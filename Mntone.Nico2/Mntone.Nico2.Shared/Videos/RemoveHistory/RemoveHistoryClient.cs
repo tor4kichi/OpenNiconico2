@@ -13,12 +13,14 @@ namespace Mntone.Nico2.Videos.RemoveHistory
 				throw new ArgumentException();
 			}
 
-			return context.GetClient().GetStringAsync( NiconicoUrls.VideoRemoveUrl + token + "&video_id=" + requestId );
+			return context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.VideoRemoveUrl}{token}&video_id={requestId}");
 		}
 
 		public static Task<string> RemoveAllHistoriesDataAsync( NiconicoContext context, string token )
 		{
-			return context.GetClient().GetStringAsync( NiconicoUrls.VideoRemoveUrl + token + "&video_id=all" );
+			return context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.VideoRemoveUrl}{token}&video_id=all");
 		}
 
 		public static RemoveHistoryResponse ParseRemoveHistoryData( string historiesData )

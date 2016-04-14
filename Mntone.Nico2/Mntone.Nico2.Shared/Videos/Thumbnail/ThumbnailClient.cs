@@ -18,7 +18,9 @@ namespace Mntone.Nico2.Videos.Thumbnail
 				throw new ArgumentException();
 			}
 
-			return context.GetClient().GetStringAsync( NiconicoUrls.VideoThumbInfoUrl + requestId );
+			return context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.VideoThumbInfoUrl}{requestId}");
+				
 		}
 
 		public static ThumbnailResponse ParseThumbnailData( string thumbnailData )

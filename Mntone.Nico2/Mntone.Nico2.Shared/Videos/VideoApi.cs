@@ -18,6 +18,18 @@ namespace Mntone.Nico2.Videos
 			this._context = context;
 		}
 
+
+		/// <summary>
+		/// 動画ページ内にある動画情報を取得します。
+		/// </summary>
+		/// <param name="requestId"></param>
+		/// <returns></returns>
+		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync( string requestId )
+		{
+			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId);
+		}
+
+
 		/// <summary>
 		/// 非同期操作として flv 情報を取得します
 		/// </summary>
@@ -36,25 +48,7 @@ namespace Mntone.Nico2.Videos
 		}
 #endif
 
-		/// <summary>
-		/// 非同期操作として flv 情報を取得します
-		/// </summary>
-		/// <param name="requestId">目的の動画 ID</param>
-		/// <param name="cKey">CKey</param>
-		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
-		[Overload( "GetFlvWithCKeyAsync" )]
-		public IAsyncOperation<Flv.FlvResponse> GetFlvAsync( string requestId, string cKey )
-		{
-			return Flv.FlvClient.GetFlvAsync( _context, requestId, cKey ).AsAsyncOperation();
-		}
-#else
-		public Task<Flv.FlvResponse> GetFlvAsync( string requestId, string cKey )
-		{
-			return Flv.FlvClient.GetFlvAsync( _context, requestId, cKey );
-		}
-#endif
-
+	
 		/// <summary>
 		/// 非同期操作として thumbnail 情報を取得します
 		/// </summary>

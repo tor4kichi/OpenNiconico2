@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Mntone.Nico2.Dictionaries.Recent
 {
@@ -6,7 +7,8 @@ namespace Mntone.Nico2.Dictionaries.Recent
 	{
 		public static Task<string> GetRecentDataAsync( NiconicoContext context )
 		{
-			return context.GetClient().GetStringAsync( NiconicoUrls.DictionaryRecentUrl );
+			return context.GetClient()
+				.GetStringAsync(NiconicoUrls.DictionaryRecentUrl);
 		}
 
 		public static RecentResponse ParseRecentData( string recentData )

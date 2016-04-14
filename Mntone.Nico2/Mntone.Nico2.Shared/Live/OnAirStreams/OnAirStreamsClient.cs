@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Mntone.Nico2.Live.OnAirStreams
@@ -13,7 +14,9 @@ namespace Mntone.Nico2.Live.OnAirStreams
 				sb.Append( "&zpage=" );
 				sb.Append( pageIndex );
 			}
-			return context.GetClient().GetStringAsync( sb.ToString() );
+			return context.GetClient()
+				.GetStringAsync( new Uri(sb.ToString()) )
+				.AsTask();
 		}
 
 		public static Task<string> GetOnAirStreamsRecentDataAsync(
@@ -33,7 +36,8 @@ namespace Mntone.Nico2.Live.OnAirStreams
 			}
 			sb.Append( "&sort=" );
 			sb.Append( type.ToSortTypeString() );
-			return context.GetClient().GetStringAsync( sb.ToString() );
+			return context.GetClient()
+				.GetStringAsync( sb.ToString() );
 		}
 
 		public static OnAirStreamsResponse ParseOnAirStreamsData( string onAirStreamsData )

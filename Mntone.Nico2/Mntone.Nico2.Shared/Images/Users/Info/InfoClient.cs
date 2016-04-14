@@ -13,7 +13,8 @@ namespace Mntone.Nico2.Images.Users.Info
 	{
 		public static Task<string> GetInfoDataAsync( NiconicoContext context, uint requestUserId )
 		{
-			return context.GetClient().GetStringAsync( NiconicoUrls.ImageUserInfoUrl + requestUserId );
+			return context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.ImageUserInfoUrl}{requestUserId}");
 		}
 
 		public static InfoResponse ParseInfoData( string infoData )

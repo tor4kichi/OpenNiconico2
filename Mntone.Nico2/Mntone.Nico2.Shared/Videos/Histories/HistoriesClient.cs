@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Mntone.Nico2.Videos.Histories
 {
@@ -6,7 +7,8 @@ namespace Mntone.Nico2.Videos.Histories
 	{
 		public static Task<string> GetHistoriesDataAsync( NiconicoContext context )
 		{
-			return context.GetClient().GetStringAsync( NiconicoUrls.VideoHistoryUrl );
+			return context.GetClient()
+				.GetStringAsync(NiconicoUrls.VideoHistoryUrl);
 		}
 
 		public static HistoriesResponse ParseHistoriesData( string historiesData )

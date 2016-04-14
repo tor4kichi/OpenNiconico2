@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Mntone.Nico2.Live.OtherStreams
 {
@@ -7,9 +8,12 @@ namespace Mntone.Nico2.Live.OtherStreams
 		public static Task<string> GetOtherStreamsDataAsync(
 			NiconicoContext context, StatusType status, ushort pageIndex )
 		{
-			return context.GetClient().GetStringAsync( pageIndex > 1
-				? NiconicoUrls.LiveIndexZeroStreamListUrl + status.ToStatusTypeString() + "&zpage=" + pageIndex
-				: NiconicoUrls.LiveIndexZeroStreamListUrl + status.ToStatusTypeString() );
+			return context.GetClient().GetStringAsync(
+				pageIndex > 1
+					? $"{NiconicoUrls.LiveIndexZeroStreamListUrl}{status.ToStatusTypeString()}&zpage={pageIndex}"
+					: $"{NiconicoUrls.LiveIndexZeroStreamListUrl}{status.ToStatusTypeString()}"
+				);
+				
 		}
 
 		public static OtherStreamsResponse ParseOtherStreamsData( string otherStreamsData )

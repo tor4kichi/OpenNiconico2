@@ -1,29 +1,37 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace Mntone.Nico2.Videos.Flv
 {
 	internal sealed class FlvClient
 	{
-		public static Task<string> GetFlvDataAsync( NiconicoContext context, string requestId )
+		public static async Task<string> GetFlvDataAsync( NiconicoContext context, string requestId )
 		{
 			if( !NiconicoRegex.IsVideoId( requestId ) )
 			{
 				throw new ArgumentException();
 			}
 
-			return context.GetClient().GetStringAsync( NiconicoUrls.VideoFlvUrl + requestId + "?as3=1" );
+			var htmlWeb = new HtmlAgilityPack.HtmlWeb();
+			var htmlDocument = await htmlWeb.LoadFromWebAsync($"{NiconicoUrls.VideoWatchPageUrl}{requestId}");
+
+			var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
+			var str = WebUtility.UrlDecode(WebUtility.HtmlDecode(videoInfoNode.InnerText));
+
+			System.Diagnostics.Debug.Write(str);
+
+			return str;
 		}
 
-		public static Task<string> GetFlvDataAsync( NiconicoContext context, string requestId, string cKey )
-		{
-			return context.GetClient().GetStringAsync( NiconicoUrls.VideoFlvUrl + requestId + "?as3=1&ckey=" + cKey );
-		}
-
+		
 		public static FlvResponse ParseFlvData( string flvData )
 		{
-			var response = flvData.Split( new char[] { '&' } ).ToDictionary(
+			var json = (dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(flvData);
+
+			var info = (string)json.flvInfo;
+			var response = info.Split( new char[] { '&' } ).ToDictionary(
 				source => source.Substring( 0, source.IndexOf( '=' ) ),
 				source => Uri.UnescapeDataString( source.Substring( source.IndexOf( '=' ) + 1 ) ) );
 
@@ -41,10 +49,5 @@ namespace Mntone.Nico2.Videos.Flv
 				.ContinueWith( prevTask => ParseFlvData( prevTask.Result ) );
 		}
 
-		public static Task<FlvResponse> GetFlvAsync( NiconicoContext context, string requestId, string cKey )
-		{
-			return GetFlvDataAsync( context, requestId, cKey )
-				.ContinueWith( prevTask => ParseFlvData( prevTask.Result ) );
-		}
 	}
 }

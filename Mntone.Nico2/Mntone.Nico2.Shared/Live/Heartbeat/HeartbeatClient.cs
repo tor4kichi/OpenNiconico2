@@ -18,7 +18,9 @@ namespace Mntone.Nico2.Live.Heartbeat
 				throw new ArgumentException();
 			}
 
-			return context.GetClient().GetStringAsync( NiconicoUrls.LiveHeartbeatUrl + "?v=" + requestId );
+			return context.GetClient()
+				.GetStringAsync( new Uri($"{NiconicoUrls.LiveHeartbeatUrl}?v={requestId}") )
+				.AsTask();
 		}
 
 		public static HeartbeatResponse ParseHeartbeatData( string heartbeatData )

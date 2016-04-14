@@ -62,4 +62,17 @@ namespace Mntone.Nico2
 		/// </summary>
 		public uint UserId { get; internal set; }
 	}
+
+
+	public static class NiconicoSessionExtetion
+	{
+		public static string ToCookieText(this NiconicoSession session, string userSessionName)
+		{
+			return string.Format(
+						"{0}={1}; expires={2}",
+						userSessionName,
+						session.Key,
+						session.Expires.ToUniversalTime().ToString("ddd, dd-MMM-yyyy HH:mm:ss' GMT'", System.Globalization.CultureInfo.InvariantCulture));
+		}
+	}
 }

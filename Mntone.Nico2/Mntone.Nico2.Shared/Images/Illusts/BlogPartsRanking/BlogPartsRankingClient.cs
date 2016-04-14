@@ -15,9 +15,8 @@ namespace Mntone.Nico2.Images.Illusts.BlogPartsRanking
 			NiconicoContext context, DurationType targetDuration, GenreOrCategory targetGenreOrCategory )
 		{
 			return context.GetClient().GetStringAsync(
-				NiconicoUrls.ImageBlogPartsUrl
-				+ "ranking&key=" + targetDuration.ToDurationTypeString()
-				+ "%2c" + targetGenreOrCategory.ToGenreAndCategoryString() );
+					$"{NiconicoUrls.ImageBlogPartsUrl}ranking&key={targetDuration.ToDurationTypeString()}%2c{targetGenreOrCategory.ToGenreAndCategoryString()}"
+				);
 		}
 
 		public static BlogPartsRankingResponse ParseRankingData( string rankingData )

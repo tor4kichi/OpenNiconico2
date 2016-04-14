@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
+using Windows.Web.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 #if WINDOWS_APP
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -14,67 +15,47 @@ namespace Mntone.Nico2
 {
 	internal static class HttpClientExtensions
 	{
-#if WINDOWS_APP
-		public static Task<IBuffer> GetBufferAsync( this HttpClient client, string uri )
+		public static Task<HttpResponseMessage> GetAsync(this HttpClient client, string uri)
+		{
+			return client.GetAsync(new Uri(uri))
+				.AsTask();
+		}
+
+		public static Task<string> GetStringAsync(this HttpClient client, string uri)
+		{
+			return client.GetStringAsync(new Uri(uri))
+				.AsTask();
+		}
+		
+
+
+		public static Task<string> GetConvertedStringAsync(this HttpClient client, string uri)
+		{
+			return client.GetConvertedStringAsync(uri, Encoding.UTF8);
+		}
+
+		public static Task<string> GetConvertedStringAsync(this HttpClient client, string uri, Encoding encoding)
 		{
 			return client
-				.GetStreamAsync( uri )
-				.ContinueWith( prevTask =>
+				.GetBufferAsync(new Uri(uri))
+				.AsTask()
+				.ContinueWith(stream =>
 				{
-					var stream = prevTask.Result;
-					var byteArray = new byte[stream.Length];
-					stream.Read( byteArray, 0, ( int )stream.Length );
-					return byteArray.AsBuffer();
-				} );
+					var byteArray = stream.Result.ToArray();
+					return Encoding.UTF8.GetString(byteArray, 0, byteArray.Length);
+				});
 		}
-#else
-		public static Task<byte[]> GetByteArrayAsync( this HttpClient client, string uri )
+
+		public static Task<byte[]> GetByteArrayAsync(this HttpClient client, string uri)
 		{
 			return client
-				.GetStreamAsync( uri )
-				.ContinueWith( prevTask =>
+				.GetBufferAsync(new Uri(uri))
+				.AsTask()
+				.ContinueWith(stream =>
 				{
-					var stream = prevTask.Result;
-					var ret = new byte[stream.Length];
-					stream.Read( ret, 0, ( int )stream.Length );
-					return ret;
-				} );
+					return stream.Result.ToArray();
+				});
 		}
-#endif
-
-		public static Task<string> GetStringWithoutHttpRequestExceptionAsync( this HttpClient client, string uri )
-		{
-			return client
-				.SendAsync( new HttpRequestMessage( HttpMethod.Get, uri ) )
-				.ContinueWith( prevTask => prevTask.Result.Content.ReadAsStringAsync() )
-				.Unwrap();
-		}
-
-		public static Task<string> GetConvertedStringAsync( this HttpClient client, string uri )
-		{
-			return client.GetConvertedStringAsync( uri, Encoding.UTF8 );
-		}
-
-		public static Task<string> GetConvertedStringAsync( this HttpClient client, string uri, Encoding encoding )
-		{
-			return client
-				.GetStreamAsync( uri )
-				.ContinueWith( stream => new StreamReader( stream.Result, encoding ).ReadToEnd() );
-		}
-
-		public static Task<HttpResponseMessage> Post2Async( this HttpClient client, string uri, IEnumerable<KeyValuePair<string, string>> content )
-		{
-			return client.PostAsync( uri, new FormUrlEncodedContent( content ) );
-		}
-
-		public static Task<HttpResponseMessage> HeadAsync( this HttpClient client, Uri uri )
-		{
-			return client.SendAsync( new HttpRequestMessage( HttpMethod.Head, uri ) );
-		}
-
-		public static Task<HttpResponseMessage> Head2Async( this HttpClient client, string uri )
-		{
-			return client.HeadAsync( new Uri( uri ) );
-		}
+		
 	}
 }

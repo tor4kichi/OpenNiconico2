@@ -13,8 +13,9 @@ namespace Mntone.Nico2.Images.Users.Data
 	{
 		public static Task<string> GetDataDataAsync( NiconicoContext context, uint requestUserId )
 		{
-			return context.GetClient().GetStringAsync( NiconicoUrls.ImageUserDataUrl + requestUserId );
-		}
+			return context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.ImageUserDataUrl}{requestUserId}");
+        }
 
 		public static DataResponse ParseDataData( string dataData )
 		{

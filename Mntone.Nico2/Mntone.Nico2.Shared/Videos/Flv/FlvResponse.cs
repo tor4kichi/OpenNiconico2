@@ -12,46 +12,61 @@ namespace Mntone.Nico2.Videos.Flv
 	/// </summary>
 	public sealed class FlvResponse
 	{
+		internal FlvResponse( object watchAPIDataContainer)
+		{
+
+		}
 		internal FlvResponse( Dictionary<string, string> wwwFormData )
 		{
-			ThreadId = wwwFormData["thread_id"].ToUInt();
-			Length = wwwFormData["l"].ToTimeSpanFromSecondsString();
-			VideoUrl = wwwFormData["url"].ToUri();
-			ReportUrl = wwwFormData["link"].ToUri();
-			CommentServerUrl = wwwFormData["ms"].ToUri();
-			SubCommentServerUrl = wwwFormData["ms_sub"].ToUri();
+			ThreadId = SafeGetValue(wwwFormData, "thread_id")?.ToUInt() ?? uint.MaxValue;
+			Length = SafeGetValue(wwwFormData, "l")?.ToTimeSpanFromSecondsString() ?? TimeSpan.FromSeconds(0);
+			VideoUrl = SafeGetValue(wwwFormData, "url")?.ToUri() ?? null;
+			ReportUrl = SafeGetValue(wwwFormData, "link")?.ToUri() ?? null;
+			CommentServerUrl = SafeGetValue(wwwFormData, "ms")?.ToUri() ?? null;
+			SubCommentServerUrl = SafeGetValue(wwwFormData, "ms_sub")?.ToUri() ?? null;
 
-			PrivateReason = wwwFormData.ContainsKey( "deleted" ) ? ( PrivateReasonType )wwwFormData["deleted"].ToUShort() : PrivateReasonType.None;
-			UserId = wwwFormData["user_id"].ToUInt();
-			IsPremium = wwwFormData["is_premium"].ToBooleanFrom1();
-			UserName = wwwFormData["nickname"];
-			LoadedAt = DateTimeOffset.FromFileTime( 10000 * long.Parse( wwwFormData["time"] ) + 116444736000000000 );
+			var deleted = SafeGetValue(wwwFormData, "deleted");
+			PrivateReason = deleted != null ? ( PrivateReasonType) deleted.ToUShort() : PrivateReasonType.None;
+			UserId = SafeGetValue(wwwFormData, "user_id")?.ToUInt() ?? uint.MaxValue;
+			IsPremium = SafeGetValue(wwwFormData, "is_premium")?.ToBooleanFrom1() ?? false;
+			UserName = SafeGetValue(wwwFormData, "nickname");
+			var loadedAtTime = SafeGetValue(wwwFormData, "time");
+			LoadedAt = DateTimeOffset.FromFileTime( 10000 * long.Parse(loadedAtTime) + 116444736000000000 );
 
-			if( wwwFormData.ContainsKey( "needs_key" ) )
-			{
-				IsKeyRequired = wwwFormData["needs_key"].ToBooleanFrom1();
-			}
-			if( wwwFormData.ContainsKey( "optional_thread_id" ) )
-			{
-				OptionalThreadId = wwwFormData["optional_thread_id"].ToUInt();
-			}
-			ChannelFilter = wwwFormData.ContainsKey( "ng_ch" ) ? wwwFormData["ng_ch"] : string.Empty;
-			FlashMediaServerToken = wwwFormData.ContainsKey( "fmst" ) ? wwwFormData["fmst"] : string.Empty;
+			IsKeyRequired = SafeGetValue(wwwFormData, "needs_key")?.ToBooleanFrom1() ?? false;
+			OptionalThreadId = SafeGetValue(wwwFormData, "optional_thread_id")?.ToUInt() ?? uint.MaxValue;
+
+			ChannelFilter = SafeGetValue(wwwFormData, "ng_ch") ?? string.Empty;
+			FlashMediaServerToken = SafeGetValue(wwwFormData, "fmst") ?? string.Empty;
 
 #if WINDOWS_APP
 			AppsHost = wwwFormData["hms"].ToHostName();
 #else
-			AppsHost = wwwFormData["hms"];
+			AppsHost = SafeGetValue(wwwFormData, "hms");
 #endif
-			AppsPort = wwwFormData["hmsp"].ToUShort();
-			AppsThreadId = wwwFormData["hmst"].ToUShort();
-			AppsTicket = wwwFormData["hmstk"];
+			AppsPort = SafeGetValue(wwwFormData, "hmsp").ToUShort();
+			AppsThreadId = SafeGetValue(wwwFormData, "hmst").ToUShort();
+			AppsTicket = SafeGetValue(wwwFormData, "hmstk");
 
 #if DEBUG
-			Done = wwwFormData["done"].ToBooleanFromString();
-			NgRv = wwwFormData["ng_rv"].ToUShort();
+			Done = SafeGetValue(wwwFormData, "done")?.ToBooleanFromString() ?? false;
+			NgRv = SafeGetValue(wwwFormData, "ng_rv")?.ToUShort() ?? ushort.MaxValue;
 #endif
 		}
+
+
+		private string SafeGetValue(Dictionary<string, string> dict, string key)
+		{
+			if (dict.ContainsKey(key))
+			{
+				return dict[key];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 
 		/// <summary>
 		/// スレッド ID
