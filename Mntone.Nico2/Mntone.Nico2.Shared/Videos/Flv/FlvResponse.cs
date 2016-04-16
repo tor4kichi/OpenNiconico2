@@ -10,12 +10,8 @@ namespace Mntone.Nico2.Videos.Flv
 	/// <summary>
 	/// getflv の情報を格納するクラス
 	/// </summary>
-	public sealed class FlvResponse
+	public class FlvResponse
 	{
-		internal FlvResponse( object watchAPIDataContainer)
-		{
-
-		}
 		internal FlvResponse( Dictionary<string, string> wwwFormData )
 		{
 			ThreadId = SafeGetValue(wwwFormData, "thread_id")?.ToUInt() ?? uint.MaxValue;

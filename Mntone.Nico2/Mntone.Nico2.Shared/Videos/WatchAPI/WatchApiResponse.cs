@@ -6,181 +6,16 @@ using System.Text;
 
 namespace Mntone.Nico2.Videos.WatchAPI
 {
-    public class WatchApiResponse
+    public class WatchApiResponse : FlvResponse
 	{
-		public WatchApiResponse(WatchApiJson json)
+		internal WatchApiResponse(WatchApiJson json)
+			: base(json.GetFlvInfo())
 		{
-			var flvInfo = json.flashvars.flvInfo.Split(new char[] { '&' }).ToDictionary(
-				source => source.Substring(0, source.IndexOf('=')),
-				source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
+			
+			
 
-
-			ThreadId = SafeGetValue(flvInfo, "thread_id")?.ToUInt() ?? uint.MaxValue;
-			Length = SafeGetValue(flvInfo, "l")?.ToTimeSpanFromSecondsString() ?? TimeSpan.FromSeconds(0);
-			VideoUrl = SafeGetValue(flvInfo, "url")?.ToUri() ?? null;
-			ReportUrl = SafeGetValue(flvInfo, "link")?.ToUri() ?? null;
-			CommentServerUrl = SafeGetValue(flvInfo, "ms")?.ToUri() ?? null;
-			SubCommentServerUrl = SafeGetValue(flvInfo, "ms_sub")?.ToUri() ?? null;
-
-			var deleted = SafeGetValue(flvInfo, "deleted");
-			PrivateReason = deleted != null ? (PrivateReasonType)deleted.ToUShort() : PrivateReasonType.None;
-			UserId = SafeGetValue(flvInfo, "user_id")?.ToUInt() ?? uint.MaxValue;
-			IsPremium = SafeGetValue(flvInfo, "is_premium")?.ToBooleanFrom1() ?? false;
-			UserName = SafeGetValue(flvInfo, "nickname");
-			var loadedAtTime = SafeGetValue(flvInfo, "time");
-			LoadedAt = DateTimeOffset.FromFileTime(10000 * long.Parse(loadedAtTime) + 116444736000000000);
-
-			IsKeyRequired = SafeGetValue(flvInfo, "needs_key")?.ToBooleanFrom1() ?? false;
-			OptionalThreadId = SafeGetValue(flvInfo, "optional_thread_id")?.ToUInt() ?? uint.MaxValue;
-
-			ChannelFilter = SafeGetValue(flvInfo, "ng_ch") ?? string.Empty;
-			FlashMediaServerToken = SafeGetValue(flvInfo, "fmst") ?? string.Empty;
-
-#if WINDOWS_APP
-			AppsHost = wwwFormData["hms"].ToHostName();
-#else
-			AppsHost = SafeGetValue(flvInfo, "hms");
-#endif
-			AppsPort = SafeGetValue(flvInfo, "hmsp").ToUShort();
-			AppsThreadId = SafeGetValue(flvInfo, "hmst").ToUShort();
-			AppsTicket = SafeGetValue(flvInfo, "hmstk");
-
-#if DEBUG
-			Done = SafeGetValue(flvInfo, "done")?.ToBooleanFromString() ?? false;
-			NgRv = SafeGetValue(flvInfo, "ng_rv")?.ToUShort() ?? ushort.MaxValue;
-#endif
+			
 		}
-
-		private string SafeGetValue(Dictionary<string, string> dict, string key)
-		{
-			if (dict.ContainsKey(key))
-			{
-				return dict[key];
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		/// <summary>
-		/// スレッド ID
-		/// </summary>
-		public uint ThreadId { get; private set; }
-
-		/// <summary>
-		/// 長さ
-		/// </summary>
-		public TimeSpan Length { get; private set; }
-
-		/// <summary>
-		/// 動画 URL
-		/// </summary>
-		public Uri VideoUrl { get; private set; }
-
-		/// <summary>
-		/// 連絡ページ URL
-		/// </summary>
-		public Uri ReportUrl { get; private set; }
-
-		/// <summary>
-		/// コメント サーバー URL
-		/// </summary>
-		public Uri CommentServerUrl { get; private set; }
-
-		/// <summary>
-		/// サブ コメント サーバー URL
-		/// </summary>
-		public Uri SubCommentServerUrl { get; private set; }
-
-		/// <summary>
-		/// 非公開理由
-		/// </summary>
-		public PrivateReasonType PrivateReason { get; private set; }
-
-		/// <summary>
-		/// 削除されたか
-		/// </summary>
-		/// <remarks>
-		/// 非公開動画は削除されたうちに入らない
-		/// </remarks>
-		public bool IsDeleted { get { return PrivateReason != PrivateReasonType.None && PrivateReason != PrivateReasonType.Private; } }
-
-		/// <summary>
-		/// ユーザー ID
-		/// </summary>
-		public uint UserId { get; private set; }
-
-		/// <summary>
-		/// プレミアム会員か
-		/// </summary>
-		public bool IsPremium { get; private set; }
-
-		/// <summary>
-		/// ユーザー名
-		/// </summary>
-		public string UserName { get; private set; }
-
-		/// <summary>
-		/// 読み込み日時
-		/// </summary>
-		public DateTimeOffset LoadedAt { get; private set; }
-
-		/// <summary>
-		/// キーが必要か
-		/// </summary>
-		public bool IsKeyRequired { get; private set; }
-
-		/// <summary>
-		/// 追加のスレッド ID
-		/// </summary>
-		public uint OptionalThreadId { get; private set; }
-
-		/// <summary>
-		/// チャンネル動画のフィルター
-		/// </summary>
-		public string ChannelFilter { get; private set; }
-
-		/// <summary>
-		/// Flash Media サーバーのトークン
-		/// </summary>
-		public string FlashMediaServerToken { get; private set; }
-
-#if DEBUG
-		/// <summary>
-		/// ? done
-		/// </summary>
-		public bool Done { get; private set; }
-
-		/// <summary>
-		/// ? ng_rv
-		/// </summary>
-		public ushort NgRv { get; private set; }
-#endif
-
-		/// <summary>
-		/// ニコニコアプリのホスト名
-		/// </summary>
-#if WINDOWS_APP
-		public HostName AppsHost { get; private set; }
-#else
-		public string AppsHost { get; private set; }
-#endif
-
-		/// <summary>
-		/// ニコニコアプリのポート番号
-		/// </summary>
-		public ushort AppsPort { get; private set; }
-
-		/// <summary>
-		/// ニコニコアプリのスレッド ID
-		/// </summary>
-		public uint AppsThreadId { get; set; }
-
-		/// <summary>
-		/// ニコニコアプリのチケット
-		/// </summary>
-		public string AppsTicket { get; private set; }
 	}
 
 	public class MorningPremium
@@ -397,6 +232,15 @@ namespace Mntone.Nico2.Videos.WatchAPI
 		public string playlistToken { get; set; }
 
 		public object tagRelatedBanner { get; set; }
+
+
+		public Dictionary<string, string> GetFlvInfo()
+		{
+			return this.flashvars.flvInfo.Split(new char[] { '&' }).ToDictionary(
+					source => source.Substring(0, source.IndexOf('=')),
+					source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
+		}
+
 	}
 
 }

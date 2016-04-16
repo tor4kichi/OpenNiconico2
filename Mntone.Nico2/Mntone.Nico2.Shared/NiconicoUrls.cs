@@ -54,6 +54,7 @@ namespace Mntone.Nico2
 		internal static string VideoThumbInfoUrl { get { return "http://ext.nicovideo.jp/api/getthumbinfo/"; } }
 		internal static string VideoHistoryUrl { get { return VideoApiUrlBase + "videoviewhistory/list"; } }
 		internal static string VideoRemoveUrl { get { return VideoApiUrlBase + "videoviewhistory/remove?token="; } }
+		internal static string VideoThreadKeyApiUrl { get { return VideoFlapiUrlBase + "getthreadkey?thread="; } }
 
 		#endregion
 

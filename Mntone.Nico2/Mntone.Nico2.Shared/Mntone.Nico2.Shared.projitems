@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\WordExist\WordExistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HtmlDocumentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpClientExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpQueryExtention.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Images\Illusts\BlogPartsRanking\BlogPartsRankingClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Images\Illusts\BlogPartsRanking\BlogPartsRankingResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Images\Illusts\BlogPartsRanking\DurationType.cs" />
@@ -131,12 +132,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\UserApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ThreadKeyResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\PrivateReasonType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\HistoriesClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\HistoriesResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\History.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRanking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRankingRss.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\MovieType.cs" />

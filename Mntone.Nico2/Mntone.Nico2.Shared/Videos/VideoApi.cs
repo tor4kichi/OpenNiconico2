@@ -30,6 +30,20 @@ namespace Mntone.Nico2.Videos
 		}
 
 
+
+		/// <summary>
+		/// 動画情報を元にして動画コメントを取得します。
+		/// </summary>
+		/// <param name="flvResponse"></param>
+		/// <returns></returns>
+		public Task<Comment.CommentResponse> GetCommentAsync(Flv.FlvResponse flvResponse)
+		{
+			return Comment.CommentClient.GetCommentAsync(_context, flvResponse);
+		}
+
+
+
+
 		/// <summary>
 		/// 非同期操作として flv 情報を取得します
 		/// </summary>
