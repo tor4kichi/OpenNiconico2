@@ -45,47 +45,16 @@ namespace Mntone.Nico2.Videos.Comment
 				paramDict.Add("force_184", threadKeyResponse.Force184);
 			}
 			
-			/*
-			var commentPostData = new CommentPostData(
-				response.ThreadId.ToString()
-				, threadKey
-				, null // response.UserId.ToString()
-				, (uint)response.Length.TotalMinutes
-				, force184
-				);
+			var param = HttpQueryExtention.DictionaryToQuery(paramDict);
+			var commentUrl = $"{response.CommentServerUrl}thread?{Uri.EscapeUriString(param)}";
 
-			var xml = commentPostData.ToXml();
-
-			System.Diagnostics.Debug.Write(xml);
-
-
-			var content = new Windows.Web.Http.HttpStringContent(xml);
-*/
-
-			try
-			{
-				var param = HttpQueryExtention.DictionaryToQuery(paramDict);
-				var commentUrl = $"{response.CommentServerUrl}thread?{Uri.EscapeUriString(param)}";
-
-				return  await context.GetClient()
-					.GetStringAsync(commentUrl);
-			}
-			catch (Exception e)
-			{
-				System.Diagnostics.Debug.Write(e.Message);
-				throw;
-			}
-
-
-
-			
+			return await context.GetClient()
+				.GetStringAsync(commentUrl);
 		}
 
 
 		public static CommentResponse ParseComment(string commentData)
 		{
-			System.Diagnostics.Debug.Write(commentData);
-
 			return CommentResponse.CreateFromXml(commentData);
 		}
 

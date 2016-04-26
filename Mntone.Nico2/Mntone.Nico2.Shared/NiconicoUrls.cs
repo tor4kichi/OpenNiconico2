@@ -56,6 +56,44 @@ namespace Mntone.Nico2
 		internal static string VideoRemoveUrl { get { return VideoApiUrlBase + "videoviewhistory/remove?token="; } }
 		internal static string VideoThreadKeyApiUrl { get { return VideoFlapiUrlBase + "getthreadkey?thread="; } }
 
+
+		private const string ExtUrlBase = "http://ext" + DomainBase;
+		private const string ExtAPIUrlBase = ExtUrlBase + "api/";
+		private const string ExtSearchUrlBase = ExtAPIUrlBase + "search/";
+
+		public static string VideoKeywordSearchApiUrl = ExtSearchUrlBase + "search/";
+		public static string VideoTagSearchApiUrl = ExtSearchUrlBase + "tag/";
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="keyword"></param>
+		/// <param name="pageCount"></param>
+		/// <param name="sortMethod">n/v/m/r/f/l/h</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// SortMethod
+		/// n = new_comment | 
+		/// v = view_counter | 
+		/// m = mylist_counter | 
+		/// r = num_res | 
+		/// f = first_retrieve | 
+		/// l = length | 
+		/// h = popularity
+		/// </remarks>
+		public static string MakeKeywordSearchUrl(string keyword, uint pageCount, string sortMethod="h")
+		{
+			return $"{VideoKeywordSearchApiUrl}{keyword}?mode=watch&page={pageCount}&sort={sortMethod}&order=d";
+		}
+
+
+		public static string MakeTagSearchUrl(string tag, uint pageCount, string sortMethod = "h")
+		{
+			return $"{VideoTagSearchApiUrl}{tag}?mode=watch&page={pageCount}&sort={sortMethod}&order=d";
+		}
+
+
 		#endregion
 
 

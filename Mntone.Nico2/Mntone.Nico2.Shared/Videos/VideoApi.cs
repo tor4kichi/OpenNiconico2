@@ -19,28 +19,7 @@ namespace Mntone.Nico2.Videos
 		}
 
 
-		/// <summary>
-		/// 動画ページ内にある動画情報を取得します。
-		/// </summary>
-		/// <param name="requestId"></param>
-		/// <returns></returns>
-		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync( string requestId )
-		{
-			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId);
-		}
-
-
-
-		/// <summary>
-		/// 動画情報を元にして動画コメントを取得します。
-		/// </summary>
-		/// <param name="flvResponse"></param>
-		/// <returns></returns>
-		public Task<Comment.CommentResponse> GetCommentAsync(Flv.FlvResponse flvResponse)
-		{
-			return Comment.CommentClient.GetCommentAsync(_context, flvResponse);
-		}
-
+		
 
 
 
@@ -131,6 +110,50 @@ namespace Mntone.Nico2.Videos
 			return RemoveHistory.RemoveHistoryClient.RemoveAllHistoriesAsync( _context, token );
 		}
 #endif
+
+		/// <summary>
+		/// 動画ページ内にある動画情報を取得します。
+		/// </summary>
+		/// <param name="requestId"></param>
+		/// <returns></returns>
+		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId)
+		{
+			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId);
+		}
+
+
+
+		/// <summary>
+		/// 動画情報を元にして動画コメントを取得します。
+		/// </summary>
+		/// <param name="flvResponse"></param>
+		/// <returns></returns>
+		public Task<Comment.CommentResponse> GetCommentAsync(Flv.FlvResponse flvResponse)
+		{
+			return Comment.CommentClient.GetCommentAsync(_context, flvResponse);
+		}
+
+
+		/// <summary>
+		/// ニコニコ動画へのキーワード検索を行い結果を取得します。
+		/// </summary>
+		/// <param name="flvResponse"></param>
+		/// <returns></returns>
+		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount)
+		{
+			return Search.SearchClient.GetKeywordSearchAsync(_context, keyword, pageCount);
+		}
+
+		/// <summary>
+		/// ニコニコ動画へのキーワード検索を行い結果を取得します。
+		/// </summary>
+		/// <param name="flvResponse"></param>
+		/// <returns></returns>
+		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount)
+		{
+			return Search.SearchClient.GetTagSearchAsync(_context, tag, pageCount);
+		}
+
 
 		#region field
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Linq;
 
 /* 
    Licensed under the Apache License, Version 2.0
@@ -88,6 +89,12 @@ namespace Mntone.Nico2.Videos.Comment
 		public string Text { get; set; }
 
 
+		public string GetDecodedText()
+		{
+			var bytes = Text.Select(x => Convert.ToByte(x)).ToArray();
+			return Encoding.UTF8.GetString(bytes);
+		}
+
 		public bool GetAnonymity()
 		{
 			return Anonymity == "1";
@@ -102,6 +109,29 @@ namespace Mntone.Nico2.Videos.Comment
 		{
 			return uint.Parse(Vpos);
 		}
+
+		public IEnumerable<CommandType> GetCommandTypes()
+		{
+			if (Mail == null)
+			{
+				return Enumerable.Empty<CommandType>();
+			}
+
+			return Mail.Split(' ').Select(x =>
+			{
+				CommandType temp;
+				if (Enum.TryParse<CommandType>(x, out temp))
+				{
+					return new Nullable<CommandType>(temp);
+				}
+				else
+				{
+					return new Nullable<CommandType>();
+				}
+			})
+			.Where(x => x.HasValue)
+			.Select(x => x.Value);
+		}
 	}
 
 	[XmlRoot(ElementName = "packet")]
@@ -110,7 +140,7 @@ namespace Mntone.Nico2.Videos.Comment
 		public static CommentResponse CreateFromXml(string xmlText)
 		{
 			var serializer = new XmlSerializer(typeof(CommentResponse));
-
+			
 			return (CommentResponse) serializer.Deserialize(new StringReader(xmlText));
 		}
 

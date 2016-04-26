@@ -128,10 +128,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortDirection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortDirectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringExtention.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\UserApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
@@ -146,6 +148,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRankingRss.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\MovieType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\MovieTypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\Tag.cs" />

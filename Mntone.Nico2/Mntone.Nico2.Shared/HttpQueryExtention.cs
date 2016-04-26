@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Mntone.Nico2
 {
-    public static class HttpQueryExtention
-    {
+	public static class HttpQueryExtention
+	{
 		public static string DictionaryToQuery(IDictionary<string, string> dict)
 		{
 			return String.Join("&",
