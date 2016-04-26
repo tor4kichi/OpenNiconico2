@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -82,57 +83,85 @@ namespace Mntone.Nico2.Videos.Ranking
 
 	public enum RankingCategory
 	{
+		/// <summary>カテゴリ合算</summary>
 		all,
-		music,
-		ent,
-		anime,
-		game,
-		animal,
-		que,
-		radio,
-		sport,
-		politics,
-		chat,
-		science,
-		history,
-		cooking,
-		nature,
-		diary,
-		dance,
-		sing,
-		play,
-		lecture,
-		owner,
-		tw,
-		other,
-		test,
-		r18
-	}
 
+		/// <summary>エンタメ・音楽</summary>
+		g_ent2,
 
+		/// <summary>エンターテイメント</summary>
+		ent,　　	
+		/// <summary>音楽</summary>
+		music,      
+		/// <summary>謳ってみた</summary>
+		sing,		
+		/// <summary>踊ってみた</summary>
+		dance,		
+		/// <summary>演奏してみた</summary>
+		play,		
+		/// <summary>VOCALOID</summary>
+		vocaloid,	
+		/// <summary>ニコニコインディーズ</summary>
+		nicoindies,	
 
+		/// <summary>生活・一般・スポ</summary>
+		g_life2,
+		/// <summary>動物</summary>
+		animal,		 
+		/// <summary>料理</summary>
+		cooking,	 
+		/// <summary>自然</summary>
+		nature,		 
+		/// <summary>旅行</summary>
+		travel,		 
+		/// <summary>スポーツ</summary>
+		sport,		 
+		/// <summary>ニコニコ動画講座</summary>
+		lecture,	 
+		/// <summary>車載動画</summary>
+		drive,		 
+		/// <summary>歴史</summary>
+		history,	 
 
-	public static class RankingTargetExtention
-	{
-		public static string ToCultulizedText(this RankingTarget target)
-		{
-			return target.ToString();
-		}
-	}
+		/// <summary>政治</summary>
+		g_politics,	 
 
-	public static class RankingTimeSpanExtention
-	{
-		public static string ToCultulizedText(this RankingTimeSpan timeSpan)
-		{
-			return timeSpan.ToString();
-		}
-	}
+		/// <summary>科学・技術</summary>
+		g_tech,      
+		/// <summary>科学</summary>
+		science,	 
+		/// <summary>ニコニコ技術部</summary>
+		tech,		 
+		/// <summary>ニコニコ手芸部</summary>
+		handcraft,   
+		/// <summary>作ってみた</summary>
+		make,        
 
-	public static class RankingCategoryExtention
-	{
-		public static string ToCultulizedText(this RankingCategory category)
-		{
-			return category.ToString();
-		}
+		/// <summary>アニメ・ゲーム・絵</summary>
+		g_culture2,  
+
+		/// <summary>アニメ</summary>
+		anime,		
+		/// <summary>ゲーム</summary>
+		game,		
+		/// <summary>東方</summary>
+		toho,		
+		/// <summary>アイドルマスター</summary>
+		imas,		 
+		/// <summary>ラジオ</summary>
+		radio,		 
+		/// <summary>描いてみた</summary>
+		draw,		 
+		/// <summary></summary>
+
+		/// <summary>その他（合算）</summary>
+		g_other,	 
+
+		/// <summary>例のアレ</summary>
+		are,		
+		/// <summary>日記</summary>
+		diary,		 
+		/// <summary>その他</summary>
+		other,		 
 	}
 }

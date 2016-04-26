@@ -150,6 +150,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchSortMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\MovieType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\MovieTypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\Tag.cs" />

@@ -82,15 +82,15 @@ namespace Mntone.Nico2
 		/// l = length | 
 		/// h = popularity
 		/// </remarks>
-		public static string MakeKeywordSearchUrl(string keyword, uint pageCount, string sortMethod="h")
+		public static string MakeKeywordSearchUrl(string keyword, uint pageCount, string sortMethod, string sortDir)
 		{
-			return $"{VideoKeywordSearchApiUrl}{keyword}?mode=watch&page={pageCount}&sort={sortMethod}&order=d";
+			return $"{VideoKeywordSearchApiUrl}{keyword}?mode=watch&page={pageCount}&sort={sortMethod}&order={sortDir}";
 		}
 
 
-		public static string MakeTagSearchUrl(string tag, uint pageCount, string sortMethod = "h")
+		public static string MakeTagSearchUrl(string tag, uint pageCount, string sortMethod, string sortDir)
 		{
-			return $"{VideoTagSearchApiUrl}{tag}?mode=watch&page={pageCount}&sort={sortMethod}&order=d";
+			return $"{VideoTagSearchApiUrl}{tag}?mode=watch&page={pageCount}&sort={sortMethod}&order={sortDir}";
 		}
 
 

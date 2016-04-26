@@ -137,21 +137,21 @@ namespace Mntone.Nico2.Videos
 		/// <summary>
 		/// ニコニコ動画へのキーワード検索を行い結果を取得します。
 		/// </summary>
-		/// <param name="flvResponse"></param>
+		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount)
+		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, Search.SearchSortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
 		{
-			return Search.SearchClient.GetKeywordSearchAsync(_context, keyword, pageCount);
+			return Search.SearchClient.GetKeywordSearchAsync(_context, keyword, pageCount, sortMethod, sortDir);
 		}
 
 		/// <summary>
 		/// ニコニコ動画へのキーワード検索を行い結果を取得します。
 		/// </summary>
-		/// <param name="flvResponse"></param>
+		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount)
+		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount, Search.SearchSortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
 		{
-			return Search.SearchClient.GetTagSearchAsync(_context, tag, pageCount);
+			return Search.SearchClient.GetTagSearchAsync(_context, tag, pageCount, sortMethod, sortDir);
 		}
 
 

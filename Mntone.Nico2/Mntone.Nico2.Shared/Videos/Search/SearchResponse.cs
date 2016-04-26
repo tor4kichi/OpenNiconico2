@@ -62,12 +62,13 @@ namespace Mntone.Nico2.Videos.Search
 		[OnDeserialized]
 		private void SetValuesOnDeserialized(StreamingContext context)
 		{
-			title = title.DecodeUTF8();
-			title_short = title_short.DecodeUTF8();
-			last_res_body = last_res_body.DecodeUTF8();
-			description_short = description_short.DecodeUTF8();
-
 			FirstRetrieve = DateTime.Parse(_first_retrieve);
+
+			while(_length.Length <= 5)
+			{
+				_length = "00:" + _length;
+			}
+
 			Length = TimeSpan.Parse(_length);
 		}
 
