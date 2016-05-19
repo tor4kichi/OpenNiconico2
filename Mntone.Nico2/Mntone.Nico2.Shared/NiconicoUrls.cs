@@ -296,7 +296,111 @@ namespace Mntone.Nico2
 		/// ニコニコ ユーザー アイコン未設定 URL テキスト
 		/// </summary>
 		public static string UserBlankIconUrl { get { return "http://uni.res.nimg.jp/img/user/thumb/blank.jpg"; } }
+
+
 		
+
+		public static string MakeUserMylistGroupListRssUrl(string userId)
+		{
+			return $"{VideoUrlBase}user/{userId}/mylist?rss=2.0";
+		}
+
+		/// <summary>
+		/// ユーザーが投稿した動画を取得
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="page"></param>
+		/// <returns></returns>
+		public static string MakeUserVideoRssUrl(string userId, uint page, string sortMethod = null, string sortDirection = null)
+		{
+			if (page <= 0)
+			{
+				throw new NotSupportedException("page is can not be lesser equal 0.");
+			}
+
+			var url = $"http://www.nicovideo.jp/user/{userId}/video?page={page}";
+
+			if (sortMethod != null)
+			{
+				url += $"&sort={sortMethod}";
+			}
+
+			if (sortDirection != null)
+			{
+				url += $"&order={sortDirection}";
+			}
+
+			return url;
+		}
+
 		#endregion
+
+
+		#region Mylist Deflist とりあえずマイリスト
+
+		// とりあえずマイリスト
+		// see@ http://web.archive.org/web/20140625053235/http://efcl.info/wiki/niconicoapi/
+
+
+		public static string MylistDefListUrlBase = VideoApiUrlBase + "deflist/";
+
+		public static string MylistDeflistListUrl	= MylistDefListUrlBase + "list";
+		public static string MylistDeflistAddUrl	= MylistDefListUrlBase + "add";
+		public static string MylistDeflistUpdateUrl = MylistDefListUrlBase + "update";
+		public static string MylistDeflistRemoveUrl = MylistDefListUrlBase + "delete";
+		public static string MylistDeflistMoveUrl	= MylistDefListUrlBase + "move";
+		public static string MylistDeflistCopyUrl	= MylistDefListUrlBase + "copy";
+
+		#endregion
+
+
+		#region MylistGroup 
+
+		public static string MylistGroupUrlBase	= VideoApiUrlBase + "mylistgroup/";
+
+		public static string MylistGroupListUrl = MylistGroupUrlBase + "list";
+		public static string MylistGroupGetUrl = MylistGroupUrlBase + "get";
+		public static string MylistGroupAddUrl = MylistGroupUrlBase + "add";
+		public static string MylistGroupUpdateUrl = MylistGroupUrlBase + "update";
+		public static string MylistGroupRemoveUrl = MylistGroupUrlBase + "delete";
+		public static string MylistGroupSortUrl = MylistGroupUrlBase + "sort";
+
+		#endregion
+
+		#region Mylist
+
+		public static string MylistMyPageUrl = VideoUrlBase + "my/mylist";
+
+		public static string MakeMylistCSRFTokenApiUrl(string group_id)
+		{
+			return $"{MylistMyPageUrl}/#/{group_id}";
+		}
+
+
+		public static string MylistUrlBase    = VideoApiUrlBase + "mylist/";
+
+		public static string MylistListUrl    = MylistUrlBase + "list";
+		public static string MylistAddUrl     = MylistUrlBase + "add";
+		public static string MylistUpdateUrl  = MylistUrlBase + "update";
+		public static string MylistRemoveUrl  = MylistUrlBase + "delete";
+		public static string MylistMoveUrl    = MylistUrlBase + "move";
+		public static string MylistCopyUrl    = MylistUrlBase + "copy";
+
+
+
+		#endregion
+
+
+		#region WatchItem お気に入り
+
+		public static string WatchItemUrlBase = VideoApiUrlBase + "watchitem/";
+
+		public static string WatchItemListUrl   = WatchItemUrlBase + "list";
+		public static string WatchItemExistUrl  = WatchItemUrlBase + "exist";
+		public static string WatchItemAddUrl    = WatchItemUrlBase + "add";
+		public static string WatchItemRemoveUrl = WatchItemUrlBase + "remove";
+
+		#endregion
+
 	}
 }

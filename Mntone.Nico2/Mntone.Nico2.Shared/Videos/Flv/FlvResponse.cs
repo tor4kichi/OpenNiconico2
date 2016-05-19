@@ -12,7 +12,18 @@ namespace Mntone.Nico2.Videos.Flv
 	/// </summary>
 	public class FlvResponse
 	{
+		internal FlvResponse()
+		{
+
+		}
+
 		internal FlvResponse( Dictionary<string, string> wwwFormData )
+		{
+			SetupFlvData(wwwFormData);
+		}
+
+
+		internal void SetupFlvData( Dictionary<string, string> wwwFormData )
 		{
 			ThreadId = SafeGetValue(wwwFormData, "thread_id")?.ToUInt() ?? uint.MaxValue;
 			Length = SafeGetValue(wwwFormData, "l")?.ToTimeSpanFromSecondsString() ?? TimeSpan.FromSeconds(0);
@@ -22,12 +33,12 @@ namespace Mntone.Nico2.Videos.Flv
 			SubCommentServerUrl = SafeGetValue(wwwFormData, "ms_sub")?.ToUri() ?? null;
 
 			var deleted = SafeGetValue(wwwFormData, "deleted");
-			PrivateReason = deleted != null ? ( PrivateReasonType) deleted.ToUShort() : PrivateReasonType.None;
+			PrivateReason = deleted != null ? (PrivateReasonType)deleted.ToUShort() : PrivateReasonType.None;
 			UserId = SafeGetValue(wwwFormData, "user_id")?.ToUInt() ?? uint.MaxValue;
 			IsPremium = SafeGetValue(wwwFormData, "is_premium")?.ToBooleanFrom1() ?? false;
 			UserName = SafeGetValue(wwwFormData, "nickname");
 			var loadedAtTime = SafeGetValue(wwwFormData, "time");
-			LoadedAt = DateTimeOffset.FromFileTime( 10000 * long.Parse(loadedAtTime) + 116444736000000000 );
+			LoadedAt = DateTimeOffset.FromFileTime(10000 * long.Parse(loadedAtTime) + 116444736000000000);
 
 			IsKeyRequired = SafeGetValue(wwwFormData, "needs_key")?.ToBooleanFrom1() ?? false;
 			OptionalThreadId = SafeGetValue(wwwFormData, "optional_thread_id")?.ToUInt() ?? uint.MaxValue;
@@ -49,7 +60,6 @@ namespace Mntone.Nico2.Videos.Flv
 			NgRv = SafeGetValue(wwwFormData, "ng_rv")?.ToUShort() ?? ushort.MaxValue;
 #endif
 		}
-
 
 		private string SafeGetValue(Dictionary<string, string> dict, string key)
 		{

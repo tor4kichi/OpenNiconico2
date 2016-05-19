@@ -139,7 +139,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, Search.SearchSortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
+		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, SortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
 		{
 			return Search.SearchClient.GetKeywordSearchAsync(_context, keyword, pageCount, sortMethod, sortDir);
 		}
@@ -149,7 +149,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount, Search.SearchSortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
+		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount, SortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
 		{
 			return Search.SearchClient.GetTagSearchAsync(_context, tag, pageCount, sortMethod, sortDir);
 		}

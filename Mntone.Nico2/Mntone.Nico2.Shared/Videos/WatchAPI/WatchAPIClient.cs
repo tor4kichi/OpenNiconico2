@@ -36,9 +36,9 @@ namespace Mntone.Nico2.Videos.WatchAPI
 			jsonSerializer.Error += JsonSerializer_Error;
 			jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
 			
-			var watchApi = jsonSerializer.Deserialize<WatchApiJson>(new JsonTextReader(new StringReader(flvData)));
+			var watchApi = jsonSerializer.Deserialize<WatchApiResponse>(new JsonTextReader(new StringReader(flvData)));
 
-			return new WatchApiResponse(watchApi);
+			return watchApi;
 		}
 
 		private static void JsonSerializer_Error(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)

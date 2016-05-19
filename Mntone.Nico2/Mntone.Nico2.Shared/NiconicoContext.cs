@@ -242,6 +242,16 @@ namespace Mntone.Nico2
 		}
 		private Users.UserApi _User = null;
 
+
+		/// <summary>
+		/// ニコニコ マイリスト API 郡
+		/// </summary>
+		public Mylist.MylistApi Mylist
+		{
+			get { return this._Mylist ?? (this._Mylist = new Nico2.Mylist.MylistApi(this)); }
+		}
+		private Mylist.MylistApi _Mylist = null;
+
 		#endregion
 
 
