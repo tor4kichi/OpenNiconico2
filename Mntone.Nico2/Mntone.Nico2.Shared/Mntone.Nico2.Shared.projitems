@@ -14,7 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\CommunityApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptionFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DeleteCondition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\CategoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\DictionaryApi.cs" />
@@ -140,6 +139,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoUrls.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParseException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Prefecture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PrivateReasonType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\SearchApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionClient.cs" />
@@ -160,7 +160,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ThreadKeyResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\PrivateReasonType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\HistoriesClient.cs" />

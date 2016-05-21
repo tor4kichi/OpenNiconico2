@@ -15,8 +15,8 @@ namespace Mntone.Nico2.Videos.Histories
 		/// <summary>
 		/// 削除された (非公開含む) か
 		/// </summary>
-		public DeleteStatus DeleteStatus { get { return this._DeleteStatus; } }
-		private DeleteStatus _DeleteStatus = DeleteStatus.NotDeleted;
+		public PrivateReasonType DeleteStatus { get { return this._DeleteStatus; } }
+		private PrivateReasonType _DeleteStatus = PrivateReasonType.None;
 
 		[DataMember(Name = "deleted")]
 		private uint IsDeletedImpl
@@ -27,7 +27,7 @@ namespace Mntone.Nico2.Videos.Histories
 			}
 			set
 			{
-				_DeleteStatus = (DeleteStatus)value;
+				_DeleteStatus = (PrivateReasonType)value;
 			}
 		}
 

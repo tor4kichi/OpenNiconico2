@@ -1,5 +1,5 @@
 ﻿
-namespace Mntone.Nico2.Videos.Flv
+namespace Mntone.Nico2
 {
 	/// <summary>
 	/// 動画が非公開にされている理由
