@@ -15,8 +15,21 @@ namespace Mntone.Nico2.Videos.Histories
 		/// <summary>
 		/// 削除された (非公開含む) か
 		/// </summary>
-		[DataMember( Name = "deleted" )]
-		public bool IsDeleted { get; private set; }
+		public DeleteStatus DeleteStatus { get { return this._DeleteStatus; } }
+		private DeleteStatus _DeleteStatus = DeleteStatus.NotDeleted;
+
+		[DataMember(Name = "deleted")]
+		private uint IsDeletedImpl
+		{
+			get
+			{
+				return (uint)_DeleteStatus;
+			}
+			set
+			{
+				_DeleteStatus = (DeleteStatus)value;
+			}
+		}
 
 		/// <summary>
 		/// デバイス
