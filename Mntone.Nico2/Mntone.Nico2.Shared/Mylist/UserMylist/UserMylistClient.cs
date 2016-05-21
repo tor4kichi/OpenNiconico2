@@ -36,7 +36,7 @@ namespace Mntone.Nico2.Mylist.UserMylist
 					IsPublic = true,
 					Description = x.Description,
 					Name = x.Title,
-					ThumnailUrl = new Uri(x.Thumbnail.Url),
+					ThumbnailUrl = new Uri(x.Thumbnail.Url),
 				};
 			})
 			.ToList();

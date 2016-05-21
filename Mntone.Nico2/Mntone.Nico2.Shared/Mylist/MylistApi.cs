@@ -38,7 +38,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<List<MylistGroup.MylistGroupData>> GetMylistGroupListAsync()
 		{
-			return MylistGroup.IndivisualMylistClient.GetMylistGroupListAsync(_context);
+			return MylistGroup.MylistGroupClient.GetMylistGroupListAsync(_context);
 		}
 
 
@@ -48,7 +48,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> CreateMylistGroupAsync(string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			return MylistGroup.IndivisualMylistClient.AddMylistGroupAsync(_context, name, description, is_public, default_sort, iconType);
+			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, name, description, is_public, default_sort, iconType);
 		}
 
 
@@ -58,7 +58,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> CreateMylistGroupAsync(MylistGroup.MylistGroupData groupData)
 		{
-			return MylistGroup.IndivisualMylistClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.IsPublic, groupData.MylistSort, groupData.IconType);
+			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.IsPublic, groupData.DefaultSort, groupData.IconId);
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistGroupAsync(string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			return MylistGroup.IndivisualMylistClient.UpdateMylistGroupAsync(_context, group_id, name, description, is_public, default_sort, iconType);
+			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, group_id, name, description, is_public, default_sort, iconType);
 		}
 
 
@@ -84,7 +84,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistGroupAsync(MylistGroup.MylistGroupData groupData)
 		{
-			return MylistGroup.IndivisualMylistClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.IsPublic, groupData.MylistSort, groupData.IconType);
+			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.IsPublic, groupData.DefaultSort, groupData.IconId);
 		}
 
 
@@ -95,7 +95,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> RemoveMylistGroupAsync(string group_id)
 		{
-			return MylistGroup.IndivisualMylistClient.RemoveMylistGroupAsync(_context, group_id);
+			return MylistGroup.MylistGroupClient.RemoveMylistGroupAsync(_context, group_id);
 		}
 
 
@@ -106,7 +106,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> RemoveMylistGroupAsync(MylistGroup.MylistGroupData groupData)
 		{
-			return MylistGroup.IndivisualMylistClient.RemoveMylistGroupAsync(_context, groupData.Id);
+			return MylistGroup.MylistGroupClient.RemoveMylistGroupAsync(_context, groupData.Id);
 		}
 
 
@@ -117,7 +117,14 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<List<Mylist.MylistData>> GetMylistItemListAsync(string group_id)
 		{
-			return MylistItem.MylistItemClient.GetMylistItemAsync(_context, group_id);
+			if (MylistGroup.MylistGroupData.IsDeflist(group_id))
+			{
+				return Mylist.Deflist.DeflistClient.GetDeflistAsync(_context);
+			}
+			else
+			{
+				return MylistItem.MylistItemClient.GetMylistItemAsync(_context, group_id);
+			}
 		}
 
 		/// <summary>
@@ -291,6 +298,17 @@ namespace Mntone.Nico2.Mylist
 			return UserMylist.UserMylistClient.GetUserMylistAsync(_context, userId);
 		}
 
+
+
+		/// <summary>
+		/// マイリストグループの詳細を取得します
+		/// </summary>
+		/// <param name="group_id"></param>
+		/// <returns></returns>
+		public Task<MylistGroup.MylistGroup> GetMylistGroupDetailAsync(string group_id)
+		{
+			return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, group_id);
+		}
 
 
 		#region field

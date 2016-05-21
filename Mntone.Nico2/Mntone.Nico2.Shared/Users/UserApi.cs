@@ -54,6 +54,17 @@ namespace Mntone.Nico2.Users
 #endif
 
 
+		/// <summary>
+		/// 指定したユーザーIDのユーザー情報を取得します。
+		/// </summary>
+		/// <param name="requestUserId"></param>
+		/// <returns></returns>
+		/// <remarks>ログイン不要</remarks>
+		public Task<User.User> GetUserAsync(string requestUserId)
+		{
+			return User.UserClient.GetUserAsync(_context, requestUserId);
+		}
+
 		#region field
 
 		private NiconicoContext _context;

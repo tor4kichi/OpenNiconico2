@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\CommunityApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptionFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeleteCondition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\CategoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\DictionaryApi.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\Vote\VoteClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistCSRFTokenHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistItem\MylistItemResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistRss.cs" />
@@ -150,6 +153,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\UserApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\User\UserClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\User\UserResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />

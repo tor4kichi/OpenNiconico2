@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Mntone.Nico2.Mylist.MylistItem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Mntone.Nico2.Mylist
 {
+
     public class MylistData
     {
 		public NiconicoItemType ItemType { get; set; }
@@ -21,6 +23,7 @@ namespace Mntone.Nico2.Mylist
 		public uint CommentCount { get; set; }
 		public uint MylistCount { get; set; }
 		public Uri ThumbnailUrl { get; set; }
+		public bool IsDeleted { get; set; }
 
 
 		public static List<MylistData> ParseMylistDataListFromJson(dynamic json)

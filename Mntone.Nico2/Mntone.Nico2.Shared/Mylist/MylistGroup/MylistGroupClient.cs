@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Mntone.Nico2.Mylist.MylistGroup
 {
-    internal sealed class IndivisualMylistClient
+    internal sealed class MylistGroupClient
     {
 
 		
@@ -51,19 +53,38 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 
 
+
+		public static async Task<string> GetMylistGroupDetailDataAsync(NiconicoContext context, string group_id)
+		{
+			return await context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.MylistGroupDetailApi}?{nameof(group_id)}={group_id}");
+		}
+
+
+		private static MylistGroup ParseMylistGroupDetailXml(string xml)
+		{
+			var serializer = new XmlSerializer(typeof(MylistGroupResponse));
+
+			MylistGroupResponse response = null;
+			using (var stream = new StringReader(xml))
+			{
+				response = (MylistGroupResponse)serializer.Deserialize(stream);
+			}
+
+			return response.Mylistgroup;
+		}
+
+
+
+
+
+
+
 		public static Task<List<MylistGroupData>> GetMylistGroupListAsync(NiconicoContext context)
 		{
 			return GetMylistGroupListDataAsync(context)
 				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistGroupListJson(prevTask.Result));
 		}
-
-
-		public static Task<MylistGroupData> GetMylistGroupAsync(NiconicoContext context, string group_id)
-		{
-			return GetMylistGroupDataAsync(context, group_id)
-				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistGroupJson(prevTask.Result));
-		}
-
 
 		public static Task<ContentManageResult> AddMylistGroupAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
@@ -82,6 +103,14 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		{
 			return RemoveMylistGroupDataAsync(context, group_id)
 				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistApiResult(prevTask.Result));
+		}
+
+
+
+		public static Task<MylistGroup> GetMylistGroupDetailAsync(NiconicoContext context, string group_id)
+		{
+			return GetMylistGroupDetailDataAsync(context, group_id)
+				.ContinueWith(prevTask => ParseMylistGroupDetailXml(prevTask.Result));
 		}
 	}
 

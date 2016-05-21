@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mntone.Nico2.Mylist
@@ -10,31 +11,48 @@ namespace Mntone.Nico2.Mylist
     {
 		public static List<MylistGroupData> ParseMylistGroupListJson(string json)
 		{
-			dynamic parsedJson = JsonConvert.DeserializeObject(json);
+			var parsedJson = JsonConvert.DeserializeObject< LoginUserMylistGroupData>(json);
 
-			return MylistGroupData.ListCreateFromJson(parsedJson);
+			return parsedJson.mylistgroup
+				.Select(x => new MylistGroupData(x))
+				.ToList();
 		}
 
-		public static MylistGroupData ParseMylistGroupJson(string json)
+
+		public static List<MylistData> ParseMylistItemResponse(string json)
 		{
-			dynamic parsedJson = JsonConvert.DeserializeObject(json);
+			var res = JsonConvert.DeserializeObject<MylistItem.MylistItemResponse>(json);
 
-			return MylistGroupData.CreateFromJson(parsedJson);
+			if (res.status == "ok")
+			{
+				return res.mylistitem.Select(x =>
+				{
+					return new MylistData()
+					{
+						Title = x.item_data.title,
+						Description = x.description,
+						ItemId = x.item_data.video_id,
+						ItemType = (NiconicoItemType)int.Parse(x.item_type),
+						FirstRetrieve = new DateTime(x.item_data.first_retrieve),
+						ViewCount = uint.Parse(x.item_data.view_counter),
+						CommentCount = uint.Parse(x.item_data.num_res),
+						MylistCount = uint.Parse(x.item_data.mylist_counter),
+						CreateTime = new DateTime(x.create_time),
+						UpdateTime = new DateTime(x.update_time),
+						IsDeleted = x.item_data.deleted.ToBooleanFrom1(),
+						Length = TimeSpan.FromSeconds(int.Parse(x.item_data.length_seconds)),
+						ThumbnailUrl = new Uri(x.item_data.thumbnail_url),
+					};
+				})
+				.ToList();
+			}
+			else
+			{
+				return null;
+			}
 		}
 
-		public static List<MylistData> ParseMylistListJson(string json)
-		{
-			dynamic parsedJson = JsonConvert.DeserializeObject(json);
-
-			return MylistData.ParseMylistDataListFromJson(parsedJson);
-		}
-
-		public static MylistData ParseMylistJson(string json)
-		{
-			dynamic parsedJson = JsonConvert.DeserializeObject(json);
-
-			return MylistData.ParseMylistDataEntry(parsedJson);
-		}
+		
 
 		public static ContentManageResult ParseMylistApiResult(string json)
 		{

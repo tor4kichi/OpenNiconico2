@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -86,10 +87,16 @@ namespace Mntone.Nico2.Mylist.MylistItem
 
 
 
+	
+
+
+
+
+
 		public static Task<List<MylistData>> GetMylistItemAsync(NiconicoContext context, string group_id)
 		{
 			return GetMylistItemDataAsync(context, group_id)
-				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistListJson(prevTask.Result));
+				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistItemResponse(prevTask.Result));
 		}
 
 

@@ -79,7 +79,7 @@ namespace Mntone.Nico2.Mylist.Deflist
 		public static Task<List<MylistData>> GetDeflistAsync(NiconicoContext context)
 		{
 			return GetDeflistDataAsync(context)
-				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistListJson(prevTask.Result));
+				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistItemResponse(prevTask.Result));
 		}
 
 

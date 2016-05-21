@@ -333,6 +333,11 @@ namespace Mntone.Nico2
 			return url;
 		}
 
+
+		public static string CE_UserApiUrl { get { return "http://api.ce.nicovideo.jp/api/v1/user.info"; } }
+
+
+
 		#endregion
 
 
@@ -364,6 +369,10 @@ namespace Mntone.Nico2
 		public static string MylistGroupUpdateUrl = MylistGroupUrlBase + "update";
 		public static string MylistGroupRemoveUrl = MylistGroupUrlBase + "delete";
 		public static string MylistGroupSortUrl = MylistGroupUrlBase + "sort";
+
+
+
+		public static string MylistGroupDetailApi = "http://api.ce.nicovideo.jp/nicoapi/v1/mylistgroup.get";
 
 		#endregion
 
