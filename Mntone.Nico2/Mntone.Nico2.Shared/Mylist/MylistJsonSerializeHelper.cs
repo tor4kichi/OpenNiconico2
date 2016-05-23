@@ -54,27 +54,6 @@ namespace Mntone.Nico2.Mylist
 
 		
 
-		public static ContentManageResult ParseMylistApiResult(string json)
-		{
-			dynamic parsedJson = JsonConvert.DeserializeObject(json);
-
-			if (parsedJson.error != null)
-			{
-				if (parsedJson.error.code == "EXIST")
-				{
-					return ContentManageResult.Exist;
-				}
-			}
-
-			if (parsedJson.status != null)
-			{
-				if (parsedJson.status == "ok")
-				{
-					return ContentManageResult.Success;
-				}
-			}
-
-			return ContentManageResult.Failed;
-		}
+		
 	}
 }

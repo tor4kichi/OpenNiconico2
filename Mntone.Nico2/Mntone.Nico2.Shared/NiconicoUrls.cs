@@ -337,6 +337,26 @@ namespace Mntone.Nico2
 		public static string CE_UserApiUrl { get { return "http://api.ce.nicovideo.jp/api/v1/user.info"; } }
 
 
+		private static string UserFavApiBase = VideoApiUrlBase + "watchitem/";
+
+		public static string UserFavListApiUrl { get { return UserFavApiBase + "list"; } }
+		public static string UserFavExistApiUrl { get { return UserFavApiBase + "exist"; } }
+		public static string UserFavAddApiUrl { get { return UserFavApiBase + "add"; } }
+		public static string UserFavRemoveApiUrl { get { return UserFavApiBase + "delete"; } }
+
+
+		public static string UserFavUserPageUrl = UserPageUrl + "/fav/user";
+		public static string UserFavMylistPageUrl = UserPageUrl + "/fav/mylist";
+		public static string UserFavTagPageUrl = UserPageUrl + "/fav/tag";
+
+
+		// tags
+		public static string UserFavTagBase = VideoApiUrlBase + "favtag/";
+		public static string UserFavTagListUrl { get { return UserFavTagBase + "list"; } }
+		public static string UserFavTagAddUrl { get { return UserFavTagBase + "add"; } }
+		public static string UserFavTagRemoveUrl { get { return UserFavTagBase + "delete"; } }
+
+
 
 		#endregion
 
@@ -378,7 +398,13 @@ namespace Mntone.Nico2
 
 		#region Mylist
 
+
 		public static string MylistMyPageUrl = VideoUrlBase + "my/mylist";
+
+		public static string MakeMylistPageUrl(string group_id)
+		{
+			return VideoUrlBase + "mylist/" + group_id;
+		}
 
 		public static string MakeMylistCSRFTokenApiUrl(string group_id)
 		{
@@ -408,6 +434,16 @@ namespace Mntone.Nico2
 		public static string WatchItemExistUrl  = WatchItemUrlBase + "exist";
 		public static string WatchItemAddUrl    = WatchItemUrlBase + "add";
 		public static string WatchItemRemoveUrl = WatchItemUrlBase + "remove";
+
+		#endregion
+
+
+		#region Tag
+		
+		public static string MakeTagPageUrl(string tag)
+		{
+			return $"{VideoUrlBase}tag/{tag}";
+		}
 
 		#endregion
 

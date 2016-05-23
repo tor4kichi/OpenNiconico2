@@ -202,7 +202,7 @@ namespace Mntone.Nico2.Mylist
 		{
 			if (MylistGroup.MylistGroupData.IsDeflist(mylistData.GroupId))
 			{
-				return Deflist.DeflistClient.RemoveDeflistAsync(_context, mylistData.ItemId);
+				return Deflist.DeflistClient.RemoveDeflistAsync(_context, mylistData.ItemType, mylistData.ItemId);
 			}
 			else
 			{
@@ -222,7 +222,7 @@ namespace Mntone.Nico2.Mylist
 
 			if (MylistGroup.MylistGroupData.IsDeflist(groupId))
 			{
-				return Deflist.DeflistClient.RemoveDeflistAsync(_context, datum.Select(x => x.ItemId));
+				return Deflist.DeflistClient.RemoveDeflistAsync(_context, datum);
 			}
 			else
 			{
@@ -251,7 +251,7 @@ namespace Mntone.Nico2.Mylist
 
 			if (MylistGroup.MylistGroupData.IsDeflist(groupId))
 			{
-				return Deflist.DeflistClient.CopyDeflistAsync(_context, targetMylistGroup.Id,  datum.Select(x => x.ItemId));
+				return Deflist.DeflistClient.CopyDeflistAsync(_context, targetMylistGroup.Id,  datum);
 			}
 			else
 			{
@@ -279,7 +279,7 @@ namespace Mntone.Nico2.Mylist
 
 			if (MylistGroup.MylistGroupData.IsDeflist(groupId))
 			{
-				return Deflist.DeflistClient.MoveDeflistAsync(_context, targetMylistGroup.Id, datum.Select(x => x.ItemId));
+				return Deflist.DeflistClient.MoveDeflistAsync(_context, targetMylistGroup.Id, datum);
 			}
 			else
 			{

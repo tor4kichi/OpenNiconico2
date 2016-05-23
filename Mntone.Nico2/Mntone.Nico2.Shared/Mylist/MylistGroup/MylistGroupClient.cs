@@ -27,7 +27,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 		public static async Task<string> AddMylistGroupDataAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			var token = await MylistCSRFTokenHelper.GetMylistToken(context);
+			var token = await CSRFTokenHelper.GetToken(context);
 
 			return await context.GetClient()
 				.GetStringAsync($"{NiconicoUrls.MylistGroupAddUrl}?{nameof(name)}={name}&{nameof(description)}={description}&{nameof(is_public)}={is_public.ToString1Or0()}&{nameof(default_sort)}={(uint)default_sort}&{nameof(iconType)}={(uint)iconType}&{nameof(token)}={token}");
@@ -36,7 +36,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 		public static async Task<string> UpdateMylistGroupDataAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			var token = await MylistCSRFTokenHelper.GetMylistToken(context, group_id);
+			var token = await CSRFTokenHelper.GetMylistToken(context, group_id);
 
 			return await context.GetClient()
 				.GetStringAsync($"{NiconicoUrls.MylistGroupUpdateUrl}?{nameof(group_id)}={group_id}&{nameof(name)}={name}&{nameof(description)}={description}&{nameof(is_public)}={is_public.ToString1Or0()}&{nameof(default_sort)}={(uint)default_sort}&{nameof(iconType)}={(uint)iconType}&{nameof(token)}={token}");
@@ -45,7 +45,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 		public static async Task<string> RemoveMylistGroupDataAsync(NiconicoContext context, string group_id)
 		{
-			var token = await MylistCSRFTokenHelper.GetMylistToken(context);
+			var token = await CSRFTokenHelper.GetToken(context);
 
 			return await context.GetClient()
 				.GetStringAsync($"{NiconicoUrls.MylistDeflistRemoveUrl}?{nameof(group_id)}={group_id}&{nameof(token)}={token}");
@@ -89,20 +89,20 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		public static Task<ContentManageResult> AddMylistGroupAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
 			return AddMylistGroupDataAsync(context, name, description, is_public, default_sort, iconType)
-				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistApiResult(prevTask.Result));
+				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
 		public static Task<ContentManageResult> UpdateMylistGroupAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
 			return UpdateMylistGroupDataAsync(context, group_id, name, description, is_public, default_sort, iconType)
-				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistApiResult(prevTask.Result));
+				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
 
 		public static Task<ContentManageResult> RemoveMylistGroupAsync(NiconicoContext context, string group_id)
 		{
 			return RemoveMylistGroupDataAsync(context, group_id)
-				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistApiResult(prevTask.Result));
+				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
 

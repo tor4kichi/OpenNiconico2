@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mntone.Nico2.Mylist
+namespace Mntone.Nico2
 {
-    public static class MylistCSRFTokenHelper
+    public static class CSRFTokenHelper
     {
-		public static async Task<string> GetMylistToken(NiconicoContext context, string group_id)
+		public static async Task<string> GetMylistToken(this NiconicoContext context, string group_id)
 		{
 			var api = NiconicoUrls.MakeMylistCSRFTokenApiUrl(group_id);
 
@@ -16,7 +16,7 @@ namespace Mntone.Nico2.Mylist
 				.ContinueWith(x => x.Result.Substring(x.Result.IndexOf("NicoAPI.token = \"") + 17, 60));
 		}
 
-		public static async Task<string> GetMylistToken(NiconicoContext context)
+		public static async Task<string> GetToken(this NiconicoContext context)
 		{
 			var api = NiconicoUrls.MylistMyPageUrl;
 

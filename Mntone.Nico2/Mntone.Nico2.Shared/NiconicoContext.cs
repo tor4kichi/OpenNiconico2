@@ -168,6 +168,43 @@ namespace Mntone.Nico2
 		}
 
 
+		internal Task<string> GetStringAsync(string url, Dictionary<string, string> query)
+		{
+			var queryText = String.Join("&", query.Select(x => x.Key + "=" + x.Value));
+			var realUri = $"{url}?{queryText}";
+
+			return GetClient().GetStringAsync(realUri);
+		}
+
+		internal Task<string> GetStringAsync(string url)
+		{
+			return GetClient().GetStringAsync(url);
+		}
+
+		internal async Task<string> PostAsync(string url, Dictionary<string, string> keyvalues, bool withToken = true)
+		{
+			if (!keyvalues.ContainsKey("token"))
+			{
+				var token = await this.GetToken();
+				keyvalues.Add("token", token);
+			}
+
+			var content = new HttpFormUrlEncodedContent(keyvalues);
+
+			using (var res = await GetClient().PostAsync(new Uri(url), content))
+			{
+				if (res.IsSuccessStatusCode)
+				{
+					return await res.Content.ReadAsStringAsync();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		}
+
+
 		#region APIs
 
 		/// <summary>

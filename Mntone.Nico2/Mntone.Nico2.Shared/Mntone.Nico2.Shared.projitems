@@ -111,7 +111,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\Tags\TagsClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\Tags\TagsResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\Vote\VoteClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistCSRFTokenHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContentManageResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSRFTokenHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistItem\MylistItemResponse.cs" />
@@ -128,11 +129,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistJsonSerializeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistQueryUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoAccountAuthority.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoAuthenticationToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoHResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NiconicoQueryHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoRegex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoSession.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoSignInStatus.cs" />
@@ -149,6 +150,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)SortDirection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortDirectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringExtention.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\UserApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoClient.cs" />
