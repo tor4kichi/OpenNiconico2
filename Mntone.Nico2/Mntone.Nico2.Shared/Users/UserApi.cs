@@ -159,6 +159,34 @@ namespace Mntone.Nico2.Users
 
 
 
+
+		public Task<Video.UserVideoResponse> GetUserVideos(uint userId, uint page, SortMethod sortMethod = SortMethod.FirstRetrieve, SortDirection sortDir = SortDirection.Descending)
+		{
+			return Video.UserVideoClient.GetUserAsync(_context, userId, page, sortMethod, sortDir);
+		}
+
+
+
+
+
+		public Task<NG.NGCommentResponse> GetNGComment()
+		{
+			return NG.NGClient.GetNGCommentAsync(_context);
+		}
+
+
+		public Task<NG.NGCommentResponseCore> AddNGComment(NG.NGCommentType type, string source)
+		{
+			return NG.NGClient.AddNGCommentAsync(_context, type, source);
+		}
+
+		public Task<NG.NGCommentResponseCore> DeleteNGComment(NG.NGCommentType type, string source)
+		{
+			return NG.NGClient.DeleteNGCommentAsync(_context, type, source);
+		}
+
+
+
 		#region field
 
 		private NiconicoContext _context;

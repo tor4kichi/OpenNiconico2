@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -61,7 +62,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		}
 
 
-		private static MylistGroup ParseMylistGroupDetailXml(string xml)
+		private static MylistGroupDetail ParseMylistGroupDetailXml(string xml)
 		{
 			var serializer = new XmlSerializer(typeof(MylistGroupResponse));
 
@@ -75,8 +76,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		}
 
 
-
-
+		
 
 
 
@@ -107,7 +107,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 
 
-		public static Task<MylistGroup> GetMylistGroupDetailAsync(NiconicoContext context, string group_id)
+		public static Task<MylistGroupDetail> GetMylistGroupDetailAsync(NiconicoContext context, string group_id)
 		{
 			return GetMylistGroupDetailDataAsync(context, group_id)
 				.ContinueWith(prevTask => ParseMylistGroupDetailXml(prevTask.Result));

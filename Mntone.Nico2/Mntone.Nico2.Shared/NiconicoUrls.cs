@@ -318,7 +318,7 @@ namespace Mntone.Nico2
 				throw new NotSupportedException("page is can not be lesser equal 0.");
 			}
 
-			var url = $"http://www.nicovideo.jp/user/{userId}/video?page={page}";
+			var url = $"http://www.nicovideo.jp/user/{userId}/video?rss=2.0&page={page}";
 
 			if (sortMethod != null)
 			{
@@ -351,12 +351,13 @@ namespace Mntone.Nico2
 
 
 		// tags
-		public static string UserFavTagBase = VideoApiUrlBase + "favtag/";
+		public const string UserFavTagBase = VideoApiUrlBase + "favtag/";
 		public static string UserFavTagListUrl { get { return UserFavTagBase + "list"; } }
 		public static string UserFavTagAddUrl { get { return UserFavTagBase + "add"; } }
 		public static string UserFavTagRemoveUrl { get { return UserFavTagBase + "delete"; } }
 
-
+		// ng comment
+		public const string UserNGCommentUrl = VideoFlapiUrlBase + "configurengclient";
 
 		#endregion
 
@@ -393,6 +394,7 @@ namespace Mntone.Nico2
 
 
 		public static string MylistGroupDetailApi = "http://api.ce.nicovideo.jp/nicoapi/v1/mylistgroup.get";
+		public static string MylistListlApi = "http://api.ce.nicovideo.jp/nicoapi/v1/mylist.list";
 
 		#endregion
 

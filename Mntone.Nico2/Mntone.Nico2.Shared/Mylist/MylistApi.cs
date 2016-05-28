@@ -36,7 +36,7 @@ namespace Mntone.Nico2.Mylist
 		/// ログイン中のユーザーのマイリストグループ一覧を取得
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<MylistGroup.MylistGroupData>> GetMylistGroupListAsync()
+		public Task<List<MylistGroupData>> GetMylistGroupListAsync()
 		{
 			return MylistGroup.MylistGroupClient.GetMylistGroupListAsync(_context);
 		}
@@ -56,7 +56,7 @@ namespace Mntone.Nico2.Mylist
 		/// ログイン中のユーザーの新しいマイリストグループを作成
 		/// </summary>
 		/// <returns></returns>
-		public Task<ContentManageResult> CreateMylistGroupAsync(MylistGroup.MylistGroupData groupData)
+		public Task<ContentManageResult> CreateMylistGroupAsync(MylistGroupData groupData)
 		{
 			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.IsPublic, groupData.DefaultSort, groupData.IconId);
 		}
@@ -82,7 +82,7 @@ namespace Mntone.Nico2.Mylist
 		/// </summary>
 		/// <param name="groupData"></param>
 		/// <returns></returns>
-		public Task<ContentManageResult> UpdateMylistGroupAsync(MylistGroup.MylistGroupData groupData)
+		public Task<ContentManageResult> UpdateMylistGroupAsync(MylistGroupData groupData)
 		{
 			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.IsPublic, groupData.DefaultSort, groupData.IconId);
 		}
@@ -104,10 +104,22 @@ namespace Mntone.Nico2.Mylist
 		/// </summary>
 		/// <param name="group_id">削除対象のマイリストグループID(</param>
 		/// <returns></returns>
-		public Task<ContentManageResult> RemoveMylistGroupAsync(MylistGroup.MylistGroupData groupData)
+		public Task<ContentManageResult> RemoveMylistGroupAsync(MylistGroupData groupData)
 		{
 			return MylistGroup.MylistGroupClient.RemoveMylistGroupAsync(_context, groupData.Id);
 		}
+
+		/// <summary>
+		/// マイリストに登録されたアイテムの一覧を取得
+		/// </summary>
+		/// <param name="group_id">マイリストグループID</param>
+		/// <returns></returns>
+		/// <remarks>http://api.ce.nicovideo.jp/nicoapi/v1 を利用してマイリストを取得します。</remarks>
+		public Task<MylistListResponse> GetMylistListAsync(string group_id, uint from = 0, uint limit = 50, SortMethod sortMethod = SortMethod.FirstRetrieve, SortDirection sortDir = SortDirection.Descending)
+		{
+			return MylistItem.MylistItemClient.GetMylistListAsync(_context, group_id, from, limit, sortMethod, sortDir);
+		}
+
 
 
 		/// <summary>
@@ -115,11 +127,11 @@ namespace Mntone.Nico2.Mylist
 		/// </summary>
 		/// <param name="group_id">マイリストグループID</param>
 		/// <returns></returns>
-		public Task<List<Mylist.MylistData>> GetMylistItemListAsync(string group_id)
+		public Task<List<MylistData>> GetMylistItemListAsync(string group_id)
 		{
-			if (MylistGroup.MylistGroupData.IsDeflist(group_id))
+			if (MylistGroupData.IsDeflist(group_id))
 			{
-				return Mylist.Deflist.DeflistClient.GetDeflistAsync(_context);
+				return Deflist.DeflistClient.GetDeflistAsync(_context);
 			}
 			else
 			{
@@ -137,7 +149,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> AddMylistItemAsync(string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
-			if (MylistGroup.MylistGroupData.IsDeflist(group_id))
+			if (MylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.AddDeflistAsync(_context, item_type, item_id, description);
 			}
@@ -170,7 +182,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistItemAsync(string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
-			if (MylistGroup.MylistGroupData.IsDeflist(group_id))
+			if (MylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.UpdateDeflistAsync(_context, item_type, item_id, description);
 			}
@@ -200,7 +212,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> RemoveMylistItemAsync(MylistData mylistData)
 		{
-			if (MylistGroup.MylistGroupData.IsDeflist(mylistData.GroupId))
+			if (MylistGroupData.IsDeflist(mylistData.GroupId))
 			{
 				return Deflist.DeflistClient.RemoveDeflistAsync(_context, mylistData.ItemType, mylistData.ItemId);
 			}
@@ -220,7 +232,7 @@ namespace Mntone.Nico2.Mylist
 		{
 			var groupId = datum.First().GroupId;
 
-			if (MylistGroup.MylistGroupData.IsDeflist(groupId))
+			if (MylistGroupData.IsDeflist(groupId))
 			{
 				return Deflist.DeflistClient.RemoveDeflistAsync(_context, datum);
 			}
@@ -239,7 +251,7 @@ namespace Mntone.Nico2.Mylist
 		/// <param name="datum"></param>
 		/// <returns></returns>
 		/// <remarks>ターゲットにはとりあえずマイリストを指定することはできません</remarks>
-		public Task<ContentManageResult> CopyMylistItemAsync(MylistGroup.MylistGroupData targetMylistGroup, IEnumerable<MylistData> datum)
+		public Task<ContentManageResult> CopyMylistItemAsync(MylistGroupData targetMylistGroup, IEnumerable<MylistData> datum)
 		{
 			if (targetMylistGroup.IsDeflist())
 			{
@@ -249,7 +261,7 @@ namespace Mntone.Nico2.Mylist
 
 			var groupId = datum.First().GroupId;
 
-			if (MylistGroup.MylistGroupData.IsDeflist(groupId))
+			if (MylistGroupData.IsDeflist(groupId))
 			{
 				return Deflist.DeflistClient.CopyDeflistAsync(_context, targetMylistGroup.Id,  datum);
 			}
@@ -267,7 +279,7 @@ namespace Mntone.Nico2.Mylist
 		/// <param name="datum"></param>
 		/// <returns></returns>
 		/// <remarks>ターゲットにはとりあえずマイリストを指定することは出来ません。</remarks>
-		public Task<ContentManageResult> MoveMylistItemAsync(MylistGroup.MylistGroupData targetMylistGroup, IEnumerable<MylistData> datum)
+		public Task<ContentManageResult> MoveMylistItemAsync(MylistGroupData targetMylistGroup, IEnumerable<MylistData> datum)
 		{
 			if (targetMylistGroup.IsDeflist())
 			{
@@ -277,7 +289,7 @@ namespace Mntone.Nico2.Mylist
 
 			var groupId = datum.First().GroupId;
 
-			if (MylistGroup.MylistGroupData.IsDeflist(groupId))
+			if (MylistGroupData.IsDeflist(groupId))
 			{
 				return Deflist.DeflistClient.MoveDeflistAsync(_context, targetMylistGroup.Id, datum);
 			}
@@ -293,7 +305,7 @@ namespace Mntone.Nico2.Mylist
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns></returns>
-		public Task<List<MylistGroup.MylistGroupData>> GetUserMylistGroupAsync(string userId)
+		public Task<List<MylistGroupData>> GetUserMylistGroupAsync(string userId)
 		{
 			return UserMylist.UserMylistClient.GetUserMylistAsync(_context, userId);
 		}
@@ -305,7 +317,7 @@ namespace Mntone.Nico2.Mylist
 		/// </summary>
 		/// <param name="group_id"></param>
 		/// <returns></returns>
-		public Task<MylistGroup.MylistGroup> GetMylistGroupDetailAsync(string group_id)
+		public Task<MylistGroupDetail> GetMylistGroupDetailAsync(string group_id)
 		{
 			return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, group_id);
 		}

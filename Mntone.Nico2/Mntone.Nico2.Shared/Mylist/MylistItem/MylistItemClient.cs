@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Mntone.Nico2.Mylist.MylistItem
 {
@@ -86,13 +88,53 @@ namespace Mntone.Nico2.Mylist.MylistItem
 
 
 
+		public static async Task<string> GetMylistListDataAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		{
+			var dict = new Dictionary<string, string>();
 
-	
+			dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(from), from.ToString());
+			dict.Add(nameof(limit), limit.ToString());
+			dict.Add(nameof(sortMethod), sortMethod.ToShortString());
+			dict.Add(nameof(sortDir), sortDir.ToShortString());
+
+			var query = HttpQueryExtention.DictionaryToQuery(dict);
+
+			return await context.GetClient()
+				.GetStringAsync($"{NiconicoUrls.MylistListlApi}?{query}");
+		}
+
+		private static MylistListResponse ParseMylistListXml(string xml)
+		{
+			var serializer = new XmlSerializer(typeof(MylistListResponse));
+
+			MylistListResponse response = null;
+			using (var stream = new StringReader(xml))
+			{
+				response = (MylistListResponse)serializer.Deserialize(stream);
+			}
+
+			return response;
+
+		}
 
 
 
 
+		public static Task<MylistListResponse> GetMylistListAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		{
+			return GetMylistListDataAsync(context, group_id, from, limit, sortMethod, sortDir)
+				.ContinueWith(prevTask => ParseMylistListXml(prevTask.Result));
 
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="group_id"></param>
+		/// <returns></returns>
 		public static Task<List<MylistData>> GetMylistItemAsync(NiconicoContext context, string group_id)
 		{
 			return GetMylistItemDataAsync(context, group_id)

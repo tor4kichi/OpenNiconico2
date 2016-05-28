@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Mntone.Nico2.Mylist.MylistGroup
+namespace Mntone.Nico2.Mylist
 {
 
 

@@ -18,7 +18,7 @@ namespace Mntone.Nico2.Mylist.UserMylist
 
 
 
-		public static List<MylistGroup.MylistGroupData> ParseRss(string rss)
+		public static List<MylistGroupData> ParseRss(string rss)
 		{
 			var serializer = new XmlSerializer(typeof(UserMylistRss));
 
@@ -30,7 +30,7 @@ namespace Mntone.Nico2.Mylist.UserMylist
 
 			return parsedRss.Channel.Item.Select(x =>
 			{
-				return new MylistGroup.MylistGroupData()
+				return new MylistGroupData()
 				{
 					Id = x.Link.Split('/').Last(),
 					IsPublic = true,
@@ -42,7 +42,7 @@ namespace Mntone.Nico2.Mylist.UserMylist
 			.ToList();
 		}
 
-		public static Task<List<MylistGroup.MylistGroupData>> GetUserMylistAsync(NiconicoContext context, string user_id)
+		public static Task<List<MylistGroupData>> GetUserMylistAsync(NiconicoContext context, string user_id)
 		{
 			return GetUserMylistDataAsync(context, user_id)
 				.ContinueWith(prevTask => ParseRss(prevTask.Result));

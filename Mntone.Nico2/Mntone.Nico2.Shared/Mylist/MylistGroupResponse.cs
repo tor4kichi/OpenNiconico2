@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0
 
 http://www.apache.org/licenses/LICENSE-2.0
 */
-namespace Mntone.Nico2.Mylist.MylistGroup
+namespace Mntone.Nico2.Mylist
 {
 	[XmlRoot(ElementName = "options")]
 	public class Options
@@ -71,7 +71,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		[XmlElement(ElementName = "summary")]
 		public string Summary { get; set; }
 	}
-
+	/*
 	[XmlRoot(ElementName = "video_info")]
 	public class Video_info
 	{
@@ -80,9 +80,10 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		[XmlElement(ElementName = "thread")]
 		public Thread Thread { get; set; }
 	}
+	*/
 
 	[XmlRoot(ElementName = "mylistgroup")]
-	public class MylistGroup
+	public class MylistGroupDetail
 	{
 		[XmlElement(ElementName = "id")]
 		public string Id { get; set; }
@@ -120,7 +121,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 	public class MylistGroupResponse
 	{
 		[XmlElement(ElementName = "mylistgroup")]
-		public MylistGroup Mylistgroup { get; set; }
+		public MylistGroupDetail Mylistgroup { get; set; }
 		[XmlAttribute(AttributeName = "status")]
 		public string Status { get; set; }
 	}

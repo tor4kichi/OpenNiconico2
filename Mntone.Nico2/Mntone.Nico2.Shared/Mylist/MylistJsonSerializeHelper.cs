@@ -18,7 +18,7 @@ namespace Mntone.Nico2.Mylist
 				.ToList();
 		}
 
-
+		
 		public static List<MylistData> ParseMylistItemResponse(string json)
 		{
 			var res = JsonConvert.DeserializeObject<MylistItem.MylistItemResponse>(json);
