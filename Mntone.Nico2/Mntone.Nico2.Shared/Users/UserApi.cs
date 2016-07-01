@@ -159,6 +159,29 @@ namespace Mntone.Nico2.Users
 
 
 
+		/// <summary>
+		/// ユーザーのプロフィールを含む詳細データを取得します。
+		/// データ取得のためにニコニコ動画のユーザーページへアクセスします。
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		public Task<User.UserDetail> GetUserDetail(uint userId)
+		{
+			return GetUserDetail(userId.ToString());
+		}
+
+		/// <summary>
+		/// ユーザーのプロフィールを含む詳細データを取得します。
+		/// データ取得のためにニコニコ動画のユーザーページへアクセスします。
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		public Task<User.UserDetail> GetUserDetail(string userId)
+		{
+			return User.UserClient.GetUserDetailAsync(_context, userId);
+
+		}
+
 
 		public Task<Video.UserVideoResponse> GetUserVideos(uint userId, uint page, SortMethod sortMethod = SortMethod.FirstRetrieve, SortDirection sortDir = SortDirection.Descending)
 		{

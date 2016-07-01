@@ -64,6 +64,8 @@ namespace Mntone.Nico2
 		public static string VideoKeywordSearchApiUrl = ExtSearchUrlBase + "search/";
 		public static string VideoTagSearchApiUrl = ExtSearchUrlBase + "tag/";
 
+		public static string RelatedVideoApiUrl = "http://api.ce.nicovideo.jp/nicoapi/v1/video.relation";
+
 
 		/// <summary>
 		/// 
@@ -297,12 +299,17 @@ namespace Mntone.Nico2
 		/// </summary>
 		public static string UserBlankIconUrl { get { return "http://uni.res.nimg.jp/img/user/thumb/blank.jpg"; } }
 
+		public static string UserPageUrlBase = $"{VideoUrlBase}user/";
 
-		
-
-		public static string MakeUserMylistGroupListRssUrl(string userId)
+		public static string MakeUserPageUrl(string user_id)
 		{
-			return $"{VideoUrlBase}user/{userId}/mylist?rss=2.0";
+			return $"{UserPageUrlBase}{user_id}";
+		}
+
+
+		public static string MakeUserMylistGroupListRssUrl(string user_id)
+		{
+			return $"{MakeUserPageUrl(user_id)}/mylist?rss=2.0";
 		}
 
 		/// <summary>

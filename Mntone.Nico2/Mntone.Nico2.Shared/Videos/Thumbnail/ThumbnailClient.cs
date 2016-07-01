@@ -15,7 +15,7 @@ namespace Mntone.Nico2.Videos.Thumbnail
 		{
 			if( !NiconicoRegex.IsVideoId( requestId ) )
 			{
-				throw new ArgumentException();
+//				throw new ArgumentException();
 			}
 
 			return context.GetClient()

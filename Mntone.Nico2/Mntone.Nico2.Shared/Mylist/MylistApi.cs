@@ -115,7 +115,7 @@ namespace Mntone.Nico2.Mylist
 		/// <param name="group_id">マイリストグループID</param>
 		/// <returns></returns>
 		/// <remarks>http://api.ce.nicovideo.jp/nicoapi/v1 を利用してマイリストを取得します。</remarks>
-		public Task<MylistListResponse> GetMylistListAsync(string group_id, uint from = 0, uint limit = 50, SortMethod sortMethod = SortMethod.FirstRetrieve, SortDirection sortDir = SortDirection.Descending)
+		public Task<NicoVideoResponse> GetMylistListAsync(string group_id, uint from = 0, uint limit = 50, SortMethod sortMethod = SortMethod.FirstRetrieve, SortDirection sortDir = SortDirection.Descending)
 		{
 			return MylistItem.MylistItemClient.GetMylistListAsync(_context, group_id, from, limit, sortMethod, sortDir);
 		}

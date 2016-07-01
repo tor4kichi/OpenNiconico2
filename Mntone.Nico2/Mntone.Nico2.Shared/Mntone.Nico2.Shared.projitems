@@ -160,6 +160,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\User\UserClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\User\UserDetail.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\User\UserResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoResponse.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\History.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRanking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRankingRss.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Related\RelatedClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchClient.cs" />

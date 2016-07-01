@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Windows.Web.Http;
 using System.Threading.Tasks;
+using Windows.Web.Http.Filters;
 
 #if WINDOWS_APP
 using Windows.Foundation;

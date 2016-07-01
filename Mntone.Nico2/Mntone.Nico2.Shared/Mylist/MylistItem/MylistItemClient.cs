@@ -104,14 +104,14 @@ namespace Mntone.Nico2.Mylist.MylistItem
 				.GetStringAsync($"{NiconicoUrls.MylistListlApi}?{query}");
 		}
 
-		private static MylistListResponse ParseMylistListXml(string xml)
+		private static NicoVideoResponse ParseMylistListXml(string xml)
 		{
-			var serializer = new XmlSerializer(typeof(MylistListResponse));
+			var serializer = new XmlSerializer(typeof(NicoVideoResponse));
 
-			MylistListResponse response = null;
+			NicoVideoResponse response = null;
 			using (var stream = new StringReader(xml))
 			{
-				response = (MylistListResponse)serializer.Deserialize(stream);
+				response = (NicoVideoResponse)serializer.Deserialize(stream);
 			}
 
 			return response;
@@ -121,7 +121,7 @@ namespace Mntone.Nico2.Mylist.MylistItem
 
 
 
-		public static Task<MylistListResponse> GetMylistListAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<NicoVideoResponse> GetMylistListAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
 		{
 			return GetMylistListDataAsync(context, group_id, from, limit, sortMethod, sortDir)
 				.ContinueWith(prevTask => ParseMylistListXml(prevTask.Result));

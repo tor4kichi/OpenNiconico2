@@ -3,6 +3,7 @@ using System;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
 #else
+using Mntone.Nico2.Mylist;
 using System.Threading.Tasks;
 #endif
 
@@ -116,9 +117,9 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="requestId"></param>
 		/// <returns></returns>
-		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId)
+		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId, bool forceLowQuality)
 		{
-			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId);
+			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality);
 		}
 
 
@@ -154,6 +155,17 @@ namespace Mntone.Nico2.Videos
 			return Search.SearchClient.GetTagSearchAsync(_context, tag, pageCount, sortMethod, sortDir);
 		}
 
+
+
+		/// <summary>
+		/// ニコニコ動画IDから関連する動画情報を取得します。
+		/// </summary>
+		/// <param name="SearchResponse"></param>
+		/// <returns></returns>
+		public Task<NicoVideoResponse> GetRelatedVideoAsync(string videoId, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
+		{
+			return Related.RelatedClient.GetRelatedVideoAsync(_context, videoId, from, limit, sortMethod, sortDir);
+		}
 
 		#region field
 

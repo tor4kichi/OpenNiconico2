@@ -64,12 +64,16 @@ namespace Mntone.Nico2.Videos.Search
 		{
 			FirstRetrieve = DateTime.Parse(_first_retrieve);
 
-			while(_length.Length <= 5)
+			var values = _length.Split(':').Reverse();
+			var totalTime_Sec = 0;
+			var q = 0;
+			foreach (var t in values)
 			{
-				_length = "00:" + _length;
+				totalTime_Sec += int.Parse(t) * (q == 0 ? 1 : (q * 60));
+				q++;
 			}
 
-			Length = TimeSpan.Parse(_length);
+			Length = TimeSpan.FromSeconds(totalTime_Sec);
 		}
 
 	}
