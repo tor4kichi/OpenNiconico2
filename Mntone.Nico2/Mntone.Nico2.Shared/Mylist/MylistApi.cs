@@ -58,7 +58,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> CreateMylistGroupAsync(MylistGroupData groupData)
 		{
-			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.IsPublic, groupData.DefaultSort, groupData.IconId);
+			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.GetIsPublic(), MylistDefaultSort.FirstRetrieve_Descending, groupData.GetIconType());
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Mntone.Nico2.Mylist
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistGroupAsync(MylistGroupData groupData)
 		{
-			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.IsPublic, groupData.DefaultSort, groupData.IconId);
+			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.GetIsPublic(), MylistDefaultSort.FirstRetrieve_Descending, groupData.GetIconType());
 		}
 
 

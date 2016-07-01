@@ -62,7 +62,7 @@ namespace Mntone.Nico2.Users.User
 			}
 
 			data.BirthDay = accountItems[2].GetElementByTagName("span").InnerText;
-			data.Region = accountItems[3].GetElementByTagName("span").InnerText;
+			data.Region = accountItems.ElementAtOrDefault(3)?.GetElementByTagName("span").InnerText ?? "非公開";
 
 			var stats = profile.GetElementByClassName("stats");
 			data.FavCount = uint.Parse(stats.GetElementByClassName("fav").InnerText);
@@ -91,9 +91,17 @@ namespace Mntone.Nico2.Users.User
 
 			// ex) 投稿動画（606件）
 			// 先頭5文字をスキップして、以降の任意桁数の数字を抽出
-			data.TotalVideoCount = uint.Parse(
-				new String(video.GetElementByTagName("h3").InnerText.Skip(5).TakeWhile(x => x >= '0' && x <= '9').ToArray())
-				);
+			try
+			{
+				data.TotalVideoCount = uint.Parse(
+					new String(video.GetElementByTagName("h3").InnerText.Skip(5).TakeWhile(x => x >= '0' && x <= '9').ToArray())
+					);
+			}
+			catch
+			{
+				// 投稿動画非公開の場合
+				data.TotalVideoCount = 0;
+			}
 
 			return data;
 		}

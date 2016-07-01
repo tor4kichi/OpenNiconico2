@@ -14,7 +14,7 @@ namespace Mntone.Nico2.Mylist
 			var parsedJson = JsonConvert.DeserializeObject< LoginUserMylistGroupData>(json);
 
 			return parsedJson.mylistgroup
-				.Select(x => new MylistGroupData(x))
+				.Cast<MylistGroupData>()
 				.ToList();
 		}
 
