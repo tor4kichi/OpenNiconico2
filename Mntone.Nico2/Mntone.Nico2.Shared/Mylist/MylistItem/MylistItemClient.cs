@@ -41,10 +41,11 @@ namespace Mntone.Nico2.Mylist.MylistItem
 		{
 			var token = CSRFTokenHelper.GetToken(context);
 
-			var ids_query = NiconicoQueryHelper.Make_idlist_QueryString(item_type, item_id);
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(item_type);
+			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
 			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistRemoveUrl}?{nameof(group_id)}={group_id}&{ids_query}&{nameof(token)}={token}");
+				.GetStringAsync($"{NiconicoUrls.MylistRemoveUrl}?{nameof(group_id)}={group_id}&{key}={val}&{nameof(token)}={token}");
 		}
 
 

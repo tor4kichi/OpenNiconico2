@@ -42,10 +42,11 @@ namespace Mntone.Nico2.Mylist.Deflist
 		{
 			var token = CSRFTokenHelper.GetToken(context);
 
-			var id_list = NiconicoQueryHelper.Make_idlist_QueryString(itemType, item_id);
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
+			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
 			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistRemoveUrl}?{id_list}&{nameof(token)}={token}");
+				.GetStringAsync($"{NiconicoUrls.MylistDeflistRemoveUrl}?{key}={val}&{nameof(token)}={token}");
 		}
 
 
@@ -64,10 +65,11 @@ namespace Mntone.Nico2.Mylist.Deflist
 		{
 			var token = CSRFTokenHelper.GetToken(context);
 
-			var id_list = NiconicoQueryHelper.Make_idlist_QueryString(itemType, item_id);
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
+			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
 			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistMoveUrl}?{nameof(target_group_id)}={target_group_id}&{id_list}&{nameof(token)}={token}");
+				.GetStringAsync($"{NiconicoUrls.MylistDeflistMoveUrl}?{nameof(target_group_id)}={target_group_id}&{key}={val}&{nameof(token)}={token}");
 		}
 
 		public static async Task<string> MoveDeflistDataAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
@@ -87,10 +89,11 @@ namespace Mntone.Nico2.Mylist.Deflist
 		{
 			var token = CSRFTokenHelper.GetToken(context);
 
-			var id_list = NiconicoQueryHelper.Make_idlist_QueryString(itemType, item_id);
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
+			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
 			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistCopyUrl}?{nameof(target_group_id)}={target_group_id}&{id_list}&{nameof(token)}={token}");
+				.GetStringAsync($"{NiconicoUrls.MylistDeflistCopyUrl}?{nameof(target_group_id)}={target_group_id}&{key}={val}&{nameof(token)}={token}");
 		}
 
 		public static async Task<string> CopyDeflistDataAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)

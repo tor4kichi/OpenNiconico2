@@ -14,6 +14,7 @@ namespace Mntone.Nico2.Users.Fav
 {
 	// お気に入りAPIのクライアント
 
+
     internal sealed class FavClient
     {
 		public static Task<string> GetFavUsersDataAsync(NiconicoContext context)
@@ -42,15 +43,16 @@ namespace Mntone.Nico2.Users.Fav
 			return context.PostAsync(NiconicoUrls.UserFavAddApiUrl, formData);
 		}
 
-
+		
 		public static Task<string> RemoveFavDataAsync(NiconicoContext context, NiconicoItemType itemType, string item_id)
 		{
-			var id_list = NiconicoQueryHelper.Make_idlist_QueryString(itemType, item_id);
-
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
+			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 			var formData = new Dictionary<string, string>
 			{
-				{ nameof(id_list), id_list },
+				{ key, val },
 			};
+
 
 			return context.PostAsync(NiconicoUrls.UserFavRemoveApiUrl, formData);
 		}
@@ -72,7 +74,7 @@ namespace Mntone.Nico2.Users.Fav
 		{
 			var formData = new Dictionary<string, string>
 			{
-				{ nameof(tag), tag },
+				{ nameof(tag), TagStringHelper.ToEnsureHankakuNumberTagString(tag) },
 			};
 
 			return context.PostAsync(NiconicoUrls.UserFavTagAddUrl, formData);
@@ -83,7 +85,7 @@ namespace Mntone.Nico2.Users.Fav
 		{
 			var formData = new Dictionary<string, string>
 			{
-				{ nameof(tag), tag },
+				{ nameof(tag), TagStringHelper.ToEnsureHankakuNumberTagString(tag) },
 			};
 
 			return context.PostAsync(NiconicoUrls.UserFavTagRemoveUrl, formData);
@@ -158,7 +160,7 @@ namespace Mntone.Nico2.Users.Fav
 
 			if (response.status == "ok")
 			{
-				return response.favtag_items.Select(x => x.tag)
+				return response.favtag_items.Select(x => TagStringHelper.ToEnsureHankakuNumberTagString(x.tag))
 				.ToList();
 			}
 			else
@@ -222,6 +224,10 @@ namespace Mntone.Nico2.Users.Fav
 		}
 
 
+		/// <param name="context"></param>
+		/// <param name="tag"></param>
+		/// <returns></returns>
+		/// <remarks>Tagの文字列に全角の数字が含まれる場合は、すべて半角に変換して扱う必要があります。</remarks>
 		public static Task<ContentManageResult> RemoveFavTagAsync(NiconicoContext context, string tag)
 		{
 			return RemoveFavTagDataAsync(context, tag)

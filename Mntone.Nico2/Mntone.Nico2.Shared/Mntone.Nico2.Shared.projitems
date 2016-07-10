@@ -153,6 +153,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)StringExtention.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\TagStringHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\NG\NGClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\NG\NGCommentResponse.cs" />

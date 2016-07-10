@@ -61,19 +61,28 @@ namespace Mntone.Nico2.Users.User
 					break;
 			}
 
-			data.BirthDay = accountItems[2].GetElementByTagName("span").InnerText;
-			data.Region = accountItems.ElementAtOrDefault(3)?.GetElementByTagName("span").InnerText ?? "非公開";
+			try
+			{
+				data.BirthDay = accountItems[2].GetElementByTagName("span").InnerText;
+				data.Region = accountItems.ElementAtOrDefault(3)?.GetElementByTagName("span").InnerText ?? "非公開";
+			}
+			catch (Exception) { }
 
-			var stats = profile.GetElementByClassName("stats");
-			data.FavCount = uint.Parse(stats.GetElementByClassName("fav").InnerText);
-			data.StampCount = uint.Parse(stats.GetElementByClassName("exp").GetElementByTagName("a").InnerText.Replace("EXP", ""));
+
+			try
+			{
+				var stats = profile.GetElementByClassName("stats");
+				data.FavCount = uint.Parse(stats.GetElementByClassName("fav").InnerText);
+				data.StampCount = uint.Parse(stats.GetElementByClassName("exp").GetElementByTagName("a").InnerText.Replace("EXP", ""));
+			}
+			catch (Exception) { }
 
 			try
 			{
 				data.Description = profile
 					.GetElementByClassName("userDetailComment")
-					.GetElementByTagName("li")
-					.GetElementById("descriptioin_full")
+					.GetElementById("user_description")
+					.GetElementById("description_full")
 					.GetElementByTagName("span")
 					.InnerHtml;
 			}
@@ -101,6 +110,7 @@ namespace Mntone.Nico2.Users.User
 			{
 				// 投稿動画非公開の場合
 				data.TotalVideoCount = 0;
+				data.IsOwnerVideoPrivate = true;
 			}
 
 			return data;

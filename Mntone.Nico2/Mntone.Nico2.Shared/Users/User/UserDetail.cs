@@ -16,6 +16,7 @@ namespace Mntone.Nico2.Users.User
 		public uint FavCount { get; set; }
 		public uint StampCount { get; set; }
 
+		public bool IsOwnerVideoPrivate { get; set; }
 
 		/// <summary>
 		/// 自己紹介コメント（HTML）

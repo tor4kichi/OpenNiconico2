@@ -9,7 +9,9 @@ namespace Mntone.Nico2.Mylist
     {
 		public static string MylistDataToQueryString(MylistData mylistData)
 		{
-			return NiconicoQueryHelper.Make_idlist_QueryString(mylistData.ItemType, mylistData.ItemId);
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(mylistData.ItemType);
+			var val = NiconicoQueryHelper.RemoveIdPrefix(mylistData.ItemId);
+			return $"{key}={val}";
 		}
 
 		public static string MylistDataToQueryString(IEnumerable<MylistData> list)

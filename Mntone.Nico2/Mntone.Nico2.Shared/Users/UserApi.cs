@@ -151,9 +151,10 @@ namespace Mntone.Nico2.Users
 		/// </summary>
 		/// <param name="tag"></param>
 		/// <returns></returns>
+		/// <remarks>Tagの文字列に全角の数字が含まれる場合は、すべて半角に変換して扱う必要があります。</remarks>
 		public Task<ContentManageResult> RemoveFavTagAsync(string tag)
 		{
-			return Fav.FavClient.AddFavTagAsync(_context, tag);
+			return Fav.FavClient.RemoveFavTagAsync(_context, tag);
 		}
 
 
