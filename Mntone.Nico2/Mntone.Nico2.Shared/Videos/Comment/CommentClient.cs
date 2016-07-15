@@ -1,9 +1,14 @@
-﻿using System;
+﻿using Mntone.Nico2.Videos.Flv;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Mntone.Nico2.Videos.Comment
 {
@@ -64,5 +69,135 @@ namespace Mntone.Nico2.Videos.Comment
 			return GetCommentDataAsync(context, response)
 					.ContinueWith(prevTask => ParseComment(prevTask.Result));
 		}
+
+
+
+
+		// コメントの送信
+
+
+		public static async Task<string> GetPostKeyAsync(NiconicoContext context, CommentThread thread)
+		{
+			var commmentCount = int.Parse(thread.CommentCount);
+			var paramDict = new Dictionary<string, string>();
+			paramDict.Add("version", "1");
+			paramDict.Add("version_sub", "2");
+			paramDict.Add("thread", thread._thread);
+			paramDict.Add("block_no", ((commmentCount + 1) / 100).ToString());
+			paramDict.Add("device", "1");
+			paramDict.Add("yugi", "");
+
+			return await context.GetStringAsync(NiconicoUrls.VideoPostKeyUrl, paramDict);
+		}
+
+
+		static readonly int PostKeyCharCount = "postkey=".Count();
+
+		public static string ParsePostKey(string getPostKeyResult)
+		{
+			Debug.WriteLine(getPostKeyResult);
+			return new String(getPostKeyResult.Skip(PostKeyCharCount).ToArray());
+		}
+
+
+		public static async Task<string> PostCommentDataAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, IEnumerable<CommandType> commands)
+		{
+			// postkeyの取得
+			var postKey = await GetPostKeyAsync(context, thread)
+				.ContinueWith(prevResult => ParsePostKey(prevResult.Result));
+
+			Debug.WriteLine(postKey);
+
+			var info = await context.User.GetInfoAsync();
+			var userid = info.Id;
+			var isPremium = info.IsPremium;
+
+			var postComment = new PostComment()
+			{
+				user_id = userid.ToString(),
+				mail = String.Join(" ", commands.Select(x => x.ToString())),
+				thread = thread._thread,
+				vpos = ((uint)position.TotalMilliseconds / 10).ToString(),
+				ticket = thread.Ticket,
+				premium = isPremium.ToString1Or0(),
+				postkey = postKey,
+				comment = comment,
+			};
+
+			
+			string postCommentXml = "";
+			var emptyNamepsaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+			var serializer = new XmlSerializer(typeof(PostComment));
+
+			var xmlwriterSettings = new XmlWriterSettings()
+			{
+				OmitXmlDeclaration = true,
+			};
+
+			using (var memoryStream = new MemoryStream())
+			{
+				serializer.Serialize(XmlWriter.Create(memoryStream, xmlwriterSettings), postComment, emptyNamepsaces);
+				memoryStream.Flush();
+				memoryStream.Seek(0, SeekOrigin.Begin);
+
+				using (var reader = new StreamReader(memoryStream))
+				{
+					postCommentXml = reader.ReadToEnd();
+				}
+			}
+
+			Debug.WriteLine(postCommentXml);
+				
+
+			var content = new Windows.Web.Http.HttpStringContent(postCommentXml);
+
+			return await context.PostAsync(flvResonse.CommentServerUrl.AbsoluteUri, content);
+		}
+
+
+		public static PostCommentResponse ParsePostCommentResult(string postCommentResult)
+		{
+			// 成功していればchatクラスのXMLがかえってくる
+			// TODO: 
+			PostCommentResponse res = null;
+			var serializer = new XmlSerializer(typeof(PostCommentResponse));
+			using (var reader = new StringReader(postCommentResult))
+			{
+				res = (PostCommentResponse)serializer.Deserialize(reader);
+			}
+			Debug.WriteLine(postCommentResult);
+			return res;
+		}
+
+		public static Task<PostCommentResponse> PostCommentAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, IEnumerable<CommandType> commands)
+		{
+			return PostCommentDataAsync(context, flvResonse, thread, comment, position, commands)
+				.ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));
+		}
+
+
+
+	}
+
+	[XmlRoot(ElementName = "chat")]
+	public class PostComment
+	{
+		[XmlAttribute]
+		public string thread { get; set; }
+		[XmlAttribute]
+		public string vpos { get; set; }
+		[XmlAttribute]
+		public string mail { get; set; }
+		[XmlAttribute]
+		public string ticket { get; set; }
+		[XmlAttribute]
+		public string user_id { get; set; }
+		[XmlAttribute]
+		public string postkey { get; set; }
+		[XmlAttribute]
+		public string premium { get; set; }
+
+		[XmlText]
+		public string comment { get; set; }
 	}
 }

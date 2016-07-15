@@ -166,10 +166,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoRss.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ChatResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\PostCommentResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ThreadKeyResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvClient.cs" />

@@ -4,6 +4,8 @@ using Windows.Foundation;
 using Windows.Foundation.Metadata;
 #else
 using Mntone.Nico2.Mylist;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 #endif
 
@@ -166,6 +168,18 @@ namespace Mntone.Nico2.Videos
 		{
 			return Related.RelatedClient.GetRelatedVideoAsync(_context, videoId, from, limit, sortMethod, sortDir);
 		}
+
+
+
+
+		
+		public Task<Comment.PostCommentResponse> PostCommentAsync(Flv.FlvResponse flvResponse, Comment.CommentThread thread, string comment, TimeSpan position, IEnumerable<Comment.CommandType> commands)
+		{
+			return Comment.CommentClient.PostCommentAsync(_context, flvResponse, thread, comment, position, commands);
+		}
+
+
+
 
 		#region field
 

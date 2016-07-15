@@ -120,7 +120,7 @@ namespace Mntone.Nico2
 					{
 						var authFlag = response.Headers[XNiconicoAuthflag].ToUInt();
 						var auth = (NiconicoAccountAuthority)authFlag;
-						return auth != NiconicoAccountAuthority.NotSignedIn ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;
+						return auth != NiconicoAccountAuthority.NotSignedIn ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;						
 					}
 					else if( response.StatusCode == Windows.Web.Http.HttpStatusCode.ServiceUnavailable )
 					{
@@ -192,6 +192,11 @@ namespace Mntone.Nico2
 
 			var content = new HttpFormUrlEncodedContent(keyvalues);
 
+			return await this.PostAsync(url, content);
+		}
+
+		internal async Task<string> PostAsync(string url, IHttpContent content)
+		{
 			using (var res = await GetClient().PostAsync(new Uri(url), content))
 			{
 				if (res.IsSuccessStatusCode)

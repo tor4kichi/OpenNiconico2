@@ -366,7 +366,11 @@ namespace Mntone.Nico2
 		// ng comment
 		public const string UserNGCommentUrl = VideoFlapiUrlBase + "configurengclient";
 
+		public const string VideoPostKeyUrl = VideoFlapiUrlBase + "getpostkey";
+
 		#endregion
+
+
 
 
 		#region Mylist Deflist とりあえずマイリスト
