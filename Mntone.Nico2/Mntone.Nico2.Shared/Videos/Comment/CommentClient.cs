@@ -100,7 +100,7 @@ namespace Mntone.Nico2.Videos.Comment
 		}
 
 
-		public static async Task<string> PostCommentDataAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, IEnumerable<CommandType> commands)
+		public static async Task<string> PostCommentDataAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, string command)
 		{
 			// postkeyの取得
 			var postKey = await GetPostKeyAsync(context, thread)
@@ -115,7 +115,7 @@ namespace Mntone.Nico2.Videos.Comment
 			var postComment = new PostComment()
 			{
 				user_id = userid.ToString(),
-				mail = String.Join(" ", commands.Select(x => x.ToString())),
+				mail = command,
 				thread = thread._thread,
 				vpos = ((uint)position.TotalMilliseconds / 10).ToString(),
 				ticket = thread.Ticket,
@@ -169,7 +169,7 @@ namespace Mntone.Nico2.Videos.Comment
 			return res;
 		}
 
-		public static Task<PostCommentResponse> PostCommentAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, IEnumerable<CommandType> commands)
+		public static Task<PostCommentResponse> PostCommentAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, string commands)
 		{
 			return PostCommentDataAsync(context, flvResonse, thread, comment, position, commands)
 				.ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));

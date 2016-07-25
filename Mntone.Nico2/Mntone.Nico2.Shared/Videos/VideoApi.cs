@@ -117,11 +117,14 @@ namespace Mntone.Nico2.Videos
 		/// <summary>
 		/// 動画ページ内にある動画情報を取得します。
 		/// </summary>
-		/// <param name="requestId"></param>
+		/// <param name="requestId">動画ID</param>
+		/// <param name="forceLowQuality">強制的に低画質動画を再生する場合に true</param>
+		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
 		/// <returns></returns>
-		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId, bool forceLowQuality)
+		/// <exception cref="ContentZoningException"></exception>
+		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
 		{
-			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality);
+			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality, harmfulReactType);
 		}
 
 
@@ -173,7 +176,7 @@ namespace Mntone.Nico2.Videos
 
 
 		
-		public Task<Comment.PostCommentResponse> PostCommentAsync(Flv.FlvResponse flvResponse, Comment.CommentThread thread, string comment, TimeSpan position, IEnumerable<Comment.CommandType> commands)
+		public Task<Comment.PostCommentResponse> PostCommentAsync(Flv.FlvResponse flvResponse, Comment.CommentThread thread, string comment, TimeSpan position, string commands)
 		{
 			return Comment.CommentClient.PostCommentAsync(_context, flvResponse, thread, comment, position, commands);
 		}

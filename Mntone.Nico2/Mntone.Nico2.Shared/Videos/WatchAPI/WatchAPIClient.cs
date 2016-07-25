@@ -10,24 +10,31 @@ namespace Mntone.Nico2.Videos.WatchAPI
 {
 	internal sealed class WatchAPIClient
 	{
-		public static async Task<string> GetWatchApiDataAsync(NiconicoContext context, string requestId, bool forceQuality)
+		public static async Task<string> GetWatchApiDataAsync(NiconicoContext context, string requestId, bool forceQuality, HarmfulContentReactionType harmfulReactType)
 		{
 			if (!NiconicoRegex.IsVideoId(requestId))
 			{
 //				throw new ArgumentException();
 			}
 
+			var dict = new Dictionary<string, string>();
 			var url = $"{NiconicoUrls.VideoWatchPageUrl}{requestId}";
 
 			if (forceQuality)
 			{
-				url += "?eco=1";
+				dict.Add("eco", "1");
 			}
+			if (harmfulReactType != HarmfulContentReactionType.None)
+			{
+				dict.Add("watch_harmful", ((uint)harmfulReactType).ToString());
+			}
+
+			url += "?" + HttpQueryExtention.DictionaryToQuery(dict);
 
 			try
 			{
 				var client = context.GetClient();
-				
+
 				var res = await context.GetClient()
 					.GetAsync(url);
 
@@ -41,12 +48,25 @@ namespace Mntone.Nico2.Videos.WatchAPI
 				var htmlDocument = new HtmlAgilityPack.HtmlDocument();
 				htmlDocument.LoadHtml(text);
 
-				var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
-				var str = WebUtility.UrlDecode(WebUtility.HtmlDecode(videoInfoNode.InnerText));
+				// 推定有害動画の視聴ブロックページかをチェック
+				if (htmlDocument.GetElementbyId("PAGECONTAINER") != null)
+				{
+					throw new ContentZoningException("access once blocked, maybe harmful video.");
+				}
+				else
+				{
+					var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
+					var str = WebUtility.UrlDecode(WebUtility.HtmlDecode(videoInfoNode.InnerText));
 
-				System.Diagnostics.Debug.WriteLine(str);
+					System.Diagnostics.Debug.WriteLine(str);
 
-				return str;
+					return str;
+
+				}
+			}
+			catch (ContentZoningException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
@@ -73,9 +93,9 @@ namespace Mntone.Nico2.Videos.WatchAPI
 
 		}
 
-		public static Task<WatchApiResponse> GetWatchApiAsync(NiconicoContext context, string requestId, bool forceLowQuality)
+		public static Task<WatchApiResponse> GetWatchApiAsync(NiconicoContext context, string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType)
 		{
-			return GetWatchApiDataAsync(context, requestId, forceLowQuality)
+			return GetWatchApiDataAsync(context, requestId, forceLowQuality, harmfulReactType)
 				.ContinueWith(prevTask => ParseWatchApi(prevTask.Result));
 		}
 

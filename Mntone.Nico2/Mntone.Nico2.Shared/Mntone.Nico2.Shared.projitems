@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Channels\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Icon\IconClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\CommunityApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContentZoningException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\CategoryExtensions.cs" />
@@ -24,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Summary\SummaryClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Summary\SummaryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\WordExist\WordExistClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HarmfulContentReactionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HtmlDocumentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpQueryExtention.cs" />
