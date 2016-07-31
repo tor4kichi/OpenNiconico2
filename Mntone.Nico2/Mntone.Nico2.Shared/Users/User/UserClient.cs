@@ -36,8 +36,9 @@ namespace Mntone.Nico2.Users.User
 			data.ThumbnailUri = avatar.GetElementByTagName("img")
 				.GetAttributeValue("src", "");
 
-			data.Nickname = profile.GetElementByTagName("h2")
+			var nickname = profile.GetElementByTagName("h2")
 				.InnerText;
+			data.Nickname = nickname.Remove(nickname.Length - 2);
 
 			var accountItems = profile.GetElementByClassName("account")
 				.GetElementsByTagName("p")

@@ -9,103 +9,100 @@ namespace Mntone.Nico2.Mylist.Deflist
 {
     internal sealed class DeflistClient
     {
-		public static async Task<string> GetDeflistDataAsync(NiconicoContext context)
+		public static Task<string> GetDeflistDataAsync(NiconicoContext context)
 		{
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistListUrl}");
+			return context.GetStringAsync(NiconicoUrls.MylistDeflistListUrl);
 		}
 
 
-		public static async Task<string> AddDeflistDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id, string description)
+		public static Task<string> AddDeflistDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id, string description)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var no_prefix_id = NiconicoQueryHelper.RemoveIdPrefix(item_id);
+			dict.Add(nameof(item_id), item_id);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistAddUrl}?{nameof(item_type)}={(uint)item_type}&{nameof(item_id)}={no_prefix_id}&{nameof(description)}={description}&{nameof(token)}={token}");
+			if (item_type != NiconicoItemType.Video)
+			{
+				dict.Add(nameof(item_type), ((uint)item_type).ToString());
+			}
+			if (!string.IsNullOrWhiteSpace(description))
+			{
+				dict.Add(nameof(description), description);
+			}
+
+			return context.PostAsync(NiconicoUrls.MylistDeflistAddUrl, dict);
 		}
 
 
-		public static async Task<string> UpdateDeflistDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id, string description)
+		public static Task<string> UpdateDeflistDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id, string description)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var no_prefix_id = NiconicoQueryHelper.RemoveIdPrefix(item_id);
+			dict.Add(nameof(item_id), item_id);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistUpdateUrl}?{nameof(item_type)}={(uint)item_type}&{nameof(item_id)}={no_prefix_id}&{nameof(description)}={description}&{nameof(token)}={token}");
+			if (item_type != NiconicoItemType.Video)
+			{
+				dict.Add(nameof(item_type), ((uint)item_type).ToString());
+			}
+			if (!string.IsNullOrWhiteSpace(description))
+			{
+				dict.Add(nameof(description), description);
+			}
+
+			return context.PostAsync(NiconicoUrls.MylistDeflistUpdateUrl, dict);
 		}
 
 
-		public static async Task<string> RemoveDeflistDataAsync(NiconicoContext context, NiconicoItemType itemType, string item_id)
+		public static Task<string> RemoveDeflistDataAsync(NiconicoContext context, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
 			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistRemoveUrl}?{key}={val}&{nameof(token)}={token}");
+			foreach (var item_id in itemIdList)
+			{
+				dict.Add(key, item_id);
+			}
+
+			return context.PostAsync(NiconicoUrls.MylistDeflistRemoveUrl, dict);
 		}
 
 
-		public static async Task<string> RemoveDeflistDataAsync(NiconicoContext context, IEnumerable<MylistData> datum)
+		public static Task<string> MoveDeflistDataAsync(NiconicoContext context, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var id_list = MylistQueryUtil.MylistDataToQueryString(datum);
-
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistRemoveUrl}?{id_list}&{nameof(token)}={token}");
-		}
-
-
-		public static async Task<string> MoveDeflistDataAsync(NiconicoContext context, string target_group_id, NiconicoItemType itemType, string item_id)
-		{
-			var token = CSRFTokenHelper.GetToken(context);
+			dict.Add(nameof(target_group_id), target_group_id);
 
 			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
+			foreach (var item_id in itemIdList)
+			{
+				dict.Add(key, item_id);
+			}
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistMoveUrl}?{nameof(target_group_id)}={target_group_id}&{key}={val}&{nameof(token)}={token}");
+			return context.PostAsync(NiconicoUrls.MylistDeflistMoveUrl, dict);
 		}
 
-		public static async Task<string> MoveDeflistDataAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
+		
+
+
+
+
+		public static Task<string> CopyDeflistDataAsync(NiconicoContext context, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var id_list = MylistQueryUtil.MylistDataToQueryString(datum);
-
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistMoveUrl}?{nameof(target_group_id)}={target_group_id}&{id_list}&{nameof(token)}={token}");
-		}
-
-
-
-
-		public static async Task<string> CopyDeflistDataAsync(NiconicoContext context, string target_group_id, NiconicoItemType itemType, string item_id)
-		{
-			var token = CSRFTokenHelper.GetToken(context);
+			dict.Add(nameof(target_group_id), target_group_id);
 
 			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistCopyUrl}?{nameof(target_group_id)}={target_group_id}&{key}={val}&{nameof(token)}={token}");
+			foreach (var item_id in itemIdList)
+			{
+				dict.Add(key, item_id);
+			}
+
+			return context.PostAsync(NiconicoUrls.MylistDeflistCopyUrl, dict);
 		}
-
-		public static async Task<string> CopyDeflistDataAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
-		{
-			var token = CSRFTokenHelper.GetToken(context);
-
-			var id_list = MylistQueryUtil.MylistDataToQueryString(datum);
-
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistCopyUrl}?{nameof(target_group_id)}={target_group_id}&{id_list}&{nameof(token)}={token}");
-		}
-
 
 
 
@@ -132,40 +129,24 @@ namespace Mntone.Nico2.Mylist.Deflist
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> RemoveDeflistAsync(NiconicoContext context, NiconicoItemType item_type, string item_id)
+		public static Task<ContentManageResult> RemoveDeflistAsync(NiconicoContext context, NiconicoItemType item_type, params string[] itemIdList)
 		{
-			return RemoveDeflistDataAsync(context, item_type, item_id)
+			return RemoveDeflistDataAsync(context, item_type, itemIdList)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> RemoveDeflistAsync(NiconicoContext context, IEnumerable<MylistData> datum)
+		public static Task<ContentManageResult> MoveDeflistAsync(NiconicoContext context, string target_group_id, NiconicoItemType item_type, params string[] itemIdList)
 		{
-			return RemoveDeflistDataAsync(context, datum)
+			return MoveDeflistDataAsync(context, target_group_id, item_type, itemIdList)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> MoveDeflistAsync(NiconicoContext context, string target_group_id, NiconicoItemType item_type, string item_id)
+
+		public static Task<ContentManageResult> CopyDeflistAsync(NiconicoContext context, string target_group_id, NiconicoItemType item_type, params string[] itemIdList)
 		{
-			return MoveDeflistDataAsync(context, target_group_id, item_type, item_id)
+			return CopyDeflistDataAsync(context, target_group_id, item_type, itemIdList)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> MoveDeflistAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
-		{
-			return MoveDeflistDataAsync(context, target_group_id, datum)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
-
-		public static Task<ContentManageResult> CopyDeflistAsync(NiconicoContext context, string target_group_id, NiconicoItemType item_type, string item_id)
-		{
-			return CopyDeflistDataAsync(context, target_group_id, item_type, item_id)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
-
-		public static Task<ContentManageResult> CopyDeflistAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
-		{
-			return CopyDeflistDataAsync(context, target_group_id, datum)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
 	}
 }

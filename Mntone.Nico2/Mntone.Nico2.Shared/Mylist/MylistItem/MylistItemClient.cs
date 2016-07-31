@@ -11,85 +11,90 @@ namespace Mntone.Nico2.Mylist.MylistItem
 {
     internal sealed class MylistItemClient
     {
-		public static async Task<string> GetMylistItemDataAsync(NiconicoContext context, string group_id)
+		public static Task<string> GetMylistItemDataAsync(NiconicoContext context, string group_id)
 		{
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistListUrl}?{nameof(group_id)}={group_id}");
+			var dict = new Dictionary<string, string>();
+			dict.Add(nameof(group_id), group_id);
+			return context.GetStringAsync(NiconicoUrls.MylistListUrl, dict);
 		}
 
-		public static async Task<string> AddMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
+		public static Task<string> AddMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var no_prefix_id = NiconicoQueryHelper.RemoveIdPrefix(item_id);
+			dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(item_type), ((uint)item_type).ToString());
+			dict.Add(nameof(item_id), item_id);
+			dict.Add(nameof(description), description);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistAddUrl}?{nameof(group_id)}={group_id}&{nameof(item_type)}={(uint)item_type}&{nameof(item_id)}={no_prefix_id}&{nameof(description)}={description}&{nameof(token)}={token}");
+			return context.GetStringAsync(NiconicoUrls.MylistAddUrl, dict);
 		}
 
-		public static async Task<string> UpdateMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
+		public static Task<string> UpdateMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var no_prefix_id = NiconicoQueryHelper.RemoveIdPrefix(item_id);
+			dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(item_type), ((uint)item_type).ToString());
+			dict.Add(nameof(item_id), item_id);
+			dict.Add(nameof(description), description);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistUpdateUrl}?{nameof(group_id)}={group_id}&{nameof(item_type)}={(uint)item_type}&{nameof(item_id)}={no_prefix_id}&{nameof(description)}={description}&{nameof(token)}={token}");
+			return context.PostAsync(NiconicoUrls.MylistUpdateUrl, dict);
 		}
 
-		public static async Task<string> RemoveMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id)
+		public static Task<string> RemoveMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string[] itemIdList)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
+
+			dict.Add(nameof(group_id), group_id);
 
 			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(item_type);
-			var val = NiconicoQueryHelper.RemoveIdPrefix(item_id);
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistRemoveUrl}?{nameof(group_id)}={group_id}&{key}={val}&{nameof(token)}={token}");
+			foreach (var item_id in itemIdList)
+			{
+				dict.Add(key, item_id);
+			}
+
+			return context.PostAsync(NiconicoUrls.MylistRemoveUrl, dict);
 		}
 
-
-		public static async Task<string> RemoveMylistItemDataAsync(NiconicoContext context, IEnumerable<MylistData> datum)
+		public static Task<string> CopyMylistDataAsync(NiconicoContext context, string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var ids_query = MylistQueryUtil.MylistDataToQueryString(datum);
+			dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(target_group_id), target_group_id);
 
-			var group_id = datum.First().GroupId;
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
+			foreach (var item_id in itemIdList)
+			{
+				dict.Add(key, item_id);
+			}
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistRemoveUrl}?{nameof(group_id)}={group_id}&{ids_query}&{nameof(token)}={token}");
+			return context.PostAsync(NiconicoUrls.MylistCopyUrl, dict);
 		}
 
-		public static async Task<string> MoveMylistItemDataAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
+
+		public static Task<string> MoveMylistDataAsync(NiconicoContext context, string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			var token = CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			var ids_query = MylistQueryUtil.MylistDataToQueryString(datum);
+			dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(target_group_id), target_group_id);
 
-			var group_id = datum.First().GroupId;
+			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
+			foreach (var item_id in itemIdList)
+			{
+				dict.Add(key, item_id);
+			}
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistMoveUrl}?{nameof(group_id)}={group_id}&{nameof(target_group_id)}={target_group_id}&{ids_query}&{nameof(token)}={token}");
-		}
-
-
-		public static async Task<string> CopyMylistItemDataAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
-		{
-			var token = CSRFTokenHelper.GetToken(context);
-
-			var ids_query = MylistQueryUtil.MylistDataToQueryString(datum);
-
-			var group_id = datum.First().GroupId;
-
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistCopyUrl}?{nameof(group_id)}={group_id}&{nameof(target_group_id)}={target_group_id}&{ids_query}&{nameof(token)}={token}");
+			return  context.PostAsync(NiconicoUrls.MylistMoveUrl, dict);
 		}
 
 
 
 
-		public static async Task<string> GetMylistListDataAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<string> GetMylistListDataAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
 		{
 			var dict = new Dictionary<string, string>();
 
@@ -99,10 +104,7 @@ namespace Mntone.Nico2.Mylist.MylistItem
 			dict.Add(nameof(sortMethod), sortMethod.ToShortString());
 			dict.Add(nameof(sortDir), sortDir.ToShortString());
 
-			var query = HttpQueryExtention.DictionaryToQuery(dict);
-
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistListlApi}?{query}");
+			return context.GetStringAsync(NiconicoUrls.MylistListlApi, dict);
 		}
 
 		private static NicoVideoResponse ParseMylistListXml(string xml)
@@ -156,27 +158,22 @@ namespace Mntone.Nico2.Mylist.MylistItem
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> RemoveMylistItemAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id)
+		public static Task<ContentManageResult> RemoveMylistItemAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, params string[] itemIdList)
 		{
-			return RemoveMylistItemDataAsync(context, group_id, item_type, item_id)
+			return RemoveMylistItemDataAsync(context, group_id, item_type, itemIdList)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> RemoveMylistItemAsync(NiconicoContext context, IEnumerable<MylistData> datum)
+		public static Task<ContentManageResult> CopyMylistItemAsync(NiconicoContext context, string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			return RemoveMylistItemDataAsync(context, datum)
+			return CopyMylistDataAsync(context, group_id, target_group_id, itemType, itemIdList)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		public static Task<ContentManageResult> MoveMylistItemAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
-		{
-			return MoveMylistItemDataAsync(context, target_group_id, datum)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
 
-		public static Task<ContentManageResult> CopyMylistItemAsync(NiconicoContext context, string target_group_id, IEnumerable<MylistData> datum)
+		public static Task<ContentManageResult> MoveMylistItemAsync(NiconicoContext context, string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			return CopyMylistItemDataAsync(context, target_group_id, datum)
+			return MoveMylistDataAsync(context, group_id, target_group_id, itemType, itemIdList)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 	}

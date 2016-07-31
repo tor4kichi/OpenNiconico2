@@ -210,37 +210,21 @@ namespace Mntone.Nico2.Mylist
 		/// </summary>
 		/// <param name="mylistData"></param>
 		/// <returns></returns>
-		public Task<ContentManageResult> RemoveMylistItemAsync(MylistData mylistData)
+		public Task<ContentManageResult> RemoveMylistItemAsync(string group_id, NiconicoItemType item_type, params string[] itemIdList)
 		{
-			if (MylistGroupData.IsDeflist(mylistData.GroupId))
+			if (MylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.RemoveDeflistAsync(_context, mylistData.ItemType, mylistData.ItemId);
+				return Deflist.DeflistClient.RemoveDeflistAsync(_context, item_type, itemIdList);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.RemoveMylistItemAsync(_context, mylistData.GroupId, mylistData.ItemType, mylistData.ItemId);
+				return MylistItem.MylistItemClient.RemoveMylistItemAsync(_context, group_id, item_type, itemIdList);
 			}
 		}
 
 
-		/// <summary>
-		/// マイリストからアイテムを削除します
-		/// </summary>
-		/// <param name="mylistData"></param>
-		/// <returns></returns>
-		public Task<ContentManageResult> RemoveMylistItemAsync(IEnumerable<MylistData> datum)
-		{
-			var groupId = datum.First().GroupId;
 
-			if (MylistGroupData.IsDeflist(groupId))
-			{
-				return Deflist.DeflistClient.RemoveDeflistAsync(_context, datum);
-			}
-			else
-			{
-				return MylistItem.MylistItemClient.RemoveMylistItemAsync(_context, datum);
-			}
-		}
+		
 
 
 
@@ -251,23 +235,26 @@ namespace Mntone.Nico2.Mylist
 		/// <param name="datum"></param>
 		/// <returns></returns>
 		/// <remarks>ターゲットにはとりあえずマイリストを指定することはできません</remarks>
-		public Task<ContentManageResult> CopyMylistItemAsync(MylistGroupData targetMylistGroup, IEnumerable<MylistData> datum)
+		public Task<ContentManageResult> CopyMylistItemAsync(string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			if (targetMylistGroup.IsDeflist())
+			if (group_id == target_group_id)
+			{
+				return Task.FromResult(ContentManageResult.Success);
+			}
+
+			if (MylistGroupData.IsDeflist(target_group_id))
 			{
 				// とりあえずマイリストへのコピーはサポートしていない
 				throw new NotSupportedException("not support mylist item copy to Deflist(とりあえずマイリスト)");
 			}
 
-			var groupId = datum.First().GroupId;
-
-			if (MylistGroupData.IsDeflist(groupId))
+			if (MylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.CopyDeflistAsync(_context, targetMylistGroup.Id,  datum);
+				return Deflist.DeflistClient.CopyDeflistAsync(_context, target_group_id, itemType, itemIdList);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.CopyMylistItemAsync(_context, targetMylistGroup.Id, datum);
+				return MylistItem.MylistItemClient.CopyMylistItemAsync(_context, group_id, target_group_id, itemType, itemIdList);
 			}
 			
 		}
@@ -279,24 +266,28 @@ namespace Mntone.Nico2.Mylist
 		/// <param name="datum"></param>
 		/// <returns></returns>
 		/// <remarks>ターゲットにはとりあえずマイリストを指定することは出来ません。</remarks>
-		public Task<ContentManageResult> MoveMylistItemAsync(MylistGroupData targetMylistGroup, IEnumerable<MylistData> datum)
+		public Task<ContentManageResult> MoveMylistItemAsync(string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
 		{
-			if (targetMylistGroup.IsDeflist())
+			if (group_id == target_group_id)
+			{
+				return Task.FromResult(ContentManageResult.Success);
+			}
+
+			if (MylistGroupData.IsDeflist(target_group_id))
 			{
 				// とりあえずマイリストへの移動はサポートしていない
 				throw new NotSupportedException("not support mylist item move to Deflist(とりあえずマイリスト)");
 			}
 
-			var groupId = datum.First().GroupId;
-
-			if (MylistGroupData.IsDeflist(groupId))
+			if (MylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.MoveDeflistAsync(_context, targetMylistGroup.Id, datum);
+				return Deflist.DeflistClient.MoveDeflistAsync(_context, target_group_id, itemType, itemIdList);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.MoveMylistItemAsync(_context, targetMylistGroup.Id, datum);
+				return MylistItem.MylistItemClient.MoveMylistItemAsync(_context, group_id, target_group_id, itemType, itemIdList);
 			}
+
 		}
 
 

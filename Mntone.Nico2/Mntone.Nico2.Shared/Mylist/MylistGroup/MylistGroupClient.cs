@@ -14,51 +14,64 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 		
 
-		public static async Task<string> GetMylistGroupListDataAsync(NiconicoContext context)
+		public static Task<string> GetMylistGroupListDataAsync(NiconicoContext context)
 		{
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistGroupListUrl}");
+			return context.GetStringAsync(NiconicoUrls.MylistGroupListUrl);
 		}
 
-		public static async Task<string> GetMylistGroupDataAsync(NiconicoContext context, string group_id)
+		public static Task<string> GetMylistGroupDataAsync(NiconicoContext context, string group_id)
 		{
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistGroupGetUrl}?{nameof(group_id)}={group_id}");
+			var dict = new Dictionary<string, string>();
+			dict.Add(nameof(group_id), group_id);
+			return context.GetStringAsync(NiconicoUrls.MylistGroupGetUrl, dict);
 		}
 
-		public static async Task<string> AddMylistGroupDataAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
+		public static Task<string> AddMylistGroupDataAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			var token = await CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistGroupAddUrl}?{nameof(name)}={name}&{nameof(description)}={description}&{nameof(is_public)}={is_public.ToString1Or0()}&{nameof(default_sort)}={(uint)default_sort}&{nameof(iconType)}={(uint)iconType}&{nameof(token)}={token}");
-		}
+			dict.Add(nameof(name), name);
+			dict.Add(nameof(description), description);
+			dict.Add(nameof(is_public), is_public.ToString1Or0());
+			dict.Add(nameof(default_sort), ((uint)default_sort).ToString());
+			dict.Add(nameof(iconType), ((uint)iconType).ToString());
 
-
-		public static async Task<string> UpdateMylistGroupDataAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
-		{
-			var token = await CSRFTokenHelper.GetMylistToken(context, group_id);
-
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistGroupUpdateUrl}?{nameof(group_id)}={group_id}&{nameof(name)}={name}&{nameof(description)}={description}&{nameof(is_public)}={is_public.ToString1Or0()}&{nameof(default_sort)}={(uint)default_sort}&{nameof(iconType)}={(uint)iconType}&{nameof(token)}={token}");
+			return context.PostAsync(NiconicoUrls.MylistGroupAddUrl, dict);
 		}
 
 
-		public static async Task<string> RemoveMylistGroupDataAsync(NiconicoContext context, string group_id)
+		public static Task<string> UpdateMylistGroupDataAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			var token = await CSRFTokenHelper.GetToken(context);
+			var dict = new Dictionary<string, string>();
+			dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(name), name);
+			dict.Add(nameof(description), description);
+			dict.Add(nameof(is_public), is_public.ToString1Or0());
+			dict.Add(nameof(default_sort), ((uint)default_sort).ToString());
+			dict.Add(nameof(iconType), ((uint)iconType).ToString());
 
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistDeflistRemoveUrl}?{nameof(group_id)}={group_id}&{nameof(token)}={token}");
+			return context.PostAsync(NiconicoUrls.MylistGroupUpdateUrl, dict);
 		}
 
 
-
-
-		public static async Task<string> GetMylistGroupDetailDataAsync(NiconicoContext context, string group_id)
+		public static Task<string> RemoveMylistGroupDataAsync(NiconicoContext context, string group_id)
 		{
-			return await context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.MylistGroupDetailApi}?{nameof(group_id)}={group_id}");
+			var dict = new Dictionary<string, string>();
+			dict.Add(nameof(group_id), group_id);
+
+			return context.PostAsync(NiconicoUrls.MylistGroupRemoveUrl, dict);
+		}
+
+
+		
+
+
+
+		public static Task<string> GetMylistGroupDetailDataAsync(NiconicoContext context, string group_id)
+		{
+			var dict = new Dictionary<string, string>();
+			dict.Add(nameof(group_id), group_id);
+			return context.GetStringAsync(NiconicoUrls.MylistGroupDetailApi, dict);
 		}
 
 

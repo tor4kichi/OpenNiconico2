@@ -9,6 +9,9 @@ namespace Mntone.Nico2.Mylist
 	[DataContract]
 	public class MylistGroupData
 	{
+		public const string DeflistGroupId = "0";
+
+
 		public MylistGroupData() { }
 
 		
@@ -22,7 +25,7 @@ namespace Mntone.Nico2.Mylist
 
 		public static bool IsDeflist(string group_id)
 		{
-			return group_id == null || group_id == "0";
+			return group_id == null || group_id == DeflistGroupId;
 		}
 
 		[DataMember(Name = "id")]
@@ -45,7 +48,7 @@ namespace Mntone.Nico2.Mylist
 
 		public bool GetIsPublic()
 		{
-			return IsPublic == "0" ? false : true;
+			return IsPublic.ToBooleanFrom1();
 		}
 
 		public IconType GetIconType()
