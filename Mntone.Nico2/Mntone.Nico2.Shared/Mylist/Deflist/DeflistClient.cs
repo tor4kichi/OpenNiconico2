@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Mntone.Nico2.Mylist.Deflist
     {
 		public static Task<string> GetDeflistDataAsync(NiconicoContext context)
 		{
-			return context.GetStringAsync(NiconicoUrls.MylistDeflistListUrl);
+			return context.PostAsync(NiconicoUrls.MylistDeflistListUrl);
 		}
 
 

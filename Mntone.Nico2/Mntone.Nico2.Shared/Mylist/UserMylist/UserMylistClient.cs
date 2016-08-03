@@ -58,6 +58,13 @@ namespace Mntone.Nico2.Mylist.UserMylist
 						)
 						);
 
+					data.IconId = anchor
+						.GetElementByClassName("folderIcon")
+						.GetAttributeValue("class", "")
+						.Last()
+						.ToString();
+						
+
 
 					var fullDescription = section.GetElementsByClassName("mylistDescription")?
 						.SingleOrDefault(y => y.GetAttributeValue("data-nico-mylist-desc-full", "") == "true");

@@ -72,6 +72,14 @@ namespace Mntone.Nico2.Mylist
 		
 
 		public int ItemCount { get; set; } = 0;
+
+
+		public MylistDefaultSort GetDefaultSort()
+		{
+			var index = int.Parse(DefaultSort);
+
+			return (MylistDefaultSort)index;
+		}
 	}
 
 	[DataContract]

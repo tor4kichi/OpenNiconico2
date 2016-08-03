@@ -31,7 +31,8 @@ namespace Mntone.Nico2.Mylist
 					{
 						Title = x.item_data.title,
 						Description = x.description,
-						ItemId = x.item_data.video_id,
+						ItemId = x.item_id,
+						WatchId = x.item_data.watch_id,
 						ItemType = (NiconicoItemType)int.Parse(x.item_type),
 						FirstRetrieve = new DateTime(x.item_data.first_retrieve),
 						ViewCount = uint.Parse(x.item_data.view_counter),

@@ -182,6 +182,13 @@ namespace Mntone.Nico2
 			return GetClient().GetStringAsync(url);
 		}
 
+		internal Task<string> PostAsync(string url, bool withToken = true)
+		{
+			Dictionary<string, string> keyvalues = new Dictionary<string, string>();
+
+			return this.PostAsync(url, keyvalues, withToken);
+		}
+
 		internal async Task<string> PostAsync(string url, Dictionary<string, string> keyvalues, bool withToken = true)
 		{
 			if (!keyvalues.ContainsKey("token"))

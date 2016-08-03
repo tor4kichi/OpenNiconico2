@@ -16,17 +16,17 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 		public static Task<string> GetMylistGroupListDataAsync(NiconicoContext context)
 		{
-			return context.GetStringAsync(NiconicoUrls.MylistGroupListUrl);
+			return context.PostAsync(NiconicoUrls.MylistGroupListUrl);
 		}
 
 		public static Task<string> GetMylistGroupDataAsync(NiconicoContext context, string group_id)
 		{
 			var dict = new Dictionary<string, string>();
 			dict.Add(nameof(group_id), group_id);
-			return context.GetStringAsync(NiconicoUrls.MylistGroupGetUrl, dict);
+			return context.PostAsync(NiconicoUrls.MylistGroupGetUrl, dict);
 		}
 
-		public static Task<string> AddMylistGroupDataAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
+		public static Task<string> AddMylistGroupDataAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType icon_id)
 		{
 			var dict = new Dictionary<string, string>();
 
@@ -34,13 +34,13 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 			dict.Add(nameof(description), description);
 			dict.Add(nameof(is_public), is_public.ToString1Or0());
 			dict.Add(nameof(default_sort), ((uint)default_sort).ToString());
-			dict.Add(nameof(iconType), ((uint)iconType).ToString());
+			dict.Add(nameof(icon_id), ((uint)icon_id).ToString());
 
 			return context.PostAsync(NiconicoUrls.MylistGroupAddUrl, dict);
 		}
 
 
-		public static Task<string> UpdateMylistGroupDataAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
+		public static Task<string> UpdateMylistGroupDataAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType icon_id)
 		{
 			var dict = new Dictionary<string, string>();
 			dict.Add(nameof(group_id), group_id);
@@ -48,7 +48,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 			dict.Add(nameof(description), description);
 			dict.Add(nameof(is_public), is_public.ToString1Or0());
 			dict.Add(nameof(default_sort), ((uint)default_sort).ToString());
-			dict.Add(nameof(iconType), ((uint)iconType).ToString());
+			dict.Add(nameof(icon_id), ((uint)icon_id).ToString());
 
 			return context.PostAsync(NiconicoUrls.MylistGroupUpdateUrl, dict);
 		}

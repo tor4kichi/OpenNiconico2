@@ -4,9 +4,11 @@ using System.Text;
 
 namespace Mntone.Nico2.Mylist
 {
-    public enum MylistDefaultSort
+	// see@ http://web.archive.org/web/20140625053235/http://efcl.info/wiki/niconicoapi/
+	public enum MylistDefaultSort
     {
-		Latest = 1,
+		Old,
+		Latest,
 		Memo_Ascending,
 		Memo_Descending,
 		Title_Ascending,

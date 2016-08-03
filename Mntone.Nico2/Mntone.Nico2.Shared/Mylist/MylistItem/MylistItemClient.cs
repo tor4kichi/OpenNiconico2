@@ -15,7 +15,7 @@ namespace Mntone.Nico2.Mylist.MylistItem
 		{
 			var dict = new Dictionary<string, string>();
 			dict.Add(nameof(group_id), group_id);
-			return context.GetStringAsync(NiconicoUrls.MylistListUrl, dict);
+			return context.PostAsync(NiconicoUrls.MylistListUrl, dict);
 		}
 
 		public static Task<string> AddMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
@@ -27,7 +27,7 @@ namespace Mntone.Nico2.Mylist.MylistItem
 			dict.Add(nameof(item_id), item_id);
 			dict.Add(nameof(description), description);
 
-			return context.GetStringAsync(NiconicoUrls.MylistAddUrl, dict);
+			return context.PostAsync(NiconicoUrls.MylistAddUrl, dict);
 		}
 
 		public static Task<string> UpdateMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
