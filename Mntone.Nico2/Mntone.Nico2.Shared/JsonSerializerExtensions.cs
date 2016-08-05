@@ -9,11 +9,7 @@ namespace Mntone.Nico2
 	{
 		public static T Load<T>( string data )
 		{
-			using( var ms = new MemoryStream( Encoding.Unicode.GetBytes( data ) ) )
-			{
-				return ( T )new DataContractJsonSerializer( typeof( T ) ).ReadObject( ms );
-			}
-			throw new Exception( "Parse Error" );
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data);
 		}
 	}
 }
