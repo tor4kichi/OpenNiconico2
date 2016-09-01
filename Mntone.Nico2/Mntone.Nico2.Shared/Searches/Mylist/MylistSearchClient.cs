@@ -7,7 +7,7 @@ namespace Mntone.Nico2.Searches.Mylist
 {
 	public sealed class MylistSearchClient
     {
-		public static async Task<string> GetMylistSearchDataAsync(
+		public static Task<string> GetMylistSearchDataAsync(
 			NiconicoContext context
 			, string str
 			, uint from
@@ -26,7 +26,7 @@ namespace Mntone.Nico2.Searches.Mylist
 			dict.Add(nameof(order), order.ToShortString());
 			dict.Add(nameof(sort), sort.ToShortString());
 
-			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLIST_SEARCH, dict);
+			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLIST_SEARCH, dict);
 		}
 
 

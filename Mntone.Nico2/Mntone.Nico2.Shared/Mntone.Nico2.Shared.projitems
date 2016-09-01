@@ -119,6 +119,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroupResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupDetailResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistListResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistResponse.cs" />

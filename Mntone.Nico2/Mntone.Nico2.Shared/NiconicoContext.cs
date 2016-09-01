@@ -5,6 +5,7 @@ using System.Net;
 using Windows.Web.Http;
 using System.Threading.Tasks;
 using Windows.Web.Http.Filters;
+using Windows.Foundation.Metadata;
 
 #if WINDOWS_APP
 using Windows.Foundation;
@@ -59,12 +60,6 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient != null )
 			{
-				var cookies = _ProtocolFilter.CookieManager.GetCookies(NiconicoCookieUrl);
-				foreach (var cookie in cookies)
-				{
-					_ProtocolFilter.CookieManager.DeleteCookie(cookie);
-				}
-
 				this.HttpClient.Dispose();
 				this.HttpClient = null;
 			}
@@ -83,6 +78,7 @@ namespace Mntone.Nico2
 #endif
 		{
 			var request = new Dictionary<string, string>();
+
 			request.Add( MailTelName, this.AuthenticationToken.MailOrTelephone );
 			request.Add( PasswordName, this.AuthenticationToken.Password );
 
@@ -165,8 +161,7 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient == null )
 			{
-				_ProtocolFilter = new HttpBaseProtocolFilter();
-				this.HttpClient = new HttpClient(_ProtocolFilter);
+				this.HttpClient = new HttpClient();
 				this.HttpClient.DefaultRequestHeaders.Add( "user-agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
@@ -359,7 +354,6 @@ namespace Mntone.Nico2
 		internal const string DefaultUserAgent = "OpenNiconico/2.0";
 		private readonly Uri NiconicoCookieUrl = new Uri( "http://nicovideo.jp/" );
 
-		private HttpBaseProtocolFilter _ProtocolFilter;
 		public HttpClient HttpClient { get; private set; }
 
 		#endregion

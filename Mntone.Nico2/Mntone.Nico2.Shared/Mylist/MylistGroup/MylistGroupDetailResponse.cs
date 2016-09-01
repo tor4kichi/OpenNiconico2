@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -29,7 +30,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		public string __description { get; private set; }
 
 		private string _Description;
-		public string Description => _Description ?? (_Description = __description.DecodeUTF8());
+		public string Description => _Description ?? (_Description = __description);
 
 
 		[DataMember(Name = "public")]
@@ -75,6 +76,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		public string default_sort_order { get; private set; }
 
 		[DataMember(Name = "video_info")]
+		[JsonConverter(typeof(SingleOrArrayConverter<Searches.Video.VideoInfo>))]
 		public IList<Searches.Video.VideoInfo> SampleVideoInfoItems { get; set; }
 	}
 

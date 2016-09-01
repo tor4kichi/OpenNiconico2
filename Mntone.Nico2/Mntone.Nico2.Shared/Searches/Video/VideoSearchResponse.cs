@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -38,7 +39,7 @@ namespace Mntone.Nico2.Searches.Video
 		public string __title { get; private set; }
 
 		private string _Title;
-		public string Title => _Title ?? (_Title = __title.DecodeUTF8());
+		public string Title => _Title ?? (_Title = __title);
 
 		[DataMember(Name = "length_in_seconds")]
 		public string __length_in_seconds { get; private set; }
@@ -187,6 +188,7 @@ namespace Mntone.Nico2.Searches.Video
 		public uint GetCount() => uint.Parse(__count);
 
 		[DataMember(Name = "video_info")]
+		[JsonConverter(typeof(SingleOrArrayConverter<VideoInfo>))]
 		public IList<VideoInfo> VideoInfoItems { get; private set; }
 
 		[DataMember(Name = "total_count")]

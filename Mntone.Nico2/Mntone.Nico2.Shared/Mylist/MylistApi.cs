@@ -58,7 +58,7 @@ namespace Mntone.Nico2.Mylist
 		/// <param name="sort"></param>
 		/// <param name="order"></param>
 		/// <returns></returns>
-		public Task<VideoListingResponse> GetMylistGroupVideoAsync(
+		public Task<MylistGroupVideoResponse> GetMylistGroupVideoAsync(
 			string group_id
 			, uint from = 0
 			, uint limit = 30

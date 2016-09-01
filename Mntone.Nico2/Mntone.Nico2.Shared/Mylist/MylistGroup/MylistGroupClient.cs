@@ -9,7 +9,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
     public sealed class MylistGroupClient
     {
 		// マイリストの詳細取得
-		public static async Task<string> GetMylistGroupDetailDataAsync(
+		public static Task<string> GetMylistGroupDetailDataAsync(
 			NiconicoContext context
 			, string group_id
 			, bool isNeedDetail
@@ -22,12 +22,12 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 			dict.Add(nameof(group_id), group_id);
 			dict.Add(nameof(isNeedDetail), isNeedDetail.ToString1Or0());
 
-			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLISTGROUP_GET, dict);
+			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLISTGROUP_GET, dict);
 		}
 
 
 		// マイリストに含まれる動画リストの取得
-		public static async Task<string> GetMylistGroupVideoDataAsync(
+		public static Task<string> GetMylistGroupVideoDataAsync(
 			NiconicoContext context
 			, string group_id
 			, uint from
@@ -46,7 +46,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 			dict.Add(nameof(order), order.ToShortString());
 			dict.Add(nameof(sort), sort.ToShortString());
 
-			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLIST_LIST, dict);
+			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLIST_LIST, dict);
 		}
 
 
@@ -58,9 +58,9 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		}
 
 
-		private static VideoListingResponse ParseMylistVideoItemsResponseJson(string json)
+		private static MylistGroupVideoResponse ParseMylistVideoItemsResponseJson(string json)
 		{
-			var responseContainer = JsonSerializerExtensions.Load<VideoListingResponseContainer>(json);
+			var responseContainer = JsonSerializerExtensions.Load<MylistGroupVideoResponseContainer>(json);
 
 			return responseContainer.nicovideo_video_response;
 		}
@@ -79,7 +79,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 
 
-		public static Task<VideoListingResponse> GetMylistGroupVideoAsync(
+		public static Task<MylistGroupVideoResponse> GetMylistGroupVideoAsync(
 			NiconicoContext context
 			, string group_id
 			, uint from

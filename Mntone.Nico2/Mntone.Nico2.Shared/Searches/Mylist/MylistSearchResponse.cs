@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -16,14 +17,14 @@ namespace Mntone.Nico2.Searches.Mylist
 		public string __name { get; private set; }
 
 		private string _Name;
-		public string Name => _Name ?? (_Name = __name.DecodeUTF8());
+		public string Name => _Name ?? (_Name = __name);
 
 
 		[DataMember(Name = "description")]
 		public string __description { get; private set; }
 
 		private string _Description;
-		public string Description => _Description ?? (_Description = __description.DecodeUTF8());
+		public string Description => _Description ?? (_Description = __description);
 
 	
 		[DataMember(Name = "thread_ids")]
@@ -45,6 +46,7 @@ namespace Mntone.Nico2.Searches.Mylist
 
 
 		[DataMember(Name = "video_info")]
+		[JsonConverter(typeof(SingleOrArrayConverter<Video.VideoInfo>))]
 		public IList<Video.VideoInfo> VideoInfoItems { get; private set; }
 	}
 
@@ -64,6 +66,7 @@ namespace Mntone.Nico2.Searches.Mylist
 
 
 		[DataMember(Name = "mylistgroup")]
+		[JsonConverter(typeof(SingleOrArrayConverter<MylistGroup>))]
 		public IList<MylistGroup> MylistGroupItems { get; private set; }
 
 		[DataMember(Name = "@status")]
