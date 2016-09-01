@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mntone.Nico2.Mylist.MylistGroup;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,8 +35,17 @@ namespace Mntone.Nico2.Mylist
 		}
 
 
+		/// <summary>
+		/// マイリストグループの詳細を取得します
+		/// </summary>
+		/// <param name="group_id"></param>
+		/// <param name="isNeedDetail"></param>
+		/// <returns></returns>
+		public Task<MylistGroupDetailResponse> GetMylistGroupDetailAsync(string group_id, bool isNeedDetail = true)
+		{
+			return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, group_id, isNeedDetail);
+		}
 
-		
 
 
 		#region field
