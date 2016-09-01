@@ -144,6 +144,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ParseException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Prefecture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrivateReasonType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Mylist\MylistSearchClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Mylist\MylistSearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\SearchApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionClient.cs" />

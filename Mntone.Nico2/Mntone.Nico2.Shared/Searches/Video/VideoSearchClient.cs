@@ -10,8 +10,8 @@ namespace Mntone.Nico2.Searches.Video
 		public static async Task<string> GetKeywordSearchDataAsync(
 			NiconicoContext context
 			, string str
-			, int from
-			, int limit
+			, uint from
+			, uint limit
 			, Sort sort
 			, Order order
 			)
@@ -32,8 +32,8 @@ namespace Mntone.Nico2.Searches.Video
 		public static async Task<string> GetTagSearchDataAsync(
 			NiconicoContext context
 			, string tag
-			, int from
-			, int limit
+			, uint from
+			, uint limit
 			, Sort sort
 			, Order order
 			)
@@ -64,8 +64,8 @@ namespace Mntone.Nico2.Searches.Video
 		public static Task<VideoSearchResponse> GetKeywordSearchAsync(
 			NiconicoContext context
 			, string keyword
-			, int from
-			, int limit
+			, uint from
+			, uint limit
 			, Sort sort
 			, Order order
 			)
@@ -77,8 +77,8 @@ namespace Mntone.Nico2.Searches.Video
 		public static Task<VideoSearchResponse> GetTagSearchAsync(
 			NiconicoContext context
 			, string tag
-			, int from
-			, int limit
+			, uint from
+			, uint limit
 			, Sort sort
 			, Order order
 			)

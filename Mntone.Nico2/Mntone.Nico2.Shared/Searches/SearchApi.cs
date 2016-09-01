@@ -37,10 +37,10 @@ namespace Mntone.Nico2.Searches
 #endif
 
 
-		public Task<Video.VideoSearchResponse> VideoSearchAsync(
+		public Task<Video.VideoSearchResponse> VideoSearchWithKeywordAsync(
 			string keyword
-			, int from = 0
-			, int limit = 100
+			, uint from = 0
+			, uint limit = 30
 			, Sort sort = Sort.FirstRetrieve
 			, Order order = Order.Descending
 			)
@@ -56,10 +56,10 @@ namespace Mntone.Nico2.Searches
 		}
 
 
-		public Task<Video.VideoSearchResponse> TagSearchAsync(
+		public Task<Video.VideoSearchResponse> VideoSearchWithTagAsync(
 			string tag
-			, int from = 0
-			, int limit = 100
+			, uint from = 0
+			, uint limit = 30
 			, Sort sort = Sort.FirstRetrieve
 			, Order order = Order.Descending
 			)
@@ -74,7 +74,23 @@ namespace Mntone.Nico2.Searches
 				);
 		}
 
-
+		public Task<Mylist.MylistSearchResponse> MylistSearchAsync(
+			string keyword
+			, uint from = 0
+			, uint limit = 30
+			, Sort sort = Sort.FirstRetrieve
+			, Order order = Order.Descending
+			)
+		{
+			return Mylist.MylistSearchClient.GetMylistSearchAsync(
+				this._context
+				, keyword
+				, from
+				, limit
+				, sort
+				, order
+				);
+		}
 
 		#region field
 
