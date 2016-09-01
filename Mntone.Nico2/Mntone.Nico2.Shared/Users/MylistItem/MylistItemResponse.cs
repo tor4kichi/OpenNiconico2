@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Mntone.Nico2.Mylist.MylistItem
+namespace Mntone.Nico2.Users.MylistItem
 {
   
 	[DataContract]

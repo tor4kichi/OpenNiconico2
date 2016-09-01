@@ -1,4 +1,4 @@
-﻿using Mntone.Nico2.Mylist.MylistGroup;
+﻿
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace Mntone.Nico2.Mylist
 		
 		public static List<MylistData> ParseMylistItemResponse(string json)
 		{
-			var res = JsonConvert.DeserializeObject<MylistItem.MylistItemResponse>(json);
+			var res = JsonConvert.DeserializeObject<Users.MylistItem.MylistItemResponse>(json);
 
 			if (res.status == "ok")
 			{

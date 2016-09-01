@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mntone.Nico2.Mylist;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mntone.Nico2.Mylist.Deflist
+namespace Mntone.Nico2.Users.Deflist
 {
     internal sealed class DeflistClient
     {

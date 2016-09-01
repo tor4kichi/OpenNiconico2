@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mntone.Nico2.Mylist;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Mntone.Nico2.Mylist.MylistItem
+namespace Mntone.Nico2.Users.MylistItem
 {
     internal sealed class MylistItemClient
     {

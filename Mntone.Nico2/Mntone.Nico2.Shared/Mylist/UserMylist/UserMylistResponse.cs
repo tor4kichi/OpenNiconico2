@@ -1,5 +1,4 @@
-﻿using Mntone.Nico2.Mylist.MylistGroup;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
