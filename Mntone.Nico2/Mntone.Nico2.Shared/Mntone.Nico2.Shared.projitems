@@ -150,7 +150,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SortMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializeInteropExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sex.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SortDirection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Order.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortDirectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringExtention.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavClient.cs" />
@@ -199,5 +199,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\VideoApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchAPIClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchApiResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Searches\Video\" />
   </ItemGroup>
 </Project>
