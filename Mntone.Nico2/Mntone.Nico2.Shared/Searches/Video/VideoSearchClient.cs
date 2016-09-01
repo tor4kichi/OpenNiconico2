@@ -52,16 +52,16 @@ namespace Mntone.Nico2.Searches.Video
 		}
 
 
-		private static VideoSearchResponse ParseVideoResponseJson(string videoSearchResponseJson)
+		private static VideoListingResponse ParseVideoResponseJson(string videoSearchResponseJson)
 		{
-			var responseContainer = JsonSerializerExtensions.Load<VideoSearchResponseContainer>(videoSearchResponseJson);
+			var responseContainer = JsonSerializerExtensions.Load<VideoListingResponseContainer>(videoSearchResponseJson);
 
 			return responseContainer.nicovideo_video_response;
 		}
 
 		
 
-		public static Task<VideoSearchResponse> GetKeywordSearchAsync(
+		public static Task<VideoListingResponse> GetKeywordSearchAsync(
 			NiconicoContext context
 			, string keyword
 			, uint from
@@ -74,7 +74,7 @@ namespace Mntone.Nico2.Searches.Video
 				.ContinueWith(prevTask => ParseVideoResponseJson(prevTask.Result));
 		}
 
-		public static Task<VideoSearchResponse> GetTagSearchAsync(
+		public static Task<VideoListingResponse> GetTagSearchAsync(
 			NiconicoContext context
 			, string tag
 			, uint from

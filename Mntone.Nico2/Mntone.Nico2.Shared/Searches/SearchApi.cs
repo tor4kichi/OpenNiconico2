@@ -37,7 +37,7 @@ namespace Mntone.Nico2.Searches
 #endif
 
 
-		public Task<Video.VideoSearchResponse> VideoSearchWithKeywordAsync(
+		public Task<Video.VideoListingResponse> VideoSearchWithKeywordAsync(
 			string keyword
 			, uint from = 0
 			, uint limit = 30
@@ -56,7 +56,7 @@ namespace Mntone.Nico2.Searches
 		}
 
 
-		public Task<Video.VideoSearchResponse> VideoSearchWithTagAsync(
+		public Task<Video.VideoListingResponse> VideoSearchWithTagAsync(
 			string tag
 			, uint from = 0
 			, uint limit = 30

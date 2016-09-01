@@ -13,7 +13,13 @@ namespace Mntone.Nico2
 		FirstRetrieve, // f
 		Length,		   // l
 		Popurarity,    // h
-    }
+
+
+		MylistPopurarity, // c
+		UpdateTime,    // n
+		Relation,      // s
+		VideoCount,    // i
+	}
 
 
 	public static class SortMethodExtention
@@ -36,6 +42,15 @@ namespace Mntone.Nico2
 					return 'l';
 				case Sort.Popurarity:
 					return 'h';
+
+				case Sort.MylistPopurarity:
+					return 'c';
+				case Sort.UpdateTime:
+					return 'n';
+				case Sort.Relation:
+					return 's';
+				case Sort.VideoCount:
+					return 'i';
 				default:
 					throw new NotSupportedException($"not support {nameof(Sort)}.{method.ToString()}");
 			}

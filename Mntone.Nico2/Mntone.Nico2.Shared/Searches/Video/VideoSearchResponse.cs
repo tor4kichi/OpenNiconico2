@@ -149,10 +149,10 @@ namespace Mntone.Nico2.Searches.Video
 	{
 
 		[DataMember(Name = "video")]
-		public Video video { get; private set; }
+		public Video Video { get; private set; }
 
 		[DataMember(Name = "thread")]
-		public Thread thread { get; private set; }
+		public Thread Thread { get; private set; }
 	}
 
 	[DataContract]
@@ -178,7 +178,7 @@ namespace Mntone.Nico2.Searches.Video
 	}
 
 	[DataContract]
-	public class VideoSearchResponse
+	public class VideoListingResponse
 	{
 
 		[DataMember(Name = "count")]
@@ -206,11 +206,11 @@ namespace Mntone.Nico2.Searches.Video
 	}
 
 	[DataContract]
-	public class VideoSearchResponseContainer
+	public class VideoListingResponseContainer
 	{
 
 		[DataMember(Name = "nicovideo_video_response")]
-		public VideoSearchResponse nicovideo_video_response { get; set; }
+		public VideoListingResponse nicovideo_video_response { get; set; }
 	}
 
 }

@@ -1,4 +1,5 @@
 ﻿using Mntone.Nico2.Mylist.MylistGroup;
+using Mntone.Nico2.Searches.Video;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,36 @@ namespace Mntone.Nico2.Mylist
 		{
 			return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, group_id, isNeedDetail);
 		}
+
+
+
+		/// <summary>
+		/// マイリストグループの動画リストを取得します
+		/// </summary>
+		/// <param name="group_id"></param>
+		/// <param name="from"></param>
+		/// <param name="limit"></param>
+		/// <param name="sort"></param>
+		/// <param name="order"></param>
+		/// <returns></returns>
+		public Task<VideoListingResponse> GetMylistGroupVideoAsync(
+			string group_id
+			, uint from = 0
+			, uint limit = 30
+			, Sort sort = Sort.FirstRetrieve
+			, Order order = Order.Descending
+			)
+		{
+			return MylistGroup.MylistGroupClient.GetMylistGroupVideoAsync(
+				_context
+				, group_id
+				, from
+				, limit
+				, sort
+				, order
+				);
+		}
+
 
 
 

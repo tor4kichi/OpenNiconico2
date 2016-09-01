@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mntone.Nico2.Searches.Video;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 
 
 		// マイリストに含まれる動画リストの取得
-		public static async Task<string> GetMylistVideoItemsDataAsync(
+		public static async Task<string> GetMylistGroupVideoDataAsync(
 			NiconicoContext context
 			, string group_id
 			, uint from
@@ -57,6 +58,13 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		}
 
 
+		private static VideoListingResponse ParseMylistVideoItemsResponseJson(string json)
+		{
+			var responseContainer = JsonSerializerExtensions.Load<VideoListingResponseContainer>(json);
+
+			return responseContainer.nicovideo_video_response;
+		}
+
 
 
 		public static Task<MylistGroupDetailResponse> GetMylistGroupDetailAsync(
@@ -67,6 +75,21 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		{
 			return GetMylistGroupDetailDataAsync(context, group_id, isNeedDetail)
 				.ContinueWith(prevTask => ParseMylistGroupDetailResponseJson(prevTask.Result));
+		}
+
+
+
+		public static Task<VideoListingResponse> GetMylistGroupVideoAsync(
+			NiconicoContext context
+			, string group_id
+			, uint from
+			, uint limit
+			, Sort sort
+			, Order order
+			)
+		{
+			return GetMylistGroupVideoDataAsync(context, group_id, from, limit, sort, order)
+				.ContinueWith(prevTask => ParseMylistVideoItemsResponseJson(prevTask.Result));
 		}
 	}
 }
