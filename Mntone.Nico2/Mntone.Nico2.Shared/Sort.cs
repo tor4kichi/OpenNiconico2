@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mntone.Nico2
 {
-    public enum SortMethod
+    public enum Sort
     {
 		NewComment,    // n
 		ViewCount,     // v
@@ -18,30 +18,30 @@ namespace Mntone.Nico2
 
 	public static class SortMethodExtention
 	{
-		public static char ToChar(this SortMethod method)
+		public static char ToChar(this Sort method)
 		{
 			switch (method)
 			{
-				case SortMethod.NewComment:
+				case Sort.NewComment:
 					return 'n';
-				case SortMethod.ViewCount:
+				case Sort.ViewCount:
 					return 'v';
-				case SortMethod.MylistCount:
+				case Sort.MylistCount:
 					return 'm';
-				case SortMethod.CommentCount:
+				case Sort.CommentCount:
 					return 'r';
-				case SortMethod.FirstRetrieve:
+				case Sort.FirstRetrieve:
 					return 'f';
-				case SortMethod.Length:
+				case Sort.Length:
 					return 'l';
-				case SortMethod.Popurarity:
+				case Sort.Popurarity:
 					return 'h';
 				default:
-					throw new NotSupportedException($"not support {nameof(SortMethod)}.{method.ToString()}");
+					throw new NotSupportedException($"not support {nameof(Sort)}.{method.ToString()}");
 			}
 		}
 
-		public static string ToShortString(this SortMethod method)
+		public static string ToShortString(this Sort method)
 		{
 			return method.ToChar().ToString();
 		}

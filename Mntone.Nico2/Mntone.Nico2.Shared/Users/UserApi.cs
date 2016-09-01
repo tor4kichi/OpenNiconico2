@@ -184,7 +184,7 @@ namespace Mntone.Nico2.Users
 		}
 
 
-		public Task<Video.UserVideoResponse> GetUserVideos(uint userId, uint page, SortMethod sortMethod = SortMethod.FirstRetrieve, SortDirection sortDir = SortDirection.Descending)
+		public Task<Video.UserVideoResponse> GetUserVideos(uint userId, uint page, Sort sortMethod = Sort.FirstRetrieve, Order sortDir = Order.Descending)
 		{
 			return Video.UserVideoClient.GetUserAsync(_context, userId, page, sortMethod, sortDir);
 		}

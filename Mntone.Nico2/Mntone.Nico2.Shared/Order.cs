@@ -4,7 +4,7 @@ namespace Mntone.Nico2
 	/// <summary>
 	/// 整列方向
 	/// </summary>
-	public enum SortDirection
+	public enum Order
 	{
 		/// <summary>
 		/// 昇順

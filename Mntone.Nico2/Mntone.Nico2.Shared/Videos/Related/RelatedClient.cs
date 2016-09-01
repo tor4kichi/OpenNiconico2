@@ -10,7 +10,7 @@ namespace Mntone.Nico2.Videos.Related
 {
     internal sealed class RelatedClient
     {
-		public static async Task<string> GetRelatedVideoDataAsync(NiconicoContext context, string videoId, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		public static async Task<string> GetRelatedVideoDataAsync(NiconicoContext context, string videoId, uint from, uint limit, Sort sortMethod, Order sortDir)
 		{
 			var dict = new Dictionary<string, string>();
 
@@ -37,7 +37,7 @@ namespace Mntone.Nico2.Videos.Related
 		}
 
 
-		public static Task<NicoVideoResponse> GetRelatedVideoAsync(NiconicoContext context, string videoId, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<NicoVideoResponse> GetRelatedVideoAsync(NiconicoContext context, string videoId, uint from, uint limit, Sort sortMethod, Order sortDir)
 		{
 			return GetRelatedVideoDataAsync(context, videoId, from, limit, sortMethod, sortDir)
 				.ContinueWith(prevTask => ParseXml<NicoVideoResponse>(prevTask.Result));

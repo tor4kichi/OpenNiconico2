@@ -178,7 +178,7 @@ namespace Mntone.Nico2.Live
 		}
 #else
 		public Task<OnAirStreams.OnAirStreamsResponse> GetOnAirStreamsRecentAsync(
-			ushort pageIndex, Category category, SortDirection direction, SortType type )
+			ushort pageIndex, Category category, Order direction, SortType type )
 		{
 			return OnAirStreams.OnAirStreamsClient.GetOnAirStreamsRecentAsync( this._context, pageIndex, category, direction, type );
 		}

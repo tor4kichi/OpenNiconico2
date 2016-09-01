@@ -20,7 +20,7 @@ namespace Mntone.Nico2.Live.OnAirStreams
 		}
 
 		public static Task<string> GetOnAirStreamsRecentDataAsync(
-			NiconicoContext context, ushort pageIndex, Category category, SortDirection direction, SortType type )
+			NiconicoContext context, ushort pageIndex, Category category, Order direction, SortType type )
 		{
 			var sb = new StringBuilder( NiconicoUrls.LiveZappingListRecentUrl );
 			if( pageIndex != 1 )
@@ -30,7 +30,7 @@ namespace Mntone.Nico2.Live.OnAirStreams
 			}
 			sb.Append( "&tab=" );
 			sb.Append( category.ToCategoryString() );
-			if( direction == SortDirection.Descending )
+			if( direction == Order.Descending )
 			{
 				sb.Append( "&order=desc" );
 			}
@@ -52,7 +52,7 @@ namespace Mntone.Nico2.Live.OnAirStreams
 		}
 
 		public static Task<OnAirStreamsResponse> GetOnAirStreamsRecentAsync(
-			NiconicoContext context, ushort pageIndex, Category category, SortDirection direction = SortDirection.Ascending, SortType type = SortType.StartTime )
+			NiconicoContext context, ushort pageIndex, Category category, Order direction = Order.Ascending, SortType type = SortType.StartTime )
 		{
 			return GetOnAirStreamsRecentDataAsync( context, pageIndex, category, direction, type )
 				.ContinueWith( prevTask => ParseOnAirStreamsData( prevTask.Result ) );

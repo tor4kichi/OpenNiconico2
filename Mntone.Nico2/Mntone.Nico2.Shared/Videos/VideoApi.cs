@@ -145,7 +145,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, SortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
+		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, Sort sortMethod, Order sortDir = Order.Descending)
 		{
 			return Search.SearchClient.GetKeywordSearchAsync(_context, keyword, pageCount, sortMethod, sortDir);
 		}
@@ -155,7 +155,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount, SortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
+		public Task<Search.SearchResponse> GetTagSearchAsync(string tag, uint pageCount, Sort sortMethod, Order sortDir = Order.Descending)
 		{
 			return Search.SearchClient.GetTagSearchAsync(_context, tag, pageCount, sortMethod, sortDir);
 		}
@@ -167,7 +167,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="SearchResponse"></param>
 		/// <returns></returns>
-		public Task<NicoVideoResponse> GetRelatedVideoAsync(string videoId, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir = SortDirection.Descending)
+		public Task<NicoVideoResponse> GetRelatedVideoAsync(string videoId, uint from, uint limit, Sort sortMethod, Order sortDir = Order.Descending)
 		{
 			return Related.RelatedClient.GetRelatedVideoAsync(_context, videoId, from, limit, sortMethod, sortDir);
 		}

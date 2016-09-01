@@ -4,26 +4,26 @@ namespace Mntone.Nico2
 {
 	internal static class SortDirectionExtensions
 	{
-		public static char ToChar( this SortDirection direction )
+		public static char ToChar( this Order direction )
 		{
 			switch( direction )
 			{
-			case SortDirection.Ascending:
+			case Order.Ascending:
 				return 'a';
-			case SortDirection.Descending:
+			case Order.Descending:
 				return 'd';
 			default:
 				throw new ArgumentOutOfRangeException();
 			}
 		}
 
-		public static string ToShortString( this SortDirection direction )
+		public static string ToShortString( this Order direction )
 		{
 			switch( direction )
 			{
-			case SortDirection.Ascending:
+			case Order.Ascending:
 				return "asc";
-			case SortDirection.Descending:
+			case Order.Descending:
 				return "desc";
 			default:
 				throw new ArgumentOutOfRangeException();

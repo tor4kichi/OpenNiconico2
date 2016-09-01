@@ -12,7 +12,7 @@ namespace Mntone.Nico2.Users.Video
     {
 		// ユーザーの投稿動画関連
 
-		public static Task<string> GetUserDataAsync(NiconicoContext context, uint user_id, uint page, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<string> GetUserDataAsync(NiconicoContext context, uint user_id, uint page, Sort sortMethod, Order sortDir)
 		{
 			var url = NiconicoUrls.MakeUserVideoRssUrl(user_id.ToString(), page, sortMethod.ToShortString(), sortDir.ToShortString());
 			return context.GetClient()
@@ -51,7 +51,7 @@ namespace Mntone.Nico2.Users.Video
 
 		}
 
-		public static Task<UserVideoResponse> GetUserAsync(NiconicoContext context, uint user_id, uint page, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<UserVideoResponse> GetUserAsync(NiconicoContext context, uint user_id, uint page, Sort sortMethod, Order sortDir)
 		{
 			return GetUserDataAsync(context, user_id, page, sortMethod, sortDir)
 				.ContinueWith(prevTask => ParseUserData(prevTask.Result));

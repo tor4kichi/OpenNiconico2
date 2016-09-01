@@ -147,7 +147,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Searches\SearchApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SortMethod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Video\VideoSearchClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Video\VideoSearchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializeInteropExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Order.cs" />
@@ -199,8 +201,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\VideoApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchAPIClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchApiResponse.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Searches\Video\" />
   </ItemGroup>
 </Project>

@@ -94,7 +94,7 @@ namespace Mntone.Nico2.Mylist.MylistItem
 
 
 
-		public static Task<string> GetMylistListDataAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<string> GetMylistListDataAsync(NiconicoContext context, string group_id, uint from, uint limit, Sort sortMethod, Order sortDir)
 		{
 			var dict = new Dictionary<string, string>();
 
@@ -124,7 +124,7 @@ namespace Mntone.Nico2.Mylist.MylistItem
 
 
 
-		public static Task<NicoVideoResponse> GetMylistListAsync(NiconicoContext context, string group_id, uint from, uint limit, SortMethod sortMethod, SortDirection sortDir)
+		public static Task<NicoVideoResponse> GetMylistListAsync(NiconicoContext context, string group_id, uint from, uint limit, Sort sortMethod, Order sortDir)
 		{
 			return GetMylistListDataAsync(context, group_id, from, limit, sortMethod, sortDir)
 				.ContinueWith(prevTask => ParseMylistListXml(prevTask.Result));
