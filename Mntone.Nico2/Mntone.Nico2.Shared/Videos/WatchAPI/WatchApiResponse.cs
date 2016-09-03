@@ -363,6 +363,8 @@ namespace Mntone.Nico2.Videos.WatchAPI
 		public VideoDetail videoDetail { get; set; }
 		[DataMember(Name = "channelInfo")]
 		public ChannelInfo channelInfo { get; set; }
+		[DataMember(Name = "uploaderInfo")]
+		public UploaderInfo UploaderInfo { get; set; }
 		[DataMember(Name = "viewerInfo")]
 		public ViewerInfo viewerInfo { get; set; }
 		[DataMember(Name = "tagRelatedMarquee")]
@@ -378,7 +380,8 @@ namespace Mntone.Nico2.Videos.WatchAPI
 
 		public Dictionary<string, string> GetFlvInfo()
 		{
-			return this.flashvars.flvInfo.Split(new char[] { '&' }).ToDictionary(
+			var decoded = System.Net.WebUtility.UrlDecode(this.flashvars.flvInfo);
+			return decoded.Split(new char[] { '&' }).ToDictionary(
 					source => source.Substring(0, source.IndexOf('=')),
 					source => Uri.UnescapeDataString(source.Substring(source.IndexOf('=') + 1)));
 		}

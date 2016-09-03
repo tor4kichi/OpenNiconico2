@@ -56,11 +56,13 @@ namespace Mntone.Nico2.Videos.WatchAPI
 				else
 				{
 					var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
-					var str = WebUtility.UrlDecode(WebUtility.HtmlDecode(videoInfoNode.InnerText));
+					var rawStr = videoInfoNode.InnerText;
+					var htmlDecoded = WebUtility.HtmlDecode(rawStr);
+					//var str = WebUtility.UrlDecode(htmlDecoded);
 
-					System.Diagnostics.Debug.WriteLine(str);
+					System.Diagnostics.Debug.WriteLine(htmlDecoded);
 
-					return str;
+					return htmlDecoded;
 
 				}
 			}
