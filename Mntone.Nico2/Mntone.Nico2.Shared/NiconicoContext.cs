@@ -60,7 +60,14 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient != null )
 			{
-				ProtocolFilter.ClearAuthenticationCache();
+				if (ApiInformation.IsMethodPresent("Windows.Web.Http.Filters.HttpBaseProtocolFilter", "ClearAuthenticationCache"))
+				{
+					// Call the method here
+					ProtocolFilter.ClearAuthenticationCache();
+				}
+				
+				
+
 				this.HttpClient.Dispose();
 				this.HttpClient = null;
 			}
