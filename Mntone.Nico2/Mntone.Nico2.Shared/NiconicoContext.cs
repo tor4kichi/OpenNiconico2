@@ -60,6 +60,7 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient != null )
 			{
+				ProtocolFilter.ClearAuthenticationCache();
 				this.HttpClient.Dispose();
 				this.HttpClient = null;
 			}
@@ -161,7 +162,8 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient == null )
 			{
-				this.HttpClient = new HttpClient();
+				this.ProtocolFilter = new HttpBaseProtocolFilter();
+				this.HttpClient = new HttpClient(ProtocolFilter);
 				this.HttpClient.DefaultRequestHeaders.Add( "user-agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
@@ -354,6 +356,7 @@ namespace Mntone.Nico2
 		internal const string DefaultUserAgent = "OpenNiconico/2.0";
 		private readonly Uri NiconicoCookieUrl = new Uri( "http://nicovideo.jp/" );
 
+		public HttpBaseProtocolFilter ProtocolFilter { get; private set; }
 		public HttpClient HttpClient { get; private set; }
 
 		#endregion
