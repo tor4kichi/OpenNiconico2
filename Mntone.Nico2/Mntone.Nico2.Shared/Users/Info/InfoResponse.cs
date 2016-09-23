@@ -8,7 +8,7 @@ namespace Mntone.Nico2.Users.Info
 	/// </summary>
 	public sealed class InfoResponse
 	{
-		internal InfoResponse( HtmlNode bodyHtml, string language )
+		internal InfoResponse( HtmlNode bodyHtml, string language, UserMyPageJSInfo info )
 		{
 			var profileHtml = bodyHtml.GetElementByClassName( "userDetail" ).GetElementByClassName( "profile" );
 			{
@@ -16,6 +16,10 @@ namespace Mntone.Nico2.Users.Info
 				this.Name = h2Html.FirstChild.InnerText;
 			}
 
+			this.Id = info.Id;
+			this.IsPremium = info.IsPremium;
+			this.IsOver18 = info.IsOver18;
+			/*
 			{
 				var accountIdHtml = profileHtml.GetElementByClassName( "account" ).GetElementByClassName( "accountNumber" ).Element( "span" );
 				var keywords = accountIdHtml.InnerText.Split( new char[] { ' ', '(', ')' } );
@@ -23,25 +27,25 @@ namespace Mntone.Nico2.Users.Info
 				{
 					switch( language )
 					{
-					case "ja-jp":
-						this.Id = keywords[0].ToUInt();
-						this.JoinedVersion = keywords[1];
-						this.IsPremium = keywords[3] == "プレミアム会員";
-						break;
-					case "en-us":
-						this.Id = keywords[0].ToUInt();
-						this.JoinedVersion = keywords[1];
-						this.IsPremium = keywords[3] == "Premium";
-						break;
-					case "zh-tw":
-						this.Id = keywords[0].ToUInt();
-						this.JoinedVersion = keywords[1];
-						this.IsPremium = keywords[3] == "白金會員";
-						break;
+						case "ja-jp":
+							this.Id = keywords[0].ToUInt();
+							this.JoinedVersion = keywords[1];
+							this.IsPremium = keywords[3] == "プレミアム会員";
+							break;
+						case "en-us":
+							this.Id = keywords[0].ToUInt();
+							this.JoinedVersion = keywords[1];
+							this.IsPremium = keywords[3] == "Premium";
+							break;
+						case "zh-tw":
+							this.Id = keywords[0].ToUInt();
+							this.JoinedVersion = keywords[1];
+							this.IsPremium = keywords[3] == "白金會員";
+							break;
 					}
 				}
 			}
-
+			*/
 			{
 				var statsHtml = profileHtml.GetElementByClassName( "stats" );
 				this.FavoriteCount = statsHtml.GetElementByClassName( "fav" ).FirstChild.InnerText.ToUShort();
@@ -61,15 +65,17 @@ namespace Mntone.Nico2.Users.Info
 				var creatorScoreText = statsHtml.GetElementByClassName( "cpp" ).FirstChild.InnerText;
 				switch( language )
 				{
-				case "ja-jp":
-				case "zh-tw":
-					this.CreatorScore = creatorScoreText.Substring( 0, creatorScoreText.Length - 1 ).ToUInt();
-					break;
-				case "en-us":
-					this.CreatorScore = creatorScoreText.Substring( 0, creatorScoreText.Length - 7 ).ToUInt();
-					break;
-				default:
-					break;
+					case "ja-jp":
+						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 1).ToUInt();
+						break;
+					case "zh-tw":
+						this.CreatorScore = creatorScoreText.Substring( 0, creatorScoreText.Length - 1 ).ToUInt();
+						break;
+					case "en-us":
+						this.CreatorScore = creatorScoreText.Substring( 0, creatorScoreText.Length - 7 ).ToUInt();
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -93,6 +99,12 @@ namespace Mntone.Nico2.Users.Info
 		/// プレミアムか
 		/// </summary>
 		public bool IsPremium { get; private set; }
+
+		/// <summary>
+		/// プレミアムか
+		/// </summary>
+		public bool IsOver18 { get; private set; }
+
 
 		/// <summary>
 		/// お気に入り登録された数
