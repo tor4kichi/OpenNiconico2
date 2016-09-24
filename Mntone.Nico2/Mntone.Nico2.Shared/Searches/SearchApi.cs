@@ -92,6 +92,24 @@ namespace Mntone.Nico2.Searches
 				);
 		}
 
+		public Task<Community.CommunitySearchResponse> CommunitySearchAsync(
+			string keyword
+			, uint page = 1
+			, Community.CommunitySearchSort sort = Community.CommunitySearchSort.CreatedAt
+			, Order order = Order.Descending
+			, Community.CommunitySearchMode mode = Community.CommunitySearchMode.Keyword
+			)
+		{
+			return Community.CommunityClient.CommunitySearchAsync(
+				this._context
+				, keyword
+				, page
+				, sort
+				, order
+				, mode
+				);
+		}
+
 		#region field
 
 		private NiconicoContext _context;

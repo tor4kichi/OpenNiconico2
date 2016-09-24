@@ -22,7 +22,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 			dict.Add(nameof(group_id), group_id);
 			dict.Add(nameof(isNeedDetail), isNeedDetail.ToString1Or0());
 
-			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLISTGROUP_GET, dict);
+			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_MYLISTGROUP_GET, dict);
 		}
 
 
@@ -46,7 +46,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 			dict.Add(nameof(order), order.ToShortString());
 			dict.Add(nameof(sort), sort.ToShortString());
 
-			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLIST_LIST, dict);
+			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_MYLIST_LIST, dict);
 		}
 
 

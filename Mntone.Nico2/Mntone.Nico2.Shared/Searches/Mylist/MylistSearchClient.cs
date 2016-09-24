@@ -26,7 +26,7 @@ namespace Mntone.Nico2.Searches.Mylist
 			dict.Add(nameof(order), order.ToShortString());
 			dict.Add(nameof(sort), sort.ToShortString());
 
-			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_MYLIST_SEARCH, dict);
+			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_MYLIST_SEARCH, dict);
 		}
 
 

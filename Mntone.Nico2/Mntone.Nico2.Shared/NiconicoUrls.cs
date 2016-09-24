@@ -252,7 +252,17 @@ namespace Mntone.Nico2
 		/// ニコニコ コミュニティー アイコン未設定 URL テキスト
 		/// </summary>
 		public static string CommunityBlankIconUrl { get { return "http://icon.nimg.jp/404.jpg"; } }
-		
+
+
+
+		private const string CommunityUrlBase = "http://com" + DomainBase;
+
+		public static string CommynitySearchPageUrl = CommunityUrlBase + "search/";
+
+		public static string CommynitySammaryPageUrl = CommunityUrlBase + "community/";
+
+
+
 		#endregion
 
 
@@ -465,28 +475,54 @@ namespace Mntone.Nico2
 
 		#region api.ce.nicovideo
 
-		public const string NICOVIDEO_CE_API_BASE = "http://api.ce.nicovideo.jp/nicoapi/";
+		public const string NICOVIDEO_CE_NICOAPI_BASE = "http://api.ce.nicovideo.jp/nicoapi/";
+
+		public const string NICOVIDEO_CE_NICOAPI_V1 = NICOVIDEO_CE_NICOAPI_BASE + "v1/";
+
+		public const string NICOVIDEO_CE_NICOAPI_V1_MYLISTGROUP = NICOVIDEO_CE_NICOAPI_V1 + "mylistgroup";
+		public const string NICOVIDEO_CE_NICOAPI_V1_MYLISTGROUP_GET = NICOVIDEO_CE_NICOAPI_V1_MYLISTGROUP + ".get";
+
+		public const string NICOVIDEO_CE_NICOAPI_V1_MYLIST        = NICOVIDEO_CE_NICOAPI_V1 + "mylist";
+		public const string NICOVIDEO_CE_NICOAPI_V1_MYLIST_SEARCH = NICOVIDEO_CE_NICOAPI_V1_MYLIST + ".search";
+		public const string NICOVIDEO_CE_NICOAPI_V1_MYLIST_LIST   = NICOVIDEO_CE_NICOAPI_V1_MYLIST + ".list";
+
+
+		public const string NICOVIDEO_CE_NICOAPI_V1_VIDEO = NICOVIDEO_CE_NICOAPI_V1 + "video";
+		public const string NICOVIDEO_CE_NICOAPI_V1_VIDEO_SEARCH = NICOVIDEO_CE_NICOAPI_V1_VIDEO + ".search";
+
+		public const string NICOVIDEO_CE_NICOAPI_V1_TAG = NICOVIDEO_CE_NICOAPI_V1 + "tag";
+		public const string NICOVIDEO_CE_NICOAPI_V1_TAG_SEARCH = NICOVIDEO_CE_NICOAPI_V1_TAG + ".search";
+
+
+
+
+
+
+		// http://api.ce.nicovideo.jp/api/v1/community.info
+		public const string NICOVIDEO_CE_API_BASE = "http://api.ce.nicovideo.jp/api/";
 
 		public const string NICOVIDEO_CE_API_V1 = NICOVIDEO_CE_API_BASE + "v1/";
 
-		public const string NICOVIDEO_CE_API_V1_MYLISTGROUP = NICOVIDEO_CE_API_V1 + "mylistgroup";
-		public const string NICOVIDEO_CE_API_V1_MYLISTGROUP_GET = NICOVIDEO_CE_API_V1_MYLISTGROUP + ".get";
+		public const string NICOVIDEO_CE_API_V1_COMMUNITY = NICOVIDEO_CE_API_V1 + "community";
 
-		public const string NICOVIDEO_CE_API_V1_MYLIST        = NICOVIDEO_CE_API_V1 + "mylist";
-		public const string NICOVIDEO_CE_API_V1_MYLIST_SEARCH = NICOVIDEO_CE_API_V1_MYLIST + ".search";
-		public const string NICOVIDEO_CE_API_V1_MYLIST_LIST   = NICOVIDEO_CE_API_V1_MYLIST + ".list";
-
-
-		public const string NICOVIDEO_CE_API_V1_VIDEO = NICOVIDEO_CE_API_V1 + "video";
-		public const string NICOVIDEO_CE_API_V1_VIDEO_SEARCH = NICOVIDEO_CE_API_V1_VIDEO + ".search";
-
-		public const string NICOVIDEO_CE_API_V1_TAG = NICOVIDEO_CE_API_V1 + "tag";
-		public const string NICOVIDEO_CE_API_V1_TAG_SEARCH = NICOVIDEO_CE_API_V1_TAG + ".search";
+		/// <summary>
+		/// コミュニティ情報の取得
+		/// </summary>
+		/// <remarks>?id=co00000000</remarks>
+		public const string NICOVIDEO_CE_API_V1_COMMUNITY_INFO = NICOVIDEO_CE_API_V1_COMMUNITY + ".info";
 
 
+		// 生放送関連
+		public const string NICOVIDEO_CE_LIVEAPI_BASE = "http://api.ce.nicovideo.jp/liveapi/";
+		public const string NICOVIDEO_CE_LIVEAPI_BASE_V1 = NICOVIDEO_CE_LIVEAPI_BASE + "v1/";
+
+		/// <summary>
+		/// 生放送情報の取得
+		/// </summary>
+		/// <remarks>?community_id=co00000000</remarks>
+		public const string NICOVIDEO_CE_LIVEAPI_V1_COMMUNITY_VIDEO = NICOVIDEO_CE_LIVEAPI_BASE_V1 + ".video";
 
 
-		
 
 
 		#endregion

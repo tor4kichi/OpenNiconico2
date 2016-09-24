@@ -26,7 +26,7 @@ namespace Mntone.Nico2.Searches.Video
 			dict.Add(nameof(order), order.ToShortString());
 			dict.Add(nameof(sort), sort.ToShortString());
 
-			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_VIDEO_SEARCH, dict);
+			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_VIDEO_SEARCH, dict);
 		}
 
 		public static async Task<string> GetTagSearchDataAsync(
@@ -48,7 +48,7 @@ namespace Mntone.Nico2.Searches.Video
 			dict.Add(nameof(order), order.ToShortString());
 			dict.Add(nameof(sort), sort.ToShortString());
 
-			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_API_V1_TAG_SEARCH, dict);
+			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_TAG_SEARCH, dict);
 		}
 
 

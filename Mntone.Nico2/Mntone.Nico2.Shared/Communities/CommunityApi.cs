@@ -38,6 +38,28 @@ namespace Mntone.Nico2.Communities
 #endif
 
 
+
+		/// <summary>
+		/// コミュニティ情報を取得します
+		/// </summary>
+		/// <param name="communityId"></param>
+		/// <returns></returns>
+		public Task<Info.NicovideoCommunityResponse> GetCommunifyInfoAsync(string communityId)
+		{
+			return Info.InfoClient.GetCommunityInfoAsync(this._context, communityId);
+		}
+
+
+		/// <summary>
+		/// コミュニティ情報を取得します
+		/// </summary>
+		/// <param name="communityId"></param>
+		/// <returns></returns>
+		public Task<Detail.CommunityDetailResponse> GetCommunityDetailAsync(string communityId)
+		{
+			return Detail.DetailClient.GetCommunityDetailAsync(this._context, communityId);
+		}
+
 		#region field
 
 		private NiconicoContext _context;
