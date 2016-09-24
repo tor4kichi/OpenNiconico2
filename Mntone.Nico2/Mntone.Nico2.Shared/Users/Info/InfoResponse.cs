@@ -46,38 +46,40 @@ namespace Mntone.Nico2.Users.Info
 				}
 			}
 			*/
+			try
 			{
-				var statsHtml = profileHtml.GetElementByClassName( "stats" );
-				this.FavoriteCount = statsHtml.GetElementByClassName( "fav" ).FirstChild.InnerText.ToUShort();
+				var statsHtml = profileHtml.GetElementByClassName("stats");
+				this.FavoriteCount = statsHtml.GetElementByClassName("fav").FirstChild.InnerText.ToUShort();
 
-				var stampText = statsHtml.GetElementByClassName( "exp" ).FirstChild.InnerText;
-				this.StampCount = stampText.Substring( 0, stampText.Length - 3 ).ToUShort();
+				var stampText = statsHtml.GetElementByClassName("exp").FirstChild.InnerText;
+				this.StampCount = stampText.Substring(0, stampText.Length - 3).ToUShort();
 
-				var nicoruText = statsHtml.GetElementByClassName( "nicoru" )?.FirstChild.ChildNodes[1].InnerText ?? "-";
-				if( nicoruText != "-" )
+				var nicoruText = statsHtml.GetElementByClassName("nicoru")?.FirstChild.ChildNodes[1].InnerText ?? "-";
+				if (nicoruText != "-")
 				{
 					this.NicoruCount = nicoruText.ToUShort();
 				}
 
-				var pointsText = statsHtml.GetElementByClassName( "nicopoint" ).FirstChild.InnerText;
-				this.Points = pointsText.Substring( 0, pointsText.Length - 2 ).ToUInt();
+				var pointsText = statsHtml.GetElementByClassName("nicopoint").FirstChild.InnerText;
+				this.Points = pointsText.Substring(0, pointsText.Length - 2).ToUInt();
 
-				var creatorScoreText = statsHtml.GetElementByClassName( "cpp" ).FirstChild.InnerText;
-				switch( language )
+				var creatorScoreText = statsHtml.GetElementByClassName("cpp").FirstChild.InnerText;
+				switch (language)
 				{
 					case "ja-jp":
 						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 1).ToUInt();
 						break;
 					case "zh-tw":
-						this.CreatorScore = creatorScoreText.Substring( 0, creatorScoreText.Length - 1 ).ToUInt();
+						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 1).ToUInt();
 						break;
 					case "en-us":
-						this.CreatorScore = creatorScoreText.Substring( 0, creatorScoreText.Length - 7 ).ToUInt();
+						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 7).ToUInt();
 						break;
 					default:
 						break;
 				}
 			}
+			catch { }
 		}
 
 		/// <summary>
