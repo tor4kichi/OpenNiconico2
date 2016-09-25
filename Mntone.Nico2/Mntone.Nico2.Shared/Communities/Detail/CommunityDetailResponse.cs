@@ -4,6 +4,13 @@ using System.Text;
 
 namespace Mntone.Nico2.Communities.Detail
 {
+	public class CommunityLiveInfo
+	{
+		public string LiveTitle { get; set; }
+		public string ShortDesc { get; set; }
+
+		public string LiveId { get; set; }
+	}
 
 	public class CommunityNews
 	{
@@ -61,6 +68,9 @@ namespace Mntone.Nico2.Communities.Detail
 
 		
 		public List<CommunityNews> NewsList { get; private set; } = new List<CommunityNews>();
+
+		public List<CommunityLiveInfo> CurrentLiveList { get; private set; } = new List<CommunityLiveInfo>();
+
 
 		public List<LiveInfo> RecentLiveList { get; private set; } = new List<LiveInfo>();
 

@@ -153,6 +153,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Community\CommunitySearchMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Community\CommunitySearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Community\CommunitySearchSort.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Live\LiveSearchClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Live\NicoliveSearchMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Live\NicoliveSearchSort.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Live\NicoliveVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Mylist\MylistSearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Mylist\MylistSearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\SearchApi.cs" />
@@ -166,6 +170,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Order.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortDirectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringExtention.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\FavCommunity\FavCommunityClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\FavCommunity\FavCommunityResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\MylistDeflist\DeflistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Fav\FavResponse.cs" />

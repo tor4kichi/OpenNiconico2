@@ -60,6 +60,17 @@ namespace Mntone.Nico2.Communities
 			return Detail.DetailClient.GetCommunityDetailAsync(this._context, communityId);
 		}
 
+
+		/// <summary>
+		/// コミュニティの生放送状況を取得します
+		/// </summary>
+		/// <param name="communityId"></param>
+		/// <returns></returns>
+		public Task<Live.NicoliveVideoResponse> GetCommunityLiveInfoAsync(string communityId)
+		{
+			return Live.LiveInfoClient.GetCommunityLiveInfo(this._context, communityId);
+		}
+
 		#region field
 
 		private NiconicoContext _context;

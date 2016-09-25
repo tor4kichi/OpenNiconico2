@@ -513,6 +513,21 @@ namespace Mntone.Nico2.Users
 		#endregion
 
 
+		#region Fav Community
+
+		/// <summary>
+		/// マイページのお気に入りコミュニティにアクセスして
+		/// HTMLを解析してお気に入りコミュニティを取得します
+		/// </summary>
+		/// <returns></returns>
+		public Task<FavCommunity.FavCommunityResponse> GetFavCommunityAsync()
+		{
+			return FavCommunity.FavCommunityClient.GetFavCommunityAsync(_context);
+		}
+
+		#endregion
+
+
 		#region field
 
 		private NiconicoContext _context;

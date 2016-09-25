@@ -365,6 +365,7 @@ namespace Mntone.Nico2
 		public static string UserFavUserPageUrl = UserPageUrl + "/fav/user";
 		public static string UserFavMylistPageUrl = UserPageUrl + "/fav/mylist";
 		public static string UserFavTagPageUrl = UserPageUrl + "/fav/tag";
+		public static string UserFavCommunityPageUrl = UserPageUrl + "/community"; // コミュは/fav無し
 
 
 		// tags
@@ -517,12 +518,13 @@ namespace Mntone.Nico2
 		public const string NICOVIDEO_CE_LIVEAPI_BASE_V1 = NICOVIDEO_CE_LIVEAPI_BASE + "v1/";
 
 		/// <summary>
-		/// 生放送情報の取得
+		/// コミュニティの生放送情報の取得
 		/// </summary>
 		/// <remarks>?community_id=co00000000</remarks>
-		public const string NICOVIDEO_CE_LIVEAPI_V1_COMMUNITY_VIDEO = NICOVIDEO_CE_LIVEAPI_BASE_V1 + ".video";
+		public const string NICOVIDEO_CE_LIVEAPI_V1_COMMUNITY_VIDEO = NICOVIDEO_CE_LIVEAPI_BASE_V1 + "community.video";
 
 
+		public const string NICOVIDEO_CE_LIVEAPI_V1_VIDEO_SEARCH = NICOVIDEO_CE_LIVEAPI_BASE_V1 + "video.search.solr";
 
 
 		#endregion

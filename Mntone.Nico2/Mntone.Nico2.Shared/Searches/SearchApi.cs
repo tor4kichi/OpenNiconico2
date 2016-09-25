@@ -110,6 +110,43 @@ namespace Mntone.Nico2.Searches
 				);
 		}
 
+
+
+		/// <summary>
+		/// 生放送情報の検索結果を取得します。
+		/// </summary>
+		/// <param name="word">キーワードまたはタグ</param>
+		/// <param name="isTagSearch">タグ検索とするか</param>
+		/// <param name="provider">検索対象の生放送提供者種別。無指定の場合すべて</param>
+		/// <param name="from">検索開始位置</param>
+		/// <param name="length">検索結果の希望取得数</param>
+		/// <param name="order">順番。無指定の場合はAccending(古いものが先に来る）</param>
+		/// <param name="sort"></param>
+		/// <param name="mode"></param>
+		/// <returns></returns>
+		public Task<Live.NicoliveVideoResponse> LiveSearchAsync(
+			string word,
+			bool isTagSearch,
+			Nico2.Live.CommunityType? provider = null,
+			uint from = 0,
+			uint length = 30,
+			Order? order = null,
+			Live.NicoliveSearchSort? sort = null,
+			Live.NicoliveSearchMode? mode = null
+			)
+		{
+			return Live.LiveSearchClient.GetLiveSearchAsync(_context,
+				word, isTagSearch, provider,
+				from,
+				length,
+				order,
+				sort,
+				mode
+				);
+		}
+
+
+
 		#region field
 
 		private NiconicoContext _context;

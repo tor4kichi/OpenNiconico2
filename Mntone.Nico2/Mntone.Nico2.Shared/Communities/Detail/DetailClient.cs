@@ -19,6 +19,9 @@ namespace Mntone.Nico2.Communities.Detail
 		{
 			CommunityDetailResponse res = new CommunityDetailResponse();
 
+			var communitySammary = new CommunitySammary();
+			var communityDetail = new CommunityDetail();
+
 			var doc = new HtmlAgilityPack.HtmlDocument();
 
 			doc.LoadHtml(html);
@@ -31,13 +34,53 @@ namespace Mntone.Nico2.Communities.Detail
 
 			// コンテンツの読み取り
 			var comMain = cfix.GetElementById("community_main");
+
+			// 放送中
+			var nowLiveElem = comMain.GetElementById("now_live");
+			if (nowLiveElem != null)
+			{
+				try
+				{
+					var liveItemContainer = nowLiveElem.GetElementByClassName("frm_now_cnt");
+
+					foreach (var liveItem in liveItemContainer.GetElementsByClassName("now_item"))
+					{
+						var comLiveInfo = new CommunityLiveInfo();
+
+
+						var itemHeader = liveItem.Element("h2");
+						var titleAnchor = itemHeader.Element("a");
+						comLiveInfo.LiveTitle = titleAnchor.InnerText;
+
+						var liveUrl = titleAnchor.Attributes["href"].Value;
+
+						var withoutQuery = new string(liveUrl.TakeWhile(x => x != '?').ToArray());
+						var liveId = withoutQuery.Split('/').LastOrDefault();
+
+						if (liveId == null) { throw new Exception(); }
+						comLiveInfo.LiveId = liveId;
+
+						var liveShortDescElem = itemHeader.GetElementByClassName("desc");
+						comLiveInfo.ShortDesc = liveShortDescElem.InnerText;
+
+						communityDetail.CurrentLiveList.Add(comLiveInfo);
+					}
+				}
+				catch { }
+			}
+
+
+
+
+
+
+
+
+
 			var comMainContent = comMain.GetElementById("community_prof_frm")
 				.GetElementById("community_prof_frm2");
 
-
-			var communitySammary = new CommunitySammary();
-			var communityDetail = new CommunityDetail();
-			// 開設日
+	// 開設日
 			try
 			{
 				var cfix_r = comMainContent.GetElementByClassName("cfix")
