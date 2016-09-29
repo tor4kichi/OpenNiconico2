@@ -41,8 +41,8 @@ namespace Mntone.Nico2.Searches
 			string keyword
 			, uint from = 0
 			, uint limit = 30
-			, Sort sort = Sort.FirstRetrieve
-			, Order order = Order.Descending
+			, Sort? sort = null
+			, Order? order = null
 			)
 		{
 			return Video.VideoSearchClient.GetKeywordSearchAsync(
@@ -60,8 +60,8 @@ namespace Mntone.Nico2.Searches
 			string tag
 			, uint from = 0
 			, uint limit = 30
-			, Sort sort = Sort.FirstRetrieve
-			, Order order = Order.Descending
+			, Sort? sort = null
+			, Order? order = null
 			)
 		{
 			return Video.VideoSearchClient.GetTagSearchAsync(
@@ -78,8 +78,8 @@ namespace Mntone.Nico2.Searches
 			string keyword
 			, uint from = 0
 			, uint limit = 30
-			, Sort sort = Sort.FirstRetrieve
-			, Order order = Order.Descending
+			, Sort? sort = null
+			, Order? order = null
 			)
 		{
 			return Mylist.MylistSearchClient.GetMylistSearchAsync(

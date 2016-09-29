@@ -12,8 +12,8 @@ namespace Mntone.Nico2.Searches.Mylist
 			, string str
 			, uint from
 			, uint limit
-			, Sort sort
-			, Order order
+			, Sort? sort
+			, Order? order
 			)
 		{
 			var dict = new Dictionary<string, string>();
@@ -23,8 +23,16 @@ namespace Mntone.Nico2.Searches.Mylist
 			dict.Add(nameof(str), str);
 			dict.Add(nameof(from), from.ToString());
 			dict.Add(nameof(limit), limit.ToString());
-			dict.Add(nameof(order), order.ToShortString());
-			dict.Add(nameof(sort), sort.ToShortString());
+			if (order.HasValue)
+			{
+				dict.Add(nameof(order), order.Value.ToShortString());
+			}
+
+			if (sort.HasValue)
+			{
+				dict.Add(nameof(sort), sort.Value.ToShortString());
+			}
+			
 
 			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_MYLIST_SEARCH, dict);
 		}
@@ -42,8 +50,8 @@ namespace Mntone.Nico2.Searches.Mylist
 			, string keyword
 			, uint from
 			, uint limit
-			, Sort sort
-			, Order order
+			, Sort? sort
+			, Order? order
 			)
 		{
 			return GetMylistSearchDataAsync(context, keyword, from, limit, sort, order)
