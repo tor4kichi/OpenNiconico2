@@ -31,18 +31,39 @@ namespace Mntone.Nico2.Users.Video
 				rss = (UserVideoRss)serializer.Deserialize(stream);
 			}
 
+
+			
+
 			return new UserVideoResponse()
 			{
 				UserId = uint.Parse(rss.Channel.Link.Split('/')[2]),
 				UserName = rss.Channel.Creator,
 				Items = rss.Channel.Item.Select(x =>
 				{
+					var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+					var firstTreatedDesc = x.Description.Trim(' ', '\n');
+
+					htmlDoc.LoadHtml(firstTreatedDesc);
+
+					var descElem = htmlDoc.DocumentNode.GetElementByClassName("nico-description");
+
+					var infoElem = htmlDoc.DocumentNode.GetElementByClassName("nico-info").Element("small");
+					var lengthElem = infoElem.GetElementByClassName("nico-info-length");
+					var pubDateElem = infoElem.GetElementByClassName("nico-info-date");
+
+					var split = pubDateElem.InnerText.Split(new[] { '年', '月', '日', '：' }, options:StringSplitOptions.RemoveEmptyEntries)
+						.Select(y => int.Parse(y))
+						.ToArray();
+					var pubDate = new DateTime(split[0], split[1], split[2], split[3], split[4], split[5]);
+
 					return new VideoData()
 					{
 						VideoId = x.Link2.Split('/').Last(),
 						Title = x.Title,
+						SubmitTime = pubDate,
 						ThumbnailUrl = new Uri(x.Thumbnail.Url),
-						Description = x.Description
+						Description = descElem.InnerText,
+						Length = lengthElem.InnerText.ToTimeSpan()
 					};
 				})
 				.ToList()

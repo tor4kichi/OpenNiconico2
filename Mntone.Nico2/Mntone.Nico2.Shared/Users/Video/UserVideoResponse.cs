@@ -22,6 +22,7 @@ namespace Mntone.Nico2.Users.Video
 		public string VideoId { get; set; }
 		public string Title { get; set; }
 
+		public DateTime SubmitTime { get; set; }
 		public Uri ThumbnailUrl { get; set; }
 		public string Description { get; set; }
 		public TimeSpan Length { get; set; }
