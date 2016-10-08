@@ -144,6 +144,8 @@ namespace Mntone.Nico2.Videos.Ranking
 		anime,		
 		/// <summary>ゲーム</summary>
 		game,		
+		/// <remarks>実況プレイ動画</remarks>
+		jikkyo,
 		/// <summary>東方</summary>
 		toho,		
 		/// <summary>アイドルマスター</summary>
