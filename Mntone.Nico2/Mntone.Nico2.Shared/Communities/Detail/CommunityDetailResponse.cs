@@ -7,7 +7,6 @@ namespace Mntone.Nico2.Communities.Detail
 	public class CommunityLiveInfo
 	{
 		public string LiveTitle { get; set; }
-		public string ShortDesc { get; set; }
 
 		public string LiveId { get; set; }
 	}
@@ -78,7 +77,7 @@ namespace Mntone.Nico2.Communities.Detail
 
 		public List<CommunityVideo> VideoList { get; private set; } = new List<CommunityVideo>();
 
-		public CommunityOption Option { get; private set; } = new CommunityOption();
+//		public CommunityOption Option { get; private set; } = new CommunityOption();
 
 		public string PrivilegeDescription { get; set; }
 	}

@@ -11,12 +11,12 @@ namespace Mntone.Nico2.Searches.Live
 			NiconicoContext context,
 			string word,
 			bool isTagSearch,
-			Nico2.Live.CommunityType? provider = null,
+			Nico2.Live.CommunityType? pt = null,
 			uint from = 0,
-			uint length = 30,
+			uint limit = 30,
 			Order? order = null,
 			NicoliveSearchSort? sort = null,
-			NicoliveSearchMode? mode = null
+			NicoliveSearchMode? search_mode = null
 			)
 		{
 			var dict = new Dictionary<string, string>();
@@ -32,9 +32,9 @@ namespace Mntone.Nico2.Searches.Live
 				dict.Add(nameof(kind), kind);
 			}
 
-			if (provider.HasValue)
+			if (pt.HasValue)
 			{
-				dict.Add(nameof(provider), provider.ToString().ToLower());
+				dict.Add(nameof(pt), pt.ToString().ToLower());
 			}
 
 			if (from > 0)
@@ -42,12 +42,12 @@ namespace Mntone.Nico2.Searches.Live
 				dict.Add(nameof(from), from.ToString());
 			}
 
-			if (length >= 150)
+			if (limit >= 150)
 			{
-				length = 149;
+				limit = 149;
 			}
 
-			dict.Add(nameof(length), length.ToString());
+			dict.Add(nameof(limit), limit.ToString());
 
 			if (order.HasValue)
 			{
@@ -59,9 +59,9 @@ namespace Mntone.Nico2.Searches.Live
 				dict.Add(nameof(sort), sort.Value.ToString().ToLower());
 			}
 
-			if (mode.HasValue)
+			if (search_mode.HasValue)
 			{
-				dict.Add(nameof(mode), mode.Value.ToString().ToLower());
+				dict.Add(nameof(search_mode), search_mode.Value.ToString().ToLower());
 			}
 
 			return context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_LIVEAPI_V1_VIDEO_SEARCH, dict);
