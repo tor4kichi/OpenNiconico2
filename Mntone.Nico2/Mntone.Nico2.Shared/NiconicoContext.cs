@@ -170,6 +170,7 @@ namespace Mntone.Nico2
 			if( this.HttpClient == null )
 			{
 				this.ProtocolFilter = new HttpBaseProtocolFilter();
+				ProtocolFilter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
 				this.HttpClient = new HttpClient(ProtocolFilter);
 				this.HttpClient.DefaultRequestHeaders.Add( "user-agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
