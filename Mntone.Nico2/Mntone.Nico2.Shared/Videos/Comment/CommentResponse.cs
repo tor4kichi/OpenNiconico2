@@ -157,7 +157,7 @@ namespace Mntone.Nico2.Videos.Comment
 
 		public uint GetCommentCount()
 		{
-			return uint.Parse(Thread.CommentCount);
+			return Thread.CommentCount != null ? uint.Parse(Thread.CommentCount) : 0;
 		}
 
 		public uint GetMylistCount()
