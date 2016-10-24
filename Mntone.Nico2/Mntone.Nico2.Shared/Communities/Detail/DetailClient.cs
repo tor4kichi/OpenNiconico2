@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,29 +33,34 @@ namespace Mntone.Nico2.Communities.Detail
 
 			// コンテンツの読み取り
 
-			var body = doc.DocumentNode.Element("body");
+			var htmlNode = doc.DocumentNode.Element("html");
+			var body = htmlNode.Element("body");
 			var main = body.Element("main");
+
 			// 放送中
-			var nowLiveElem = body.SelectNodes("main//a");
-			foreach (var liveItem in nowLiveElem)
+			var nowLiveElem = doc.DocumentNode.SelectNodes(@"//a[@class='now_live_inner']");
+
+			if (nowLiveElem != null )
 			{
-				var comLiveInfo = new CommunityLiveInfo();
+				foreach (var liveItem in nowLiveElem)
+				{
+					var comLiveInfo = new CommunityLiveInfo();
 
+					var liveTitleElem = liveItem.SelectSingleNode("//h2[@class='now_live_title']");
+					comLiveInfo.LiveTitle = liveTitleElem.InnerText;
 
-				comLiveInfo.LiveTitle = liveItem.GetElementByClassName("now_live_info")
-					.Element("h2")
-					.InnerText;
+					var liveUrl = liveItem.Attributes["href"].Value;
 
-				var liveUrl = liveItem.Attributes["href"].Value;
+					var withoutQuery = new string(liveUrl.TakeWhile(x => x != '?').ToArray());
+					var liveId = withoutQuery.Split('/').LastOrDefault();
 
-				var withoutQuery = new string(liveUrl.TakeWhile(x => x != '?').ToArray());
-				var liveId = withoutQuery.Split('/').LastOrDefault();
+					if (liveId == null) { throw new Exception(); }
+					comLiveInfo.LiveId = liveId;
 
-				if (liveId == null) { throw new Exception(); }
-				comLiveInfo.LiveId = liveId;
-
-				communityDetail.CurrentLiveList.Add(comLiveInfo);
+					communityDetail.CurrentLiveList.Add(comLiveInfo);
+				}
 			}
+			
 
 
 
@@ -65,24 +71,24 @@ namespace Mntone.Nico2.Communities.Detail
 
 
 			var header = body.Element("header");
-			var communityData = header.SelectSingleNode("[@class='communityData']");
+			var communityData = header.SelectSingleNode("//div[@class='communityData']");
 			var communityDetailElem = communityData.GetElementByClassName("communityDetail");
 
 			// 開設日
 			try
 			{
 				
-				var createDateElem = communityDetailElem.SelectSingleNode("tr[2]/[@class='content']");
+				var createDateElem = communityDetailElem.SelectSingleNode("./tr[2]/td");
 				var dateText = createDateElem.InnerText;
 				var createDate = ParseDateTimeText(dateText);
 
 				communityDetail.DateTime = createDate.ToString();
 
-				var ownerNameAnchor = communityDetailElem.SelectSingleNode("tr[1]/[@class='content']/a");
+				var ownerNameAnchor = communityDetailElem.SelectSingleNode("./tr[1]/td/a");
 				var id = ownerNameAnchor.Attributes["href"].Value.Split('/').LastOrDefault();
 				communityDetail.OwnerUserId = id;
 
-				var name = ownerNameAnchor.Element("strong").InnerText;
+				var name = ownerNameAnchor.InnerText.Trim('\n', '\t');
 				communityDetail.OwnerUserName = name;
 
 
@@ -92,28 +98,31 @@ namespace Mntone.Nico2.Communities.Detail
 
 			try
 			{
-				var tagElements = communityDetailElem.SelectNodes("tr[3]/[@class='content']/li/a");
-				communityDetail.Tags = tagElements.Select(x => x.InnerText).ToList();
+				var tagElements = communityDetailElem.SelectNodes("./tr[3]//a");
+				if (tagElements != null)
+				{
+					communityDetail.Tags = tagElements.Select(x => x.InnerText).ToList();
+				}
 			}
 			catch { }
 
 
 
-			var communityRegist = header.GetElementById("communityRegist");
+			var communityRegist = header.SelectSingleNode("//div[@class='communityRegist']");
 
 			// プロフィール(数字やタグなど)
 			{
 				
 
-				var levelElem = communityRegist.SelectSingleNode("div/dl/[@class='content'][1]");
+				var levelElem = communityRegist.SelectSingleNode("./div/dl/dd[1]");
 				var levelText = levelElem.InnerText;
 				var level = uint.Parse(levelText);
 				communityDetail.Level = level;
 
 
-				var memberContainer = communityRegist.SelectSingleNode("div/dl/[@class='content'][2]");
+				var memberContainer = communityRegist.SelectSingleNode("./div/dl/dd[2]");
 				var memberElem = memberContainer;
-				var memberText = memberElem.InnerText;
+				var memberText = memberElem.FirstChild.InnerText.TrimStart('\n', '\t');
 				var memberCount = uint.Parse(memberText);
 				communityDetail.MemberCount = memberCount;
 
@@ -165,41 +174,47 @@ namespace Mntone.Nico2.Communities.Detail
 
 
 			// Htmlによるコミュニティの説明
+			try
 			{
-				var descContentElem = main.GetElementById("profile_text_content");
+				var descContentElem = main.SelectSingleNode("id('profile_text_content')");
 				communityDetail.ProfielHtml = descContentElem.InnerHtml;
+			}
+			catch
+			{
 			}
 
 			// News
-			var newsContainer = main.SelectSingleNode("ul[@class='noticeList']");
+			var newsContainer = main.SelectSingleNode("//ul[@class='noticeList']");
 			//			if (newsContainer.FirstChild.Name == "subbox")
 			try
 			{
-				foreach (var newsItem in newsContainer.GetElementsByClassName("item"))
+				if (newsContainer != null)
 				{
-					var news = new CommunityNews();
+					foreach (var newsItem in newsContainer.Elements("li"))
+					{
+						var news = new CommunityNews();
 
-					var newsHeaderElem = newsItem.SelectSingleNode("[@class='noticeItemHeader']");
+						var newsHeaderElem = newsItem.SelectSingleNode(".//div[@class='noticeItemHeader']");
 
-					var titleElem = newsHeaderElem.GetElementByClassName("noticeTitle");
-					news.Title = titleElem.InnerText;
+						var titleElem = newsHeaderElem.GetElementByClassName("noticeTitle");
+						news.Title = titleElem.InnerText;
 
-					var postDateElem = newsHeaderElem.SelectSingleNode("[@class='date']");
-					news.PostDate = ParseDateTimeText(postDateElem.InnerText);
+						var postDateElem = newsHeaderElem.SelectSingleNode(".//span[@class='date']");
+						news.PostDate = ParseDateTimeText(postDateElem.InnerText);
 
-					// 「（」から「）」までの文字列を取得する
-					// 文字列自体に「（」「）」が含まれていても問題ないように取得している
-					var postAuthorElem = newsHeaderElem.SelectSingleNode("[@class='author']");
-					news.PostAuthor = postAuthorElem.InnerText;
-
-
-					var newsContentElem = newsItem.Element("p");
-					news.ContentHtml = newsContentElem.InnerHtml;
+						// 「（」から「）」までの文字列を取得する
+						// 文字列自体に「（」「）」が含まれていても問題ないように取得している
+						var postAuthorElem = newsHeaderElem.SelectSingleNode(".//span[@class='author']");
+						news.PostAuthor = postAuthorElem.InnerText;
 
 
-					communityDetail.NewsList.Add(news);
-				}
-				
+						var newsContentElem = newsItem.Element("p");
+						news.ContentHtml = newsContentElem.InnerHtml;
+
+
+						communityDetail.NewsList.Add(news);
+					}
+				}			
 			}
 			catch { }
 
@@ -209,7 +224,8 @@ namespace Mntone.Nico2.Communities.Detail
 
 			// 最近行われた生放送
 
-			var sideContent = main.SelectSingleNode("[@class='area-sideContent']");
+			var sideContent = main.SelectSingleNode("//div[@class='area-sideContent']");
+			try
 			{
 
 
@@ -218,7 +234,7 @@ namespace Mntone.Nico2.Communities.Detail
 					var liveInfo = new LiveInfo();
 
 					var dateElem = node.GetElementByClassName("liveDate");
-					
+
 					var date = ParseDateTimeText(dateElem.InnerText);
 					liveInfo.StartTime = date;
 
@@ -237,11 +253,11 @@ namespace Mntone.Nico2.Communities.Detail
 					return liveInfo;
 				};
 
+				var liveInfoContainer = sideContent.SelectSingleNode("./section//h2[contains(.,'生放送のお知らせ')]");
+				var recentLiveElem = liveInfoContainer.SelectSingleNode("../../ul[1]");
+				var preservedLiveElem = liveInfoContainer.SelectSingleNode("../../ul[2]");
 
-				var recentLiveElem = sideContent.SelectSingleNode("section[1]/ul[1]");
-				var preservedLiveElem = sideContent.SelectSingleNode("section[1]/ul[2]");
-
-				var recentLiveItems = recentLiveElem.ChildNodes.Where(x => !x.HasAttributes);
+				var recentLiveItems = recentLiveElem.Elements("li").Where(x => !x.HasAttributes);
 				foreach (var recentLiveItem in recentLiveItems)
 				{
 					var liveInfo = nodeToLiveInfo(recentLiveItem);
@@ -251,7 +267,7 @@ namespace Mntone.Nico2.Communities.Detail
 
 
 
-				var preservedLiveItems = preservedLiveElem.ChildNodes.Where(x => !x.HasAttributes);
+				var preservedLiveItems = preservedLiveElem.Elements("li").Where(x => !x.HasAttributes);
 				foreach (var preservedLiveItem in preservedLiveItems)
 				{
 					var liveInfo = nodeToLiveInfo(preservedLiveItem);
@@ -259,19 +275,36 @@ namespace Mntone.Nico2.Communities.Detail
 					communityDetail.FutureLiveList.Add(liveInfo);
 				}
 			}
+			catch { }
 
 			// TODO: コミュニティメンバーのパース
 
 			// コミュニティ動画
-			var communityVideoContainer = sideContent.SelectSingleNode("section[2]");
+			var communityVideoContainerTitleElem = sideContent.SelectSingleNode("./section//h2[contains(.,'コミュニティ動画')]");
+			var communityVideoContainer = communityVideoContainerTitleElem.ParentNode.ParentNode;
 
+			try
+			{
+				// 動画数
+				var videoCountElem = communityVideoContainer.SelectSingleNode(".//span[@class='subinfo']");
+				var videoCountAndMaxCountText = videoCountElem.InnerText;
+				var videoCountText = new string(videoCountAndMaxCountText.TakeWhile(x => x >= '0' && x <= '9').ToArray());
+				var videoCount = uint.Parse(videoCountText);
+				communityDetail.VideoCount = videoCount;
+				communityDetail.VideoMaxCount = 10000;
+			}
+			catch { }
+
+			try
 			{
 				var videoItems = communityVideoContainer.SelectNodes("ul/li");
 				foreach (var videoItem in videoItems)
 				{
 					var video = new CommunityVideo();
 
-					var videoAnchorElem = videoItem.FirstChild;
+					var videoAnchorElem = videoItem.Elements("a").FirstOrDefault();
+
+					if (videoAnchorElem == null) { continue; }
 
 					var videoUrl = videoAnchorElem.Attributes["href"].Value;
 					var videoIdTemp = videoUrl.SkipWhile(x => !(x >= '0' && x <= '9'))
@@ -288,9 +321,8 @@ namespace Mntone.Nico2.Communities.Detail
 
 					communityDetail.VideoList.Add(video);
 				}
-
-
 			}
+			catch { }
 
 
 			res.CommunitySammary = communitySammary;
