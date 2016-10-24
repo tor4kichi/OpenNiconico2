@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using System;
 using System.Linq;
 
 namespace Mntone.Nico2.Users.Info
@@ -10,15 +11,22 @@ namespace Mntone.Nico2.Users.Info
 	{
 		internal InfoResponse( HtmlNode bodyHtml, string language, UserMyPageJSInfo info )
 		{
-			var profileHtml = bodyHtml.GetElementByClassName( "userDetail" ).GetElementByClassName( "profile" );
-			{
-				var h2Html = profileHtml.Element( "h2" );
-				this.Name = h2Html.FirstChild.InnerText;
-			}
-
 			this.Id = info.Id;
 			this.IsPremium = info.IsPremium;
 			this.IsOver18 = info.IsOver18;
+
+
+			var profileHtml = bodyHtml.GetElementByClassName("userDetail").GetElementByClassName("profile");
+			try
+			{
+				var h2Html = profileHtml.Element("h2");
+				this.Name = h2Html.FirstChild.InnerText;	
+			}
+			catch //(Exception ex)
+			{
+				//throw new Exception("ユーザー名の取得に失敗しました", ex);
+			}
+
 			/*
 			{
 				var accountIdHtml = profileHtml.GetElementByClassName( "account" ).GetElementByClassName( "accountNumber" ).Element( "span" );
