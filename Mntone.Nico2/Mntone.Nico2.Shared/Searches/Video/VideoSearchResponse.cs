@@ -175,6 +175,7 @@ namespace Mntone.Nico2.Searches.Video
 	{
 
 		[DataMember(Name = "tag")]
+		[JsonConverter(typeof(SingleOrArrayConverter<Tag>))]
 		public IList<Tag> TagItems { get; set; }
 	}
 

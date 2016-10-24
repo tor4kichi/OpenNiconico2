@@ -183,7 +183,7 @@ namespace Mntone.Nico2
 
 		internal Task<string> GetStringAsync(string url, Dictionary<string, string> query)
 		{
-			var queryText = String.Join("&", query.Select(x => x.Key + "=" + x.Value));
+			var queryText = String.Join("&", query.Select(x => x.Key + "=" + Uri.EscapeDataString(x.Value)));
 			var realUri = $"{url}?{queryText}";
 
 			return GetClient().GetStringAsync(realUri);
