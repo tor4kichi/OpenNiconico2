@@ -9,11 +9,25 @@ namespace Mntone.Nico2.Users.Info
 	/// </summary>
 	public sealed class InfoResponse
 	{
-		internal InfoResponse( HtmlNode bodyHtml, string language, UserMyPageJSInfo info )
+		internal InfoResponse(HtmlNode bodyHtml, string language, UserMyPageJSInfo info)
 		{
-			this.Id = info.Id;
-			this.IsPremium = info.IsPremium;
-			this.IsOver18 = info.IsOver18;
+			try
+			{
+				this.Id = uint.Parse(info.Id);
+			}
+			catch { }
+
+			try
+			{
+				this.IsPremium = info.IsPremium.ToBooleanFromString();
+			}
+			catch { }
+
+			try
+			{
+				this.IsOver18 = uint.Parse(info.Age) >= 18;
+			}
+			catch { }
 
 
 			var profileHtml = bodyHtml.GetElementByClassName("userDetail").GetElementByClassName("profile");
