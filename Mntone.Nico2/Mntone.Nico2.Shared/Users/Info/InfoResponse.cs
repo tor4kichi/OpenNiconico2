@@ -34,7 +34,7 @@ namespace Mntone.Nico2.Users.Info
 			try
 			{
 				var h2Html = profileHtml.Element("h2");
-				this.Name = h2Html.FirstChild.InnerText;	
+				this.Name = h2Html.FirstChild.InnerText;
 			}
 			catch //(Exception ex)
 			{
@@ -68,40 +68,27 @@ namespace Mntone.Nico2.Users.Info
 				}
 			}
 			*/
+
 			try
 			{
-				var statsHtml = profileHtml.GetElementByClassName("stats");
-				this.FavoriteCount = statsHtml.GetElementByClassName("fav").FirstChild.InnerText.ToUShort();
+				var stats = profileHtml.GetElementByClassName("stats");
+				var statsItems = stats.SelectNodes("./li/a/span");
 
-				var stampText = statsHtml.GetElementByClassName("exp").FirstChild.InnerText;
-				this.StampCount = stampText.Substring(0, stampText.Length - 3).ToUShort();
-
-				var nicoruText = statsHtml.GetElementByClassName("nicoru")?.FirstChild.ChildNodes[1].InnerText ?? "-";
-				if (nicoruText != "-")
+				var statsItemNumbers = statsItems.Select(x =>
 				{
-					this.NicoruCount = nicoruText.ToUShort();
-				}
+					var numberWithUnit = x.InnerText.Where(y => y != ',');
+					var numberText = string.Join("", numberWithUnit.TakeWhile(y => y >= '0' && y <= '9'));
+					return uint.Parse(numberText);
+				})
+				.ToArray();
 
-				var pointsText = statsHtml.GetElementByClassName("nicopoint").FirstChild.InnerText;
-				this.Points = pointsText.Substring(0, pointsText.Length - 2).ToUInt();
-
-				var creatorScoreText = statsHtml.GetElementByClassName("cpp").FirstChild.InnerText;
-				switch (language)
-				{
-					case "ja-jp":
-						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 1).ToUInt();
-						break;
-					case "zh-tw":
-						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 1).ToUInt();
-						break;
-					case "en-us":
-						this.CreatorScore = creatorScoreText.Substring(0, creatorScoreText.Length - 7).ToUInt();
-						break;
-					default:
-						break;
-				}
+				this.FavoriteCount = (ushort)statsItemNumbers[0];
+				this.StampCount = (ushort)statsItemNumbers[1];
+				this.Points = statsItemNumbers[2];
+				this.CreatorScore = statsItemNumbers[3];
 			}
-			catch { }
+			catch (Exception) { }
+
 		}
 
 		/// <summary>
@@ -139,11 +126,6 @@ namespace Mntone.Nico2.Users.Info
 		/// スタンプ数
 		/// </summary>
 		public ushort StampCount { get; private set; }
-
-		/// <summary>
-		/// ニコる数
-		/// </summary>
-		public ushort NicoruCount { get; private set; }
 
 		/// <summary>
 		/// ニコニコポイント数

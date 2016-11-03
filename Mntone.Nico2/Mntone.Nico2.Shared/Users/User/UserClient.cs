@@ -47,34 +47,23 @@ namespace Mntone.Nico2.Users.User
 			data.IsPremium = accountItems[0].GetElementByTagName("span")
 				.InnerText.EndsWith("プレミアム会員");
 
-			switch (accountItems[1].GetElementByTagName("span").InnerText)
-			{
-				case "男性":
-					data.Gender = Sex.Male;
-					break;
-				case "女性":
-					data.Gender = Sex.Female;
-					break;
-
-				case "未公開":
-				default:
-					data.Gender = null;
-					break;
-			}
-
-			try
-			{
-				data.BirthDay = accountItems[2].GetElementByTagName("span").InnerText;
-				data.Region = accountItems.ElementAtOrDefault(3)?.GetElementByTagName("span").InnerText ?? "非公開";
-			}
-			catch (Exception) { }
-
-
 			try
 			{
 				var stats = profile.GetElementByClassName("stats");
-				data.FavCount = uint.Parse(stats.GetElementByClassName("fav").InnerText);
-				data.StampCount = uint.Parse(stats.GetElementByClassName("exp").GetElementByTagName("a").InnerText.Replace("EXP", ""));
+				var statsItems = stats.SelectNodes("./li//span");
+
+				var statsItemNumbers = statsItems.Select(x => 
+				{
+					var numberWithUnit = x.InnerText.Where(y => y != ',');
+					var numberText = string.Join("", numberWithUnit.TakeWhile(y => y >= '0' && y <= '9'));
+					return uint.Parse(numberText);
+				})
+				.ToArray();
+
+				data.FollowerCount = statsItemNumbers[0];
+				data.StampCount = statsItemNumbers[1];
+				//data.NiconicoPoint = statsItemNumbers[2];
+				//data.CreateScore = statsItemNumbers[3];
 			}
 			catch (Exception) { }
 

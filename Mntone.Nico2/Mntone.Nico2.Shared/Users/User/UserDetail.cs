@@ -13,7 +13,7 @@ namespace Mntone.Nico2.Users.User
 		public Sex? Gender { get; set; }
 		public string Region { get; set; }
 		public string BirthDay { get; set; }
-		public uint FavCount { get; set; }
+		public uint FollowerCount { get; set; }
 		public uint StampCount { get; set; }
 
 		public bool IsOwnerVideoPrivate { get; set; }
