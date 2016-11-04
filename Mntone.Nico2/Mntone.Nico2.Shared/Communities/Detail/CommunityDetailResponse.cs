@@ -53,7 +53,7 @@ namespace Mntone.Nico2.Communities.Detail
 		public string OwnerUserName { get; set; }
 		public string OwnerUserId { get; set; }
 
-		public uint MemberMaxCount { get; set; }
+		public uint FollowerMaxCount { get; set; }
 
 		public uint VideoMaxCount { get; set; }
 
@@ -77,7 +77,9 @@ namespace Mntone.Nico2.Communities.Detail
 
 		public List<CommunityVideo> VideoList { get; private set; } = new List<CommunityVideo>();
 
-//		public CommunityOption Option { get; private set; } = new CommunityOption();
+		public List<CommunityMember> SampleFollwers { get; private set; } = new List<CommunityMember>();
+
+		//		public CommunityOption Option { get; private set; } = new CommunityOption();
 
 		public string PrivilegeDescription { get; set; }
 	}
@@ -93,7 +95,9 @@ namespace Mntone.Nico2.Communities.Detail
 
 	public class CommunityMember
 	{
-		// TODO: 
+		public uint UserId { get; set; }
+		public string Name { get; set; }
+		public Uri IconUrl { get; set; }
 	}
 
 	public class CommunityVideo
@@ -103,6 +107,7 @@ namespace Mntone.Nico2.Communities.Detail
 		public string ThumbnailUrl { get; set; }
 	}
 
+	
 
 	public class CommunitySammary
 	{

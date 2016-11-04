@@ -277,7 +277,52 @@ namespace Mntone.Nico2.Communities.Detail
 			}
 			catch { }
 
-			// TODO: コミュニティメンバーのパース
+			// コミュニティメンバーのパース
+			var communityFollowerContainerTitleElem = sideContent.SelectSingleNode("./section//h2[contains(.,'コミュニティフォロワー')]");
+			var communityFollowerContainer = communityFollowerContainerTitleElem.ParentNode.ParentNode;
+
+			try
+			{
+				//フォロワー数
+				var followerCountElem = communityFollowerContainer.SelectSingleNode(".//span[@class='subinfo']");
+				var followerCountAndMaxCountText = followerCountElem.InnerText;
+				var followerCountText = new string(followerCountAndMaxCountText.TakeWhile(x => x >= '0' && x <= '9').ToArray());
+				var followerCount = uint.Parse(followerCountText);
+				communityDetail.MemberCount = followerCount;
+			}
+			catch { }
+
+			// メンバーのサンプル
+			try
+			{
+				var followerItems = communityFollowerContainer.SelectNodes("ul/li");
+				foreach (var followerItem in followerItems)
+				{
+					var member = new CommunityMember();
+
+					var memberAnchorElem = followerItem.Elements("a").FirstOrDefault();
+
+					if (memberAnchorElem == null) { continue; }
+
+					var videoUrl = memberAnchorElem.Attributes["href"].Value;
+					var memberUserIdTemp = videoUrl.SkipWhile(x => !(x >= '0' && x <= '9'))
+						.TakeWhile(x => x >= '0' && x <= '9')
+						.ToArray();
+
+					var memberUserId = new String(memberUserIdTemp);
+					member.UserId = uint.Parse(memberUserId);
+
+					var imgElem = memberAnchorElem.Element("img");
+					member.IconUrl = new Uri(imgElem.Attributes["src"].Value);
+
+					member.Name = imgElem.Attributes["title"].Value;
+
+					communityDetail.SampleFollwers.Add(member);
+				}
+			}
+			catch { }
+
+
 
 			// コミュニティ動画
 			var communityVideoContainerTitleElem = sideContent.SelectSingleNode("./section//h2[contains(.,'コミュニティ動画')]");
