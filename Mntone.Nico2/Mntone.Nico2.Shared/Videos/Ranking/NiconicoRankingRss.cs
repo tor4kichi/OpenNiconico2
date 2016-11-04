@@ -62,6 +62,8 @@ namespace Mntone.Nico2.Videos.Ranking
 		public string LastBuildDate { get; set; }
 		[XmlElement(ElementName = "generator")]
 		public string Generator { get; set; }
+		[XmlElement(ElementName = "creator", Namespace = "http://purl.org/dc/elements/1.1/")]
+		public string Creater { get; set; }
 		[XmlElement(ElementName = "language")]
 		public string Language { get; set; }
 		[XmlElement(ElementName = "copyright")]
@@ -73,7 +75,7 @@ namespace Mntone.Nico2.Videos.Ranking
 	}
 
 	[XmlRoot(ElementName = "rss")]
-	public class NiconicoRankingRss
+	public class NiconicoVideoRss
 	{
 		[XmlElement(ElementName = "channel")]
 		public Channel Channel { get; set; }

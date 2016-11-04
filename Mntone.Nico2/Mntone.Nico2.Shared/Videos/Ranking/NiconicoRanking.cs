@@ -25,7 +25,7 @@ namespace Mntone.Nico2.Videos.Ranking
 			return $"{_target}/{_timeSpan}/{_category}?rss=2.0";
         }
 
-		public static async Task<NiconicoRankingRss> GetRankingData(RankingTarget target, RankingTimeSpan timeSpan, RankingCategory category)
+		public static async Task<NiconicoVideoRss> GetRankingData(RankingTarget target, RankingTimeSpan timeSpan, RankingCategory category)
 		{
 			var rssUrl = NiconicoRankingDomain + MakeRankingUrlParameters(target, timeSpan, category);
 
@@ -43,9 +43,9 @@ namespace Mntone.Nico2.Videos.Ranking
 					var result = await client.SendAsync(request);
 					using (var contentStream = await result.Content.ReadAsStreamAsync())
 					{
-						var serializer = new XmlSerializer(typeof(NiconicoRankingRss));
+						var serializer = new XmlSerializer(typeof(NiconicoVideoRss));
 
-						return (NiconicoRankingRss)serializer.Deserialize(contentStream);
+						return (NiconicoVideoRss)serializer.Deserialize(contentStream);
 					}
 				}
 			}

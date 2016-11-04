@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mntone.Nico2.Videos.Ranking;
+using System.Collections.Generic;
 
 #if WINDOWS_APP
 using System;
@@ -69,6 +70,19 @@ namespace Mntone.Nico2.Communities
 		public Task<Live.NicoliveVideoResponse> GetCommunityLiveInfoAsync(string communityId)
 		{
 			return Live.LiveInfoClient.GetCommunityLiveInfo(this._context, communityId);
+		}
+
+
+
+		/// <summary>
+		/// コミュニティに登録された動画を取得します。
+		/// </summary>
+		/// <param name="communityId">"co"から始まるコミュニティID</param>
+		/// <param name="page">1 以上のページ数</param>
+		/// <returns></returns>
+		public Task<NiconicoVideoRss> GetCommunityVideoAsync(string communityId, uint page)
+		{
+			return Video.CommunityVideoClient.GetCommunityVideosAsync(_context, communityId, page);
 		}
 
 		#region field

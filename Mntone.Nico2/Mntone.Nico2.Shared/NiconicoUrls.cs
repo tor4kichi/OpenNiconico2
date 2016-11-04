@@ -261,6 +261,8 @@ namespace Mntone.Nico2
 
 		public static string CommynitySammaryPageUrl = CommunityUrlBase + "community/";
 
+		public static string CommynityVideoPageUrl = CommunityUrlBase + "video/";
+
 
 
 		#endregion

@@ -19,6 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Info\InfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\LiveInfo\CommunityLiveInfoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\LiveInfo\LiveInfoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Communities\Video\CommunityVideoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Communities\Video\CommunityVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentZoningException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Category.cs" />
