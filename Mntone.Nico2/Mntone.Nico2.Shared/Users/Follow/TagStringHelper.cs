@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mntone.Nico2.Users.Fav
+namespace Mntone.Nico2.Users.Follow
 {
     public static class TagStringHelper
     {

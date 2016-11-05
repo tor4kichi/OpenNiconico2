@@ -74,10 +74,18 @@ namespace Mntone.Nico2.Communities.Detail
 			var communityData = header.SelectSingleNode("//div[@class='communityData']");
 			var communityDetailElem = communityData.GetElementByClassName("communityDetail");
 
+			try
+			{
+				var titleElem = communityData.Element("h2")
+					.Element("a")
+					;
+				communityDetail.Name = titleElem.InnerText.Trim('\n', '\t');
+			}
+			catch { }
+
 			// 開設日
 			try
 			{
-				
 				var createDateElem = communityDetailElem.SelectSingleNode("./tr[2]/td");
 				var dateText = createDateElem.InnerText;
 				var createDate = ParseDateTimeText(dateText);
@@ -254,26 +262,27 @@ namespace Mntone.Nico2.Communities.Detail
 				};
 
 				var liveInfoContainer = sideContent.SelectSingleNode("./section//h2[contains(.,'生放送のお知らせ')]");
-				var recentLiveElem = liveInfoContainer.SelectSingleNode("../../ul[1]");
-				var preservedLiveElem = liveInfoContainer.SelectSingleNode("../../ul[2]");
-
-				var recentLiveItems = recentLiveElem.Elements("li").Where(x => !x.HasAttributes);
-				foreach (var recentLiveItem in recentLiveItems)
+				if (liveInfoContainer != null)
 				{
-					var liveInfo = nodeToLiveInfo(recentLiveItem);
+					var recentLiveElem = liveInfoContainer.SelectSingleNode("../../ul[1]");
+					var preservedLiveElem = liveInfoContainer.SelectSingleNode("../../ul[2]");
 
-					communityDetail.RecentLiveList.Add(liveInfo);
-				}
+					var recentLiveItems = recentLiveElem.Elements("li").Where(x => !x.HasAttributes);
+					foreach (var recentLiveItem in recentLiveItems)
+					{
+						var liveInfo = nodeToLiveInfo(recentLiveItem);
 
+						communityDetail.RecentLiveList.Add(liveInfo);
+					}
 
+					var preservedLiveItems = preservedLiveElem.Elements("li").Where(x => !x.HasAttributes);
+					foreach (var preservedLiveItem in preservedLiveItems)
+					{
+						var liveInfo = nodeToLiveInfo(preservedLiveItem);
 
-				var preservedLiveItems = preservedLiveElem.Elements("li").Where(x => !x.HasAttributes);
-				foreach (var preservedLiveItem in preservedLiveItems)
-				{
-					var liveInfo = nodeToLiveInfo(preservedLiveItem);
-
-					communityDetail.FutureLiveList.Add(liveInfo);
-				}
+						communityDetail.FutureLiveList.Add(liveInfo);
+					}
+				}				
 			}
 			catch { }
 

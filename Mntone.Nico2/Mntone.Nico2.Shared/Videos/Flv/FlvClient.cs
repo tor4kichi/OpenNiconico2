@@ -8,9 +8,9 @@ namespace Mntone.Nico2.Videos.Flv
 	{
 		public static async Task<string> GetFlvDataAsync( NiconicoContext context, string requestId )
 		{
-			if( !NiconicoRegex.IsVideoId( requestId ) )
+//			if( !NiconicoRegex.IsVideoId( requestId ) )
 			{
-				throw new ArgumentException();
+//				throw new ArgumentException();
 			}
 
 			await context.GetClient()

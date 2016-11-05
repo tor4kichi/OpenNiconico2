@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Mntone.Nico2.Users.Fav
+namespace Mntone.Nico2.Users.Follow
 {
-	public class FavData
+	public class FollowData
 	{
 		public NiconicoItemType ItemType { get; set; }
 		public string ItemId { get; set; }
@@ -59,17 +59,17 @@ namespace Mntone.Nico2.Users.Fav
 	#region Fav Tag Response
 
 	[DataContract]
-	public class FavtagItem
+	public class FollowTagItem
 	{
 		[DataMember(Name = "tag")]
 		public string tag { get; set; }
 	}
 
 	[DataContract]
-	public class FavTagResponse
+	public class FollowTagResponse
 	{
 		[DataMember(Name = "favtag_items")]
-		public IList<FavtagItem> favtag_items { get; set; }
+		public IList<FollowTagItem> favtag_items { get; set; }
 		[DataMember(Name = "user_id")]
 		public int user_id { get; set; }
 		[DataMember(Name = "status")]

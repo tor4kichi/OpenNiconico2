@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mntone.Nico2.Users.FavCommunity
+namespace Mntone.Nico2.Users.FollowCommunity
 {
-    public sealed class FavCommunityClient
-    {
+	public sealed class FollowCommunityClient
+	{
 
 		// お気に入りのCommunityを取得
 		// マイページのCommunity欄にアクセス
 		// http://www.nicovideo.jp/my/community
 
-		#region Fav Communit Listing
+		#region Follow Community Listing
 
 		public static Task<string> GetMyPageCommunityHtmlAsync(NiconicoContext context)
 		{
@@ -22,9 +22,9 @@ namespace Mntone.Nico2.Users.FavCommunity
 		}
 
 
-		private static FavCommunityResponse PerseFavCommunityPageHtml(string html)
+		private static FollowCommunityResponse PerseFollowCommunityPageHtml(string html)
 		{
-			var favCommunityResponse = new FavCommunityResponse();
+			var followCommunityResponse = new FollowCommunityResponse();
 			var doc = new HtmlAgilityPack.HtmlDocument();
 
 			doc.LoadHtml(html);
@@ -41,12 +41,12 @@ namespace Mntone.Nico2.Users.FavCommunity
 			// コミュニティが登録されていない時の対応
 			if (articlBodyElem.GetElementByClassName("noListMsg") != null)
 			{
-				return favCommunityResponse;
+				return followCommunityResponse;
 			}
 
 			foreach (var commuContainer in articlBodyElem.GetElementsByClassName("outer"))
 			{
-				var favCommunity = new FavCommunityInfo();
+				var favCommunity = new FollowCommunityInfo();
 
 				var imgElem = commuContainer.GetElementByClassName("thumbContainer")
 					.Element("a")
@@ -81,27 +81,24 @@ namespace Mntone.Nico2.Users.FavCommunity
 					var descElem = sectionClassElem.Element("p");
 					favCommunity.ShortDescription = descElem.InnerText;
 
-					favCommunityResponse.Items.Add(favCommunity);
+					followCommunityResponse.Items.Add(favCommunity);
 				}
-				
+
 			}
 
 
-			return favCommunityResponse;
+			return followCommunityResponse;
 		}
 
 
 		#endregion
 
-		public static Task<FavCommunityResponse> GetFavCommunityAsync(NiconicoContext context)
+		public static Task<FollowCommunityResponse> GetFollowCommunityAsync(NiconicoContext context)
 		{
 			return GetMyPageCommunityHtmlAsync(context)
-				.ContinueWith(prevTask => PerseFavCommunityPageHtml(prevTask.Result));
+				.ContinueWith(prevTask => PerseFollowCommunityPageHtml(prevTask.Result));
 		}
-
-
-
-
+		/*
 		// Communityへの登録
 		// http://com.nicovideo.jp/motion/co1894176
 		// mode:commit
@@ -109,6 +106,16 @@ namespace Mntone.Nico2.Users.FavCommunity
 		// comment:
 		// notify:
 		// POST
+		public static Task<bool> AddFollowCommunity(
+			NiconicoContext context
+			, string comunityId
+			, string comment = ""
+			, string notify = ""
+			)
+		{
+
+		}
+
 
 		// 成功すると 200 
 		// http://com.nicovideo.jp/motion/co2128730/done
@@ -128,5 +135,27 @@ namespace Mntone.Nico2.Users.FavCommunity
 		// commit
 		// http://com.nicovideo.jp/leave/co2128730 にPOSTする
 		// 成功したら200、失敗したら404
+
+		public Task<bool> RemoveFollowCommunity(NiconicoContext context, CommunityLeaveToken token)
+		{
+
+		}
+
+
+
+
+		public Task<CommunityLeaveToken> GetCommunityLeaveToken(NiconicoContext context, string communityId)
+		{
+
+		}
+		*/
+	}
+
+	public class CommunityLeaveToken
+	{
+		public string CommunityId { get; set; }
+		public string Time { get; set; }
+		public string CommitKey { get; set; }
+		public string Commit { get; set; }
 	}
 }

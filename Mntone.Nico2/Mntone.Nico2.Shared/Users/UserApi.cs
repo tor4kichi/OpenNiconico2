@@ -72,9 +72,9 @@ namespace Mntone.Nico2.Users
 		/// ログイン中のユーザーのお気に入り登録しているユーザーの一覧を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<Fav.FavData>> GetFavUsersAsync()
+		public Task<List<Follow.FollowData>> GetFollowUsersAsync()
 		{
-			return Fav.FavClient.GetFavUsersAsync(_context);
+			return Follow.FollowClient.GetFollowUsersAsync(_context);
 		}
 
 
@@ -83,9 +83,9 @@ namespace Mntone.Nico2.Users
 		/// ログイン中ユーザーがお気に入り登録しているタグの一覧を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<string>> GetFavTagsAsync()
+		public Task<List<string>> GetFollowTagsAsync()
 		{
-			return Fav.FavClient.GetFavTagsAsync(_context);
+			return Follow.FollowClient.GetFollowTagsAsync(_context);
 		}
 
 
@@ -93,9 +93,9 @@ namespace Mntone.Nico2.Users
 		/// ログイン中のユーザーがお気に入り登録しているマイリストの一覧を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<Fav.FavData>> GetFavMylistsAsync()
+		public Task<List<Follow.FollowData>> GetFollowMylistsAsync()
 		{
-			return Fav.FavClient.GetFavMylistAsync(_context);
+			return Follow.FollowClient.GetFollowMylistAsync(_context);
 		}
 
 
@@ -105,9 +105,9 @@ namespace Mntone.Nico2.Users
 		/// <param name="itemType"></param>
 		/// <param name="item_id"></param>
 		/// <returns></returns>
-		public Task<ContentManageResult> ExistUserFavAsync(NiconicoItemType itemType, string item_id)
+		public Task<ContentManageResult> ExistUserFollowAsync(NiconicoItemType itemType, string item_id)
 		{
-			return Fav.FavClient.ExistFavAsync(_context, itemType, item_id);
+			return Follow.FollowClient.ExistFollowAsync(_context, itemType, item_id);
 		}
 
 		/// <summary>
@@ -116,10 +116,10 @@ namespace Mntone.Nico2.Users
 		/// <param name="itemType"></param>
 		/// <param name="item_id"></param>
 		/// <returns></returns>
-		/// <remarks>tagのお気に入り登録は AddFavtagAsync を利用してください</remarks>
-		public Task<ContentManageResult> AddUserFavAsync(NiconicoItemType itemType, string item_id)
+		/// <remarks>tagのお気に入り登録は AddFollowTagAsync を利用してください</remarks>
+		public Task<ContentManageResult> AddUserFollowAsync(NiconicoItemType itemType, string item_id)
 		{
-			return Fav.FavClient.AddFavAsync(_context, itemType, item_id);
+			return Follow.FollowClient.AddFollowAsync(_context, itemType, item_id);
 		}
 
 
@@ -129,10 +129,10 @@ namespace Mntone.Nico2.Users
 		/// <param name="itemType"></param>
 		/// <param name="item_id"></param>
 		/// <returns></returns>
-		/// <remarks>タグのお気に入り解除には RemoveFavTagAsync を利用してください</remarks>
-		public Task<ContentManageResult> RemoveUserFavAsync(NiconicoItemType itemType, string item_id)
+		/// <remarks>タグのお気に入り解除には RemoveFollowTagAsync を利用してください</remarks>
+		public Task<ContentManageResult> RemoveUserFollowAsync(NiconicoItemType itemType, string item_id)
 		{
-			return Fav.FavClient.RemoveFavAsync(_context, itemType, item_id);
+			return Follow.FollowClient.RemoveFollowAsync(_context, itemType, item_id);
 		}
 
 
@@ -142,9 +142,9 @@ namespace Mntone.Nico2.Users
 		/// <param name="tag"></param>
 		/// <returns></returns>
 		/// <remarks>タグはコンテンツではないため、お気に入りAPIのアクセス手段が他と異なります。</remarks>
-		public Task<ContentManageResult> AddFavTagAsync(string tag)
+		public Task<ContentManageResult> AddFollowTagAsync(string tag)
 		{
-			return Fav.FavClient.AddFavTagAsync(_context, tag);
+			return Follow.FollowClient.AddFollowTagAsync(_context, tag);
 		}
 
 
@@ -154,9 +154,9 @@ namespace Mntone.Nico2.Users
 		/// <param name="tag"></param>
 		/// <returns></returns>
 		/// <remarks>Tagの文字列に全角の数字が含まれる場合は、すべて半角に変換して扱う必要があります。</remarks>
-		public Task<ContentManageResult> RemoveFavTagAsync(string tag)
+		public Task<ContentManageResult> RemoveFollowTagAsync(string tag)
 		{
-			return Fav.FavClient.RemoveFavTagAsync(_context, tag);
+			return Follow.FollowClient.RemoveFollowTagAsync(_context, tag);
 		}
 
 
@@ -513,16 +513,16 @@ namespace Mntone.Nico2.Users
 		#endregion
 
 
-		#region Fav Community
+		#region Follow Community
 
 		/// <summary>
 		/// マイページのお気に入りコミュニティにアクセスして
 		/// HTMLを解析してお気に入りコミュニティを取得します
 		/// </summary>
 		/// <returns></returns>
-		public Task<FavCommunity.FavCommunityResponse> GetFavCommunityAsync()
+		public Task<FollowCommunity.FollowCommunityResponse> GetFollowCommunityAsync()
 		{
-			return FavCommunity.FavCommunityClient.GetFavCommunityAsync(_context);
+			return FollowCommunity.FollowCommunityClient.GetFollowCommunityAsync(_context);
 		}
 
 		#endregion

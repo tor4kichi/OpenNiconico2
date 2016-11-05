@@ -20,7 +20,6 @@ namespace Mntone.Nico2.Videos.Thumbnail
 
 			return context.GetClient()
 				.GetStringAsync($"{NiconicoUrls.VideoThumbInfoUrl}{requestId}");
-				
 		}
 
 		public static ThumbnailResponse ParseThumbnailData( string thumbnailData )

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mntone.Nico2.Users.FavCommunity
+namespace Mntone.Nico2.Users.FollowCommunity
 {
-	public class FavCommunityInfo
+	public class FollowCommunityInfo
 	{
 		public string CommunityName { get; set; }
 		public string CommunityId { get; set; }
@@ -14,8 +14,8 @@ namespace Mntone.Nico2.Users.FavCommunity
 		public string ShortDescription { get; set; }
 	}
 
-    public class FavCommunityResponse
+    public class FollowCommunityResponse
     {
-		public List<FavCommunityInfo> Items { get; private set; } = new List<FavCommunityInfo>();
+		public List<FollowCommunityInfo> Items { get; private set; } = new List<FollowCommunityInfo>();
     }
 }
