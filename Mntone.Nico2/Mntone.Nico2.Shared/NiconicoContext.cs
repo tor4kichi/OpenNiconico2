@@ -180,6 +180,10 @@ namespace Mntone.Nico2
 			return this.HttpClient;
 		}
 
+		internal Task<HttpResponseMessage> GetAsync(string url)
+		{
+			return GetClient().GetAsync(url);
+		}
 
 		internal Task<string> GetStringAsync(string url, Dictionary<string, string> query)
 		{
@@ -203,7 +207,7 @@ namespace Mntone.Nico2
 
 		internal async Task<string> PostAsync(string url, Dictionary<string, string> keyvalues, bool withToken = true)
 		{
-			if (!keyvalues.ContainsKey("token"))
+			if (withToken && !keyvalues.ContainsKey("token"))
 			{
 				var token = await this.GetToken();
 				keyvalues.Add("token", token);
