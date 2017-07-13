@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,7 +99,10 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			return GetMyPageCommunityHtmlAsync(context)
 				.ContinueWith(prevTask => PerseFollowCommunityPageHtml(prevTask.Result));
 		}
-		/*
+		
+
+
+
 		// Communityへの登録
 		// http://com.nicovideo.jp/motion/co1894176
 		// mode:commit
@@ -106,14 +110,33 @@ namespace Mntone.Nico2.Users.FollowCommunity
 		// comment:
 		// notify:
 		// POST
-		public static Task<bool> AddFollowCommunity(
+		public static async Task<bool> AddFollowCommunity(
 			NiconicoContext context
-			, string comunityId
+			, string communityId
+			, string title = ""
 			, string comment = ""
-			, string notify = ""
+			, bool notify = false
 			)
 		{
+			// http://com.nicovideo.jp/motion/id にアクセスして200かを確認
 
+			var url = NiconicoUrls.CommunityJoinPageUrl + communityId;
+			var res = await context.PostAsync(url, withToken:false);
+
+			await Task.Delay(1000);
+
+			// http://com.nicovideo.jp/motion/id に情報をpostする
+			var dict = new Dictionary<string, string>();
+			dict.Add("mode", "commit");
+			dict.Add("title", title ?? "フォローリクエスト");
+			dict.Add("comment", comment ?? "");
+			dict.Add("notify", notify ? "1" : "");
+
+			var postResult = await context.PostAsync(url, dict, withToken: false);
+
+			Debug.WriteLine(postResult);
+
+			return true;
 		}
 
 
@@ -136,19 +159,66 @@ namespace Mntone.Nico2.Users.FollowCommunity
 		// http://com.nicovideo.jp/leave/co2128730 にPOSTする
 		// 成功したら200、失敗したら404
 
-		public Task<bool> RemoveFollowCommunity(NiconicoContext context, CommunityLeaveToken token)
+		public static async Task<CommunityLeaveToken> GetCommunityLeaveToken(NiconicoContext context, string communityId)
 		{
+			var url = NiconicoUrls.CommunityLeavePageUrl + communityId;
+			var htmlText = await context.GetStringAsync(url);
 
+			CommunityLeaveToken leaveToken = new CommunityLeaveToken()
+			{
+				CommunityId = communityId
+			};
+
+			HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+			document.LoadHtml(htmlText);
+
+			var rootNode = document.DocumentNode;
+			var hiddenInputs = rootNode.SelectNodes("//main//input");
+
+			foreach (var hiddenInput in hiddenInputs)
+			{
+				var nameAttr = hiddenInput.GetAttributeValue("name", "");
+				if (nameAttr == "time")
+				{
+					var timeValue = hiddenInput.GetAttributeValue("value", "");
+					leaveToken.Time = timeValue;
+				}
+				else if (nameAttr == "commit_key")
+				{
+					var commit_key = hiddenInput.GetAttributeValue("value", "");
+					leaveToken.CommitKey = commit_key;
+				}
+				else if (nameAttr == "commit")
+				{
+					var commit = hiddenInput.GetAttributeValue("value", "");
+					leaveToken.Commit = commit;
+				}
+			}
+
+			return leaveToken;
+		}
+
+		public static async Task<bool> RemoveFollowCommunity(NiconicoContext context, CommunityLeaveToken token)
+		{
+			var url = NiconicoUrls.CommunityLeavePageUrl + token.CommunityId;
+			var dict = new Dictionary<string, string>();
+
+			dict.Add("time", token.Time);
+			dict.Add("commit_key", token.CommitKey);
+			dict.Add("commit", token.Commit);
+
+			var res = await context.PostAsync(url, dict, withToken: false);
+
+			Debug.WriteLine(res);
+
+			return true;
 		}
 
 
 
 
-		public Task<CommunityLeaveToken> GetCommunityLeaveToken(NiconicoContext context, string communityId)
-		{
-
-		}
-		*/
+		
+		
 	}
 
 	public class CommunityLeaveToken

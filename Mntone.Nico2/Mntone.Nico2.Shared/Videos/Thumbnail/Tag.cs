@@ -11,12 +11,12 @@ namespace Mntone.Nico2.Videos.Thumbnail
 	/// タグ情報
 	/// </summary>
 	[DataContract]
-	public sealed class Tag
+	public sealed class ThumbnailTag
 	{
 #if WINDOWS_APP
 		internal Tag( IXmlNode tagXml )
 #else
-		internal Tag( XElement tagXml )
+		internal ThumbnailTag( XElement tagXml )
 #endif
 		{
 			Category = tagXml.GetNamedAttributeText( "category" ).ToBooleanFrom1();
@@ -25,7 +25,7 @@ namespace Mntone.Nico2.Videos.Thumbnail
 		}
 
 		// シリアライズのためにデフォルトコンストラクタを用意しておく
-		public Tag() { }
+		public ThumbnailTag() { }
 
 		/// <summary>
 		/// カテゴリー タグか

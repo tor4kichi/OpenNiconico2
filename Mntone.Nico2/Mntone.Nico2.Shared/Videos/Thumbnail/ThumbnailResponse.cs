@@ -37,7 +37,7 @@ namespace Mntone.Nico2.Videos.Thumbnail
 			IsEmbeddable = thumbXml.GetNamedChildNodeText( "embeddable" ).ToBooleanFrom1();
 			CannotPlayInLive = thumbXml.GetNamedChildNodeText( "no_live_play" ).ToBooleanFrom1();
 
-			Tags = new Tags( thumbXml.GetNamedChildNode( "tags" ) );
+			Tags = new ThumbnailTags( thumbXml.GetNamedChildNode( "tags" ) );
 
 			var userIdXml = thumbXml.GetNamedChildNode( "user_id" );
 			if( userIdXml != null )
@@ -150,7 +150,7 @@ namespace Mntone.Nico2.Videos.Thumbnail
 		/// <summary>
 		/// タグ情報
 		/// </summary>
-		public Tags Tags { get; private set; }
+		public ThumbnailTags Tags { get; private set; }
 
 		/// <summary>
 		/// ユーザーの種類

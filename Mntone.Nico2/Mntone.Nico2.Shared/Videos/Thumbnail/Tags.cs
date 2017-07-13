@@ -12,16 +12,16 @@ namespace Mntone.Nico2.Videos.Thumbnail
 	/// <summary>
 	/// タグ データ
 	/// </summary>
-	public sealed class Tags
+	public sealed class ThumbnailTags
 	{
 #if WINDOWS_APP
 		internal Tags( IXmlNode tagsXml )
 #else
-		internal Tags( XElement tagsXml )
+		internal ThumbnailTags( XElement tagsXml )
 #endif
 		{
 			Domain = tagsXml.GetNamedAttributeText( "domain" );
-			Value = tagsXml.GetChildNodes().Select( tagXml => new Tag( tagXml ) ).ToList();
+			Value = tagsXml.GetChildNodes().Select( tagXml => new ThumbnailTag( tagXml ) ).ToList();
 		}
 
 		/// <summary>
@@ -32,6 +32,6 @@ namespace Mntone.Nico2.Videos.Thumbnail
 		/// <summary>
 		/// タグの一覧
 		/// </summary>
-		public IReadOnlyList<Tag> Value { get; private set; }
+		public IReadOnlyList<ThumbnailTag> Value { get; private set; }
 	}
 }

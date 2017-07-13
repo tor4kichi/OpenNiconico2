@@ -265,6 +265,10 @@ namespace Mntone.Nico2
 
 
 
+		public static string CommunityJoinPageUrl = CommunityUrlBase + "motion/";
+
+		public static string CommunityLeavePageUrl = CommunityUrlBase + "leave/";
+
 		#endregion
 
 

@@ -122,7 +122,7 @@ namespace Mntone.Nico2.Videos
 		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
 		/// <returns></returns>
 		/// <exception cref="ContentZoningException"></exception>
-		public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
+		public Task<WatchAPI.InitialWatchData> GetWatchApiAsync(string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
 		{
 			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality, harmfulReactType);
 		}
@@ -134,9 +134,9 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="flvResponse"></param>
 		/// <returns></returns>
-		public Task<Comment.CommentResponse> GetCommentAsync(Flv.FlvResponse flvResponse)
+		public Task<Comment.CommentResponse> GetCommentAsync(int userId, string commentServerUrl, int threadId, bool isKeyRequired)
 		{
-			return Comment.CommentClient.GetCommentAsync(_context, flvResponse);
+			return Comment.CommentClient.GetCommentAsync(_context, userId, commentServerUrl, threadId, isKeyRequired);
 		}
 
 
@@ -176,9 +176,9 @@ namespace Mntone.Nico2.Videos
 
 
 		
-		public Task<Comment.PostCommentResponse> PostCommentAsync(Flv.FlvResponse flvResponse, Comment.CommentThread thread, string comment, TimeSpan position, string commands)
+		public Task<Comment.PostCommentResponse> PostCommentAsync(string commentServerUrl, Comment.CommentThread thread, string comment, TimeSpan position, string commands)
 		{
-			return Comment.CommentClient.PostCommentAsync(_context, flvResponse, thread, comment, position, commands);
+			return Comment.CommentClient.PostCommentAsync(_context, commentServerUrl, thread, comment, position, commands);
 		}
 
 

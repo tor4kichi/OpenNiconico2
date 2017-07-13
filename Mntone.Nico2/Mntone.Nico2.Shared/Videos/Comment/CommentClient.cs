@@ -15,7 +15,7 @@ namespace Mntone.Nico2.Videos.Comment
 	internal sealed class CommentClient
     {
 
-		public static async Task<string> GetThreadKeyDataAsync(NiconicoContext context, uint threadId)
+		public static async Task<string> GetThreadKeyDataAsync(NiconicoContext context, int threadId)
 		{
 			return await context.GetClient()
 				.GetStringAsync(NiconicoUrls.VideoThreadKeyApiUrl + threadId.ToString());
@@ -32,18 +32,18 @@ namespace Mntone.Nico2.Videos.Comment
 			return new ThreadKeyResponse(dict["threadkey"], dict["force_184"]);
 		}
 
-		public static async Task<string> GetCommentDataAsync(NiconicoContext context, Flv.FlvResponse response)
+		public static async Task<string> GetCommentDataAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
 		{
 			var paramDict = new Dictionary<string, string>();
-			paramDict.Add("user_id", response.UserId.ToString());
+			paramDict.Add("user_id", userId.ToString());
 			paramDict.Add("version", "20090904");
-			paramDict.Add("thread", response.ThreadId.ToString());
+			paramDict.Add("thread", threadId.ToString());
 			paramDict.Add("res_from", "-1000");
 
 			// 公式動画の場合はThreadKeyとforce_184を取得する
-			if (response.IsKeyRequired)
+			if (isKeyRequired)
 			{
-				var threadKeyResponse = await GetThreadKeyDataAsync(context, response.ThreadId)
+				var threadKeyResponse = await GetThreadKeyDataAsync(context, threadId)
 					.ContinueWith(prevTask => ParseThreadKey(prevTask.Result));
 
 				paramDict.Add("threadkey", threadKeyResponse.ThreadKey);
@@ -51,7 +51,7 @@ namespace Mntone.Nico2.Videos.Comment
 			}
 			
 			var param = HttpQueryExtention.DictionaryToQuery(paramDict);
-			var commentUrl = $"{response.CommentServerUrl}thread?{Uri.EscapeUriString(param)}";
+			var commentUrl = $"{commentServerUrl}thread?{Uri.EscapeUriString(param)}";
 
 			return await context.GetClient()
 				.GetStringAsync(commentUrl);
@@ -64,9 +64,9 @@ namespace Mntone.Nico2.Videos.Comment
 		}
 
 
-		public static Task<CommentResponse> GetCommentAsync(NiconicoContext context, Flv.FlvResponse response)
+		public static Task<CommentResponse> GetCommentAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
 		{
-			return GetCommentDataAsync(context, response)
+			return GetCommentDataAsync(context, userId, commentServerUrl, threadId, isKeyRequired)
 					.ContinueWith(prevTask => ParseComment(prevTask.Result));
 		}
 
@@ -100,7 +100,7 @@ namespace Mntone.Nico2.Videos.Comment
 		}
 
 
-		public static async Task<string> PostCommentDataAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, string command)
+		public static async Task<string> PostCommentDataAsync(NiconicoContext context, string commentServerUrl, CommentThread thread, string comment, TimeSpan position, string command)
 		{
 			// postkeyの取得
 			var postKey = await GetPostKeyAsync(context, thread)
@@ -151,7 +151,7 @@ namespace Mntone.Nico2.Videos.Comment
 
 			var content = new Windows.Web.Http.HttpStringContent(postCommentXml);
 
-			return await context.PostAsync(flvResonse.CommentServerUrl.AbsoluteUri, content);
+			return await context.PostAsync(commentServerUrl, content);
 		}
 
 
@@ -169,9 +169,9 @@ namespace Mntone.Nico2.Videos.Comment
 			return res;
 		}
 
-		public static Task<PostCommentResponse> PostCommentAsync(NiconicoContext context, FlvResponse flvResonse, CommentThread thread, string comment, TimeSpan position, string commands)
+		public static Task<PostCommentResponse> PostCommentAsync(NiconicoContext context, string commentServerUrl, CommentThread thread, string comment, TimeSpan position, string commands)
 		{
-			return PostCommentDataAsync(context, flvResonse, thread, comment, position, commands)
+			return PostCommentDataAsync(context, commentServerUrl, thread, comment, position, commands)
 				.ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));
 		}
 

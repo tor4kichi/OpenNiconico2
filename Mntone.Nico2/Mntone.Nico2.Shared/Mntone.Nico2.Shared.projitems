@@ -222,7 +222,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\ThumbnailTypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\UserType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\VideoApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\InitialWatchData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchAPIClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchApiResponse.cs" />
   </ItemGroup>
 </Project>

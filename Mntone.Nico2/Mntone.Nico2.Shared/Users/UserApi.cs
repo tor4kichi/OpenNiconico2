@@ -525,6 +525,22 @@ namespace Mntone.Nico2.Users
 			return FollowCommunity.FollowCommunityClient.GetFollowCommunityAsync(_context);
 		}
 
+
+		public Task<bool> AddFollowCommunityAsync(string communityId, string title = "", string comment = "", bool notify = false)
+		{
+			return FollowCommunity.FollowCommunityClient.AddFollowCommunity(_context, communityId, title, comment, notify);
+		}
+
+		public Task<FollowCommunity.CommunityLeaveToken> GetFollowCommunityLeaveTokenAsync(string communityId)
+		{
+			return FollowCommunity.FollowCommunityClient.GetCommunityLeaveToken(_context, communityId);
+		}
+
+		public Task<bool> RemoveFollowCommunityAsync(FollowCommunity.CommunityLeaveToken leaveToken)
+		{
+			return FollowCommunity.FollowCommunityClient.RemoveFollowCommunity(_context, leaveToken);
+		}
+
 		#endregion
 
 

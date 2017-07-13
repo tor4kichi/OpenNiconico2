@@ -55,15 +55,14 @@ namespace Mntone.Nico2.Videos.WatchAPI
 				}
 				else
 				{
-					var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
-					var rawStr = videoInfoNode.InnerText;
+					var videoInfoNode = htmlDocument.GetElementbyId("js-initial-watch-data");
+					var rawStr = videoInfoNode.GetAttributeValue("data-api-data", "");
 					var htmlDecoded = WebUtility.HtmlDecode(rawStr);
 					//var str = WebUtility.UrlDecode(htmlDecoded);
 
 					System.Diagnostics.Debug.WriteLine(htmlDecoded);
 
 					return htmlDecoded;
-
 				}
 			}
 			catch (ContentZoningException)
@@ -77,14 +76,14 @@ namespace Mntone.Nico2.Videos.WatchAPI
 		}
 
 
-		public static WatchApiResponse ParseWatchApi(string flvData)
+		public static InitialWatchData ParseWatchApi(string flvData)
 		{
 			var jsonSerializer = new JsonSerializer();
 			jsonSerializer.NullValueHandling = NullValueHandling.Include;
 			jsonSerializer.Error += JsonSerializer_Error;
 			jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
 			
-			var watchApi = jsonSerializer.Deserialize<WatchApiResponse>(new JsonTextReader(new StringReader(flvData)));
+			var watchApi = jsonSerializer.Deserialize<InitialWatchData>(new JsonTextReader(new StringReader(flvData)));
 
 			return watchApi;
 		}
@@ -95,7 +94,7 @@ namespace Mntone.Nico2.Videos.WatchAPI
 
 		}
 
-		public static Task<WatchApiResponse> GetWatchApiAsync(NiconicoContext context, string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType)
+		public static Task<InitialWatchData> GetWatchApiAsync(NiconicoContext context, string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType)
 		{
 			return GetWatchApiDataAsync(context, requestId, forceLowQuality, harmfulReactType)
 				.ContinueWith(prevTask => ParseWatchApi(prevTask.Result));
