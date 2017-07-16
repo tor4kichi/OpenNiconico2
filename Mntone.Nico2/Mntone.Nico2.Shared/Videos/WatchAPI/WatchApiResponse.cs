@@ -345,16 +345,6 @@ namespace Mntone.Nico2.Videos.WatchAPI
 		public bool isPrivileged { get; set; }
 	}
 
-	public class TagRelatedMarquee
-	{
-		[DataMember(Name = "id")]
-		public string id { get; set; }
-		[DataMember(Name = "title")]
-		public string title { get; set; }
-		[DataMember(Name = "url")]
-		public string url { get; set; }
-	}
-
 	public class WatchApiResponse : FlvResponse
 	{
 		[DataMember(Name = "flashvars")]

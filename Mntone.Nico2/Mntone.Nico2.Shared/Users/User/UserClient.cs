@@ -72,9 +72,9 @@ namespace Mntone.Nico2.Users.User
 				data.Description = profile
 					.GetElementByClassName("userDetailComment")
 					.GetElementById("user_description")
-					.GetElementById("description_full")
-					.GetElementByTagName("span")
-					.InnerHtml;
+					?.GetElementById("description_full")
+					?.GetElementByTagName("span")
+					?.InnerHtml ?? "";
 			}
 			catch
 			{
@@ -92,10 +92,26 @@ namespace Mntone.Nico2.Users.User
 			// 先頭5文字をスキップして、以降の任意桁数の数字を抽出
 			try
 			{
-				data.TotalVideoCount = uint.Parse(
-					new String(video.GetElementByTagName("h3").InnerText.Skip(5).TakeWhile(x => x >= '0' && x <= '9').ToArray())
-					);
-			}
+                var videoCountElem = video.GetElementByTagName("h3");
+                if (videoCountElem != null)
+                {
+                    var countStr = new String(videoCountElem.InnerText.Skip(5).TakeWhile(x => x >= '0' && x <= '9').ToArray());
+                    if (countStr.Count() > 0)
+                    {
+                        data.TotalVideoCount = uint.Parse(
+                            countStr
+                            );
+                    }
+                    else
+                    {
+                        data.IsOwnerVideoPrivate = true;
+                    }
+                }
+                else
+                {
+                    data.IsOwnerVideoPrivate = true;
+                }
+            }
 			catch
 			{
 				// 投稿動画非公開の場合

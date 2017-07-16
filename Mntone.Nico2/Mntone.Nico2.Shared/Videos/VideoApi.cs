@@ -114,7 +114,8 @@ namespace Mntone.Nico2.Videos
 		}
 #endif
 
-		/// <summary>
+		
+        /// <summary>
 		/// 動画ページ内にある動画情報を取得します。
 		/// </summary>
 		/// <param name="requestId">動画ID</param>
@@ -122,19 +123,19 @@ namespace Mntone.Nico2.Videos
 		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
 		/// <returns></returns>
 		/// <exception cref="ContentZoningException"></exception>
-		public Task<WatchAPI.InitialWatchData> GetWatchApiAsync(string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
-		{
-			return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality, harmfulReactType);
-		}
+        public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
+        {
+            return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality, harmfulReactType);
+        }
 
 
 
-		/// <summary>
-		/// 動画情報を元にして動画コメントを取得します。
-		/// </summary>
-		/// <param name="flvResponse"></param>
-		/// <returns></returns>
-		public Task<Comment.CommentResponse> GetCommentAsync(int userId, string commentServerUrl, int threadId, bool isKeyRequired)
+        /// <summary>
+        /// 動画情報を元にして動画コメントを取得します。
+        /// </summary>
+        /// <param name="flvResponse"></param>
+        /// <returns></returns>
+        public Task<Comment.CommentResponse> GetCommentAsync(int userId, string commentServerUrl, int threadId, bool isKeyRequired)
 		{
 			return Comment.CommentClient.GetCommentAsync(_context, userId, commentServerUrl, threadId, isKeyRequired);
 		}
@@ -184,9 +185,56 @@ namespace Mntone.Nico2.Videos
 
 
 
-		#region field
+        /// <summary>
+		/// 動画ページ内にある動画情報を取得します。
+		/// </summary>
+		/// <param name="requestId">動画ID</param>
+		/// <param name="forceLowQuality">強制的に低画質動画を再生する場合に true</param>
+		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
+		/// <returns></returns>
+		/// <exception cref="ContentZoningException"></exception>
+		public Task<Dmc.DmcWatchResponse> GetDmcWatchResponseAsync(string requestId, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
+        {
+            return Dmc.DmcClient.GetDmcWatchResponseAsync(_context, requestId, harmfulReactType);
+        }
 
-		private NiconicoContext _context;
+
+        /// <summary>
+        /// DMCサーバー上の動画を再生するためのリクエストを送信し、
+        /// 動画再生のセッション情報を取得します。
+        /// </summary>
+        /// <param name="watchData"></param>
+        /// <param name="videoQuality"></param>
+        /// <param name="audioQuality"></param>
+        /// <returns></returns>
+        public Task<Dmc.DmcSessionResponse> GetDmcSessionResponse(
+            Dmc.DmcWatchResponse watchData,
+            Dmc.VideoContent videoQuality = null,
+            Dmc.AudioContent audioQuality = null)
+        {
+            return Dmc.DmcClient.GetDmcSessionResponseAsync(_context, watchData, videoQuality, audioQuality);
+        }
+
+
+        public Task DmcSessionFirstHeartbeatAsync(
+            Dmc.DmcWatchResponse watch,
+            Dmc.DmcSessionResponse sessionRes
+            )
+        {
+            return Dmc.DmcClient.DmcSessionFirstHeartbeatAsync(_context, watch, sessionRes);
+        }
+
+        public Task DmcSessionHeartbeatAsync(
+            Dmc.DmcWatchResponse watch,
+            Dmc.DmcSessionResponse sessionRes
+            )
+        {
+            return Dmc.DmcClient.DmcSessionHeartbeatAsync(_context, watch, sessionRes);
+        }
+
+        #region field
+
+        private NiconicoContext _context;
 
 		#endregion
 	}

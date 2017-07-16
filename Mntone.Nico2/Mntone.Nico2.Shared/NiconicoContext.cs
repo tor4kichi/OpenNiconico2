@@ -228,6 +228,7 @@ namespace Mntone.Nico2
 				}
 				else
 				{
+                    System.Diagnostics.Debug.WriteLine(res.ToString());
 					return "";
 				}
 			}

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Mntone.Nico2.Videos.WatchAPI
+namespace Mntone.Nico2.Videos.Dmc
 {
     [DataContract]
     public class DmcVideo
@@ -617,20 +617,6 @@ namespace Mntone.Nico2.Videos.WatchAPI
     }
 
     [DataContract]
-    public class TagRelatedMarquee
-    {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "url")]
-        public string Url { get; set; }
-
-        [DataMember(Name = "title")]
-        public string Title { get; set; }
-    }
-
-    [DataContract]
     public class TagRelatedBanner
     {
 
@@ -652,7 +638,7 @@ namespace Mntone.Nico2.Videos.WatchAPI
     {
 
         [DataMember(Name = "tagRelatedMarquee")]
-        public TagRelatedMarquee TagRelatedMarquee { get; set; }
+        public WatchAPI.TagRelatedMarquee TagRelatedMarquee { get; set; }
 
         [DataMember(Name = "tagRelatedBanner")]
         public TagRelatedBanner TagRelatedBanner { get; set; }
@@ -884,7 +870,7 @@ namespace Mntone.Nico2.Videos.WatchAPI
     }
 
     [DataContract]
-    public class InitialWatchData
+    public class DmcWatchResponse
     {
 
         [DataMember(Name = "video")]

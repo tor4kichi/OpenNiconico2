@@ -200,6 +200,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\PostCommentResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ThreadKeyResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\ClientInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\ContentAuth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\ContentSrcIdSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcContentQuality.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\KeepMethod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\Protocol.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\SessionOperationAuth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcSessionRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcSessionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Flv\FlvClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\HistoriesClient.cs" />
@@ -222,7 +232,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\ThumbnailTypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Thumbnail\UserType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\VideoApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\InitialWatchData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcWatchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\TagRelatedMarquee.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchAPIClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchApiResponse.cs" />
   </ItemGroup>
 </Project>
