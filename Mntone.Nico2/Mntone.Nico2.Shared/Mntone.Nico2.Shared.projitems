@@ -123,6 +123,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\Vote\VoteClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentManageResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSRFTokenHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Watch\LeoPlayerProps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Watch\WatchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroupData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroupResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistGroup\MylistGroupClient.cs" />

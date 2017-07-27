@@ -339,6 +339,15 @@ namespace Mntone.Nico2.Live
 #endif
 
 
+        
+        public Task<Watch.LeoPlayerProps> GetLeoPlayerPropsAsync(string liveId)
+        {
+            return Watch.WatchClient.GetLeoPlayerPropsAsync(_context, liveId);
+        }
+
+
+
+
 		#region field
 
 		private NiconicoContext _context;

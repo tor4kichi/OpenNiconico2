@@ -137,12 +137,21 @@ namespace Mntone.Nico2
 		internal static string LiveWatchingReservationListUrl { get { return LiveApiUrlBase + "watchingreservation?mode=list"; } }
 		internal static string LiveWatchingReservationDetailListUrl { get { return LiveApiUrlBase + "watchingreservation?mode=detaillist"; } }
 
-		#endregion
+        #endregion
+
+        #region Live2
+
+        private const string Live2BaseUrl = "http://live2" + DomainBase;
 
 
-		#region Images
+        internal static string Live2WatchPageUrl = Live2BaseUrl + "watch/";
 
-		private const string ImageUrlBase = "http://seiga" + DomainBase;
+        #endregion
+
+
+        #region Images
+
+        private const string ImageUrlBase = "http://seiga" + DomainBase;
 		private const string ImageApiUrlBase = ImageUrlBase + "api/";
 		private const string ImageExtApiUrlBase = "http://ext.seiga" + DomainBase + "api/";
 

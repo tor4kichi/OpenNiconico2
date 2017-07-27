@@ -27,6 +27,8 @@ namespace Mntone.Nico2.Videos.Comment
 			// threadkey response
 			// see@ http://d.hatena.ne.jp/s01149ht/20091216/1260983794
 
+            if (string.IsNullOrEmpty(threadKeyData)) { return null; }
+
 			var dict = HttpQueryExtention.QueryToDictionary(threadKeyData);
 			
 			return new ThreadKeyResponse(dict["threadkey"], dict["force_184"]);
@@ -46,9 +48,12 @@ namespace Mntone.Nico2.Videos.Comment
 				var threadKeyResponse = await GetThreadKeyDataAsync(context, threadId)
 					.ContinueWith(prevTask => ParseThreadKey(prevTask.Result));
 
-				paramDict.Add("threadkey", threadKeyResponse.ThreadKey);
-				paramDict.Add("force_184", threadKeyResponse.Force184);
-			}
+                if (threadKeyResponse != null)
+                {
+                    paramDict.Add("threadkey", threadKeyResponse.ThreadKey);
+                    paramDict.Add("force_184", threadKeyResponse.Force184);
+                }
+            }
 			
 			var param = HttpQueryExtention.DictionaryToQuery(paramDict);
 			var commentUrl = $"{commentServerUrl}thread?{Uri.EscapeUriString(param)}";
