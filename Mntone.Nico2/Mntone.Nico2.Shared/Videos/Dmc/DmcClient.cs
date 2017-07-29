@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
+using Windows.Web.Http.Headers;
 
 namespace Mntone.Nico2.Videos.Dmc
 {
@@ -26,6 +27,7 @@ namespace Mntone.Nico2.Videos.Dmc
             var dict = new Dictionary<string, string>();
             var url = $"{NiconicoUrls.VideoWatchPageUrl}{requestId}";
 
+
             if (harmfulReactType != HarmfulContentReactionType.None)
             {
                 dict.Add("watch_harmful", ((uint)harmfulReactType).ToString());
@@ -36,6 +38,20 @@ namespace Mntone.Nico2.Videos.Dmc
             try
             {
                 var client = context.GetClient();
+
+                var watchHtml5Player = new HttpCookiePairHeaderValue("watch_html5", "1");
+                if (client.DefaultRequestHeaders.Cookie.Contains(watchHtml5Player))
+                {
+                    client.DefaultRequestHeaders.Cookie.Remove(watchHtml5Player);
+                }
+                client.DefaultRequestHeaders.Cookie.Add(watchHtml5Player);
+                var notWatchFlashPlayer = new HttpCookiePairHeaderValue("watch_flash", "0");
+                var old = client.DefaultRequestHeaders.Cookie.SingleOrDefault(x => x.Name == "watch_flash");
+                if (old != null)
+                {
+                    client.DefaultRequestHeaders.Cookie.Remove(old);
+                }
+                client.DefaultRequestHeaders.Cookie.Add(notWatchFlashPlayer);
 
                 var res = await context.GetClient()
                     .GetAsync(url);

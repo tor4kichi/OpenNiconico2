@@ -55,7 +55,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public bool PostkeyAvailable { get; set; }
 
         [DataMember(Name = "ng_revision")]
-        public int NgRevision { get; set; }
+        public int? NgRevision { get; set; }
     }
 
     [DataContract]
@@ -83,10 +83,10 @@ namespace Mntone.Nico2.Videos.Dmc
         public string ServerUrl { get; set; }
 
         [DataMember(Name = "server_port")]
-        public int ServerPort { get; set; }
+        public int? ServerPort { get; set; }
 
         [DataMember(Name = "thread_id")]
-        public int ThreadId { get; set; }
+        public int? ThreadId { get; set; }
 
         [DataMember(Name = "thread_key")]
         public string ThreadKey { get; set; }

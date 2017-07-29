@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Web.Http.Headers;
 
 namespace Mntone.Nico2.Videos.WatchAPI
 {
@@ -39,6 +41,21 @@ namespace Mntone.Nico2.Videos.WatchAPI
             try
             {
                 var client = context.GetClient();
+
+                var watchHtml5Player = new HttpCookiePairHeaderValue("watch_html5", "1");
+                if (client.DefaultRequestHeaders.Cookie.Contains(watchHtml5Player))
+                {
+                    client.DefaultRequestHeaders.Cookie.Remove(watchHtml5Player);
+                }
+                client.DefaultRequestHeaders.Cookie.Add(watchHtml5Player);
+
+                var watchFlashPlayer = new HttpCookiePairHeaderValue("watch_flash", "1");
+                var old = client.DefaultRequestHeaders.Cookie.SingleOrDefault(x => x.Name == "watch_flash");
+                if (old != null)
+                {
+                    client.DefaultRequestHeaders.Cookie.Remove(old);
+                }
+                client.DefaultRequestHeaders.Cookie.Add(watchFlashPlayer);
 
                 var res = await context.GetClient()
                     .GetAsync(url);
