@@ -45,6 +45,7 @@ namespace Mntone.Nico2.Live.Watch
             var filteredPropsString = propsRawString
                 .Replace("unescapeHTML(", "")
                 .Replace("JSON.parse(", "")
+                .Replace("streamQuality: LeoPlayer.getStreamQuality(window.location.hash),", "")
                 .Replace(")", "")
                 .Replace(" * 1000", "");
 
@@ -52,6 +53,10 @@ namespace Mntone.Nico2.Live.Watch
             Func<string, string, string> removeTargetJsonParamter = (string text, string targetString) =>
             {
                 var removeStartPos = text.IndexOf(targetString);
+                if (removeStartPos == -1)
+                {
+                    return text;
+                }
                 var removeCount = (text.IndexOf("},", removeStartPos) + 2) - removeStartPos;
                 return text.Remove(removeStartPos, removeCount);
             };

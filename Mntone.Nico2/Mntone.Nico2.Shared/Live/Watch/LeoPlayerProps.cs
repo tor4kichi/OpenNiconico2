@@ -99,7 +99,7 @@ namespace Mntone.Nico2.Live.Watch
         public int BeginTime { get; set; }
 
         [DataMember(Name = "endTime")]
-        public int EndTime { get; set; }
+        public int? EndTime { get; set; }
 
         [DataMember(Name = "serverTime")]
         public long ServerTime { get; set; }
