@@ -33,6 +33,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Summary\SummaryClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Summary\SummaryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\WordExist\WordExistClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Embed\EmbedApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Embed\Ichiba\IchibaClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Embed\Ichiba\IchibaResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HarmfulContentReactionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HtmlDocumentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpClientExtensions.cs" />

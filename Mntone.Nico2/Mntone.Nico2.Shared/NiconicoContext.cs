@@ -319,15 +319,26 @@ namespace Mntone.Nico2
 		}
 		private Mylist.MylistApi _Mylist = null;
 
-		#endregion
 
 
-		#region property (and related field)
-
-		/// <summary>
-		/// ニコニコ　トークン
+        /// <summary>
+		/// ニコニコ 組み込み系 API 郡
 		/// </summary>
-		public NiconicoAuthenticationToken AuthenticationToken { get; set; }
+		public Embed.EmbedApi Embed
+        {
+            get { return this._Embed ?? (this._Embed = new Nico2.Embed.EmbedApi(this)); }
+        }
+        private Embed.EmbedApi _Embed = null;
+
+        #endregion
+
+
+        #region property (and related field)
+
+        /// <summary>
+        /// ニコニコ　トークン
+        /// </summary>
+        public NiconicoAuthenticationToken AuthenticationToken { get; set; }
 
 		/// <summary>
 		/// ニコニコ セッション
