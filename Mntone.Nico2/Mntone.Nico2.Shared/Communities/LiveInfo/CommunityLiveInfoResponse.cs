@@ -148,7 +148,12 @@ namespace Mntone.Nico2.Communities.Live
 			_IsHq.Value :
 			(_IsHq = __IsHq.ToBooleanFrom1()).Value;
 
-	}
+        [DataMember(Name = "_thumbnail_url")]
+        public string ThumbnailUrl { get; set; }
+
+        [DataMember(Name = "_picture_url")]
+        public string PictureUrl { get; set; }
+    }
 
 	[DataContract]
 	public class Community
