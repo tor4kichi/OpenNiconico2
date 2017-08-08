@@ -141,12 +141,49 @@ namespace Mntone.Nico2.Videos
 		}
 
 
-		/// <summary>
-		/// ニコニコ動画へのキーワード検索を行い結果を取得します。
-		/// </summary>
-		/// <param name="SearchResponse"></param>
-		/// <returns></returns>
-		public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, Sort sortMethod, Order sortDir = Order.Descending)
+
+        /// <summary>
+        /// DMC動画情報を元にして動画コメントを取得します。
+        /// </summary>
+        /// <param name="flvResponse"></param>
+        /// <returns></returns>
+        public Task<Comment.NMSG_Response> GetNMSGCommentAsync(Dmc.DmcWatchResponse dmcWatchRes)
+        {
+            if (dmcWatchRes.Video.DmcInfo.Thread.ThreadKeyRequired)
+            {
+                return Comment.CommentClient.GetOfficialVideoNMSGCommentAsync(
+                    _context,
+                     dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
+                     (long)dmcWatchRes.Video.DmcInfo.Thread.OptionalThreadId,
+                     dmcWatchRes.Viewer.Id,
+                     dmcWatchRes.Context.Userkey,
+                     TimeSpan.FromSeconds(dmcWatchRes.Video.Duration)
+                    );
+            }
+            else
+            {
+                return Comment.CommentClient.GetNMSGCommentAsync(
+                    _context,
+                     dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
+                     dmcWatchRes.Viewer.Id,
+                     dmcWatchRes.Context.Userkey,
+                     TimeSpan.FromSeconds(dmcWatchRes.Video.Duration)
+                    );
+            }
+        }
+        
+
+
+
+
+
+
+        /// <summary>
+        /// ニコニコ動画へのキーワード検索を行い結果を取得します。
+        /// </summary>
+        /// <param name="SearchResponse"></param>
+        /// <returns></returns>
+        public Task<Search.SearchResponse> GetKeywordSearchAsync(string keyword, uint pageCount, Sort sortMethod, Order sortDir = Order.Descending)
 		{
 			return Search.SearchClient.GetKeywordSearchAsync(_context, keyword, pageCount, sortMethod, sortDir);
 		}

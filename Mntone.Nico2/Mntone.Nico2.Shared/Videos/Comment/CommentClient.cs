@@ -1,4 +1,6 @@
 ﻿using Mntone.Nico2.Videos.Flv;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,41 +14,41 @@ using System.Xml.Serialization;
 
 namespace Mntone.Nico2.Videos.Comment
 {
-	internal sealed class CommentClient
+    internal sealed class CommentClient
     {
 
-		public static async Task<string> GetThreadKeyDataAsync(NiconicoContext context, int threadId)
-		{
-			return await context.GetClient()
-				.GetStringAsync(NiconicoUrls.VideoThreadKeyApiUrl + threadId.ToString());
-		}
+        public static async Task<string> GetThreadKeyDataAsync(NiconicoContext context, long threadId)
+        {
+            return await context.GetClient()
+                .GetStringAsync(NiconicoUrls.VideoThreadKeyApiUrl + threadId.ToString());
+        }
 
 
-		public static ThreadKeyResponse ParseThreadKey(string threadKeyData)
-		{
-			// threadkey response
-			// see@ http://d.hatena.ne.jp/s01149ht/20091216/1260983794
+        public static ThreadKeyResponse ParseThreadKey(string threadKeyData)
+        {
+            // threadkey response
+            // see@ http://d.hatena.ne.jp/s01149ht/20091216/1260983794
 
             if (string.IsNullOrEmpty(threadKeyData)) { return null; }
 
-			var dict = HttpQueryExtention.QueryToDictionary(threadKeyData);
-			
-			return new ThreadKeyResponse(dict["threadkey"], dict["force_184"]);
-		}
+            var dict = HttpQueryExtention.QueryToDictionary(threadKeyData);
 
-		public static async Task<string> GetCommentDataAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
-		{
-			var paramDict = new Dictionary<string, string>();
-			paramDict.Add("user_id", userId.ToString());
-			paramDict.Add("version", "20090904");
-			paramDict.Add("thread", threadId.ToString());
-			paramDict.Add("res_from", "-1000");
+            return new ThreadKeyResponse(dict["threadkey"], dict["force_184"]);
+        }
 
-			// 公式動画の場合はThreadKeyとforce_184を取得する
-			if (isKeyRequired)
-			{
-				var threadKeyResponse = await GetThreadKeyDataAsync(context, threadId)
-					.ContinueWith(prevTask => ParseThreadKey(prevTask.Result));
+        public static async Task<string> GetCommentDataAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
+        {
+            var paramDict = new Dictionary<string, string>();
+            paramDict.Add("user_id", userId.ToString());
+            paramDict.Add("version", "20090904");
+            paramDict.Add("thread", threadId.ToString());
+            paramDict.Add("res_from", "-1000");
+
+            // 公式動画の場合はThreadKeyとforce_184を取得する
+            if (isKeyRequired)
+            {
+                var threadKeyResponse = await GetThreadKeyDataAsync(context, threadId)
+                    .ContinueWith(prevTask => ParseThreadKey(prevTask.Result));
 
                 if (threadKeyResponse != null)
                 {
@@ -54,34 +56,155 @@ namespace Mntone.Nico2.Videos.Comment
                     paramDict.Add("force_184", threadKeyResponse.Force184);
                 }
             }
-			
-			var param = HttpQueryExtention.DictionaryToQuery(paramDict);
-			var commentUrl = $"{commentServerUrl}thread?{Uri.EscapeUriString(param)}";
 
-			return await context.GetClient()
-				.GetStringAsync(commentUrl);
-		}
+            var param = HttpQueryExtention.DictionaryToQuery(paramDict);
+            var commentUrl = $"{commentServerUrl}thread?{Uri.EscapeUriString(param)}";
 
-
-		public static CommentResponse ParseComment(string commentData)
-		{
-			return CommentResponse.CreateFromXml(commentData);
-		}
+            return await context.GetClient()
+                .GetStringAsync(commentUrl);
+        }
 
 
-		public static Task<CommentResponse> GetCommentAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
-		{
-			return GetCommentDataAsync(context, userId, commentServerUrl, threadId, isKeyRequired)
-					.ContinueWith(prevTask => ParseComment(prevTask.Result));
-		}
+        public static CommentResponse ParseComment(string commentData)
+        {
+            return CommentResponse.CreateFromXml(commentData);
+        }
+
+
+        public static Task<CommentResponse> GetCommentAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
+        {
+            return GetCommentDataAsync(context, userId, commentServerUrl, threadId, isKeyRequired)
+                    .ContinueWith(prevTask => ParseComment(prevTask.Result));
+        }
+
+
+
+        #region NMSG コメント取得
+
+
+
+        
+
+        public static Task<string> GetNMSGCommentDataAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength)
+        {
+            const string NmsgCommentApiUrl = @"http://nmsg.nicovideo.jp/api.json/";
+
+            var parameterJson = NMSG_RequestParamaterBuilder
+                .MakeVideoCommmentRequest(threadId.ToString(), userId, userKey, videoLength);
+
+            var stringContent = new Windows.Web.Http.HttpStringContent(parameterJson);
+
+            return context.PostAsync(NmsgCommentApiUrl, stringContent);
+        }
+
+        public static Task<NMSG_Response> GetNMSGCommentAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength)
+        {
+            return GetNMSGCommentDataAsync(context, threadId, userId, userKey, videoLength)
+                .ContinueWith(prevTask => ParseNMSGResponseJson(prevTask.Result));
+        }
 
 
 
 
-		// コメントの送信
+
+        public static async Task<string> GetOfficialVideoNMSGCommentDataAsync(
+            NiconicoContext context,
+            long threadId,
+            long sub_threadId,
+            int userId,
+            string userKey,
+            TimeSpan videoLength
+            )
+        {
+            const string NmsgCommentApiUrl = @"http://nmsg.nicovideo.jp/api.json/";
+
+            var threadKeyResponse = await GetThreadKeyDataAsync(context, threadId)
+                    .ContinueWith(prevTask => ParseThreadKey(prevTask.Result));
+
+            if (threadKeyResponse == null)
+            {
+                throw new Exception("can not get ThreadKey, threadId is " + threadId);
+            }
+
+            var threadKey = threadKeyResponse.ThreadKey;
+            var force184 = threadKeyResponse.Force184.ToBooleanFrom1();
+
+            var parameterJson = NMSG_RequestParamaterBuilder
+                .MakeOfficialVideoCommmentRequest(threadId.ToString(), sub_threadId.ToString(), threadKey, userId, userKey, videoLength, force184);
+
+            var stringContent = new Windows.Web.Http.HttpStringContent(parameterJson);
+
+            return await context.PostAsync(NmsgCommentApiUrl, stringContent);
+        }
 
 
-		public static async Task<string> GetPostKeyAsync(NiconicoContext context, CommentThread thread)
+        public static Task<NMSG_Response> GetOfficialVideoNMSGCommentAsync(
+            NiconicoContext context,
+            long threadId,
+            long sub_threadId,
+            int userId,
+            string userKey,
+            TimeSpan videoLength
+            )
+        {
+            return GetOfficialVideoNMSGCommentDataAsync(context, threadId, sub_threadId, userId, userKey, videoLength)
+                .ContinueWith(prevTask => ParseNMSGResponseJson(prevTask.Result));
+        }
+
+
+
+
+
+        private static NMSG_Response ParseNMSGResponseJson(string json)
+        {
+            var result = JsonConvert.DeserializeObject<List<object>>(json);
+
+            var res = new NMSG_Response();
+
+            foreach (var item in result.Cast<JObject>())
+            {
+                Debug.WriteLine(item.Path);
+                if (item.TryGetValue("thread", out var thread_token))
+                {
+                    if (res.Thread == null)
+                    {
+                        res.Thread = thread_token.ToObject<NGMS_Thread_Response>();
+                    }
+                }
+                else if (item.TryGetValue("global_num_res", out var globalNumRes_token))
+                {
+                    if (res.GlobalNumRes == null)
+                    {
+                        res.GlobalNumRes = globalNumRes_token.ToObject<NGMS_GlobalNumRes>();
+                    }
+                }
+                else if (item.TryGetValue("chat", out var chat_token))
+                {
+//                    var chat = chat_token.ToObject<NMSG_Chat>();
+
+                    res._CommentsSource.Add(chat_token);
+                }
+
+                // pingとleafは不要？
+            }
+
+
+            return res;
+        }
+
+
+
+        #endregion
+
+
+
+
+
+
+        // コメントの送信
+
+
+        public static async Task<string> GetPostKeyAsync(NiconicoContext context, CommentThread thread)
 		{
 			var commmentCount = int.Parse(thread.CommentCount);
 			var paramDict = new Dictionary<string, string>();
@@ -179,6 +302,14 @@ namespace Mntone.Nico2.Videos.Comment
 			return PostCommentDataAsync(context, commentServerUrl, thread, comment, position, commands)
 				.ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));
 		}
+
+
+
+
+
+
+
+
 
 
 

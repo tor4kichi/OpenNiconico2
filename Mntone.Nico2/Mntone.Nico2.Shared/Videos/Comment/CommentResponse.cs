@@ -110,28 +110,13 @@ namespace Mntone.Nico2.Videos.Comment
 			return uint.Parse(Vpos);
 		}
 
-		public IEnumerable<CommandType> GetCommandTypes()
-		{
-			if (Mail == null)
-			{
-				return Enumerable.Empty<CommandType>();
-			}
 
-			return Mail.Split(' ').Select(x =>
-			{
-				CommandType temp;
-				if (Enum.TryParse<CommandType>(x, out temp))
-				{
-					return new Nullable<CommandType>(temp);
-				}
-				else
-				{
-					return new Nullable<CommandType>();
-				}
-			})
-			.Where(x => x.HasValue)
-			.Select(x => x.Value);
-		}
+        public IEnumerable<CommandType> ParseCommandTypes()
+        {
+            return CommandTypesHelper.ParseCommentCommandTypes(this.Mail);
+        }
+
+        
 	}
 
 	[XmlRoot(ElementName = "packet")]

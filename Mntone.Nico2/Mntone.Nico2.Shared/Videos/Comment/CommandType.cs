@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mntone.Nico2.Videos.Comment
@@ -57,5 +58,32 @@ namespace Mntone.Nico2.Videos.Comment
 		is_button,			// 投稿者ボタンのコメント
 		_live				// 新着
 
+    }
+
+
+    public static class CommandTypesHelper
+    {
+        public static IEnumerable<CommandType> ParseCommentCommandTypes(string mail)
+        {
+            if (mail == null)
+            {
+                return Enumerable.Empty<CommandType>();
+            }
+
+            return mail.Split(' ').Select(x =>
+            {
+                CommandType temp;
+                if (Enum.TryParse<CommandType>(x, out temp))
+                {
+                    return new Nullable<CommandType>(temp);
+                }
+                else
+                {
+                    return new Nullable<CommandType>();
+                }
+            })
+            .Where(x => x.HasValue)
+            .Select(x => x.Value);
+        }
     }
 }

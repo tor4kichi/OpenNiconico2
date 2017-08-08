@@ -203,6 +203,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\NMSG_RequestParamater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\NMSG_Response.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\PostCommentResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ThreadKeyResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\ClientInfo.cs" />
