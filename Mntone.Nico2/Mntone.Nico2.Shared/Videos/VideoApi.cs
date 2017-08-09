@@ -213,10 +213,29 @@ namespace Mntone.Nico2.Videos
 
 
 
-		
-		public Task<Comment.PostCommentResponse> PostCommentAsync(string commentServerUrl, Comment.CommentThread thread, string comment, TimeSpan position, string commands)
+
+        public Task<Comment.PostCommentResponse> PostCommentAsync(
+            string commentServerUrl,
+            string threadId,
+            string ticket,
+            int commentCount,
+            string comment, 
+            TimeSpan position, 
+            string commands
+            )
+        {
+            return Comment.CommentClient.PostCommentAsync(_context, commentServerUrl, threadId, ticket, commentCount, comment, position, commands);
+        }
+
+        public Task<Comment.PostCommentResponse> PostCommentAsync(
+            string commentServerUrl, 
+            Comment.CommentThread thread, 
+            string comment, 
+            TimeSpan position, 
+            string commands
+            )
 		{
-			return Comment.CommentClient.PostCommentAsync(_context, commentServerUrl, thread, comment, position, commands);
+			return Comment.CommentClient.PostCommentAsync(_context, commentServerUrl, thread._thread, thread.Ticket, int.Parse(thread.CommentCount)+1, comment, position, commands);
 		}
 
 

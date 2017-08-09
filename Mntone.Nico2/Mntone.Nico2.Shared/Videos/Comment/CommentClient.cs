@@ -203,20 +203,18 @@ namespace Mntone.Nico2.Videos.Comment
 
         // コメントの送信
 
+        public static async Task<string> GetPostKeyAsync(NiconicoContext context, string threadId, int commentCount)
+        {
+            var paramDict = new Dictionary<string, string>();
+            paramDict.Add("version", "1");
+            paramDict.Add("version_sub", "2");
+            paramDict.Add("thread", threadId);
+            paramDict.Add("block_no", ((commentCount) / 100).ToString());
+            paramDict.Add("device", "1");
+            paramDict.Add("yugi", "");
 
-        public static async Task<string> GetPostKeyAsync(NiconicoContext context, CommentThread thread)
-		{
-			var commmentCount = int.Parse(thread.CommentCount);
-			var paramDict = new Dictionary<string, string>();
-			paramDict.Add("version", "1");
-			paramDict.Add("version_sub", "2");
-			paramDict.Add("thread", thread._thread);
-			paramDict.Add("block_no", ((commmentCount + 1) / 100).ToString());
-			paramDict.Add("device", "1");
-			paramDict.Add("yugi", "");
-
-			return await context.GetStringAsync(NiconicoUrls.VideoPostKeyUrl, paramDict);
-		}
+            return await context.GetStringAsync(NiconicoUrls.VideoPostKeyUrl, paramDict);
+        }
 
 
 		static readonly int PostKeyCharCount = "postkey=".Count();
@@ -228,10 +226,19 @@ namespace Mntone.Nico2.Videos.Comment
 		}
 
 
-		public static async Task<string> PostCommentDataAsync(NiconicoContext context, string commentServerUrl, CommentThread thread, string comment, TimeSpan position, string command)
+		public static async Task<string> PostCommentDataAsync(
+            NiconicoContext context, 
+            string commentServerUrl, 
+            string threadId, 
+            string ticket, 
+            int commentCount, 
+            string comment,
+            TimeSpan position, 
+            string command
+            )
 		{
 			// postkeyの取得
-			var postKey = await GetPostKeyAsync(context, thread)
+			var postKey = await GetPostKeyAsync(context, threadId, commentCount)
 				.ContinueWith(prevResult => ParsePostKey(prevResult.Result));
 
 			Debug.WriteLine(postKey);
@@ -244,9 +251,9 @@ namespace Mntone.Nico2.Videos.Comment
 			{
 				user_id = userid.ToString(),
 				mail = command,
-				thread = thread._thread,
+				thread = threadId,
 				vpos = ((uint)position.TotalMilliseconds / 10).ToString(),
-				ticket = thread.Ticket,
+				ticket = ticket,
 				premium = isPremium.ToString1Or0(),
 				postkey = postKey,
 				comment = comment,
@@ -297,9 +304,18 @@ namespace Mntone.Nico2.Videos.Comment
 			return res;
 		}
 
-		public static Task<PostCommentResponse> PostCommentAsync(NiconicoContext context, string commentServerUrl, CommentThread thread, string comment, TimeSpan position, string commands)
+		public static Task<PostCommentResponse> PostCommentAsync(
+            NiconicoContext context,
+            string commentServerUrl,
+            string threadId,
+            string ticket,
+            int commentCount,
+            string comment, 
+            TimeSpan position, 
+            string commands
+            )
 		{
-			return PostCommentDataAsync(context, commentServerUrl, thread, comment, position, commands)
+			return PostCommentDataAsync(context, commentServerUrl, threadId, ticket, commentCount, comment, position, commands)
 				.ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));
 		}
 
