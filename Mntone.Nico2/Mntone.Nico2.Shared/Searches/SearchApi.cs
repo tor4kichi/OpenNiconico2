@@ -36,8 +36,18 @@ namespace Mntone.Nico2.Searches
 		}
 #endif
 
+        public Task<Video.VideoInfoResponse> GetVideoInfoAsync(
+            string videoId
+            )
+        {
+            return Video.VideoSearchClient.GetVideoInfoAsync(
+                this._context
+                , videoId
+                );
+        }
 
-		public Task<Video.VideoListingResponse> VideoSearchWithKeywordAsync(
+
+        public Task<Video.VideoListingResponse> VideoSearchWithKeywordAsync(
 			string keyword
 			, uint from = 0
 			, uint limit = 30

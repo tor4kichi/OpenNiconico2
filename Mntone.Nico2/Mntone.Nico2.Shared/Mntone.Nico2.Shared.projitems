@@ -169,6 +169,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Searches\SearchApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Suggestion\SuggestionClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Searches\Video\VideoInfoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Video\VideoSearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Searches\Video\VideoSearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sort.cs" />

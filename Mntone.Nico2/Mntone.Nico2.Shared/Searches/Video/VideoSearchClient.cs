@@ -7,7 +7,40 @@ namespace Mntone.Nico2.Searches.Video
 {
     public sealed class VideoSearchClient
     {
-		public static async Task<string> GetKeywordSearchDataAsync(
+        #region Video Info
+        public static async Task<string> GetVideoDataAsync(NiconicoContext context, string videoId)
+        {
+            var dict = new Dictionary<string, string>();
+            dict.Add("__format", "json");
+            dict.Add("v", videoId);
+
+            return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_VIDEO_INFO, dict);
+        }
+
+        private static VideoInfoResponse ParseVideoInfoResponseJson(string json)
+        {
+            var responseContainer = JsonSerializerExtensions.Load<VideoInfoResponseContainer>(json);
+
+            return responseContainer.NicovideoVideoResponse;
+        }
+
+
+        public static Task<VideoInfoResponse> GetVideoInfoAsync(
+            NiconicoContext context
+            , string videoId
+            )
+        {
+            return GetVideoDataAsync(context, videoId)
+                .ContinueWith(prevTask => ParseVideoInfoResponseJson(prevTask.Result));
+        }
+
+
+        #endregion
+
+
+
+
+        public static async Task<string> GetKeywordSearchDataAsync(
 			NiconicoContext context
 			, string str
 			, uint from
@@ -71,9 +104,13 @@ namespace Mntone.Nico2.Searches.Video
 			return responseContainer.nicovideo_video_response;
 		}
 
-		
 
-		public static Task<VideoListingResponse> GetKeywordSearchAsync(
+
+
+        
+
+
+        public static Task<VideoListingResponse> GetKeywordSearchAsync(
 			NiconicoContext context
 			, string keyword
 			, uint from

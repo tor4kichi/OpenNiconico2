@@ -18,7 +18,10 @@ namespace Mntone.Nico2.Searches.Video
 
 		[DataMember(Name = "@large_thumbnail")]
 		public string @large_thumbnail { get; private set; }
-	}
+
+        [DataMember(Name = "@adult")]
+        public string Adult { get; set; }
+    }
 
 	[DataContract]
 	public class Video
@@ -28,8 +31,10 @@ namespace Mntone.Nico2.Searches.Video
 
 		public string Id => __id;
 
+        [DataMember(Name = "user_id")]
+        public string UserId { get; set; }
 
-		[DataMember(Name = "deleted")]
+        [DataMember(Name = "deleted")]
 		public string __deleted { get; private set; }
 
 		private bool? _IsDeleted;
@@ -41,7 +46,11 @@ namespace Mntone.Nico2.Searches.Video
 		private string _Title;
 		public string Title => _Title ?? (_Title = __title);
 
-		[DataMember(Name = "length_in_seconds")]
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        [DataMember(Name = "length_in_seconds")]
 		public string __length_in_seconds { get; private set; }
 
 		private TimeSpan? _Length;
@@ -63,7 +72,11 @@ namespace Mntone.Nico2.Searches.Video
 
 		public DateTime FirstRetrieve => __first_retrieve;
 
-		[DataMember(Name = "view_counter")]
+        [DataMember(Name = "default_thread")]
+        public string DefaultThread { get; set; }
+
+
+        [DataMember(Name = "view_counter")]
 		public string __view_counter { get; private set; }
 
 		private uint? _ViewCount;
@@ -124,7 +137,10 @@ namespace Mntone.Nico2.Searches.Video
 
 		[DataMember(Name = "options")]
 		public Options Options { get; private set; }
-	}
+
+        [DataMember(Name = "community_id")]
+        public string CommunityId { get; set; }
+    }
 
 	[DataContract]
 	public class Thread
@@ -143,7 +159,13 @@ namespace Mntone.Nico2.Searches.Video
 		public string summary { get; private set; }
 
 		public string GetDecodedSummary() => summary.DecodeUTF8();
-	}
+
+        [DataMember(Name = "community_id")]
+        public string CommunityId { get; set; }
+
+        [DataMember(Name = "group_type")]
+        public string GroupType { get; set; }
+    }
 
 	[DataContract]
 	public class VideoInfo

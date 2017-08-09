@@ -504,7 +504,9 @@ namespace Mntone.Nico2
 
 
 		public const string NICOVIDEO_CE_NICOAPI_V1_VIDEO = NICOVIDEO_CE_NICOAPI_V1 + "video";
-		public const string NICOVIDEO_CE_NICOAPI_V1_VIDEO_SEARCH = NICOVIDEO_CE_NICOAPI_V1_VIDEO + ".search";
+
+        public const string NICOVIDEO_CE_NICOAPI_V1_VIDEO_INFO = NICOVIDEO_CE_NICOAPI_V1_VIDEO + ".info";
+        public const string NICOVIDEO_CE_NICOAPI_V1_VIDEO_SEARCH = NICOVIDEO_CE_NICOAPI_V1_VIDEO + ".search";
 
 		public const string NICOVIDEO_CE_NICOAPI_V1_TAG = NICOVIDEO_CE_NICOAPI_V1 + "tag";
 		public const string NICOVIDEO_CE_NICOAPI_V1_TAG_SEARCH = NICOVIDEO_CE_NICOAPI_V1_TAG + ".search";
