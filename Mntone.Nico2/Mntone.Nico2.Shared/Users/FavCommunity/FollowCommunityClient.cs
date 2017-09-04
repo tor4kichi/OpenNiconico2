@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Web.Http;
 
 namespace Mntone.Nico2.Users.FollowCommunity
 {
@@ -121,7 +122,12 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			// http://com.nicovideo.jp/motion/id にアクセスして200かを確認
 
 			var url = NiconicoUrls.CommunityJoinPageUrl + communityId;
-			var res = await context.PostAsync(url, withToken:false);
+			var res = await context.GetAsync(url);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                return false;
+            }
 
 			await Task.Delay(1000);
 
@@ -132,11 +138,19 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			dict.Add("comment", comment ?? "");
 			dict.Add("notify", notify ? "1" : "");
 
-			var postResult = await context.PostAsync(url, dict, withToken: false);
+            var content = new HttpFormUrlEncodedContent(dict);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+            request.Headers["Upgrade-Insecure-Requests"] = "1";
+            request.Headers["Referer"] = url;
+            request.Headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
+            request.Content = content;
+            var postResult = await context.HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
 			Debug.WriteLine(postResult);
 
-			return true;
+			return postResult.IsSuccessStatusCode;
 		}
 
 
@@ -207,11 +221,19 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			dict.Add("commit_key", token.CommitKey);
 			dict.Add("commit", token.Commit);
 
-			var res = await context.PostAsync(url, dict, withToken: false);
+            var content = new HttpFormUrlEncodedContent(dict);
 
-			Debug.WriteLine(res);
+            var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+            request.Headers["Upgrade-Insecure-Requests"] = "1";
+            request.Headers["Referer"] = url;
+            request.Headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 
-			return true;
+            request.Content = content;
+            var postResult = await context.HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            Debug.WriteLine(postResult);
+
+            return postResult.IsSuccessStatusCode;
 		}
 
 
