@@ -249,9 +249,15 @@ namespace Mntone.Nico2.Videos
 		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
 		/// <returns></returns>
 		/// <exception cref="ContentZoningException"></exception>
-		public Task<Dmc.DmcWatchResponse> GetDmcWatchResponseAsync(string requestId, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
+		public Task<Dmc.DmcWatchData> GetDmcWatchResponseAsync(string requestId, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
         {
             return Dmc.DmcClient.GetDmcWatchResponseAsync(_context, requestId, harmfulReactType);
+        }
+
+
+        public Task<Dmc.DmcWatchResponse> GetDmcWatchJsonAsync(string requestId, string playlistToken)
+        {
+            return Dmc.DmcClient.GetDmcWatchJsonAsync(_context, requestId, playlistToken);
         }
 
 
@@ -286,6 +292,22 @@ namespace Mntone.Nico2.Videos
             )
         {
             return Dmc.DmcClient.DmcSessionHeartbeatAsync(_context, watch, sessionRes);
+        }
+
+        public Task DmcSessionLeaveAsync(
+            Dmc.DmcWatchResponse watch,
+            Dmc.DmcSessionResponse sessionRes
+            )
+        {
+            return Dmc.DmcClient.DmcSessionLeaveAsync(_context, watch, sessionRes);
+        }
+
+        public Task DmcSessionExttHeartbeatAsync(
+            Dmc.DmcWatchResponse watch,
+            Dmc.DmcSessionResponse sessionRes
+            )
+        {
+            return Dmc.DmcClient.DmcSessionExitHeartbeatAsync(_context, watch, sessionRes);
         }
 
         #region field

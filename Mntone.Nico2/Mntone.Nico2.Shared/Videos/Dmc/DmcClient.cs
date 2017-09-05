@@ -17,6 +17,72 @@ namespace Mntone.Nico2.Videos.Dmc
     {
         #region DmcWatchResponse
 
+        public static async Task<string> GetDmcWatchJsonDataAsync(NiconicoContext context, string requestId, string playlistToken)
+        {
+            if (!NiconicoRegex.IsVideoId(requestId))
+            {
+                //				throw new ArgumentException();
+            }
+
+            var dict = new Dictionary<string, string>();
+            var url = $"{NiconicoUrls.VideoWatchPageUrl}{requestId}";
+
+            dict.Add("mode", "pc_html5");
+            dict.Add("eco", "0");
+            dict.Add("playlist_token", playlistToken);
+            dict.Add("watch_harmful", ((uint)HarmfulContentReactionType.ContinueWithNotMoreConfirm).ToString());
+            dict.Add("continue_watching", "1");
+
+            url += "?" + HttpQueryExtention.DictionaryToQuery(dict);
+
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+
+            requestMessage.Headers.Add("Accept", "*/*");
+
+            try
+            {
+                var res = await context.GetClient().SendRequestAsync(requestMessage);
+
+                if (res.StatusCode == Windows.Web.Http.HttpStatusCode.Forbidden)
+                {
+                    throw new WebException("require payment.");
+                }
+
+                var text = await res.Content.ReadAsStringAsync().AsTask();
+                return text;
+
+            }
+            catch (ContentZoningException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new WebException("access failed watch/" + requestId, e);
+            }
+
+        }
+
+
+        public static DmcWatchResponse ParseDmcWatchJsonData(string htmlString)
+        {
+            var jsonSerializer = new JsonSerializer();
+            jsonSerializer.NullValueHandling = NullValueHandling.Include;
+            jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
+
+            var dmcWatchResponse = jsonSerializer.Deserialize<DmcWatchResponse>(new JsonTextReader(new StringReader(htmlString)));
+            return dmcWatchResponse;
+        }
+
+
+        public static Task<DmcWatchResponse> GetDmcWatchJsonAsync(NiconicoContext context, string requestId, string playlistToken)
+        {
+            return GetDmcWatchJsonDataAsync(context, requestId, playlistToken)
+                .ContinueWith(prevTask => ParseDmcWatchJsonData(prevTask.Result));
+        }
+
+
         public static async Task<string> GetDmcWatchResponseDataAsync(NiconicoContext context, string requestId, HarmfulContentReactionType harmfulReactType)
         {
             if (!NiconicoRegex.IsVideoId(requestId))
@@ -77,7 +143,7 @@ namespace Mntone.Nico2.Videos.Dmc
         }
 
 
-        public static DmcWatchResponse ParseDmcWatchResponseData(string htmlString)
+        public static DmcWatchData ParseDmcWatchResponseData(string htmlString)
         {
             var htmlDocument = new HtmlAgilityPack.HtmlDocument();
             htmlDocument.LoadHtml(htmlString);
@@ -92,15 +158,26 @@ namespace Mntone.Nico2.Videos.Dmc
                 try
                 {
                     var videoInfoNode = htmlDocument.GetElementbyId("js-initial-watch-data");
-                    var rawStr = videoInfoNode.GetAttributeValue("data-api-data", "");
-                    var htmlDecoded = WebUtility.HtmlDecode(rawStr);
+                    var watchDataRawString = videoInfoNode.GetAttributeValue("data-api-data", "");
+                    var htmlDecoded = WebUtility.HtmlDecode(watchDataRawString);
 
                     var jsonSerializer = new JsonSerializer();
                     jsonSerializer.NullValueHandling = NullValueHandling.Include;
                     jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
 
-                    var dmcWatchResponse = jsonSerializer.Deserialize<DmcWatchResponse>(new JsonTextReader(new StringReader(htmlDecoded)));
-                    return dmcWatchResponse;
+                    DmcWatchResponse dmcWatchResponse = jsonSerializer.Deserialize<DmcWatchResponse>(new JsonTextReader(new StringReader(htmlDecoded)));
+
+                    var environmentRawString = videoInfoNode.GetAttributeValue("data-environment", "");
+                    var environmentHtmlDecoded = WebUtility.HtmlDecode(environmentRawString);
+
+                    DmcWatchEnvironment dmcWatchEnvironment = jsonSerializer.Deserialize<DmcWatchEnvironment>(new JsonTextReader(new StringReader(environmentHtmlDecoded)));
+
+
+                    return new DmcWatchData()
+                    {
+                         DmcWatchResponse = dmcWatchResponse,
+                         DmcWatchEnvironment = dmcWatchEnvironment
+                    };
                 }
                 catch
                 {
@@ -194,13 +271,16 @@ namespace Mntone.Nico2.Videos.Dmc
                         };
                     }
 
-                    return dmcWatchResponse;
+                    return new DmcWatchData()
+                    {
+                        DmcWatchResponse = dmcWatchResponse
+                    };
                 }
             }
         }
 
 
-        public static Task<DmcWatchResponse> GetDmcWatchResponseAsync(NiconicoContext context, string requestId, HarmfulContentReactionType harmfulReactType)
+        public static Task<DmcWatchData> GetDmcWatchResponseAsync(NiconicoContext context, string requestId, HarmfulContentReactionType harmfulReactType)
         {
             return GetDmcWatchResponseDataAsync(context, requestId, harmfulReactType)
                 .ContinueWith(prevTask => ParseDmcWatchResponseData(prevTask.Result));
@@ -363,12 +443,11 @@ namespace Mntone.Nico2.Videos.Dmc
             var session = watch.Video.DmcInfo.SessionApi;
             var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=PUT";
 
-            var client = new HttpClient(new HttpBaseProtocolFilter() { });
-            client.DefaultRequestHeaders.Add("Access-Control-Request-Method", "POST");
-            client.DefaultRequestHeaders.Add("Access-Control-Request-Headers", "content-type");
-            client.DefaultRequestHeaders.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
-            var message = new HttpRequestMessage(new HttpMethod("OPTIONS"), new Uri(sessionUrl));
-            var result = await client.SendRequestAsync(message);
+            var message = new HttpRequestMessage(HttpMethod.Options, new Uri(sessionUrl));
+            message.Headers.Add("Access-Control-Request-Method", "POST");
+            message.Headers.Add("Access-Control-Request-Headers", "content-type");
+            message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
+            var result = await context.GetClient().SendRequestAsync(message, HttpCompletionOption.ResponseHeadersRead);
             if (!result.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine(result.ToString());
@@ -384,20 +463,69 @@ namespace Mntone.Nico2.Videos.Dmc
             var session = watch.Video.DmcInfo.SessionApi;
             var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=PUT";
 
+            var message = new HttpRequestMessage(HttpMethod.Post, new Uri(sessionUrl));
+
+            message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
+            message.Headers.Add("Origin", "http://www.nicovideo.jp");
+            message.Headers.Add("Referer", "http://www.nicovideo.jp/watch/" + watch.Video.Id);
+            message.Headers.Add("Accept", "application/json");
+
+            var requestJson = JsonConvert.SerializeObject(sessionRes.Data, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            message.Content = new HttpStringContent(requestJson, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
+
+            var result = await context.GetClient().SendRequestAsync(message, HttpCompletionOption.ResponseHeadersRead);
+            if (!result.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine(result.ToString());
+            }
+        }
+
+        public static async Task DmcSessionLeaveAsync(
+            NiconicoContext context,
+            DmcWatchResponse watch,
+            DmcSessionResponse sessionRes
+            )
+        {
+            var session = watch.Video.DmcInfo.SessionApi;
+            var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=DELETE";
+
+            var message = new HttpRequestMessage(HttpMethod.Options, new Uri(sessionUrl));
+            message.Headers.Add("Access-Control-Request-Method", "POST");
+            message.Headers.Add("Access-Control-Request-Headers", "content-type");
+            message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
+            var result = await context.GetClient().SendRequestAsync(message, HttpCompletionOption.ResponseHeadersRead);
+            if (!result.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine(result.ToString());
+            }
+        }
+
+        public static async Task DmcSessionExitHeartbeatAsync(
+            NiconicoContext context,
+            DmcWatchResponse watch,
+            DmcSessionResponse sessionRes
+            )
+        {
+            var session = watch.Video.DmcInfo.SessionApi;
+            var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=DELETE";
+
+            var message = new HttpRequestMessage(HttpMethod.Post, new Uri(sessionUrl));
+            message.Headers.Add("Access-Control-Request-Method", "POST");
+            message.Headers.Add("Access-Control-Request-Headers", "content-type");
+            message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
+            message.Headers.Add("Accept", "application/json");
+
             var requestJson = JsonConvert.SerializeObject(sessionRes.Data, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore
             });
 
-            //            var decodedJson = WebUtility.HtmlEncode(requestJson);
-            var decodedJson = requestJson;
-            var client = new HttpClient(new HttpBaseProtocolFilter() { });
-            client.DefaultRequestHeaders.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
-            client.DefaultRequestHeaders.Add("Origin", "http://www.nicovideo.jp");
-            client.DefaultRequestHeaders.Add("Referer", "http://www.nicovideo.jp/watch/" + watch.Video.Id);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            message.Content = new HttpStringContent(requestJson, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
 
-            var result = await client.PostAsync(new Uri(sessionUrl), new HttpStringContent(decodedJson, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+            var result = await context.GetClient().SendRequestAsync(message, HttpCompletionOption.ResponseHeadersRead);
             if (!result.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine(result.ToString());

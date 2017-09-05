@@ -6,6 +6,17 @@ using System.Xml.Linq;
 
 namespace Mntone.Nico2.Videos.Dmc
 {
+    public class DmcWatchData
+    {
+        public DmcWatchResponse DmcWatchResponse { get; set; }
+
+        public DmcWatchEnvironment DmcWatchEnvironment { get; set; }
+    }
+
+
+
+    #region Initial Watch Data
+
     [DataContract]
     public class DmcVideo
     {
@@ -876,8 +887,10 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "video")]
         public Video Video { get; set; }
 
+        /*
         [DataMember(Name = "player")]
         public Player Player { get; set; }
+        */
 
         [DataMember(Name = "thread")]
         public Thread Thread { get; set; }
@@ -916,5 +929,166 @@ namespace Mntone.Nico2.Videos.Dmc
         public LiveTopics LiveTopics { get; set; }
     }
 
+
+    #endregion
+
+
+    #region Data Environment
+
+    [DataContract]
+    public class Updated
+    {
+
+        [DataMember(Name = "timestampS")]
+        public int TimestampS { get; set; }
+
+        [DataMember(Name = "isNew")]
+        public bool IsNew { get; set; }
+    }
+
+    [DataContract]
+    public class BaseURL
+    {
+
+        [DataMember(Name = "web")]
+        public string Web { get; set; }
+
+        [DataMember(Name = "res")]
+        public string Res { get; set; }
+
+        [DataMember(Name = "dic")]
+        public string Dic { get; set; }
+
+        [DataMember(Name = "flapi")]
+        public string Flapi { get; set; }
+
+        [DataMember(Name = "riapi")]
+        public string Riapi { get; set; }
+
+        [DataMember(Name = "live")]
+        public string Live { get; set; }
+
+        [DataMember(Name = "com")]
+        public string Com { get; set; }
+
+        [DataMember(Name = "ch")]
+        public string Ch { get; set; }
+
+        [DataMember(Name = "secureCh")]
+        public string SecureCh { get; set; }
+
+        [DataMember(Name = "commons")]
+        public string Commons { get; set; }
+
+        [DataMember(Name = "commonsAPI")]
+        public string CommonsAPI { get; set; }
+
+        [DataMember(Name = "embed")]
+        public string Embed { get; set; }
+
+        [DataMember(Name = "ext")]
+        public string Ext { get; set; }
+
+        [DataMember(Name = "nicoMs")]
+        public string NicoMs { get; set; }
+
+        [DataMember(Name = "ichiba")]
+        public string Ichiba { get; set; }
+
+        [DataMember(Name = "uadAPI")]
+        public string UadAPI { get; set; }
+
+        [DataMember(Name = "ads")]
+        public string Ads { get; set; }
+
+        [DataMember(Name = "account")]
+        public string Account { get; set; }
+
+        [DataMember(Name = "secure")]
+        public string Secure { get; set; }
+
+        [DataMember(Name = "ex")]
+        public string Ex { get; set; }
+
+        [DataMember(Name = "qa")]
+        public string Qa { get; set; }
+
+        [DataMember(Name = "publicAPI")]
+        public string PublicAPI { get; set; }
+
+        [DataMember(Name = "uad")]
+        public string Uad { get; set; }
+
+        [DataMember(Name = "app")]
+        public string App { get; set; }
+
+        [DataMember(Name = "appClientAPI")]
+        public string AppClientAPI { get; set; }
+
+        [DataMember(Name = "point")]
+        public string Point { get; set; }
+
+        [DataMember(Name = "enquete")]
+        public string Enquete { get; set; }
+
+        [DataMember(Name = "notification")]
+        public string Notification { get; set; }
+
+        [DataMember(Name = "upload")]
+        public string Upload { get; set; }
+
+        [DataMember(Name = "sugoiSearchSystem")]
+        public string SugoiSearchSystem { get; set; }
+    }
+
+    [DataContract]
+    public class I18n
+    {
+
+        [DataMember(Name = "language")]
+        public string Language { get; set; }
+
+        [DataMember(Name = "locale")]
+        public string Locale { get; set; }
+
+        [DataMember(Name = "area")]
+        public string Area { get; set; }
+
+        [DataMember(Name = "footer")]
+        public object Footer { get; set; }
+    }
+
+    [DataContract]
+    public class Urls
+    {
+
+        [DataMember(Name = "playerHelp")]
+        public string PlayerHelp { get; set; }
+    }
+
+    [DataContract]
+    public class DmcWatchEnvironment
+    {
+
+        [DataMember(Name = "updated")]
+        public Updated Updated { get; set; }
+
+        [DataMember(Name = "baseURL")]
+        public BaseURL BaseURL { get; set; }
+
+        [DataMember(Name = "playlistToken")]
+        public string PlaylistToken { get; set; }
+
+        [DataMember(Name = "i18n")]
+        public I18n I18n { get; set; }
+
+        [DataMember(Name = "urls")]
+        public Urls Urls { get; set; }
+
+        [DataMember(Name = "isMonitoringLogUser")]
+        public bool IsMonitoringLogUser { get; set; }
+    }
+
+    #endregion
 
 }
