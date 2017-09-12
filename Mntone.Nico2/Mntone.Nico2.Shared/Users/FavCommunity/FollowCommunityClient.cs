@@ -73,11 +73,11 @@ namespace Mntone.Nico2.Users.FollowCommunity
 					var countElemItems = sectionClassElem.Element("ul").Elements("li");
 
 					var videoCountText = countElemItems.ElementAt(0).InnerText.Split(':').Last();
-					var videoCount = int.Parse(videoCountText);
+					var videoCount = int.Parse(videoCountText.Replace(",", ""));
 					favCommunity.VideoCount = videoCount;
 
 					var memberCountText = countElemItems.ElementAt(1).InnerText.Split(':').Last();
-					var memberCount = int.Parse(memberCountText);
+					var memberCount = int.Parse(memberCountText.Replace(",", ""));
 					favCommunity.MemberCount = memberCount;
 
 					var descElem = sectionClassElem.Element("p");
