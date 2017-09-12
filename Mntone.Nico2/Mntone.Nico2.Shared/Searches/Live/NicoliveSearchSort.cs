@@ -9,4 +9,12 @@ namespace Mntone.Nico2.Searches.Live
 		Recent,
 		Comment,
     }
+
+
+    public enum NicoliveOnAirSearchSort
+    {
+        Start_Time,
+        View_Counter,
+        Comment_Num,
+    }
 }

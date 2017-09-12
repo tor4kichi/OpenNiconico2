@@ -302,7 +302,7 @@ namespace Mntone.Nico2.Videos
             return Dmc.DmcClient.DmcSessionLeaveAsync(_context, watch, sessionRes);
         }
 
-        public Task DmcSessionExttHeartbeatAsync(
+        public Task DmcSessionExitHeartbeatAsync(
             Dmc.DmcWatchResponse watch,
             Dmc.DmcSessionResponse sessionRes
             )

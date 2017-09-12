@@ -943,7 +943,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public int TimestampS { get; set; }
 
         [DataMember(Name = "isNew")]
-        public bool IsNew { get; set; }
+        public bool? IsNew { get; set; }
     }
 
     [DataContract]
