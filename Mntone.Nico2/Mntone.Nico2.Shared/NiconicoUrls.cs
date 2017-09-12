@@ -451,7 +451,13 @@ namespace Mntone.Nico2
 		}
 
 
-		public static string MylistUrlBase    = VideoApiUrlBase + "mylist/";
+        public static string MakeMylistAddVideoTokenApiUrl(string videoId)
+        {
+            return $"{VideoUrlBase}mylist_add/video/{videoId}";
+        }
+
+
+        public static string MylistUrlBase    = VideoApiUrlBase + "mylist/";
 
 		public static string MylistListUrl    = MylistUrlBase + "list";
 		public static string MylistAddUrl     = MylistUrlBase + "add";

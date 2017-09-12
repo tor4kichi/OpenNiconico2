@@ -19,16 +19,23 @@ namespace Mntone.Nico2.Users.MylistItem
 			return context.PostAsync(NiconicoUrls.MylistListUrl, dict);
 		}
 
-		public static Task<string> AddMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
+		public static async Task<string> AddMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
 			var dict = new Dictionary<string, string>();
 
-			dict.Add(nameof(group_id), group_id);
-			dict.Add(nameof(item_type), ((uint)item_type).ToString());
-			dict.Add(nameof(item_id), item_id);
-			dict.Add(nameof(description), description);
+            var mylistToken = await context.GetMylistToken(group_id, item_id);
 
-			return context.PostAsync(NiconicoUrls.MylistAddUrl, dict);
+            dict.Add(nameof(group_id), group_id);
+			dict.Add(nameof(item_type), ((uint)item_type).ToString());
+			dict.Add(nameof(item_id), mylistToken.ItemId);
+            if (mylistToken.Values.ContainsKey("item_amc"))
+            {
+                dict.Add("item_amc", mylistToken.ItemAmc);
+            }
+            dict.Add(nameof(description), description);
+            dict.Add("token", mylistToken.Token);
+
+			return await context.PostAsync(NiconicoUrls.MylistAddUrl, dict, withToken:false);
 		}
 
 		public static Task<string> UpdateMylistItemDataAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)

@@ -17,22 +17,20 @@ namespace Mntone.Nico2.Users.Deflist
 		}
 
 
-		public static Task<string> AddDeflistDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id, string description)
+		public static async Task<string> AddDeflistDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id, string description)
 		{
 			var dict = new Dictionary<string, string>();
 
-			dict.Add(nameof(item_id), item_id);
+            var group_id = "default";
+            var mylistToken = await context.GetMylistToken(group_id, item_id);
 
-			if (item_type != NiconicoItemType.Video)
-			{
-				dict.Add(nameof(item_type), ((uint)item_type).ToString());
-			}
-			if (!string.IsNullOrWhiteSpace(description))
-			{
-				dict.Add(nameof(description), description);
-			}
+            dict.Add(nameof(group_id), group_id);
+            dict.Add(nameof(item_type), ((uint)item_type).ToString());
+            dict.Add(nameof(item_id), mylistToken.ItemId);
+            dict.Add(nameof(description), description);
+            dict.Add("token", mylistToken.Token);
 
-			return context.PostAsync(NiconicoUrls.MylistDeflistAddUrl, dict);
+            return await context.PostAsync(NiconicoUrls.MylistDeflistAddUrl, dict, withToken: false);
 		}
 
 
