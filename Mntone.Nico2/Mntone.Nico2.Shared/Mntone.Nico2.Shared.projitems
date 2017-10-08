@@ -153,6 +153,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoSession.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoSignInStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoUrls.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\LoginUserNicoRepo\LoginUserNicoRepoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoTimelineType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\UserNicoRepo\UserNicoRepoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParseException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Prefecture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrivateReasonType.cs" />

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 /* 
     Licensed under the Apache License, Version 2.0
     

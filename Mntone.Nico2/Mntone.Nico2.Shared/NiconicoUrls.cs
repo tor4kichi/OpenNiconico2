@@ -31,9 +31,9 @@ namespace Mntone.Nico2
 
 		#region Videos
 
-		private const string VideoUrlBase = "http://www" + DomainBase;
-		private const string VideoApiUrlBase = VideoUrlBase + "api/";
-		private const string VideoFlapiUrlBase = "http://flapi" + DomainBase + "api/";
+		internal const string VideoUrlBase = "http://www" + DomainBase;
+        internal const string VideoApiUrlBase = VideoUrlBase + "api/";
+        internal const string VideoFlapiUrlBase = "http://flapi" + DomainBase + "api/";
 
 		/// <summary>
 		/// ニコニコ動画 トップ ページ URL テキスト

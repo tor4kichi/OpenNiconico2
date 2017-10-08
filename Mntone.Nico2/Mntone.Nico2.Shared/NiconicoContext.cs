@@ -320,6 +320,15 @@ namespace Mntone.Nico2
 		private Mylist.MylistApi _Mylist = null;
 
 
+        /// <summary>
+		/// ニコニコ マイリスト API 郡
+		/// </summary>
+		public NicoRepo.NicoRepoApi NicoRepo
+        {
+            get { return this._NicoRepo ?? (this._NicoRepo = new Nico2.NicoRepo.NicoRepoApi(this)); }
+        }
+        private NicoRepo.NicoRepoApi _NicoRepo = null;
+
 
         /// <summary>
 		/// ニコニコ 組み込み系 API 郡
