@@ -58,7 +58,7 @@ namespace Mntone.Nico2.Searches.Video
 			dict.Add(nameof(limit), limit.ToString());
 			if (order.HasValue)
 			{
-				dict.Add(nameof(order), order.Value.ToShortString());
+				dict.Add(nameof(order), order.Value == Order.Ascending ? "a" : "d");
 			}
 			if (sort.HasValue)
 			{
@@ -86,9 +86,9 @@ namespace Mntone.Nico2.Searches.Video
 			dict.Add(nameof(limit), limit.ToString());
 			if (order.HasValue)
 			{
-				dict.Add(nameof(order), order.Value.ToShortString());
-			}
-			if (sort.HasValue)
+                dict.Add(nameof(order), order.Value == Order.Ascending ? "a" : "d");
+            }
+            if (sort.HasValue)
 			{
 				dict.Add(nameof(sort), sort.Value.ToShortString());
 			}

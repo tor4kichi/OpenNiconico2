@@ -25,7 +25,7 @@ namespace Mntone.Nico2.Searches.Mylist
 			dict.Add(nameof(limit), limit.ToString());
 			if (order.HasValue)
 			{
-				dict.Add(nameof(order), order.Value.ToShortString());
+				dict.Add(nameof(order), order.Value.ToChar().ToString());
 			}
 
 			if (sort.HasValue)

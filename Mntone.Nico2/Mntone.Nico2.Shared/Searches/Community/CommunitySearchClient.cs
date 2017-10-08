@@ -24,7 +24,7 @@ namespace Mntone.Nico2.Searches.Community
 			dict.Add("__format", "json");
 
 			dict.Add(nameof(page), page.ToString());
-			dict.Add(nameof(order), order.ToShortString());
+			dict.Add(nameof(order), order.ToChar().ToString());
 			dict.Add(nameof(sort), sort.ToShortString());
 			dict.Add(nameof(mode), mode.ToShortString());
 
