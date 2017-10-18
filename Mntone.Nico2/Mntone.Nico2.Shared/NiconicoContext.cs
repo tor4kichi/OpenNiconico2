@@ -93,13 +93,30 @@ namespace Mntone.Nico2
 			return this.GetClient()
 				.PostAsync( new Uri(NiconicoUrls.LogOnUrl), new HttpFormUrlEncodedContent(request))
 				.AsTask()
-				.ContinueWith( prevTask => this.GetIsSignedInOnInternalAsync() )
+				.ContinueWith( prevTask => 
+                {
+                    if (prevTask.IsCompleted && !prevTask.IsFaulted)
+                    {
+                        const string TwoFactorAuthSite = @"https://account.nicovideo.jp/mfa";
+
+                        if (prevTask.Result.RequestMessage.RequestUri.OriginalString.StartsWith(TwoFactorAuthSite))
+                        {
+                            LastRedirectHttpRequestMessage = prevTask.Result.RequestMessage;
+                            return Task.FromResult(NiconicoSignInStatus.TwoFactorAuthRequired);
+                        }
+                    }
+
+                    return this.GetIsSignedInOnInternalAsync();
+                } )
 				.Unwrap()
 #if WINDOWS_APP
 				.AsAsyncOperation()
 #endif
 ;
 		}
+
+        public HttpRequestMessage LastRedirectHttpRequestMessage { get; private set; }
+
 
 		/// <summary>
 		/// 非同期操作としてログイン確認のための要求を送信します。

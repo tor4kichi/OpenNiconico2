@@ -6,6 +6,11 @@ namespace Mntone.Nico2
 	/// </summary>
 	public enum NiconicoSignInStatus
 	{
+        /// <summary>
+        /// 二段階認証によるコード認証が必要
+        /// </summary>
+        TwoFactorAuthRequired = -3,
+
 		/// <summary>
 		/// サービス停止中
 		/// </summary>

@@ -23,22 +23,31 @@ namespace Mntone.Nico2
 
 		private const string AuthenticationBase = "https://secure" + DomainBase + "secure/";
 
-		internal static string LogOnUrl { get { return AuthenticationBase + "login?site=niconico"; } }
-		internal static string LogOffUrl { get { return AuthenticationBase + "logout"; } }
-
-		#endregion
+        internal static string LogOnUrl { get { return AuthenticationBase + "login?site=niconico"; } }
+        internal static string LogOffUrl { get { return AuthenticationBase + "logout"; } }
 
 
-		#region Videos
+        internal static readonly string MultiFactorAuthenticationPageBase = $"https://account{DomainBase}";
+        internal static readonly string MultiFactorAuthenticationPage = $"{MultiFactorAuthenticationPageBase}mfa";
+        internal static readonly string BackupCodeMultiFactorAuthenticationPage = $"{MultiFactorAuthenticationPage}/backup_code";
 
-		internal const string VideoUrlBase = "http://www" + DomainBase;
+        #endregion
+
+
+        #region Videos
+
+        internal const string VideoUrlBase = "http://www" + DomainBase;
         internal const string VideoApiUrlBase = VideoUrlBase + "api/";
         internal const string VideoFlapiUrlBase = "http://flapi" + DomainBase + "api/";
 
-		/// <summary>
-		/// ニコニコ動画 トップ ページ URL テキスト
-		/// </summary>
-		public static string VideoTopPageUrl { get { return VideoUrlBase + "my/top"; } }
+
+        public static string VideoLoginUrl = VideoUrlBase + "login";
+
+
+        /// <summary>
+        /// ニコニコ動画 トップ ページ URL テキスト
+        /// </summary>
+        public static string VideoTopPageUrl { get { return VideoUrlBase + "my/top"; } }
 
 		/// <summary>
 		/// ニコニコ動画 マイ ページ URL テキスト
