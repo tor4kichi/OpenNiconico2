@@ -60,29 +60,31 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient != null )
 			{
-				if (ApiInformation.IsMethodPresent("Windows.Web.Http.Filters.HttpBaseProtocolFilter", "ClearAuthenticationCache"))
-				{
-					// Call the method here
-					ProtocolFilter.ClearAuthenticationCache();
-				}
-				
-				
-
 				this.HttpClient.Dispose();
 				this.HttpClient = null;
 			}
 		}
 
 
-		/// <summary>
-		/// 非同期操作としてログイン要求を送信します。
-		/// ログイン完了後、ログインが正常にできているかをチェックし、その状態をセッションに記録します。
-		/// </summary>
-		/// <returns>非同期操作を表すオブジェクト</returns>
+        
+        public void ClearAuthenticationCache()
+        {
+            if (ApiInformation.IsMethodPresent("Windows.Web.Http.Filters.HttpBaseProtocolFilter", "ClearAuthenticationCache"))
+            {
+                // Call the method here
+                ProtocolFilter?.ClearAuthenticationCache();
+            }
+        }
+
+        /// <summary>
+        /// 非同期操作としてログイン要求を送信します。
+        /// ログイン完了後、ログインが正常にできているかをチェックし、その状態をセッションに記録します。
+        /// </summary>
+        /// <returns>非同期操作を表すオブジェクト</returns>
 #if WINDOWS_APP
 		public IAsyncOperation<NiconicoSignInStatus> SignInAsync()
 #else
-		public Task<NiconicoSignInStatus> SignInAsync()
+        public async Task<NiconicoSignInStatus> SignInAsync()
 #endif
 		{
 			var request = new Dictionary<string, string>();
@@ -90,8 +92,8 @@ namespace Mntone.Nico2
 			request.Add( MailTelName, this.AuthenticationToken.MailOrTelephone );
 			request.Add( PasswordName, this.AuthenticationToken.Password );
 
-			return this.GetClient()
-				.PostAsync( new Uri(NiconicoUrls.LogOnUrl), new HttpFormUrlEncodedContent(request))
+			return await this.GetClient()
+				.PostAsync( new Uri(NiconicoUrls.LogOnApiUrl), new HttpFormUrlEncodedContent(request))
 				.AsTask()
 				.ContinueWith( prevTask => 
                 {
@@ -102,6 +104,7 @@ namespace Mntone.Nico2
                         if (prevTask.Result.RequestMessage.RequestUri.OriginalString.StartsWith(TwoFactorAuthSite))
                         {
                             LastRedirectHttpRequestMessage = prevTask.Result.RequestMessage;
+                            LastRedirectHttpContent = prevTask.Result.Content;
                             return Task.FromResult(NiconicoSignInStatus.TwoFactorAuthRequired);
                         }
                     }
@@ -115,6 +118,7 @@ namespace Mntone.Nico2
 ;
 		}
 
+        public IHttpContent LastRedirectHttpContent { get; private set; }
         public HttpRequestMessage LastRedirectHttpRequestMessage { get; private set; }
 
 

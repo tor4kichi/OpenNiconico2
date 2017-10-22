@@ -27,6 +27,11 @@ namespace Mntone.Nico2
         internal static string LogOffUrl { get { return AuthenticationBase + "logout"; } }
 
 
+        internal static readonly string AccountApiBase = $"https://account{DomainBase}api/";
+        internal static readonly string AccountApiV1 = $"{AccountApiBase}v1/";
+        internal static readonly string LogOnApiUrl = $"{AccountApiV1}login";
+
+
         internal static readonly string MultiFactorAuthenticationPageBase = $"https://account{DomainBase}";
         internal static readonly string MultiFactorAuthenticationPage = $"{MultiFactorAuthenticationPageBase}mfa";
         internal static readonly string BackupCodeMultiFactorAuthenticationPage = $"{MultiFactorAuthenticationPage}/backup_code";
