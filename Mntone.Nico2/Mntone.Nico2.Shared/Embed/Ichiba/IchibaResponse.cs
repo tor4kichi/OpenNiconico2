@@ -66,8 +66,12 @@ namespace Mntone.Nico2.Embed.Ichiba
 
             foreach (var itemNode in ichiba_mainitemList)
             {
-                var item = IchibaItemFromXmlNode(itemNode);
-                items.Add(item);
+                try
+                {
+                    var item = IchibaItemFromXmlNode(itemNode);
+                    items.Add(item);
+                }
+                catch { }
             }
 
             return items;
@@ -88,8 +92,11 @@ namespace Mntone.Nico2.Embed.Ichiba
                     .GetElementByTagName("a")
                     .GetElementByTagName("img");
 
-                var url = img.GetAttributeValue("src", "");
-                resultItem.ThumbnailUrl = new Uri(url);
+                var url = img?.GetAttributeValue("src", "");
+                if (url != null)
+                {
+                    resultItem.ThumbnailUrl = new Uri(url);
+                }
             }
 
             // amazonLink + Title

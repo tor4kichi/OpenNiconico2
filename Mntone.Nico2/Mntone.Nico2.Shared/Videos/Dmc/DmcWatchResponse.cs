@@ -854,7 +854,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public object Nicos { get; set; }
 
         [DataMember(Name = "community")]
-        public object Community { get; set; }
+        public string Community { get; set; }
     }
 
     [DataContract]
