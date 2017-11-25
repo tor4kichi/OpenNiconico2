@@ -17,10 +17,16 @@ namespace Mntone.Nico2.Users.FollowCommunity
 
 		#region Follow Community Listing
 
-		public static Task<string> GetMyPageCommunityHtmlAsync(NiconicoContext context)
+		public static Task<string> GetMyPageCommunityHtmlAsync(NiconicoContext context, int page)
 		{
-			return context.GetClient()
-				.GetConvertedStringAsync(NiconicoUrls.UserFavCommunityPageUrl);
+            var url = NiconicoUrls.UserFavCommunityPageUrl;
+            if (page > 0)
+            {
+                url += "?page=" + (page + 1).ToString();
+            }
+
+            return context.GetClient()
+				.GetConvertedStringAsync(url);
 		}
 
 
@@ -95,9 +101,9 @@ namespace Mntone.Nico2.Users.FollowCommunity
 
 		#endregion
 
-		public static Task<FollowCommunityResponse> GetFollowCommunityAsync(NiconicoContext context)
+		public static Task<FollowCommunityResponse> GetFollowCommunityAsync(NiconicoContext context, int page)
 		{
-			return GetMyPageCommunityHtmlAsync(context)
+			return GetMyPageCommunityHtmlAsync(context, page)
 				.ContinueWith(prevTask => PerseFollowCommunityPageHtml(prevTask.Result));
 		}
 		

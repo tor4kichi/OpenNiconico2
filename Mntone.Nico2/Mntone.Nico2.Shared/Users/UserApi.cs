@@ -520,9 +520,9 @@ namespace Mntone.Nico2.Users
 		/// HTMLを解析してお気に入りコミュニティを取得します
 		/// </summary>
 		/// <returns></returns>
-		public Task<FollowCommunity.FollowCommunityResponse> GetFollowCommunityAsync()
+		public Task<FollowCommunity.FollowCommunityResponse> GetFollowCommunityAsync(int page)
 		{
-			return FollowCommunity.FollowCommunityClient.GetFollowCommunityAsync(_context);
+			return FollowCommunity.FollowCommunityClient.GetFollowCommunityAsync(_context, page);
 		}
 
 
