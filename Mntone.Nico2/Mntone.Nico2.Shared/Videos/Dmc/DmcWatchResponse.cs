@@ -312,10 +312,10 @@ namespace Mntone.Nico2.Videos.Dmc
         public object OriginalPostedDateTime { get; set; }
 
         [DataMember(Name = "width")]
-        public int Width { get; set; }
+        public int? Width { get; set; }
 
         [DataMember(Name = "height")]
-        public int Height { get; set; }
+        public int? Height { get; set; }
 
         [DataMember(Name = "duration")]
         public int Duration { get; set; }
@@ -552,28 +552,28 @@ namespace Mntone.Nico2.Videos.Dmc
         public string Nickname { get; set; }
 
         [DataMember(Name = "prefecture")]
-        public int Prefecture { get; set; }
+        public int? Prefecture { get; set; }
 
         [DataMember(Name = "sex")]
-        public int Sex { get; set; }
+        public int? Sex { get; set; }
 
         [DataMember(Name = "age")]
-        public int Age { get; set; }
+        public int? Age { get; set; }
 
         [DataMember(Name = "isPremium")]
         public bool IsPremium { get; set; }
 
         [DataMember(Name = "isPrivileged")]
-        public bool IsPrivileged { get; set; }
+        public bool? IsPrivileged { get; set; }
 
         [DataMember(Name = "isPostLocked")]
-        public bool IsPostLocked { get; set; }
+        public bool? IsPostLocked { get; set; }
 
         [DataMember(Name = "isHtrzm")]
-        public bool IsHtrzm { get; set; }
+        public bool? IsHtrzm { get; set; }
 
         [DataMember(Name = "isTwitterConnection")]
-        public bool IsTwitterConnection { get; set; }
+        public bool? IsTwitterConnection { get; set; }
     }
 
     [DataContract]
@@ -593,7 +593,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public string FavoriteToken { get; set; }
 
         [DataMember(Name = "favoriteTokenTime")]
-        public int FavoriteTokenTime { get; set; }
+        public int? FavoriteTokenTime { get; set; }
 
         [DataMember(Name = "isFavorited")]
         public bool IsFavorited { get; set; }
@@ -940,7 +940,7 @@ namespace Mntone.Nico2.Videos.Dmc
     {
 
         [DataMember(Name = "timestampS")]
-        public int TimestampS { get; set; }
+        public int? TimestampS { get; set; }
 
         [DataMember(Name = "isNew")]
         public bool? IsNew { get; set; }
@@ -1086,7 +1086,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public Urls Urls { get; set; }
 
         [DataMember(Name = "isMonitoringLogUser")]
-        public bool IsMonitoringLogUser { get; set; }
+        public bool? IsMonitoringLogUser { get; set; }
     }
 
     #endregion

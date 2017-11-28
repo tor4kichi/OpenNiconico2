@@ -181,6 +181,11 @@ namespace Mntone.Nico2.Videos.Dmc
                 catch
                 {
                     var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
+                    if (videoInfoNode == null)
+                    {
+                        return null;
+                    }
+
                     var rawStr = videoInfoNode.InnerText;
                     var htmlDecoded = WebUtility.HtmlDecode(rawStr);
 
