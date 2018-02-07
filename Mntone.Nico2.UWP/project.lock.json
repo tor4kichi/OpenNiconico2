@@ -22366,7 +22366,8 @@
     "UAP,Version=v10.0.10240": []
   },
   "packageFolders": {
-    "C:\\Users\\tor4k\\.nuget\\packages\\": {}
+    "C:\\Users\\tor4k\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {}
   },
   "project": {
     "restore": {
@@ -22377,9 +22378,13 @@
       "packagesPath": "C:\\Users\\tor4k\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\tor4k\\Documents\\Repo\\OpenNiconico2\\Mntone.Nico2.UWP\\obj\\",
       "projectStyle": "ProjectJson",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\"
+      ],
       "configFilePaths": [
         "C:\\Users\\tor4k\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -22388,9 +22393,9 @@
       }
     },
     "dependencies": {
-      "HtmlAgilityPack.NetCore": "1.5.0.1",
-      "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-      "Newtonsoft.Json": "9.0.1"
+      "HtmlAgilityPack.NetCore": "[1.5.0.1, )",
+      "Microsoft.NETCore.UniversalWindowsPlatform": "[5.2.2, )",
+      "Newtonsoft.Json": "[9.0.1, )"
     },
     "frameworks": {
       "uap10.0.10240": {}

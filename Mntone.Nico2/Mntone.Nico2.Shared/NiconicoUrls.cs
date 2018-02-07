@@ -215,7 +215,7 @@ namespace Mntone.Nico2
 
 		private const string SearchApiUrlBase = "http://api.search" + DomainBase + "api/";
 
-		internal static string SearchSuggestionUrl { get { return "http://search" + DomainBase + "suggestion/complete/"; } }
+		internal static string SearchSuggestionUrl { get { return "http://sug.search.nicovideo.jp/suggestion/expand/"; } }
 
 		#endregion
 

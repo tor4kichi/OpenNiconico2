@@ -23,6 +23,32 @@ namespace Mntone.Nico2.Live.Watch
             return client.GetStringAsync(NiconicoUrls.Live2WatchPageUrl + liveId);
         }
 
+        private static Crescendo.CrescendoLeoProps ParseCrescendoLeoPlayerProps(string html)
+        {
+            const string propStartString = "id=\"embedded-data\" data-props=\"";
+            const string propEndString = "\"";
+
+            var startPos = html.IndexOf(propStartString);
+            if (startPos == -1)
+            {
+                return null;
+            }
+
+            var endPos = html.IndexOf(propEndString, startPos + propStartString.Length);
+            var headPos = startPos + propStartString.Length;
+            var tailPos = endPos; //- propEndString.Length;
+            var propsRawString = new string(html.Skip(headPos).Take(tailPos - headPos).ToArray());
+            var unescaped = System.Net.WebUtility.HtmlDecode(propsRawString);;
+            var parsed = Newtonsoft.Json.JsonConvert.DeserializeObject<Crescendo.CrescendoLeoProps>(unescaped,
+                new Newtonsoft.Json.JsonSerializerSettings()
+                {
+
+                });
+
+
+            return parsed;
+        }
+
 
         private static LeoPlayerProps ParseLeoPlayerProps(string html)
         {
@@ -85,6 +111,12 @@ namespace Mntone.Nico2.Live.Watch
         {
             return GetLiveWatchPageHtmlAsync(context, liveId)
                 .ContinueWith(prevTask => ParseLeoPlayerProps(prevTask.Result));
+        }
+
+        public static Task<Crescendo.CrescendoLeoProps> GetCrescendoLeoPlayerPropsAsync(NiconicoContext context, string liveId)
+        {
+            return GetLiveWatchPageHtmlAsync(context, liveId)
+                .ContinueWith(prevTask => ParseCrescendoLeoPlayerProps(prevTask.Result));
         }
 
     }

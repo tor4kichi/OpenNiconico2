@@ -38,7 +38,7 @@ namespace Mntone.Nico2.Searches.Video
 		public string __deleted { get; private set; }
 
 		private bool? _IsDeleted;
-		public bool IsDeleted => _IsDeleted.HasValue ? _IsDeleted.Value : (_IsDeleted = __deleted.ToBooleanFrom1()).Value;
+		public bool IsDeleted => _IsDeleted.HasValue ? _IsDeleted.Value : (_IsDeleted = int.Parse(__deleted) > 0).Value;
 
 		[DataMember(Name = "title")]
 		public string __title { get; private set; }

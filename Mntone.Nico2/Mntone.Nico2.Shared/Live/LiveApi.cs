@@ -339,18 +339,33 @@ namespace Mntone.Nico2.Live
 #endif
 
 
-        
+        /// <summary>
+        /// HTML5生放送ページからLeoPlayerPropsを取得します。
+        /// </summary>
+        /// <param name="liveId"></param>
+        /// <returns></returns>
+        /// <remarks>Deprecated</remarks>
         public Task<Watch.LeoPlayerProps> GetLeoPlayerPropsAsync(string liveId)
         {
             return Watch.WatchClient.GetLeoPlayerPropsAsync(_context, liveId);
         }
 
 
+        /// <summary>
+        /// ニコニコ動画（く）で変更されたHTML5生放送ページからLeoPlayerPropsを取得します
+        /// </summary>
+        /// <param name="liveId"></param>
+        /// <returns></returns>
+        public Task<Watch.Crescendo.CrescendoLeoProps> GetCrescendoLeoPlayerPropsAsync(string liveId)
+        {
+            return Watch.WatchClient.GetCrescendoLeoPlayerPropsAsync(_context, liveId);
+        }
 
 
-		#region field
 
-		private NiconicoContext _context;
+        #region field
+
+        private NiconicoContext _context;
 
 		#endregion
 	}
