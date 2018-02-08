@@ -5,7 +5,19 @@ using System.Text;
 
 namespace Mntone.Nico2.Communities.Info
 {
-	[DataContract]
+
+    [DataContract]
+    public class Option
+    {
+
+        [DataMember(Name = "adult_flag")]
+        public string AdultFlag { get; set; }
+
+        [DataMember(Name = "allow_display_vast")]
+        public string AllowDisplayVast { get; set; }
+    }
+
+    [DataContract]
 	public class OptionFlagDetails
 	{
 
@@ -97,7 +109,7 @@ namespace Mntone.Nico2.Communities.Info
 
 
 		[DataMember(Name = "option")]
-		public string Option { get; private set; }
+		public Option Option { get; private set; }
 
 		[DataMember(Name = "thumbnail")]
 		public string Thumbnail { get; private set; }
