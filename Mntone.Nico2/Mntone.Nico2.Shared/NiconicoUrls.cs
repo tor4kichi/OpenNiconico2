@@ -110,12 +110,18 @@ namespace Mntone.Nico2
 		}
 
 
-		#endregion
 
 
-		#region Live
+        public const string NmsgCommentApiUrl = @"http://nmsg.nicovideo.jp/api.json/";
 
-		private const string LiveUrlBase = "http://live" + DomainBase;
+
+
+        #endregion
+
+
+        #region Live
+
+        private const string LiveUrlBase = "http://live" + DomainBase;
 		private const string LiveApiUrlBase = LiveUrlBase + "api/";
 
 		/// <summary>

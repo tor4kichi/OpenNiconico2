@@ -239,7 +239,18 @@ namespace Mntone.Nico2.Videos
 		}
 
 
-
+        public Task<Comment.PostCommentResponse> NMSGPostCommentAsync(
+            string threadId,
+            string ticket,
+            int commentCount,
+            int userId,
+            string comment,
+            TimeSpan position,
+            string commands
+            )
+        {
+            return Comment.CommentClient.NMSGPostCommentAsync(_context, threadId, ticket, commentCount, userId, comment, position, commands);
+        }
 
         /// <summary>
 		/// 動画ページ内にある動画情報を取得します。

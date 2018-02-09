@@ -122,6 +122,42 @@ namespace Mntone.Nico2.Videos.Comment
         }
     }
 
+    [DataContract]
+    public sealed class PostChatData
+    {
+        [DataMember(Name = "chat")]
+        public PostChat Chat { get; set; }
+    }
+
+    [DataContract]
+    public sealed class PostChat
+    {
+        [DataMember(Name = "thread")]
+        public string ThreadId { get; set; }
+
+        [DataMember(Name = "vpos")]
+        public int Vpos { get; set; }
+
+        [DataMember(Name = "mail")]
+        public string Mail { get; set; }
+
+        [DataMember(Name = "ticket")]
+        public string Ticket { get; set; }
+
+        [DataMember(Name = "user_id")]
+        public string UserId { get; set; }
+
+        [DataMember(Name = "content")]
+        public string Content { get; set; }
+
+        [DataMember(Name = "postkey")]
+        public string PostKey { get; set; }
+    }
+
+
+
+
+
     public static class NMSG_RequestParamaterBuilder
     {
         // normal video comment request parameter sample 
@@ -376,6 +412,49 @@ namespace Mntone.Nico2.Videos.Comment
                 },
                 new PingItem("pf:3"),
                 new PingItem("rf:0"),
+            };
+
+            var requestParamsJson = JsonConvert.SerializeObject(paramter, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            });
+
+            return requestParamsJson;
+        }
+
+
+        
+
+
+        public static string MakeOfficialVideoPostCommmentRequest(
+            string content,
+            int vpos,
+            string mail,
+            string threadId,
+            string ticket,
+            int userId,
+            string postkey
+            )
+        {
+            object[] paramter = new object[]
+            {
+                new PingItem("rs:1"),
+                new PingItem("ps:14"),
+                new PostChatData()
+                {
+                    Chat = new PostChat()
+                    {
+                        ThreadId = threadId,
+                        Vpos = vpos,
+                        Mail = mail,
+                        Ticket = ticket,
+                        UserId = userId.ToString(),
+                        Content = content,
+                        PostKey = postkey,
+                    }
+                },
+                new PingItem("pf:14"),
+                new PingItem("rf:1"),
             };
 
             var requestParamsJson = JsonConvert.SerializeObject(paramter, new JsonSerializerSettings()

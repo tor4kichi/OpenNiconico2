@@ -79,22 +79,142 @@ namespace Mntone.Nico2.Videos.Comment
 
 
 
+
+        // コメントの送信
+
+        public static async Task<string> GetPostKeyAsync(NiconicoContext context, string threadId, int commentCount)
+        {
+            var paramDict = new Dictionary<string, string>();
+            paramDict.Add("thread", threadId);
+            paramDict.Add("block_no", ((commentCount) / 100).ToString());
+            paramDict.Add("device", "1");
+            paramDict.Add("version", "1");
+            paramDict.Add("version_sub", "6");
+
+            return await context.GetStringAsync(NiconicoUrls.VideoPostKeyUrl, paramDict);
+        }
+
+
+        static readonly int PostKeyCharCount = "postkey=".Count();
+
+        public static string ParsePostKey(string getPostKeyResult)
+        {
+            Debug.WriteLine(getPostKeyResult);
+            return new String(getPostKeyResult.Skip(PostKeyCharCount).ToArray());
+        }
+
+
+        public static async Task<string> PostCommentDataAsync(
+            NiconicoContext context,
+            string commentServerUrl,
+            string threadId,
+            string ticket,
+            int commentCount,
+            string comment,
+            TimeSpan position,
+            string command
+            )
+        {
+            var info = await context.User.GetInfoAsync();
+            var userid = info.Id;
+            var isPremium = info.IsPremium;
+
+            // postkeyの取得
+            var postKey = await GetPostKeyAsync(context, threadId, commentCount)
+                .ContinueWith(prevResult => ParsePostKey(prevResult.Result));
+
+            Debug.WriteLine(postKey);
+
+
+            var postComment = new PostComment()
+            {
+                user_id = userid.ToString(),
+                mail = command,
+                thread = threadId,
+                vpos = ((uint)position.TotalMilliseconds / 10).ToString(),
+                ticket = ticket,
+                premium = isPremium.ToString1Or0(),
+                postkey = postKey,
+                comment = comment,
+            };
+
+
+            string postCommentXml = "";
+            var emptyNamepsaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+            var serializer = new XmlSerializer(typeof(PostComment));
+
+            var xmlwriterSettings = new XmlWriterSettings()
+            {
+                OmitXmlDeclaration = true,
+            };
+
+            using (var memoryStream = new MemoryStream())
+            {
+                serializer.Serialize(XmlWriter.Create(memoryStream, xmlwriterSettings), postComment, emptyNamepsaces);
+                memoryStream.Flush();
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                using (var reader = new StreamReader(memoryStream))
+                {
+                    postCommentXml = reader.ReadToEnd();
+                }
+            }
+
+            Debug.WriteLine(postCommentXml);
+
+
+            var content = new Windows.Web.Http.HttpStringContent(postCommentXml);
+
+            return await context.PostAsync(commentServerUrl, content);
+        }
+
+
+        public static PostCommentResponse ParsePostCommentResult(string postCommentResult)
+        {
+            // 成功していればchatクラスのXMLがかえってくる
+            // TODO: 
+            PostCommentResponse res = null;
+            var serializer = new XmlSerializer(typeof(PostCommentResponse));
+            using (var reader = new StringReader(postCommentResult))
+            {
+                res = (PostCommentResponse)serializer.Deserialize(reader);
+            }
+            Debug.WriteLine(postCommentResult);
+            return res;
+        }
+
+        public static Task<PostCommentResponse> PostCommentAsync(
+            NiconicoContext context,
+            string commentServerUrl,
+            string threadId,
+            string ticket,
+            int commentCount,
+            string comment,
+            TimeSpan position,
+            string commands
+            )
+        {
+            return PostCommentDataAsync(context, commentServerUrl, threadId, ticket, commentCount, comment, position, commands)
+                .ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));
+        }
+
+
+
+
         #region NMSG コメント取得
 
 
 
-        
+
 
         public static Task<string> GetNMSGCommentDataAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength)
         {
-            const string NmsgCommentApiUrl = @"http://nmsg.nicovideo.jp/api.json/";
-
             var parameterJson = NMSG_RequestParamaterBuilder
                 .MakeVideoCommmentRequest(threadId.ToString(), userId, userKey, videoLength);
 
             var stringContent = new Windows.Web.Http.HttpStringContent(parameterJson);
 
-            return context.PostAsync(NmsgCommentApiUrl, stringContent);
+            return context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, stringContent);
         }
 
         public static Task<NMSG_Response> GetNMSGCommentAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength)
@@ -116,8 +236,6 @@ namespace Mntone.Nico2.Videos.Comment
             TimeSpan videoLength
             )
         {
-            const string NmsgCommentApiUrl = @"http://nmsg.nicovideo.jp/api.json/";
-
             var threadKeyResponse = await GetThreadKeyDataAsync(context, threadId)
                     .ContinueWith(prevTask => ParseThreadKey(prevTask.Result));
 
@@ -134,7 +252,7 @@ namespace Mntone.Nico2.Videos.Comment
 
             var stringContent = new Windows.Web.Http.HttpStringContent(parameterJson);
 
-            return await context.PostAsync(NmsgCommentApiUrl, stringContent);
+            return await context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, stringContent);
         }
 
 
@@ -166,10 +284,7 @@ namespace Mntone.Nico2.Videos.Comment
                 Debug.WriteLine(item.Path);
                 if (item.TryGetValue("thread", out var thread_token))
                 {
-                    if (res.Thread == null)
-                    {
-                        res.Thread = thread_token.ToObject<NGMS_Thread_Response>();
-                    }
+                     res.Threads.Add(thread_token.ToObject<NGMS_Thread_Response>());
                 }
                 else if (item.TryGetValue("global_num_res", out var globalNumRes_token))
                 {
@@ -201,123 +316,77 @@ namespace Mntone.Nico2.Videos.Comment
 
 
 
-        // コメントの送信
+        #region NMSG コメント投稿
 
-        public static async Task<string> GetPostKeyAsync(NiconicoContext context, string threadId, int commentCount)
-        {
-            var paramDict = new Dictionary<string, string>();
-            paramDict.Add("version", "1");
-            paramDict.Add("version_sub", "2");
-            paramDict.Add("thread", threadId);
-            paramDict.Add("block_no", ((commentCount) / 100).ToString());
-            paramDict.Add("device", "1");
-            paramDict.Add("yugi", "");
-
-            return await context.GetStringAsync(NiconicoUrls.VideoPostKeyUrl, paramDict);
-        }
-
-
-		static readonly int PostKeyCharCount = "postkey=".Count();
-
-		public static string ParsePostKey(string getPostKeyResult)
-		{
-			Debug.WriteLine(getPostKeyResult);
-			return new String(getPostKeyResult.Skip(PostKeyCharCount).ToArray());
-		}
-
-
-		public static async Task<string> PostCommentDataAsync(
-            NiconicoContext context, 
-            string commentServerUrl, 
-            string threadId, 
-            string ticket, 
-            int commentCount, 
-            string comment,
-            TimeSpan position, 
-            string command
-            )
-		{
-			// postkeyの取得
-			var postKey = await GetPostKeyAsync(context, threadId, commentCount)
-				.ContinueWith(prevResult => ParsePostKey(prevResult.Result));
-
-			Debug.WriteLine(postKey);
-
-			var info = await context.User.GetInfoAsync();
-			var userid = info.Id;
-			var isPremium = info.IsPremium;
-
-			var postComment = new PostComment()
-			{
-				user_id = userid.ToString(),
-				mail = command,
-				thread = threadId,
-				vpos = ((uint)position.TotalMilliseconds / 10).ToString(),
-				ticket = ticket,
-				premium = isPremium.ToString1Or0(),
-				postkey = postKey,
-				comment = comment,
-			};
-
-			
-			string postCommentXml = "";
-			var emptyNamepsaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-			var serializer = new XmlSerializer(typeof(PostComment));
-
-			var xmlwriterSettings = new XmlWriterSettings()
-			{
-				OmitXmlDeclaration = true,
-			};
-
-			using (var memoryStream = new MemoryStream())
-			{
-				serializer.Serialize(XmlWriter.Create(memoryStream, xmlwriterSettings), postComment, emptyNamepsaces);
-				memoryStream.Flush();
-				memoryStream.Seek(0, SeekOrigin.Begin);
-
-				using (var reader = new StreamReader(memoryStream))
-				{
-					postCommentXml = reader.ReadToEnd();
-				}
-			}
-
-			Debug.WriteLine(postCommentXml);
-				
-
-			var content = new Windows.Web.Http.HttpStringContent(postCommentXml);
-
-			return await context.PostAsync(commentServerUrl, content);
-		}
-
-
-		public static PostCommentResponse ParsePostCommentResult(string postCommentResult)
-		{
-			// 成功していればchatクラスのXMLがかえってくる
-			// TODO: 
-			PostCommentResponse res = null;
-			var serializer = new XmlSerializer(typeof(PostCommentResponse));
-			using (var reader = new StringReader(postCommentResult))
-			{
-				res = (PostCommentResponse)serializer.Deserialize(reader);
-			}
-			Debug.WriteLine(postCommentResult);
-			return res;
-		}
-
-		public static Task<PostCommentResponse> PostCommentAsync(
+        public static async Task<string> NMSGPostCommentDataAsync(
             NiconicoContext context,
-            string commentServerUrl,
             string threadId,
             string ticket,
             int commentCount,
-            string comment, 
-            TimeSpan position, 
+            int userid,
+            string comment,
+            TimeSpan position,
+            string command
+            )
+        {
+            // postkeyの取得
+            var postKey = await GetPostKeyAsync(context, threadId, commentCount)
+                .ContinueWith(prevResult => ParsePostKey(prevResult.Result));
+
+            Debug.WriteLine(postKey);
+
+            var postCommentMessage = NMSG_RequestParamaterBuilder.MakeOfficialVideoPostCommmentRequest(
+                comment,
+                ((int)position.TotalMilliseconds / 10),
+                command,
+                threadId,
+                ticket,
+                userid,
+                postKey
+                );
+                        
+            Debug.WriteLine(postCommentMessage);
+
+
+            var content = new Windows.Web.Http.HttpStringContent(postCommentMessage);
+
+            return await context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, content);
+        }
+
+
+        public static PostCommentResponse NMSGParsePostCommentResult(string postCommentResult)
+        {
+            var startStr = "{\"chat_result";
+            var endStr = "}}";
+
+            var startPos = postCommentResult.IndexOf(startStr);
+            if (startPos == -1) { return null; }
+
+            var endPos = postCommentResult.IndexOf(endStr, startPos) + endStr.Length;
+            if (endPos == -1) { return null; }
+
+            var chatResultText = postCommentResult.Substring(startPos, endPos - startPos);
+
+            return JsonConvert.DeserializeObject<PostCommentResponse>(chatResultText);
+        }
+
+        public static Task<PostCommentResponse> NMSGPostCommentAsync(
+            NiconicoContext context,
+            string threadId,
+            string ticket,
+            int commentCount,
+            int userId,
+            string comment,
+            TimeSpan position,
             string commands
             )
-		{
-			return PostCommentDataAsync(context, commentServerUrl, threadId, ticket, commentCount, comment, position, commands)
-				.ContinueWith(prevResult => ParsePostCommentResult(prevResult.Result));
-		}
+        {
+            return NMSGPostCommentDataAsync(context, threadId, ticket, commentCount, userId, comment, position, commands)
+                .ContinueWith(prevResult => NMSGParsePostCommentResult(prevResult.Result));
+        }
+
+
+        #endregion
 
 
 
@@ -328,8 +397,7 @@ namespace Mntone.Nico2.Videos.Comment
 
 
 
-
-	}
+    }
 
 	[XmlRoot(ElementName = "chat")]
 	public class PostComment

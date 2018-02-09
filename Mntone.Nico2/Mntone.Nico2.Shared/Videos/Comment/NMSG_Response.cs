@@ -60,7 +60,7 @@ namespace Mntone.Nico2.Videos.Comment
 
     public class NMSG_Response
     {
-        public NGMS_Thread_Response Thread { get; set; }
+        public List<NGMS_Thread_Response> Threads { get; } = new List<NGMS_Thread_Response>();
 
         internal List<JToken> _CommentsSource { get; } = new List<JToken>();
 
