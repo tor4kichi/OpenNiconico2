@@ -444,7 +444,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public string Id { get; set; }
 
         [DataMember(Name = "requestId")]
-        public object RequestId { get; set; }
+        public string RequestId { get; set; }
 
         [DataMember(Name = "title")]
         public string Title { get; set; }
@@ -453,25 +453,70 @@ namespace Mntone.Nico2.Videos.Dmc
         public string ThumbnailURL { get; set; }
 
         [DataMember(Name = "viewCounter")]
-        public string ViewCounter { get; set; }
+        public string __ViewCounter { get; set; }
 
+        private int? _ViewCounter;
+        public int ViewCounter => (_ViewCounter ?? (_ViewCounter = int.Parse(__ViewCounter))).Value;
+
+        // Note: numResは文字列と数値のどちらもあるようなので高度な柔軟性を維持しつつ臨機応変に対応する
+        // というか数値に統一されていないのは大変遺憾である。ぷち怒
         [DataMember(Name = "numRes")]
-        public object NumRes { get; set; }
+        public object __NumRes { get; set; }
+
+        private int? _NumRes;
+        public int NumRes
+        {
+            get
+            {
+                if (!_NumRes.HasValue)
+                {
+                    if (__NumRes is long)
+                    {
+                        _NumRes = (int)(long)__NumRes;
+                    }
+                    if (__NumRes is string)
+                    {
+                        _NumRes = int.Parse((string)__NumRes);
+                    }
+                }
+
+                return _NumRes ?? 0;
+            }
+        }
+
 
         [DataMember(Name = "mylistCounter")]
-        public string MylistCounter { get; set; }
+        public string __MylistCounter { get; set; }
+
+        private int? _MylistCounter;
+        public int MylistCounter => (_MylistCounter ?? (_MylistCounter = int.Parse(__MylistCounter))).Value;
+
 
         [DataMember(Name = "firstRetrieve")]
-        public string FirstRetrieve { get; set; }
+        public string __FirstRetrieve { get; set; }
+
+        private DateTime? _FirstRetrieve;
+        public DateTime FirstRetrieve => (_FirstRetrieve ?? (_FirstRetrieve = DateTime.Parse(__FirstRetrieve))).Value;
 
         [DataMember(Name = "lengthSeconds")]
-        public string LengthSeconds { get; set; }
+        public string __LengthSeconds { get; set; }
+
+        private TimeSpan? _LengthSeconds;
+        public TimeSpan LengthSeconds => (_LengthSeconds ?? (_LengthSeconds = TimeSpan.FromSeconds(int.Parse(__LengthSeconds)))).Value;
+
 
         [DataMember(Name = "threadUpdateTime")]
-        public object ThreadUpdateTime { get; set; }
+        public string __ThreadUpdateTime { get; set; }
+
+        private DateTime? _ThreadUpdateTime;
+        public DateTime ThreadUpdateTime => (_ThreadUpdateTime ?? (_ThreadUpdateTime = DateTime.Parse(__ThreadUpdateTime))).Value;
 
         [DataMember(Name = "createTime")]
-        public object CreateTime { get; set; }
+        public string __CreateTime { get; set; }
+
+        private DateTime? _CreateTime;
+        public DateTime CreateTime => (_CreateTime ?? (_CreateTime = DateTime.Parse(__CreateTime))).Value;
+
 
         [DataMember(Name = "width")]
         public int? Width { get; set; }
@@ -483,7 +528,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public bool IsTranslated { get; set; }
 
         [DataMember(Name = "mylistComment")]
-        public object MylistComment { get; set; }
+        public int? MylistComment { get; set; }
 
         [DataMember(Name = "tkasType")]
         public object TkasType { get; set; }
