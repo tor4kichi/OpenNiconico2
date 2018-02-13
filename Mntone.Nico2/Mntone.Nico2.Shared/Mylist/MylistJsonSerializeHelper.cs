@@ -35,14 +35,14 @@ namespace Mntone.Nico2.Mylist
 						WatchId = x.item_data.watch_id,
 						ItemType = (NiconicoItemType)int.Parse(x.item_type),
 						FirstRetrieve = DateTimeOffset.FromUnixTimeSeconds(x.item_data.first_retrieve).DateTime,
-						ViewCount = uint.Parse(x.item_data.view_counter),
-						CommentCount = uint.Parse(x.item_data.num_res),
-						MylistCount = uint.Parse(x.item_data.mylist_counter),
+						ViewCount = x.item_data.view_counter != null ? uint.Parse(x.item_data.view_counter) : 0,
+						CommentCount = x.item_data.num_res != null ? uint.Parse(x.item_data.num_res) : 0,
+						MylistCount = x.item_data.mylist_counter != null ? uint.Parse(x.item_data.mylist_counter) : 0,
 						CreateTime = DateTimeOffset.FromUnixTimeSeconds(x.create_time).DateTime,
 						UpdateTime = DateTimeOffset.FromUnixTimeSeconds(x.update_time).DateTime,
 						IsDeleted = x.item_data.deleted.ToBooleanFrom1(),
-						Length = TimeSpan.FromSeconds(int.Parse(x.item_data.length_seconds)),
-						ThumbnailUrl = new Uri(x.item_data.thumbnail_url),
+						Length = x.item_data.length_seconds != null ? TimeSpan.FromSeconds(int.Parse(x.item_data.length_seconds)) : TimeSpan.Zero,
+						ThumbnailUrl = x.item_data.thumbnail_url != null ? new Uri(x.item_data.thumbnail_url) : null,
 					};
 				})
 				.ToList();
