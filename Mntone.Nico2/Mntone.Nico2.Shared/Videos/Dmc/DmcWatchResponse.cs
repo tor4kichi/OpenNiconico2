@@ -540,18 +540,14 @@ namespace Mntone.Nico2.Videos.Dmc
     [DataContract]
     public class Playlist
     {
+        [DataMember(Name = "watchId")]
+        public string WatchId { get; set; }
 
-        [DataMember(Name = "items")]
-        public IList<Item> Items { get; set; }
+        [DataMember(Name = "referer")]
+        public string Referer { get; set; }
 
-        [DataMember(Name = "type")]
-        public string Type { get; set; }
-
-        [DataMember(Name = "ref")]
-        public string Ref { get; set; }
-
-        [DataMember(Name = "option")]
-        public IList<object> Option { get; set; }
+        [DataMember(Name = "parameter")]
+        public string Parameter { get; set; }
     }
 
     [DataContract]

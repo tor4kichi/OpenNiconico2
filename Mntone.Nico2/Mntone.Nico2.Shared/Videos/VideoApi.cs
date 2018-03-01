@@ -210,6 +210,10 @@ namespace Mntone.Nico2.Videos
 			return Related.RelatedClient.GetRelatedVideoAsync(_context, videoId, from, limit, sortMethod, sortDir);
 		}
 
+        public Task<Related.VideoPlaylistResponse> GetVideoPlaylistAsync(string videoId, string referer)
+        {
+            return Related.RelatedClient.GetRelatedPlaylistAsync(_context, videoId, referer);
+        }
 
 
 

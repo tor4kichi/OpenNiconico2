@@ -80,6 +80,7 @@ namespace Mntone.Nico2
 
 		public static string RelatedVideoApiUrl = "http://api.ce.nicovideo.jp/nicoapi/v1/video.relation";
 
+        public static string VideoPlaylistApiUrl = VideoApiUrlBase + "watch/playlist";
 
 		/// <summary>
 		/// 
