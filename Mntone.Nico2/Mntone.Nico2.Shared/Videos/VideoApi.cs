@@ -325,10 +325,38 @@ namespace Mntone.Nico2.Videos
             return Dmc.DmcClient.DmcSessionExitHeartbeatAsync(_context, watch, sessionRes);
         }
 
+
+
+        /// <summary>
+        /// Get recommendations (video/etc)
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>Require User Session</remarks>
+        public Task<Recommend.RecommendResponse> GetRecommendFirstAsync()
+        {
+            return Recommend.RecommendClient.GetRecommendFirstAsync(_context);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user_tags">Recommend.RecommendResponse.UserTagParam</param>
+        /// <param name="seed">Recommend.RecommendResponse.Seed</param>
+        /// <param name="page">Recommend.RecommendResponse.Page</param>
+        /// <returns></returns>
+        public Task<Recommend.RecommendContent> GetRecommendAsync(string user_tags, int seed, int page)
+        {
+            return Recommend.RecommendClient.GetRecommendAsync(_context, user_tags, seed, page);
+        }
+
+
+
+
         #region field
 
         private NiconicoContext _context;
 
-		#endregion
-	}
+        #endregion
+
+    }
 }

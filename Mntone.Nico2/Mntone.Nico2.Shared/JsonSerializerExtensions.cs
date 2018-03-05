@@ -10,9 +10,9 @@ namespace Mntone.Nico2
 {
 	internal static class JsonSerializerExtensions
 	{
-		public static T Load<T>( string data )
+		public static T Load<T>(string data, JsonSerializerSettings settings = null)
 		{
-			return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data);
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data, settings);
 		}
 	}
 

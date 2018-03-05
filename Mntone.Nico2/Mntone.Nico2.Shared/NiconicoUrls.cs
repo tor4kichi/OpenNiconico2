@@ -117,6 +117,7 @@ namespace Mntone.Nico2
 
 
 
+
         #endregion
 
 
@@ -415,18 +416,26 @@ namespace Mntone.Nico2
 
 		public const string VideoPostKeyUrl = VideoFlapiUrlBase + "getpostkey";
 
-		#endregion
+
+
+        // Reccmmend
+        public static string RecommendPageUrl = $"{VideoUrlBase}recommendations";
+        public static string RecommendApiUrl = $"{VideoUrlBase}api/recommendations";
+
+
+
+        #endregion
 
 
 
 
-		#region Mylist Deflist とりあえずマイリスト
+        #region Mylist Deflist とりあえずマイリスト
 
-		// とりあえずマイリスト
-		// see@ http://web.archive.org/web/20140625053235/http://efcl.info/wiki/niconicoapi/
+        // とりあえずマイリスト
+        // see@ http://web.archive.org/web/20140625053235/http://efcl.info/wiki/niconicoapi/
 
 
-		public static string MylistDefListUrlBase = VideoApiUrlBase + "deflist/";
+        public static string MylistDefListUrlBase = VideoApiUrlBase + "deflist/";
 
 		public static string MylistDeflistListUrl	= MylistDefListUrlBase + "list";
 		public static string MylistDeflistAddUrl	= MylistDefListUrlBase + "add";

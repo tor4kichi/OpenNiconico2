@@ -70,7 +70,7 @@ namespace Mntone.Nico2
 			return ToDateTimeOffsetFromUnixTime( long.Parse( value ) );
 		}
 
-		public static DateTimeOffset ToDateTimeOffsetFromUnixTime( this long value )
+        public static DateTimeOffset ToDateTimeOffsetFromUnixTime( this long value )
 		{
 			return DateTimeOffset.FromFileTime( 10000000 * value + 116444736000000000 );
 		}
