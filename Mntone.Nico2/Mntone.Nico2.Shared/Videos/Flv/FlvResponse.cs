@@ -51,8 +51,8 @@ namespace Mntone.Nico2.Videos.Flv
 #else
 			AppsHost = SafeGetValue(wwwFormData, "hms");
 #endif
-			AppsPort = SafeGetValue(wwwFormData, "hmsp").ToUShort();
-			AppsThreadId = SafeGetValue(wwwFormData, "hmst").ToUShort();
+			AppsPort = SafeGetValue(wwwFormData, "hmsp")?.ToUShort() ?? 0;
+			AppsThreadId = SafeGetValue(wwwFormData, "hmst")?.ToUShort() ?? 0;
 			AppsTicket = SafeGetValue(wwwFormData, "hmstk");
 
 #if DEBUG
