@@ -317,15 +317,22 @@ namespace Mntone.Nico2
 		/// </summary>
 		public static string ChannelSmallIconUrl { get { return "http://icon.nimg.jp/channel/s/ch{0}.jpg"; } }
 
-		#endregion
+
+        public const string ChannelUrlBase = "http://ch" + DomainBase;
+
+        public const string ChannelApiUrlBase = ChannelUrlBase + "api/";
+
+        public const string ChannelInfoApiUrl = ChannelApiUrlBase + "ch.info/";
+
+        #endregion
 
 
-		#region Users
+        #region Users
 
-		/// <summary>
-		/// ニコニコ ユーザー ページ URL テキスト
-		/// </summary>
-		public static string UserPageUrl { get { return VideoUrlBase + "my"; } }
+        /// <summary>
+        /// ニコニコ ユーザー ページ URL テキスト
+        /// </summary>
+        public static string UserPageUrl { get { return VideoUrlBase + "my"; } }
 
 		/// <summary>
 		/// ニコニコ ユーザー アイコン URL テキスト
@@ -403,10 +410,12 @@ namespace Mntone.Nico2
 		public static string UserFavMylistPageUrl = UserPageUrl + "/fav/mylist";
 		public static string UserFavTagPageUrl = UserPageUrl + "/fav/tag";
 		public static string UserFavCommunityPageUrl = UserPageUrl + "/community"; // コミュは/fav無し
+        public static string UserFavChannelPageUrl = UserPageUrl + "/channel"; 
 
 
-		// tags
-		public const string UserFavTagBase = VideoApiUrlBase + "favtag/";
+
+        // tags
+        public const string UserFavTagBase = VideoApiUrlBase + "favtag/";
 		public static string UserFavTagListUrl { get { return UserFavTagBase + "list"; } }
 		public static string UserFavTagAddUrl { get { return UserFavTagBase + "add"; } }
 		public static string UserFavTagRemoveUrl { get { return UserFavTagBase + "delete"; } }

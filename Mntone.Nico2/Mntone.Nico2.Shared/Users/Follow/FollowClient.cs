@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -103,8 +104,7 @@ namespace Mntone.Nico2.Users.Follow
 
 
 
-
-		public static List<FollowData> ParseWatchItemFollowData(string json)
+        public static List<FollowData> ParseWatchItemFollowData(string json)
 		{
 			var response = JsonSerializerExtensions.Load<WatchItemResponse>(json);
 
@@ -153,8 +153,9 @@ namespace Mntone.Nico2.Users.Follow
 
 		}
 
+        
 
-		public static List<string> ParseFollowTagJson(string json)
+        public static List<string> ParseFollowTagJson(string json)
 		{
 			var response = JsonSerializerExtensions.Load<FollowTagResponse>(json);
 
@@ -192,10 +193,11 @@ namespace Mntone.Nico2.Users.Follow
 				.ContinueWith(prevTask => ParseFollowPageHtml(prevTask.Result, NiconicoItemType.Mylist));
 		}
 
+        
 
 
 
-		public static Task<ContentManageResult> ExistFollowAsync(NiconicoContext context, NiconicoItemType item_type, string item_id)
+        public static Task<ContentManageResult> ExistFollowAsync(NiconicoContext context, NiconicoItemType item_type, string item_id)
 		{
 			return ExistFollowDataAsync(context, item_type, item_id)
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
@@ -234,6 +236,128 @@ namespace Mntone.Nico2.Users.Follow
 				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
 		}
 
-		
-	}
+
+
+
+
+        public static Task<string> GetFollowChannelDataAsync(NiconicoContext context)
+        {
+            return context.GetStringAsync(NiconicoUrls.UserFavChannelPageUrl);
+        }
+
+
+        public static List<ChannelFollowData> ParseChannelFollowPageHtml(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var contentNode = doc.DocumentNode.Descendants("div").Single(x =>
+            {
+                return x.Attributes.Contains("class") && x.Attributes["class"].Value == "content";
+            });
+            var articleBodyNode = contentNode.GetElementByClassName("articleBody");
+            var outerNode = articleBodyNode.GetElementsByClassName("outer");
+
+
+            return outerNode.Select(x =>
+            {
+                var favData = new ChannelFollowData();
+                var section = x.GetElementByClassName("section");
+                var h5 = section.ChildNodes["h5"];
+                var a = h5.ChildNodes["a"];
+                var href = a.GetAttributeValue("href", "");
+                favData.Id = href.Split('/').Last();
+                favData.Name = a.InnerText;
+
+                var thumbAnchor = x.GetElementByClassName("thumbContainer")?.ChildNodes["a"];
+                if (thumbAnchor != null)
+                {
+                    favData.ThumbnailUrl = thumbAnchor.GetAttributeValue("href", String.Empty);
+                }
+
+                var videoCountDisplayText = section.ChildNodes["p"]?.InnerText;
+                var videoCount = new String(videoCountDisplayText.Reverse().TakeWhile(c => c >= '0' && c <= '9').Reverse().ToArray());
+                if (int.TryParse(videoCount, out int count))
+                {
+                    favData.VideoCount = count;
+                }
+                return favData;
+            })
+                .ToList();
+
+        }
+
+
+        public static Task<List<ChannelFollowData>> GetFollowChannelAsync(NiconicoContext context)
+        {
+            return GetFollowChannelDataAsync(context)
+                .ContinueWith(prevTask => ParseChannelFollowPageHtml(prevTask.Result));
+        }
+
+
+        private static async Task<ChannelFollowApiInfo> GetFollowChannelApiInfo(NiconicoContext context, string channelId)
+        {
+            var html = await context.GetStringAsync("http://ch.nicovideo.jp/channel/" + channelId);
+            var document = new HtmlDocument();
+            document.LoadHtml(html);
+            var bookmarkAnchorNode = document.DocumentNode.Descendants("a").Single(x =>
+            {
+                if (x.Attributes.Contains("class") && x.Attributes["class"].Value.Contains("bookmark"))
+                {
+                    return x.Attributes["class"].Value.Split(' ').FirstOrDefault() == "bookmark";
+                }
+                else
+                {
+                    return false;
+                }
+            });
+
+            return new ChannelFollowApiInfo()
+            {
+                AddApi = bookmarkAnchorNode.Attributes["api_add"].Value,
+                DeleteApi = bookmarkAnchorNode.Attributes["api_delete"].Value,
+                Params = WebUtility.HtmlDecode(bookmarkAnchorNode.Attributes["params"].Value)
+            };
+        }
+
+        public static async Task<string> __AddFollowChannelAsync(NiconicoContext context, string channelId)
+        {
+            var apiInfo = await GetFollowChannelApiInfo(context, channelId);
+            return await context.GetStringAsync($"{apiInfo.AddApi}?{apiInfo.Params}");
+        }
+
+        public static ChannelFollowResult ParseChannelFollowResult(string json)
+        {
+            return JsonSerializerExtensions.Load<ChannelFollowResult>(json);
+        }
+
+        public static Task<ChannelFollowResult> AddFollowChannelAsync(NiconicoContext context, string channelId)
+        {
+            return __AddFollowChannelAsync(context, channelId)
+                .ContinueWith(prevTask => ParseChannelFollowResult(prevTask.Result));
+                
+        }
+
+
+        public static async Task<string> __DeleteFollowChannelAsync(NiconicoContext context, string channelId)
+        {
+            var apiInfo = await GetFollowChannelApiInfo(context, channelId);
+            return await context.GetStringAsync($"{apiInfo.DeleteApi}?{apiInfo.Params}");
+        }
+        public static Task<ChannelFollowResult> DeleteFollowChannelAsync(NiconicoContext context, string channelId)
+        {
+            return __DeleteFollowChannelAsync(context, channelId)
+                .ContinueWith(prevTask => ParseChannelFollowResult(prevTask.Result));
+
+        }
+    }
+
+
+    internal struct ChannelFollowApiInfo
+    {
+        public string AddApi { get; set; }
+        public string DeleteApi { get; set; }
+        public string Params { get; set; }
+    }
+
 }

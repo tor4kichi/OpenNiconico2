@@ -12,10 +12,17 @@ namespace Mntone.Nico2.Users.Follow
 		public string Title { get; set; }
 	}
 
+    public class ChannelFollowData
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int VideoCount { get; set; }
+        public string ThumbnailUrl { get; set; }
+    }
 
-	#region WatchItem Response
+    #region WatchItem Response
 
-	[DataContract]
+    [DataContract]
 	public class ItemData
 	{
 		[DataMember(Name = "id")]

@@ -69,6 +69,7 @@ namespace Mntone.Nico2.Users.Info
 			}
 			*/
 
+            /*
 			try
 			{
 				var stats = profileHtml.GetElementByClassName("stats");
@@ -88,7 +89,7 @@ namespace Mntone.Nico2.Users.Info
 				this.CreatorScore = statsItemNumbers[3];
 			}
 			catch (Exception) { }
-
+            */
 		}
 
 		/// <summary>

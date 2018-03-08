@@ -38,6 +38,17 @@ namespace Mntone.Nico2.Channels
 #endif
 
 
+        public Task<Channels.Info.ChannelInfo> GetChannelInfo(string channelId)
+        {
+            return Channels.Info.ChannelInfoClient.GetChannelInfoAsync(_context, channelId);
+        }
+
+        public Task<Channels.Video.ChannelVideoResponse> GetChannelVideosAsync(string channelId, int page)
+        {
+            return Channels.Video.ChannelVideoClient.GetChannelVideosAsync(_context, channelId, page);
+        }
+
+
 		#region field
 
 		private NiconicoContext _context;

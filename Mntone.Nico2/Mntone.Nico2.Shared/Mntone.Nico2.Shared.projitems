@@ -11,6 +11,9 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Channels\ChannelApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Channels\Icon\IconClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Channels\Info\ChannelInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Channels\Info\ChannelInfoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Channels\Video\ChannelVideoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Detail\CommunityDetailResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Detail\DetailClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Icon\IconClient.cs" />
@@ -186,6 +189,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)StringExtention.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\FavCommunity\FollowCommunityClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\FavCommunity\FollowCommunityResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Follow\ChannelFollowResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\MylistDeflist\DeflistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Follow\FollowClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Follow\FollowResponse.cs" />

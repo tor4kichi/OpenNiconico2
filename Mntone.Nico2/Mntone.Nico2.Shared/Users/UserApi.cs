@@ -541,12 +541,34 @@ namespace Mntone.Nico2.Users
 			return FollowCommunity.FollowCommunityClient.RemoveFollowCommunity(_context, leaveToken);
 		}
 
-		#endregion
+        #endregion
 
 
-		#region field
+        #region Follow Channel
 
-		private NiconicoContext _context;
+
+        public Task<List<Users.Follow.ChannelFollowData>> GetFollowChannelAsync()
+        {
+            return Users.Follow.FollowClient.GetFollowChannelAsync(_context);
+        }
+
+
+        public Task<Users.Follow.ChannelFollowResult> AddFollowChannelAsync(string channelId)
+        {
+            return Users.Follow.FollowClient.AddFollowChannelAsync(_context, channelId);
+        }
+
+        public Task<Users.Follow.ChannelFollowResult> DeleteFollowChannelAsync(string channelId)
+        {
+            return Users.Follow.FollowClient.DeleteFollowChannelAsync(_context, channelId);
+        }
+
+        #endregion
+
+
+        #region field
+
+        private NiconicoContext _context;
 
 		#endregion
 	}

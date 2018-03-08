@@ -49,6 +49,7 @@ namespace Mntone.Nico2.Users.User
 
 			try
 			{
+                /*
 				var stats = profile.GetElementByClassName("stats");
 				var statsItems = stats.SelectNodes("./li//span");
 
@@ -59,13 +60,14 @@ namespace Mntone.Nico2.Users.User
 					return uint.Parse(numberText);
 				})
 				.ToArray();
+                */
 
-				data.FollowerCount = statsItemNumbers[0];
-				data.StampCount = statsItemNumbers[1];
-				//data.NiconicoPoint = statsItemNumbers[2];
-				//data.CreateScore = statsItemNumbers[3];
-			}
-			catch (Exception) { }
+                //				data.FollowerCount = statsItemNumbers[0];
+                //				data.StampCount = statsItemNumbers[1];
+                //data.NiconicoPoint = statsItemNumbers[2];
+                //data.CreateScore = statsItemNumbers[3];
+            }
+            catch (Exception) { }
 
 			try
 			{
