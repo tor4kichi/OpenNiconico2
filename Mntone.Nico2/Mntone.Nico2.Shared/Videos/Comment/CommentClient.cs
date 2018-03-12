@@ -207,19 +207,19 @@ namespace Mntone.Nico2.Videos.Comment
 
 
 
-        public static Task<string> GetNMSGCommentDataAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength)
+        public static Task<string> GetNMSGCommentDataAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength, bool hasOwnerThread)
         {
             var parameterJson = NMSG_RequestParamaterBuilder
-                .MakeVideoCommmentRequest(threadId.ToString(), userId, userKey, videoLength);
+                .MakeVideoCommmentRequest(threadId.ToString(), userId, userKey, videoLength, hasOwnerThread);
 
             var stringContent = new Windows.Web.Http.HttpStringContent(parameterJson);
 
             return context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, stringContent);
         }
 
-        public static Task<NMSG_Response> GetNMSGCommentAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength)
+        public static Task<NMSG_Response> GetNMSGCommentAsync(NiconicoContext context, long threadId, int userId, string userKey, TimeSpan videoLength, bool hasOwnerThread)
         {
-            return GetNMSGCommentDataAsync(context, threadId, userId, userKey, videoLength)
+            return GetNMSGCommentDataAsync(context, threadId, userId, userKey, videoLength, hasOwnerThread)
                 .ContinueWith(prevTask => ParseNMSGResponseJson(prevTask.Result));
         }
 

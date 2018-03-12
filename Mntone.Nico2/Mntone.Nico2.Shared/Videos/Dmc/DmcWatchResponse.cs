@@ -906,7 +906,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public int CommentCount { get; set; }
 
         [DataMember(Name = "hasOwnerThread")]
-        public object HasOwnerThread { get; set; }
+        public string HasOwnerThread { get; set; }
 
         [DataMember(Name = "mymemoryLanguage")]
         public object MymemoryLanguage { get; set; }

@@ -167,7 +167,8 @@ namespace Mntone.Nico2.Videos
                      dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
                      dmcWatchRes.Viewer.Id,
                      dmcWatchRes.Context.Userkey,
-                     TimeSpan.FromSeconds(dmcWatchRes.Video.Duration)
+                     TimeSpan.FromSeconds(dmcWatchRes.Video.Duration),
+                     dmcWatchRes.Thread.HasOwnerThread.ToBooleanFrom1()
                     );
             }
         }

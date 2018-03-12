@@ -141,7 +141,7 @@ namespace Mntone.Nico2.Videos.Comment
         public int Vpos { get; set; }
 
         [DataMember(Name = "leaf")]
-        public int Leaf { get; set; }
+        public int? Leaf { get; set; }
 
         [DataMember(Name = "date")]
         public int Date { get; set; }
@@ -153,7 +153,7 @@ namespace Mntone.Nico2.Videos.Comment
         public int Premium { get; set; }
 
         [DataMember(Name = "anonymity")]
-        public int Anonymity { get; set; }
+        public int? Anonymity { get; set; }
 
         [DataMember(Name = "user_id")]
         public string UserId { get; set; }

@@ -75,6 +75,45 @@ namespace Mntone.Nico2.Videos.Comment
         public string Threadkey { get; set; } = null; // 公式動画のみ必要
     }
 
+    [DataContract]
+    public class OwnerThreadItem
+    {
+        [DataMember(Name = "thread")]
+        public OwnerThread Thread { get; set; }
+    }
+
+    [DataContract]
+    public class OwnerThread
+    {
+
+        [DataMember(Name = "thread")]
+        public string ThreadId { get; set; }
+
+        [DataMember(Name = "version")]
+        public string Version { get; set; } = "20061206";
+
+        [DataMember(Name = "user_id")]
+        public int UserId { get; set; }
+
+        [DataMember(Name = "with_global")]
+        public int WithGlobal { get; set; } = 1;
+
+        [DataMember(Name = "scores")]
+        public int Scores { get; set; } = 1;
+
+        [DataMember(Name = "nicoru")]
+        public int Nicoru { get; set; } = 0;
+
+        [DataMember(Name = "userkey")]
+        public string Userkey { get; set; }
+
+        [DataMember(Name = "fork")]
+        public int Fork { get; set; } = 1;
+
+        [DataMember(Name = "res_from")]
+        public int ResFrom { get; set; } = -1000;
+    }
+
 
     [DataContract]
     public class ThreadLeavesItem
@@ -209,40 +248,90 @@ namespace Mntone.Nico2.Videos.Comment
         }
 }]
     */
-        public static string MakeVideoCommmentRequest(string threadId, int userId, string userKey, TimeSpan video_length)
+        public static string MakeVideoCommmentRequest(string threadId, int userId, string userKey, TimeSpan video_length, bool hasOwnerThread)
         {
-            object[] paramter = new object[] 
+            object[] parameters = null;
+            if (!hasOwnerThread)
             {
-                new PingItem("rs:0"),
-                new PingItem("ps:0"),
-                new ThreadItem()
+                parameters = new object[]
                 {
-                    Thread = new Thread()
+                    new PingItem("rs:0"),
+                    new PingItem("ps:0"),
+                    new ThreadItem()
                     {
-                        ThreadId = threadId,
-                        UserId = userId,
-                        Userkey = userKey
-                    }
-                },
-                new PingItem("pf:0"),
-                new PingItem("ps:1"),
-                new ThreadLeavesItem()
+                        Thread = new Thread()
+                        {
+                            ThreadId = threadId,
+                            UserId = userId,
+                            Userkey = userKey
+                        }
+                    },
+                    new PingItem("pf:0"),
+                    new PingItem("ps:1"),
+                    new ThreadLeavesItem()
+                    {
+                        ThreadLeaves = new ThreadLeaves()
+                        {
+                            ThreadId = threadId,
+                            UserId = userId,
+                            Content = ThreadLeaves.MakeContentString(video_length),
+                            Userkey = userKey,
+                            Scores = 1,
+                            Nicoru = 0,
+                        }
+                    },
+                    new PingItem("pf:1"),
+                    new PingItem("rf:0"),
+                };
+            }
+            else
+            {
+                parameters = new object[]
                 {
-                    ThreadLeaves = new ThreadLeaves()
+                    new PingItem("rs:0"),
+                    new PingItem("ps:0"),
+                    new ThreadItem()
                     {
-                        ThreadId = threadId,
-                        UserId = userId,
-                        Content = ThreadLeaves.MakeContentString(video_length),
-                        Userkey = userKey,
-                        Scores = 1,
-                        Nicoru = 0,
-                    }
-                },
-                new PingItem("pf:1"),
-                new PingItem("rf:0"),
-            };
+                        Thread = new Thread()
+                        {
+                            ThreadId = threadId,
+                            UserId = userId,
+                            Userkey = userKey
+                        }
+                    },
+                    new PingItem("pf:0"),
+                    new PingItem("ps:1"),
+                    new ThreadLeavesItem()
+                    {
+                        ThreadLeaves = new ThreadLeaves()
+                        {
+                            ThreadId = threadId,
+                            UserId = userId,
+                            Content = ThreadLeaves.MakeContentString(video_length),
+                            Userkey = userKey,
+                            Scores = 1,
+                            Nicoru = 0,
+                        }
+                    },
+                    new PingItem("pf:1"),
+                    new PingItem("ps:2"),
+                    new OwnerThreadItem()
+                    {
+                        Thread = new OwnerThread()
+                        {
+                            ThreadId = threadId,
+                            UserId = userId,
+                            Userkey = userKey
+                        }
+                    },
+                    new PingItem("pf:2"),
+                    new PingItem("rf:0"),
+                };
+            }
+            
+        
 
-            var requestParamsJson = JsonConvert.SerializeObject(paramter, new JsonSerializerSettings()
+            var requestParamsJson = JsonConvert.SerializeObject(parameters, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
 
