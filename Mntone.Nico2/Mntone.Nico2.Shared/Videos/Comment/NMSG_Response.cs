@@ -150,7 +150,7 @@ namespace Mntone.Nico2.Videos.Comment
         public int DateUsec { get; set; }
 
         [DataMember(Name = "premium")]
-        public int Premium { get; set; }
+        public int? Premium { get; set; }
 
         [DataMember(Name = "anonymity")]
         public int? Anonymity { get; set; }
@@ -169,6 +169,9 @@ namespace Mntone.Nico2.Videos.Comment
 
         [DataMember(Name = "deleted")]
         public int? Deleted { get; set; }
+
+        [DataMember(Name = "yourpost")]
+        public int? Yourpost { get; set; }
 
         public IEnumerable<CommandType> ParseCommandTypes()
         {
