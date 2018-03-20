@@ -139,21 +139,21 @@ namespace Mntone.Nico2.Users.User
 		private static Task<string> GetUserDataAsync(NiconicoContext context, string user_id)
 		{
 			return context.GetClient()
-				.GetStringAsync($"{NiconicoUrls.UserPageUrl}?{nameof(user_id)}={user_id}");
+				.GetStringAsync($"{NiconicoUrls.CE_UserApiUrl}?{nameof(user_id)}={user_id}");
 		}
 
 
-		private static User ParseUserData(string xml)
+		private static UserResponse ParseUserData(string xml)
 		{
 			var serializer = new XmlSerializer(typeof(UserResponse));
 
 			using(var stream  = new StringReader(xml))
 			{
-				return (User)serializer.Deserialize(stream);
+				return (UserResponse)serializer.Deserialize(stream);
 			}
 		}
 
-		public static Task<User> GetUserAsync(NiconicoContext context, string user_id)
+		public static Task<UserResponse> GetUserAsync(NiconicoContext context, string user_id)
 		{
 			return GetUserDataAsync(context, user_id)
 				.ContinueWith(prevTask => ParseUserData(prevTask.Result));

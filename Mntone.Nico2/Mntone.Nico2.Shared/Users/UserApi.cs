@@ -62,7 +62,7 @@ namespace Mntone.Nico2.Users
 		/// <param name="requestUserId"></param>
 		/// <returns></returns>
 		/// <remarks>ログイン不要</remarks>
-		public Task<User.User> GetUserAsync(string requestUserId)
+		public Task<User.UserResponse> GetUserAsync(string requestUserId)
 		{
 			return User.UserClient.GetUserAsync(_context, requestUserId);
 		}

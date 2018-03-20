@@ -15,9 +15,12 @@ namespace Mntone.Nico2.Users.User
 		[XmlElement(ElementName = "id")]
 		public string Id { get; set; }
 		[XmlElement(ElementName = "nickname")]
-		public string Nickname { get; set; }
+		public string __Nickname { get; set; }
 		[XmlElement(ElementName = "thumbnail_url")]
 		public string ThumbnailUrl { get; set; }
+
+        private string _Nickname;
+        public string Nickname => _Nickname ?? (_Nickname = __Nickname.DecodeUTF8());
 	}
 
 	[XmlRoot(ElementName = "vita_option")]
