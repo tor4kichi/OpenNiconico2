@@ -18,6 +18,8 @@ namespace Mntone.Nico2
 		/// </summary>
 		public static string TopPageUrl { get { return VideoUrlBase; } }
 
+        private const string CE_API_V1_BASE = "http://api.ce" + DomainBase;
+
 
 		#region Authentication
 
@@ -167,6 +169,17 @@ namespace Mntone.Nico2
 
 
         internal static string Live2WatchPageUrl = Live2BaseUrl + "watch/";
+
+        #endregion
+
+        #region api.ce.niocovideo.jp/liveapi/v1
+
+        private const string API_CE_LIVEAPI = CE_API_V1_BASE + "liveapi/";
+        private const string API_CE_LIVEAPI_V1 = API_CE_LIVEAPI + "v1/";
+
+
+        internal static string CeLiveVideoInfoApi = API_CE_LIVEAPI_V1 + "video.info";
+        internal static string CeLiveCommunityVideoApi = API_CE_LIVEAPI_V1 + "community.video";
 
         #endregion
 

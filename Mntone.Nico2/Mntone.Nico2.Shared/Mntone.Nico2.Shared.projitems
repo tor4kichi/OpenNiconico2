@@ -126,6 +126,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\Tags\TagInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\Tags\TagsClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\Tags\TagsResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Video\LiveVideoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Video\NicoliveVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\Vote\VoteClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentManageResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSRFTokenHelper.cs" />

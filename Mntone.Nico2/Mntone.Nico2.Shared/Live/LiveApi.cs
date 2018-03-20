@@ -363,6 +363,28 @@ namespace Mntone.Nico2.Live
 
 
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="liveId"></param>
+        /// <returns></returns>
+        public Task<Video.NicoliveVideoInfoResponse> GetLiveVideoInfoAsync(string liveId)
+        {
+            return Video.LiveVideoClient.LiveVideoInfoSubClient.GetLiveInfoAsync(_context, liveId);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="liveId"></param>
+        /// <returns></returns>
+        public Task<Video.NicoliveCommunityVideoResponse> GetLiveCommunityVideoAsync(string liveId)
+        {
+            return Video.LiveVideoClient.LiveCommunityVideoSubClient.GetLiveCommunityVideoAsync(_context, liveId);
+        }
+
         #region field
 
         private NiconicoContext _context;
