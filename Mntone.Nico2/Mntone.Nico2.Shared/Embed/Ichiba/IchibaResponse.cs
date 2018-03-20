@@ -113,7 +113,7 @@ namespace Mntone.Nico2.Embed.Ichiba
             // maker
             {
                 var makerNode = ichibaItemNode.GetElementByClassName("maker");
-                var makerName = makerNode.InnerText;
+                var makerName = makerNode?.InnerText;
                 resultItem.Maker = makerName;
             }
 
