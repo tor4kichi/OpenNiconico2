@@ -313,10 +313,52 @@ namespace Mntone.Nico2.Videos.Comment
 
 
 
-
-
-
         #region NMSG コメント投稿
+
+        // コメ取得
+        // コメ投稿１回目
+        // コメ投稿２回目
+        // 公式プレイヤーだと差分コメの問い合わせによって変動している
+
+
+        //投コメナシの場合
+        //rs 0 ps 0
+        //pf 0 ps 1
+        //pf 1 rf 0
+        //
+        //rs 1 ps 8
+        //pf 8 rf 1
+        //
+        //rs 2 ps 13
+        //pf 13 rf 2
+
+
+        //投コメアリの場合のpsとかの動き
+        //rs 0 ps 0
+        //pf 0 ps 1
+        //pf 1 ps 2
+        //pf 2 rf 0
+        //
+        //rs 1 ps11
+        //pf 11 rf 1
+        //
+        //rs 2 ps 16
+        //pf 16 rf 2
+
+
+        //公式アニメなどサブスレッドまで問い合わせる場合
+        //rs 0 ps 0
+        //pf 0 ps 1
+        //pf 1 ps 2
+        //pf 2 ps 3
+        //pf 3 rf 0
+        //
+        //rs 1 ps 14
+        //pf 14 rf 1
+        //
+        //rs 2 ps 19
+        //pf 19 rf 2
+
 
         public static async Task<string> NMSGPostCommentDataAsync(
             NiconicoContext context,
@@ -326,27 +368,28 @@ namespace Mntone.Nico2.Videos.Comment
             int userid,
             string comment,
             TimeSpan position,
-            string command
+            string command,
+            string postKey,
+            ThreadType threadInitialType,
+            int commentSequenceNumber
             )
         {
-            // postkeyの取得
-            var postKey = await GetPostKeyAsync(context, threadId, commentCount)
-                .ContinueWith(prevResult => ParsePostKey(prevResult.Result));
 
             Debug.WriteLine(postKey);
 
-            var postCommentMessage = NMSG_RequestParamaterBuilder.MakeOfficialVideoPostCommmentRequest(
+            var postCommentMessage = NMSG_RequestParamaterBuilder.MakeVideoPostCommmentRequest(
                 comment,
                 ((int)position.TotalMilliseconds / 10),
                 command,
                 threadId,
                 ticket,
                 userid,
-                postKey
+                postKey,
+                commentSequenceNumber,
+                threadInitialType
                 );
                         
             Debug.WriteLine(postCommentMessage);
-
 
             var content = new Windows.Web.Http.HttpStringContent(postCommentMessage);
 
@@ -370,7 +413,13 @@ namespace Mntone.Nico2.Videos.Comment
             return JsonConvert.DeserializeObject<PostCommentResponse>(chatResultText);
         }
 
-        public static Task<PostCommentResponse> NMSGPostCommentAsync(
+        // 単一アカウントから利用されることを前提とした危険な実装です
+        private static string _LastPostKey;
+
+        private static string _LastThreadId;
+        private static int _CommentRequestCount;
+
+        public static async Task<PostCommentResponse> NMSGPostCommentAsync(
             NiconicoContext context,
             string threadId,
             string ticket,
@@ -378,11 +427,42 @@ namespace Mntone.Nico2.Videos.Comment
             int userId,
             string comment,
             TimeSpan position,
-            string commands
+            string commands,
+            ThreadType threadInitialType
             )
         {
-            return NMSGPostCommentDataAsync(context, threadId, ticket, commentCount, userId, comment, position, commands)
-                .ContinueWith(prevResult => NMSGParsePostCommentResult(prevResult.Result));
+            foreach (var _ in Enumerable.Range(0, 2))
+            {
+                // postkeyの取得
+                if (_LastPostKey == null)
+                {
+                    _LastPostKey = await GetPostKeyAsync(context, threadId, commentCount)
+                        .ContinueWith(prevResult => ParsePostKey(prevResult.Result));
+                }
+
+                if (_LastThreadId != threadId)
+                {
+                    _LastThreadId = threadId;
+                    _CommentRequestCount = 1;
+                }
+
+                var res = await NMSGPostCommentDataAsync(context, threadId, ticket, commentCount, userId, comment, position, commands, _LastPostKey, threadInitialType, _CommentRequestCount);
+                var result = NMSGParsePostCommentResult(res);
+
+                _CommentRequestCount++;
+
+                if (result.Chat_result.Status == ChatResult.InvalidPostkey)
+                {
+                    _LastPostKey = null;
+                }
+                else
+                {
+                    return result;
+                }
+            }
+
+            // 2回 postkey が無効となった場合は諦める
+            return null;
         }
 
 
@@ -399,7 +479,16 @@ namespace Mntone.Nico2.Videos.Comment
 
     }
 
-	[XmlRoot(ElementName = "chat")]
+
+    public enum ThreadType
+    {
+        UserVideo = 1,
+        UserVideoWithOwnerComment,
+        ChannelVideo,
+    }
+
+
+    [XmlRoot(ElementName = "chat")]
 	public class PostComment
 	{
 		[XmlAttribute]

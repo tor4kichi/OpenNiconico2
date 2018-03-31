@@ -147,11 +147,11 @@ namespace Mntone.Nico2.Videos
         /// </summary>
         /// <param name="flvResponse"></param>
         /// <returns></returns>
-        public Task<Comment.NMSG_Response> GetNMSGCommentAsync(Dmc.DmcWatchResponse dmcWatchRes)
+        public async Task<Comment.NMSG_Response> GetNMSGCommentAsync(Dmc.DmcWatchResponse dmcWatchRes)
         {
             if (dmcWatchRes.Video.DmcInfo.Thread.ThreadKeyRequired)
             {
-                return Comment.CommentClient.GetOfficialVideoNMSGCommentAsync(
+                var res = await Comment.CommentClient.GetOfficialVideoNMSGCommentAsync(
                     _context,
                      dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
                      (long)dmcWatchRes.Video.DmcInfo.Thread.OptionalThreadId,
@@ -159,17 +159,22 @@ namespace Mntone.Nico2.Videos
                      dmcWatchRes.Context.Userkey,
                      TimeSpan.FromSeconds(dmcWatchRes.Video.Duration)
                     );
+                res.ThreadType = Comment.ThreadType.ChannelVideo;
+                return res;
             }
             else
             {
-                return Comment.CommentClient.GetNMSGCommentAsync(
+                var hasOwnerThread = dmcWatchRes.Thread.HasOwnerThread.ToBooleanFrom1();
+                var res = await Comment.CommentClient.GetNMSGCommentAsync(
                     _context,
                      dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
                      dmcWatchRes.Viewer.Id,
                      dmcWatchRes.Context.Userkey,
                      TimeSpan.FromSeconds(dmcWatchRes.Video.Duration),
-                     dmcWatchRes.Thread.HasOwnerThread.ToBooleanFrom1()
+                     hasOwnerThread
                     );
+                res.ThreadType = hasOwnerThread ? Comment.ThreadType.UserVideoWithOwnerComment : Comment.ThreadType.UserVideo;
+                return res;
             }
         }
         
@@ -251,10 +256,11 @@ namespace Mntone.Nico2.Videos
             int userId,
             string comment,
             TimeSpan position,
-            string commands
+            string commands,
+            Comment.ThreadType threadType
             )
         {
-            return Comment.CommentClient.NMSGPostCommentAsync(_context, threadId, ticket, commentCount, userId, comment, position, commands);
+            return Comment.CommentClient.NMSGPostCommentAsync(_context, threadId, ticket, commentCount, userId, comment, position, commands, threadType);
         }
 
         /// <summary>

@@ -515,20 +515,25 @@ namespace Mntone.Nico2.Videos.Comment
         
 
 
-        public static string MakeOfficialVideoPostCommmentRequest(
+        public static string MakeVideoPostCommmentRequest(
             string content,
             int vpos,
             string mail,
             string threadId,
             string ticket,
             int userId,
-            string postkey
+            string postkey,
+            int commentRequestCount,
+            ThreadType threadType
             )
         {
+            var pspf = (((int)threadType) * 3) + ((commentRequestCount + 1) * 5);
+
+            // initialPostNumber 
             object[] paramter = new object[]
             {
-                new PingItem("rs:1"),
-                new PingItem("ps:14"),
+                new PingItem($"rs:{commentRequestCount}"),
+                new PingItem($"ps:{pspf}"),
                 new PostChatData()
                 {
                     Chat = new PostChat()
@@ -542,8 +547,8 @@ namespace Mntone.Nico2.Videos.Comment
                         PostKey = postkey,
                     }
                 },
-                new PingItem("pf:14"),
-                new PingItem("rf:1"),
+                new PingItem($"pf:{pspf}"),
+                new PingItem($"rf:{commentRequestCount}"),
             };
 
             var requestParamsJson = JsonConvert.SerializeObject(paramter, new JsonSerializerSettings()

@@ -214,7 +214,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ChatResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentPostData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\NMSG_RequestParamater.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\NMSG_Response.cs" />
