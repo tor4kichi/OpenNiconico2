@@ -397,20 +397,21 @@ namespace Mntone.Nico2.Videos.Comment
         }
 
 
+        // [{"ping": {"content": "rs:1"}}, {"ping": {"content": "ps:13"}}, {"chat_result": {"thread": "1522414574", "status": 0, "no": 211, "leaf": 1}}, {"ping": {"content": "pf:13"}}, {"ping": {"content": "rf:1"}}]
+
         public static PostCommentResponse NMSGParsePostCommentResult(string postCommentResult)
         {
-            var startStr = "{\"chat_result";
-            var endStr = "}}";
+            var jsonObject = (JArray)JsonConvert.DeserializeObject(postCommentResult);
 
-            var startPos = postCommentResult.IndexOf(startStr);
-            if (startPos == -1) { return null; }
+            foreach (var token in jsonObject.Cast<JObject>())
+            {
+                if (token.TryGetValue("chat_result", out var chatResultToken))
+                {
+                    return new PostCommentResponse { Chat_result = chatResultToken.ToObject<Chat_result>() };
+                }
+            }
 
-            var endPos = postCommentResult.IndexOf(endStr, startPos) + endStr.Length;
-            if (endPos == -1) { return null; }
-
-            var chatResultText = postCommentResult.Substring(startPos, endPos - startPos);
-
-            return JsonConvert.DeserializeObject<PostCommentResponse>(chatResultText);
+            throw new NotSupportedException(postCommentResult);
         }
 
         // 単一アカウントから利用されることを前提とした危険な実装です
@@ -431,8 +432,9 @@ namespace Mntone.Nico2.Videos.Comment
             ThreadType threadInitialType
             )
         {
-            foreach (var _ in Enumerable.Range(0, 2))
+            foreach (var _ in Enumerable.Range(0, 3))
             {
+                var prevPostKey = _LastPostKey;
                 // postkeyの取得
                 if (_LastPostKey == null)
                 {
@@ -447,12 +449,23 @@ namespace Mntone.Nico2.Videos.Comment
                 }
 
                 var res = await NMSGPostCommentDataAsync(context, threadId, ticket, commentCount, userId, comment, position, commands, _LastPostKey, threadInitialType, _CommentRequestCount);
+
+
+                Debug.WriteLine(res);
+
                 var result = NMSGParsePostCommentResult(res);
 
                 _CommentRequestCount++;
 
                 if (result.Chat_result.Status == ChatResult.InvalidPostkey)
                 {
+                    // 前とポストキーが同じ場合には書き込み先ブロックを動かすためにコメ数を100加算した上で
+                    // 次のポストキー取得を行うようにする
+                    if (prevPostKey == _LastPostKey)
+                    {
+                        commentCount += 100;
+                    }
+
                     _LastPostKey = null;
                 }
                 else
