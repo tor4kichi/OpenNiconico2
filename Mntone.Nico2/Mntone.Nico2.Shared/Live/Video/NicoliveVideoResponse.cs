@@ -241,7 +241,8 @@ namespace Mntone.Nico2.Live.Video
     {
 
         [DataMember(Name = "video_info")]
-        public VideoInfo VideoInfo { get; set; }
+        [JsonConverter(typeof(SingleOrArrayConverter<VideoInfo>))]
+        public IList<VideoInfo> VideoInfo { get; set; }
 
         [DataMember(Name = "@status")]
         public string Status { get; set; }

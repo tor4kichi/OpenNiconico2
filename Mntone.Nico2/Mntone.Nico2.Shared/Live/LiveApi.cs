@@ -380,9 +380,9 @@ namespace Mntone.Nico2.Live
         /// </summary>
         /// <param name="liveId"></param>
         /// <returns></returns>
-        public Task<Video.NicoliveCommunityVideoResponse> GetLiveCommunityVideoAsync(string liveId)
+        public Task<Video.NicoliveCommunityVideoResponse> GetLiveCommunityVideoAsync(string communityOrChannelId)
         {
-            return Video.LiveVideoClient.LiveCommunityVideoSubClient.GetLiveCommunityVideoAsync(_context, liveId);
+            return Video.LiveVideoClient.LiveCommunityVideoSubClient.GetLiveCommunityVideoAsync(_context, communityOrChannelId);
         }
 
         #region field
