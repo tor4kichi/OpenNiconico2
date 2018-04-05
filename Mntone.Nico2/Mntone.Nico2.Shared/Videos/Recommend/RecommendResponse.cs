@@ -89,7 +89,7 @@ namespace Mntone.Nico2.Videos.Recommend
 
         public string ParseTitle()
         {
-            return TitleShort.DecodeUTF8();
+            return System.Net.WebUtility.HtmlDecode(TitleShort);
         }
     }
 
