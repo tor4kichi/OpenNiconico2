@@ -274,13 +274,7 @@ namespace Mntone.Nico2.Users.Follow
                 {
                     favData.ThumbnailUrl = thumbAnchor.GetAttributeValue("href", String.Empty);
                 }
-
-                var videoCountDisplayText = section.ChildNodes["p"]?.InnerText;
-                var videoCount = new String(videoCountDisplayText.Reverse().TakeWhile(c => c >= '0' && c <= '9').Reverse().ToArray());
-                if (int.TryParse(videoCount, out int count))
-                {
-                    favData.VideoCount = count;
-                }
+                
                 return favData;
             })
                 .ToList();

@@ -66,36 +66,37 @@ namespace Mntone.Nico2.Users.FollowCommunity
 
 				var sectionClassElem = commuContainer.GetElementByClassName("section");
 
-				{
-					var commuNameAnchorElem = sectionClassElem.Element("h5")
-					.Element("a");
+                var commuNameAnchorElem = sectionClassElem.Element("h5")
+                    .Element("a");
 
-					var commuName = commuNameAnchorElem.InnerText;
-					favCommunity.CommunityName = commuName;
+                var commuName = commuNameAnchorElem.InnerText;
+                    favCommunity.CommunityName = commuName;
 
-					var communityId = commuNameAnchorElem.Attributes["href"].Value.Split('/').Last();
-					favCommunity.CommunityId = communityId;
+                var communityId = commuNameAnchorElem.Attributes["href"].Value.Split('/').Last();
+                favCommunity.CommunityId = communityId;
 
-					var countElemItems = sectionClassElem.Element("ul").Elements("li");
+                try
+                {
+                    var countElemItems = sectionClassElem.Element("ul").Elements("li");
 
-					var videoCountText = countElemItems.ElementAt(0).InnerText.Split(':').Last();
-					var videoCount = int.Parse(videoCountText.Replace(",", ""));
-					favCommunity.VideoCount = videoCount;
+                    var memberCountText = countElemItems.ElementAt(0).InnerText.Split(':').Last();
+                    var memberCount = int.Parse(memberCountText.Replace(",", ""));
+                    favCommunity.MemberCount = memberCount;
 
-					var memberCountText = countElemItems.ElementAt(1).InnerText.Split(':').Last();
-					var memberCount = int.Parse(memberCountText.Replace(",", ""));
-					favCommunity.MemberCount = memberCount;
+                    var descElem = sectionClassElem.Element("p");
+                    favCommunity.ShortDescription = descElem.InnerText;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("[OpenNico2] " + e.ToString());
+                }
 
-					var descElem = sectionClassElem.Element("p");
-					favCommunity.ShortDescription = descElem.InnerText;
+                followCommunityResponse.Items.Add(favCommunity);
 
-					followCommunityResponse.Items.Add(favCommunity);
-				}
-
-			}
+            }
 
 
-			return followCommunityResponse;
+            return followCommunityResponse;
 		}
 
 

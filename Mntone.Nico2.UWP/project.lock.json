@@ -22366,11 +22366,9 @@
     "UAP,Version=v10.0.10240": []
   },
   "packageFolders": {
-    "C:\\Users\\tor4k\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {}
+    "C:\\Users\\tor4k\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "1.0.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\tor4k\\Documents\\Repo\\OpenNiconico2\\Mntone.Nico2.UWP\\Mntone.Nico2.UWP.csproj",
       "projectName": "Mntone.Nico2.UWP",
@@ -22379,13 +22377,9 @@
       "packagesPath": "C:\\Users\\tor4k\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\tor4k\\Documents\\Repo\\OpenNiconico2\\Mntone.Nico2.UWP\\obj\\",
       "projectStyle": "ProjectJson",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\"
-      ],
       "configFilePaths": [
         "C:\\Users\\tor4k\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
