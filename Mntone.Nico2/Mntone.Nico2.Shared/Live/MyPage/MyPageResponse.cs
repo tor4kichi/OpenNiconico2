@@ -11,6 +11,9 @@ namespace Mntone.Nico2.Live.MyPage
 	{
 		internal MyPageResponse( HtmlNode liveListHtml, string language )
 		{
+            // Note: Javascriptによって動的に読み込む必要がある
+            // http://live.nicovideo.jp/my_timeshift_list にアクセスした結果を解析する
+            /*
 			this._TimeshiftPrograms = liveListHtml
 				.GetElementById( "TS_list" )
 				.GetElementById( "liveItemsWrap" )
@@ -20,8 +23,9 @@ namespace Mntone.Nico2.Live.MyPage
 				.Select( i => i.GetElementByClassName( "name" ).GetElementByTagName( "a" ) )
 				.Select( i => new TimeshiftProgramInfo( i.GetAttributeValue( "href", string.Empty ).Substring( 30 ), i.GetAttributeValue( "title", string.Empty ) ) )
 				.ToList();
+                */
 
-			var favoriteList = liveListHtml.GetElementById( "Favorite_list" );
+            var favoriteList = liveListHtml.GetElementById( "Favorite_list" );
 			{
 				var onAirWrap = favoriteList.GetElementById( "subscribeItemsWrap" );
 				var onAirItems = onAirWrap != null ? onAirWrap.GetElementsByClassName( "liveItems" ) : null;
