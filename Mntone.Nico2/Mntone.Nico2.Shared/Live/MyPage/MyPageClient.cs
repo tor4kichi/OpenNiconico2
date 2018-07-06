@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mntone.Nico2.Live.MyPage
@@ -23,7 +24,7 @@ namespace Mntone.Nico2.Live.MyPage
 				language = "en-us";
 			}
 			return new MyPageResponse(
-				htmlHtml.Element( "body" ).GetElementById( "all_cover" ).GetElementById( "all" ).GetElementByClassName( "container" ).GetElementById( "liveList" ),
+				htmlHtml.Descendants("div").First(x => x.Id == "liveList"),
 				language );
 		}
 
