@@ -78,19 +78,30 @@ namespace Mntone.Nico2.Videos
 		}
 #endif
 
-		/// <summary>
-		/// 非同期操作として videoviewhistory/remove で履歴を削除します
-		/// </summary>
-		/// <param name="token">視聴履歴を取得したときに取得したトークン</param>
-		/// <param name="requestId">目的の動画 ID</param>
-		/// <returns>非同期操作を表すオブジェクト</returns>
+
+        /// <summary>
+        /// マイページの視聴履歴から視聴履歴情報を取得します
+        /// </summary>
+        /// <returns></returns>
+        public Task<Histories.HistoriesResponse> GetHistoriesFromMyPageAsync()
+        {
+            return Histories.HistoriesClient.GetHistoriesFromMyPageAsync(_context);
+        }
+
+
+        /// <summary>
+        /// 非同期操作として videoviewhistory/remove で履歴を削除します
+        /// </summary>
+        /// <param name="token">視聴履歴を取得したときに取得したトークン</param>
+        /// <param name="requestId">目的の動画 ID</param>
+        /// <returns>非同期操作を表すオブジェクト</returns>
 #if WINDOWS_APP
 		public IAsyncOperation<RemoveHistory.RemoveHistoryResponse> RemoveHistoryAsync( string token, string requestId )
 		{
 			return RemoveHistory.RemoveHistoryClient.RemoveHistoryAsync( _context, token, requestId ).AsAsyncOperation();
 		}
 #else
-		public Task<RemoveHistory.RemoveHistoryResponse> RemoveHistoryAsync( string token, string requestId )
+        public Task<RemoveHistory.RemoveHistoryResponse> RemoveHistoryAsync( string token, string requestId )
 		{
 			return RemoveHistory.RemoveHistoryClient.RemoveHistoryAsync( _context, token, requestId );
 		}

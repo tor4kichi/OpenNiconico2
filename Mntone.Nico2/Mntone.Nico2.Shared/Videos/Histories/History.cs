@@ -35,19 +35,19 @@ namespace Mntone.Nico2.Videos.Histories
 		/// デバイス
 		/// </summary>
 		[DataMember( Name = "device" )]
-		public ushort Device { get; private set; }
+		public ushort Device { get; set; }
 
 		/// <summary>
 		/// 要素の ID
 		/// </summary>
 		[DataMember( Name = "item_id" )]
-		public string ItemId { get; private set; }
+		public string ItemId { get; set; }
 
 		/// <summary>
 		/// 長さ
 		/// </summary>
 		public TimeSpan Length { get { return this._Length; } }
-		private TimeSpan _Length = TimeSpan.Zero;
+        internal TimeSpan _Length = TimeSpan.Zero;
 
 		[DataMember( Name = "length" )]
 		private string LengthImpl
@@ -68,31 +68,31 @@ namespace Mntone.Nico2.Videos.Histories
 		/// サムネール URL
 		/// </summary>
 		[DataMember( Name = "thumbnail_url" )]
-		public Uri ThumbnailUrl { get; private set; }
+		public Uri ThumbnailUrl { get; set; }
 
 		/// <summary>
 		/// 題名
 		/// </summary>
 		[DataMember( Name = "title" )]
-		public string Title { get; private set; }
+		public string Title { get; set; }
 
 		/// <summary>
 		/// 動画 ID
 		/// </summary>
 		[DataMember( Name = "video_id" )]
-		public string Id { get; private set; }
+		public string Id { get; set; }
 
 		/// <summary>
 		/// 閲覧数
 		/// </summary>
 		[DataMember( Name = "watch_count" )]
-		public uint WatchCount { get; private set; }
+		public uint WatchCount { get; set; }
 
 		/// <summary>
 		/// 開場時間
 		/// </summary>
 		public DateTimeOffset WatchedAt { get { return this._WatchedAt; } }
-		private DateTimeOffset _WatchedAt = DateTimeOffset.MinValue;
+		internal DateTimeOffset _WatchedAt = DateTimeOffset.MinValue;
 
 		[DataMember( Name = "watch_date" )]
 		private long WatchedAtImpl

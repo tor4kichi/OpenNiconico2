@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Mntone.Nico2.Videos.Histories
@@ -13,7 +14,13 @@ namespace Mntone.Nico2.Videos.Histories
 		internal HistoriesResponse()
 		{ }
 
-		[DataMember( Name = "status" )]
+        internal HistoriesResponse(string token, IEnumerable<History> histories)
+        {
+            Token = token;
+            _Histories = histories is List<History> castedHistories ? castedHistories : histories.ToList();
+        }
+
+        [DataMember( Name = "status" )]
 		private string StatusImpl
 		{
 			get { return string.Empty; }
@@ -30,7 +37,7 @@ namespace Mntone.Nico2.Videos.Histories
 		/// トークン
 		/// </summary>
 		[DataMember( Name = "token" )]
-		public string Token { get; private set; }
+		public string Token { get; set; }
 
 		/// <summary>
 		/// 視聴した動画の一覧

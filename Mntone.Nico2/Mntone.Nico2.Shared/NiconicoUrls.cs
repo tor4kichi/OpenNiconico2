@@ -66,11 +66,16 @@ namespace Mntone.Nico2
 		/// </summary>
 		public static string VideoWatchPageUrl { get { return VideoUrlBase + "watch/"; } }
 
-		internal static string VideoFlvUrl { get { return VideoFlapiUrlBase + "getflv/"; } }
+
+        public static string VideoHistoryMyPageUrl { get { return VideoUrlBase + "my/history"; } }
+
+        internal static string VideoFlvUrl { get { return VideoFlapiUrlBase + "getflv/"; } }
 		internal static string VideoThumbInfoUrl { get { return "http://ext.nicovideo.jp/api/getthumbinfo/"; } }
 		internal static string VideoHistoryUrl { get { return VideoApiUrlBase + "videoviewhistory/list"; } }
 		internal static string VideoRemoveUrl { get { return VideoApiUrlBase + "videoviewhistory/remove?token="; } }
 		internal static string VideoThreadKeyApiUrl { get { return VideoFlapiUrlBase + "getthreadkey?thread="; } }
+
+
 
 
 		private const string ExtUrlBase = "http://ext" + DomainBase;
