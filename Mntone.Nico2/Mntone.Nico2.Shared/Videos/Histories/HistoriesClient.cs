@@ -71,48 +71,50 @@ namespace Mntone.Nico2.Videos.Histories
             var histories = new List<History>();
             foreach (var node in hisotryListNode.Elements("div"))
             {
-                
-                var videoId = node.Id.Split('_').Last();
-                var imageNode = node.Descendants("img").First();
-                var thumbnailUrl = imageNode.GetAttributeValue("data-original", "");
-                if (thumbnailUrl == "")
+                try
                 {
-                    thumbnailUrl = imageNode.GetAttributeValue("src", "");
+                    var videoId = node.Id.Split('_').Last();
+                    var imageNode = node.Descendants("img").First();
+                    var thumbnailUrl = imageNode.GetAttributeValue("data-original", "");
+                    if (thumbnailUrl == "")
+                    {
+                        thumbnailUrl = imageNode.GetAttributeValue("src", "");
+                    }
+
+                    var title = imageNode.GetAttributeValue("alt", "");
+
+                    var videoTimeNode = node.GetElementByClassName("thumbContainer").Element("span");
+                    var videoTime = videoTimeNode?.InnerText.ToTimeSpan() ?? TimeSpan.Zero;
+
+                    var sectionNode = node.GetElementByClassName("section");
+                    var watchTimeNode = sectionNode.GetElementByClassName("posttime");
+                    var watchTimeText = watchTimeNode.InnerText.Split(' ', '年', '月', '日', ':').Select(x => int.TryParse(x, out var s) ? s : 0).ToArray();
+                    var watchTime = new DateTime(watchTimeText[0], watchTimeText[1], watchTimeText[2], watchTimeText[4], watchTimeText[5], 0);
+
+                    var watchCountNode = watchTimeNode.Element("span");
+                    var watchCount = ExtractNumbersFunc(watchCountNode.InnerText);
+
+                    var metaDataNode = sectionNode.Element("ul");
+                    var viewCount = ExtractNumbersFunc(metaDataNode.GetElementByClassName("play").InnerText);
+                    var commentCount = ExtractNumbersFunc(metaDataNode.GetElementByClassName("comment").InnerText);
+                    var mylistCount = ExtractNumbersFunc(metaDataNode.GetElementByClassName("mylist").InnerText);
+                    var postTimeNumbers = metaDataNode.GetElementByClassName("posttime").InnerText.Split(' ', '年', '月', '日', ':').Select(x => int.TryParse(x, out var s) ? s : 0).ToArray();
+                    var postTime = new DateTime(postTimeNumbers[0] + 2000, postTimeNumbers[1], postTimeNumbers[2], postTimeNumbers[4], postTimeNumbers[5], 0);
+
+
+                    var history = new History()
+                    {
+                        Id = videoId,
+                        ItemId = videoId,
+                        Title = title,
+                        ThumbnailUrl = thumbnailUrl.ToUri(),
+                        WatchCount = (uint)watchCount,
+                        _Length = videoTime,
+                        _WatchedAt = new DateTimeOffset(watchTime)
+                    };
+                    histories.Add(history);
                 }
-
-                var title = imageNode.GetAttributeValue("alt", "");
-
-                var videoTimeNode = node.GetElementByClassName("thumbContainer").Element("span");
-                var videoTime = videoTimeNode.InnerText.ToTimeSpan();
-
-                var sectionNode = node.GetElementByClassName("section");
-                var watchTimeNode = sectionNode.GetElementByClassName("posttime");
-                var watchTimeText = watchTimeNode.InnerText.Split(' ', '年', '月', '日', ':').Select(x => int.TryParse(x, out var s) ? s : 0).ToArray();
-                var watchTime = new DateTime(watchTimeText[0], watchTimeText[1], watchTimeText[2], watchTimeText[4], watchTimeText[5], 0);
-
-                var watchCountNode = watchTimeNode.Element("span");
-                var watchCount = ExtractNumbersFunc(watchCountNode.InnerText);
-
-                var metaDataNode = sectionNode.Element("ul");
-                var viewCount = ExtractNumbersFunc(metaDataNode.GetElementByClassName("play").InnerText);
-                var commentCount = ExtractNumbersFunc(metaDataNode.GetElementByClassName("comment").InnerText);
-                var mylistCount = ExtractNumbersFunc(metaDataNode.GetElementByClassName("mylist").InnerText);
-                var postTimeNumbers = metaDataNode.GetElementByClassName("posttime").InnerText.Split(' ', '年', '月', '日', ':').Select(x => int.TryParse(x, out var s) ? s : 0).ToArray();
-                var postTime = new DateTime(postTimeNumbers[0] + 2000, postTimeNumbers[1], postTimeNumbers[2], postTimeNumbers[4], postTimeNumbers[5], 0);
-
-
-                var history = new History()
-                {
-                    Id = videoId,
-                    ItemId = videoId,
-                    Title = title,
-                    ThumbnailUrl = thumbnailUrl.ToUri(),
-                    WatchCount = (uint)watchCount,
-                    _Length = videoTime,
-                    _WatchedAt = new DateTimeOffset(watchTime)
-                };
-
-                histories.Add(history);
+                catch { }
             }
 
             var res = new HistoriesResponse(token, histories);
