@@ -20,41 +20,59 @@ namespace Mntone.Nico2.Live.Video
         public string Description { get; set; }
 
         [DataMember(Name = "user_id")]
-        public string UserId { get; set; }
+        private string __UserId { get; set; }
 
-        public uint UserIdNumber => uint.Parse(UserId);
+        private uint? _UserId;
+        public uint UserId => (_UserId ?? (_UserId = uint.Parse(__UserId))).Value;
 
 
         [DataMember(Name = "open_time")]
-        public string __OpenTime { get; set; }
+        private string __OpenTime { get; set; }
 
-
-        public DateTime? OpenTime => __OpenTime != null ? DateTime.Parse(__OpenTime) : default(DateTime?);
+        private DateTime? _OpenTime;
+        public DateTime? OpenTime => _OpenTime ?? (_OpenTime = !string.IsNullOrEmpty(__OpenTime) ? DateTime.Parse(__OpenTime) : default(DateTime?));
 
         [DataMember(Name = "start_time")]
-        public string __StartTime { get; set; }
+        private string __StartTime { get; set; }
 
-        public DateTime? StartTime => __StartTime != null ? DateTime.Parse(__StartTime) : default(DateTime?);
+        private DateTime? _StartTime;
+        public DateTime? StartTime => _StartTime ?? (_StartTime = !string.IsNullOrEmpty(__StartTime) ? DateTime.Parse(__StartTime) : default(DateTime?));
 
 
         [DataMember(Name = "end_time")]
-        public string __EndTime { get; set; }
+        private string __EndTime { get; set; }
 
-        public DateTime? EndTime => __EndTime != null ? DateTime.Parse(__EndTime) : default(DateTime?);
+        private DateTime? _EndTime;
+        public DateTime? EndTime => _EndTime ?? (_EndTime = !string.IsNullOrEmpty(__EndTime) ? DateTime.Parse(__EndTime) : default(DateTime?));
 
 
         [DataMember(Name = "provider_type")]
-        public string __ProviderType { get; set; }
+        private string __ProviderType { get; set; }
 
+        private CommunityType? _ProviderType;
         public CommunityType ProviderType
         {
             get
             {
-                if (__ProviderType == "official") { return CommunityType.Official; }
-                if (__ProviderType == "community") { return CommunityType.Community; }
-                if (__ProviderType == "channel") { return CommunityType.Channel; }
+                if (_ProviderType == null)
+                {
+                    switch (__ProviderType)
+                    {
+                        case "official":
+                            _ProviderType = CommunityType.Official;
+                            break;
+                        case "community":
+                            _ProviderType = CommunityType.Community;
+                            break;
+                        case "channel":
+                            _ProviderType = CommunityType.Channel;
+                            break;
+                        default:
+                            throw new NotSupportedException("not support CommunityType, " + __ProviderType);
+                    }
+                }
 
-                throw new NotSupportedException("not support CommunityType, " + __ProviderType);
+                return _ProviderType.Value;
             }
         }
 
@@ -64,77 +82,129 @@ namespace Mntone.Nico2.Live.Video
         [DataMember(Name = "_thumbnail_url")]
         public string ThumbnailUrl { get; set; }
 
+        public bool HasThumbnailUrl => !string.IsNullOrEmpty(ThumbnailUrl);
+
         [DataMember(Name = "_picture_url")]
         public string PictureUrl { get; set; }
 
+        public bool HasPictureUrl => !string.IsNullOrEmpty(PictureUrl);
+
+
         [DataMember(Name = "_currentstatus")]
-        public string Currentstatus { get; set; }
+        private string __Currentstatus { get; set; }
+
+        private StatusType? _CurrentStatus;
+        public StatusType CurrentStatus
+        {
+            get
+            {
+                return (_CurrentStatus ?? (_CurrentStatus = StatusTypeExtensions.ToStatusType(__Currentstatus))).Value;
+            }
+        }
+            
+
+        
 
         [DataMember(Name = "hidescore_online")]
         public string HidescoreOnline { get; set; }
+
+
 
         [DataMember(Name = "hidescore_comment")]
         public string HidescoreComment { get; set; }
 
         [DataMember(Name = "community_only")]
-        public string CommunityOnly { get; set; }
+        private string __IsCommunityOnly { get; set; }
 
-        public bool IsCommunityOnly => CommunityOnly.ToBooleanFrom1();
+        private bool? _IsCommunityOnly;
+        public bool IsCommunityOnly => (_IsCommunityOnly ?? (_IsCommunityOnly = __IsCommunityOnly.ToBooleanFrom1())).Value;
 
         [DataMember(Name = "channel_only")]
-        public string ChannelOnly { get; set; }
+        private string __IsChannelOnly { get; set; }
 
-        public bool IsChannelOnly => ChannelOnly.ToBooleanFrom1();
+        private bool? _IsChannelOnly;
+        public bool IsChannelOnly => (_IsChannelOnly ?? (_IsChannelOnly = __IsChannelOnly.ToBooleanFrom1())).Value;
 
         [DataMember(Name = "view_counter")]
-        public string __ViewCounter { get; set; }
+        private string __ViewCount { get; set; }
 
-        public int ViewCounter => int.Parse(__ViewCounter);
+        private int? _ViewCount;
+        public int ViewCount => (_ViewCount ?? (_ViewCount = int.Parse(__ViewCount))).Value;
 
         [DataMember(Name = "comment_count")]
-        public string __CommentCount { get; set; }
+        private string __CommentCount { get; set; }
 
-        public int CommentCount => int.Parse(__CommentCount);
+        private int? _CommentCount;
+        public int CommentCount => (_CommentCount ?? (_CommentCount = int.Parse(__CommentCount))).Value;
 
         [DataMember(Name = "is_panorama")]
-        public string IsPanorama { get; set; }
+        private string __IsPanorama { get; set; }
+
+        private bool? _IsPanorama;
+        public bool IsPanorama => (_IsPanorama ?? (_IsPanorama = __IsPanorama.ToBooleanFrom1())).Value;
+
 
         [DataMember(Name = "_timeshift_limit")]
-        public string __TimeshiftLimit { get; set; }
+        private string __TimeshiftLimit { get; set; }
 
-        public int TimeshiftLimit => int.Parse(__TimeshiftLimit);
+        private int? _TimeshiftLimit;
+        public int TimeshiftLimit => (_TimeshiftLimit ?? (_TimeshiftLimit = int.Parse(__TimeshiftLimit))).Value;
 
 
         [DataMember(Name = "_ts_archive_released_time")]
-        public string TsArchiveReleasedTime { get; set; }
+        private string __TsArchiveReleasedTime { get; set; }
+
+        private DateTime? _TsArchiveReleasedTime;
+        public DateTime? TsArchiveReleasedTime => _TsArchiveReleasedTime ?? (_TsArchiveReleasedTime = !string.IsNullOrEmpty(__TsArchiveReleasedTime) ? DateTime.Parse(__TsArchiveReleasedTime) : default(DateTime?));
+
 
         [DataMember(Name = "_use_tsarchive")]
         public string UseTsarchive { get; set; }
 
         [DataMember(Name = "_ts_archive_start_time")]
-        public string TsArchiveStartTime { get; set; }
+        private string __TsArchiveStartTime { get; set; }
+
+        private DateTime? _TsArchiveStartTime;
+        public DateTime? TsArchiveStartTime => _TsArchiveStartTime ?? (_TsArchiveStartTime = !string.IsNullOrEmpty(__TsArchiveStartTime) ? DateTime.Parse(__TsArchiveStartTime) : default(DateTime?));
+
 
         [DataMember(Name = "_ts_archive_end_time")]
-        public string TsArchiveEndTime { get; set; }
+        private string __TsArchiveEndTime { get; set; }
+
+        private DateTime? _TsArchiveEndTime;
+        public DateTime? TsArchiveEndTime => _TsArchiveEndTime ?? (_TsArchiveEndTime = !string.IsNullOrEmpty(__TsArchiveEndTime) ? DateTime.Parse(__TsArchiveEndTime) : default(DateTime?));
 
         [DataMember(Name = "_ts_view_limit_num")]
-        public string TsViewLimitNum { get; set; }
+        private string __TsViewLimitNum { get; set; }
+
+        private int? _TsViewLimitNum;
+        public int TsViewLimitNum => (_TsViewLimitNum ?? (_TsViewLimitNum = int.Parse(__TsViewLimitNum))).Value;
+
 
         [DataMember(Name = "_ts_is_endless")]
-        public string TsIsEndless { get; set; }
+        private string __TsIsEndless { get; set; }
+
+        private bool? _TsIsEndless;
+        public bool TsIsEndless => (_TsIsEndless ?? (_TsIsEndless = __TsIsEndless.ToBooleanFrom1())).Value;
 
         [DataMember(Name = "_ts_reserved_count")]
-        public string TsReservedCount { get; set; }
+        private string __TsReservedCount { get; set; }
+
+        private int? _TsReservedCount;
+        public int TsReservedCount => (_TsReservedCount ?? (_TsReservedCount = int.Parse(__TsReservedCount))).Value;
+
 
         [DataMember(Name = "timeshift_enabled")]
-        public string __TimeshiftEnabled { get; set; }
+        private string __TimeshiftEnabled { get; set; }
 
-        public bool IsTimeshiftEnabled => __TimeshiftEnabled.ToBooleanFrom1();
+        private bool? _TimeshiftEnabled;
+        public bool TimeshiftEnabled => (_TimeshiftEnabled ?? (_TimeshiftEnabled = __TimeshiftEnabled.ToBooleanFrom1())).Value;
 
         [DataMember(Name = "is_hq")]
-        public string __IsHq { get; set; }
+        private string __IsHq { get; set; }
 
-        public bool IsHq => __IsHq.ToBooleanFrom1();
+        private bool? _IsHq;
+        public bool IsHq => (_IsHq ?? (_IsHq = __IsHq.ToBooleanFrom1())).Value;
     }
 
     [DataContract]
@@ -151,22 +221,26 @@ namespace Mntone.Nico2.Live.Video
         public string Description { get; set; }
 
         [DataMember(Name = "public")]
-        public string Public { get; set; }
+        private string __IsPublic { get; set; }
 
-        public bool IsPublic => Public.ToBooleanFrom1();
+        private bool? _IsPublic;
+        public bool IsPublic => (_IsPublic ?? (_IsPublic = __IsPublic.ToBooleanFrom1())).Value;
 
         [DataMember(Name = "global_id")]
         public string GlobalId { get; set; }
 
         [DataMember(Name = "user_count")]
-        public string __UserCount { get; set; }
+        private string __UserCount { get; set; }
 
-        public int UserCount => int.Parse(__UserCount);
+        private int? _UserCount;
+        public int UserCount => (_UserCount ?? (_UserCount = int.Parse(__UserCount))).Value;
+
 
         [DataMember(Name = "level")]
-        public string __Level { get; set; }
+        private string __Level { get; set; }
 
-        public int Level => int.Parse(__Level);
+        private int? _Level;
+        public int Level => (_Level ?? (_Level = int.Parse(__Level))).Value;
 
         [DataMember(Name = "thumbnail")]
         public string Thumbnail { get; set; }
@@ -181,7 +255,7 @@ namespace Mntone.Nico2.Live.Video
 
         [DataMember(Name = "livetag")]
         [JsonConverter(typeof(SingleOrArrayConverter<string>))]
-        public IList<string> Livetag { get; set; } = new List<string>();
+        public IList<string> Tags { get; set; } = new List<string>();
     }
 
     [DataContract]

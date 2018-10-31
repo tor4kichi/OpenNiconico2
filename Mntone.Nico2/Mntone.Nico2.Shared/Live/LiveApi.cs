@@ -385,6 +385,30 @@ namespace Mntone.Nico2.Live
             return Video.LiveVideoClient.LiveCommunityVideoSubClient.GetLiveCommunityVideoAsync(_context, communityOrChannelId);
         }
 
+
+        /// <summary>
+        /// 指定したIDの公式生放送やチャンネル生放送に関するオススメ生放送コンテンツを取得します。<br />
+        /// ユーザー生放送の場合は <seealso cref="GetCommunityRecommendAsync"/> を使用してください。
+        /// </summary>
+        /// <param name="officialOrChannelLiveId">lvで始まるニコニコ生放送コンテンツID</param>
+        /// <returns></returns>
+        public Task<Recommend.LiveRecommendResponse> GetOfficialOrChannelLiveRecommendAsync(string officialOrChannelLiveId)
+        {
+            return Recommend.RecommendClient.GetOfficialOrChannelLiveRecommendAsync(_context, officialOrChannelLiveId);
+        }
+
+        /// <summary>
+        /// 指定したIDのユーザー生放送に関するオススメ生放送コンテンツを取得します。<br />
+        /// 公式生放送やチャンネル生放送の場合は <seealso cref="GetOfficialOrChannelLiveRecommendAsync"/> を使用してください。
+        /// </summary>
+        /// <param name="liveId">lvで始まるニコニコ生放送コンテンツID</param>
+        /// <param name="communityId">coで始まるニコニコミュニティID</param>
+        /// <returns></returns>
+        public Task<Recommend.LiveRecommendResponse> GetCommunityRecommendAsync(string liveId, string communityId)
+        {
+            return Recommend.RecommendClient.GetCommunityLiveRecommendAsync(_context, liveId, communityId);
+        }
+
         #region field
 
         private NiconicoContext _context;

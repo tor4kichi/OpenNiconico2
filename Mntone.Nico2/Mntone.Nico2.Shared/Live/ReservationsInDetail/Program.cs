@@ -53,5 +53,25 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 		/// 有効期限日時
 		/// </summary>
 		public DateTimeOffset ExpiredAt { get; private set; }
-	}
+
+
+
+        public ReservationStatus? GetReservationStatus()
+        {
+            return Enum.TryParse(Status, out ReservationStatus result) 
+                ? new ReservationStatus?(result) 
+                : default(ReservationStatus?)
+                ;
+        }
+    }
+
+
+    public enum ReservationStatus
+    {
+        FIRST_WATCH,
+        WATCH,
+        PRODUCT_ARCHIVE_WATCH,
+        RESERVED,
+        TSARCHIVE,
+    }
 }

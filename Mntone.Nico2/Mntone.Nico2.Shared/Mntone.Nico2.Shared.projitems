@@ -116,6 +116,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\PlayerStatus\VideoAspectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\PlayerStatus\VideoPosition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\PostKey\PostKeyClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Recommend\LiveRecommendData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Recommend\RecommendClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\Reservations\ReservationsClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\ReservationsInDetail\ReservationsInDetailClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\ReservationsInDetail\ReservationsInDetailResponse.cs" />
