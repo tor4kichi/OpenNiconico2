@@ -122,6 +122,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\ReservationsInDetail\ReservationsInDetailClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\ReservationsInDetail\ReservationsInDetailResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\ReservationsInDetail\Program.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Reservation\ReservationClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\Reservation\ReservationResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\StatusType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\StatusTypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\TagRevision\TagRevisionClient.cs" />

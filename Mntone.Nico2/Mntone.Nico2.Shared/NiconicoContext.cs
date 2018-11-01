@@ -190,14 +190,16 @@ namespace Mntone.Nico2
 		{
 			if( this.HttpClient == null )
 			{
-				this.ProtocolFilter = new HttpBaseProtocolFilter();
+                this.ProtocolFilter = new HttpBaseProtocolFilter();
 				ProtocolFilter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
-				this.HttpClient = new HttpClient(ProtocolFilter);
+
+                this.HttpClient = new HttpClient(ProtocolFilter);
 				this.HttpClient.DefaultRequestHeaders.Add( "user-agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
+
 				this.HttpClient.DefaultRequestHeaders.Add( "accept-language", "ja, en;q=0.5" );
-			}
+            }
 			return this.HttpClient;
 		}
 

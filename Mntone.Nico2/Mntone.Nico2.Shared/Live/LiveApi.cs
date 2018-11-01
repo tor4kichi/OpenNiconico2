@@ -253,17 +253,57 @@ namespace Mntone.Nico2.Live
 		}
 #endif
 
-		/// <summary>
-		/// 非同期操作としてタグ リビジョンを取得します
-		/// </summary>
-		/// <returns>非同期操作を表すオブジェクト</returns>
+
+        /// <summary>
+        /// タイムシフト予約を行います。
+        /// </summary>
+        /// <param name="liveId">生放送コンテンツID（内部的にはlv無し数字のみのコンテンツIDが必要ですが、lvがあってもトリミングするよう対応してます）</param>
+        /// <param name="isOverwrite">trueを指定すると、もしも予約可能な枠が無かった場合に一番古いタイムシフト予約が強制的に削除されます。</param>
+        /// <returns></returns>
+        public Task<Reservation.ReservationResponse> ReservationAsync(string liveId, bool isOverwrite = false)
+        {
+            return Reservation.ReservationClient.ReservationAsync(_context, liveId, isOverwrite);
+        }
+
+        /// <summary>
+        /// タイムシフト予約を削除するのに必要なトークン文字列を取得します。<br />
+        /// トークン取得のために http://live.nicovideo.jp/my_timeshift_list へアクセスします。
+        /// </summary>
+        /// <returns></returns>
+        public Task<Reservation.ReservationDeleteToken> GetReservationDeleteTokenAsync()
+        {
+            return Reservation.ReservationClient.GetReservationDeleteToken(_context);
+        }
+
+
+        /// <summary>
+        /// タイムシフト予約を削除します。<br />
+        /// </summary>
+        /// <param name="liveId">生放送コンテンツID（内部的にはlv無し数字のみのコンテンツIDが必要ですが、lvがあってもトリミングするよう対応してます）</param>
+        /// <param name="token">タイムシフト予約の削除用トークン。トークン取得は <see cref="GetReservationDeleteTokenAsync"/> を利用してください。 </param>
+        /// <returns></returns>
+        /// <remarks>Getメソッドによる削除操作を行っている都合上、削除の成功/失敗は別途タイムシフト予約一覧を再取得するなどアプリサイドでの確認が必要です。</remarks>
+        public Task DeleteReservationAsync(string liveId, Reservation.ReservationDeleteToken token)
+        {
+            return Reservation.ReservationClient.DeleteReservationAsync(_context, liveId, token);
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// 非同期操作としてタグ リビジョンを取得します
+        /// </summary>
+        /// <returns>非同期操作を表すオブジェクト</returns>
 #if WINDOWS_APP
 		public IAsyncOperation<ushort> GetTagRevisionAsync( string requestId )
 		{
 			return TagRevision.TagRevisionClient.GetTagRevisionAsync( this._context, requestId ).AsAsyncOperation();
 		}
 #else
-		public Task<ushort> GetTagRevisionAsync( string requestId )
+        public Task<ushort> GetTagRevisionAsync( string requestId )
 		{
 			return TagRevision.TagRevisionClient.GetTagRevisionAsync( this._context, requestId );
 		}
