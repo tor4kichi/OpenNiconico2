@@ -107,14 +107,14 @@ namespace Mntone.Nico2.Embed.Ichiba
                 var title = amazonNode.InnerText;
                 var amazonLink = amazonNode.GetAttributeValue("href", "");
                 resultItem.AmazonItemLink = new Uri(amazonLink);
-                resultItem.Title = title;
+                resultItem.Title = System.Net.WebUtility.HtmlDecode(title);
             }
 
             // maker
             {
                 var makerNode = ichibaItemNode.GetElementByClassName("maker");
                 var makerName = makerNode?.InnerText;
-                resultItem.Maker = makerName;
+                resultItem.Maker = System.Net.WebUtility.HtmlDecode(makerName);
             }
 
             // price + discountText
