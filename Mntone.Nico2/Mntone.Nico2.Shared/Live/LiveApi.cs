@@ -449,6 +449,15 @@ namespace Mntone.Nico2.Live
             return Recommend.RecommendClient.GetCommunityLiveRecommendAsync(_context, liveId, communityId);
         }
 
+
+
+        public Task<string> GetWaybackKeyAsync(string threadId)
+        {
+            return WaybackKey.WaybackKeyClient.GetWaybackKeyAsync(_context, threadId);
+        }
+
+
+
         #region field
 
         private NiconicoContext _context;
