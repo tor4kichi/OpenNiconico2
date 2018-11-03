@@ -270,9 +270,9 @@ namespace Mntone.Nico2.Live
         /// トークン取得のために http://live.nicovideo.jp/my_timeshift_list へアクセスします。
         /// </summary>
         /// <returns></returns>
-        public Task<Reservation.ReservationDeleteToken> GetReservationDeleteTokenAsync()
+        public Task<Reservation.ReservationToken> GetReservationTokenAsync()
         {
-            return Reservation.ReservationClient.GetReservationDeleteToken(_context);
+            return Reservation.ReservationClient.GetReservationToken(_context);
         }
 
 
@@ -280,15 +280,26 @@ namespace Mntone.Nico2.Live
         /// タイムシフト予約を削除します。<br />
         /// </summary>
         /// <param name="liveId">生放送コンテンツID（内部的にはlv無し数字のみのコンテンツIDが必要ですが、lvがあってもトリミングするよう対応してます）</param>
-        /// <param name="token">タイムシフト予約の削除用トークン。トークン取得は <see cref="GetReservationDeleteTokenAsync"/> を利用してください。 </param>
+        /// <param name="token">タイムシフト予約の削除用トークン。トークン取得は <see cref="GetReservationTokenAsync"/> を利用してください。 </param>
         /// <returns></returns>
         /// <remarks>Getメソッドによる削除操作を行っている都合上、削除の成功/失敗は別途タイムシフト予約一覧を再取得するなどアプリサイドでの確認が必要です。</remarks>
-        public Task DeleteReservationAsync(string liveId, Reservation.ReservationDeleteToken token)
+        public Task DeleteReservationAsync(string liveId, Reservation.ReservationToken token)
         {
             return Reservation.ReservationClient.DeleteReservationAsync(_context, liveId, token);
         }
 
 
+        /// <summary>
+        /// タイムシフト予約の視聴権を使用して、指定されあた生放送のタイムシフト視聴を有効化します。
+        /// </summary>
+        /// <param name="liveId_wo_lv"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        /// <remarks>視聴権は使用から放送時間＋24時間の間のみ有効です。（視聴権に関わらず視聴期限内いつでも視聴可能な場合は除く）</remarks>
+        public Task UseReservationAsync(string liveId_wo_lv, Reservation.ReservationToken token)
+        {
+            return Reservation.ReservationClient.UseReservationAsync(_context, liveId_wo_lv, token);
+        }
 
 
 

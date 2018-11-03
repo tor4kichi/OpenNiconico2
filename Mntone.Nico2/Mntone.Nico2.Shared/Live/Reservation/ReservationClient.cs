@@ -7,7 +7,7 @@ using Windows.Web.Http;
 
 namespace Mntone.Nico2.Live.Reservation
 {
-    public sealed class ReservationDeleteToken
+    public sealed class ReservationToken
     {
         public string Token { get; internal set; }
     }
@@ -62,7 +62,7 @@ namespace Mntone.Nico2.Live.Reservation
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static async Task<ReservationDeleteToken> GetReservationDeleteToken(NiconicoContext context)
+        public static async Task<ReservationToken> GetReservationToken(NiconicoContext context)
         {
             var timeshiftPageHtmlText = await context.GetStringAsync("http://live.nicovideo.jp/my_timeshift_list");
 
@@ -77,7 +77,7 @@ namespace Mntone.Nico2.Live.Reservation
             // will return string like "ulck_0123456789"
             if (confirmNode != null)
             {
-                return new ReservationDeleteToken()
+                return new ReservationToken()
                 {
                     Token = confirmNode.GetAttributeValue("value", "")
                 };
@@ -90,7 +90,7 @@ namespace Mntone.Nico2.Live.Reservation
 
 
 
-        public static Task DeleteReservationAsync(NiconicoContext context, string vid, ReservationDeleteToken reservationDeleteToken)
+        public static Task DeleteReservationAsync(NiconicoContext context, string vid, ReservationToken reservationDeleteToken)
         {
             var dict = new Dictionary<string, string>();
             
@@ -112,6 +112,19 @@ namespace Mntone.Nico2.Live.Reservation
         }
 
 
+
+
+
+        public static Task UseReservationAsync(NiconicoContext context, string liveId_wo_lv, ReservationToken token)
+        {
+            var dict = new Dictionary<string, string>();
+            dict.Add("accept", "true");
+            dict.Add("mode", "use");
+            dict.Add("vid", liveId_wo_lv);
+            dict.Add("token", token.Token);
+
+            return context.PostAsync($"http://live.nicovideo.jp/api/watchingreservation", dict, withToken:false);
+        }
 
     }
 }

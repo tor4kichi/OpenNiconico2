@@ -70,8 +70,10 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
     {
         FIRST_WATCH,
         WATCH,
-        PRODUCT_ARCHIVE_WATCH,
         RESERVED,
         TSARCHIVE,
+        PRODUCT_ARCHIVE_WATCH,
+        PRODUCT_ARCHIVE_TIMEOUT,
+
     }
 }
