@@ -284,20 +284,8 @@ namespace Mntone.Nico2.Live.Watch.Crescendo
         [DataMember(Name = "account")]
         public Account Account { get; set; }
 
-        [DataMember(Name = "app")]
-        public App App { get; set; }
-
-        [DataMember(Name = "atsumaru")]
-        public Atsumaru Atsumaru { get; set; }
-
-        [DataMember(Name = "blomaga")]
-        public Blomaga Blomaga { get; set; }
-
         [DataMember(Name = "channel")]
         public Channel Channel { get; set; }
-
-        [DataMember(Name = "commons")]
-        public Commons Commons { get; set; }
 
         [DataMember(Name = "community")]
         public Community Community { get; set; }
@@ -815,8 +803,8 @@ namespace Mntone.Nico2.Live.Watch.Crescendo
         [DataMember(Name = "searchPageUrl")]
         public string SearchPageUrl { get; set; }
 
-        [DataMember(Name = "familyService")]
-        public FamilyService FamilyService { get; set; }
+//        [DataMember(Name = "familyService")]
+//        public FamilyService FamilyService { get; set; }
 
         [DataMember(Name = "environments")]
         public Environments Environments { get; set; }
@@ -824,26 +812,26 @@ namespace Mntone.Nico2.Live.Watch.Crescendo
         [DataMember(Name = "relive")]
         public Relive Relive { get; set; }
 
-        [DataMember(Name = "information")]
-        public Information Information { get; set; }
+//        [DataMember(Name = "information")]
+//        public Information Information { get; set; }
 
         [DataMember(Name = "rule")]
         public Rule Rule { get; set; }
 
-        [DataMember(Name = "spec")]
-        public Spec Spec { get; set; }
+//        [DataMember(Name = "spec")]
+//        public Spec Spec { get; set; }
 
         [DataMember(Name = "ad")]
         public Ad Ad { get; set; }
 
-        [DataMember(Name = "program")]
-        public Program Program { get; set; }
+//        [DataMember(Name = "program")]
+//        public Program Program { get; set; }
 
         [DataMember(Name = "tag")]
         public Tag Tag { get; set; }
 
-        [DataMember(Name = "coe")]
-        public Coe Coe { get; set; }
+//        [DataMember(Name = "coe")]
+//        public Coe Coe { get; set; }
 
         [DataMember(Name = "commonHeader")]
         public CommonHeader CommonHeader { get; set; }
@@ -854,8 +842,8 @@ namespace Mntone.Nico2.Live.Watch.Crescendo
         [DataMember(Name = "timeshift")]
         public Timeshift Timeshift { get; set; }
 
-        [DataMember(Name = "broadcast")]
-        public Broadcast Broadcast { get; set; }
+//        [DataMember(Name = "broadcast")]
+//        public Broadcast Broadcast { get; set; }
 
         [DataMember(Name = "enquete")]
         public Enquete Enquete { get; set; }
@@ -1861,8 +1849,8 @@ namespace Mntone.Nico2.Live.Watch.Crescendo
     public class CrescendoLeoProps
     {
 
-//        [DataMember(Name = "site")]
-//        public SiteRoot Site { get; set; }
+        [DataMember(Name = "site")]
+        public SiteRoot Site { get; set; }
 
         [DataMember(Name = "user")]
         public User User { get; set; }
