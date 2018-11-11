@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
@@ -115,16 +116,162 @@ namespace Mntone.Nico2.Live.Reservation
 
 
 
-        public static Task UseReservationAsync(NiconicoContext context, string liveId_wo_lv, ReservationToken token)
+        public static Task UseReservationAsync(NiconicoContext context, string vid, ReservationToken token)
         {
+            if (vid.StartsWith("lv"))
+            {
+                vid = vid.Remove(0, 2);
+            }
+
+            if (!int.TryParse(vid, out var vidNumber))
+            {
+                throw new ArgumentException("vid can not accept NiconicoLiveContentId.");
+            }
+
             var dict = new Dictionary<string, string>();
             dict.Add("accept", "true");
             dict.Add("mode", "use");
-            dict.Add("vid", liveId_wo_lv);
+            dict.Add("vid", vid);
             dict.Add("token", token.Token);
 
             return context.PostAsync($"http://live.nicovideo.jp/api/watchingreservation", dict, withToken:false);
         }
 
+
+
+
+
+        public static async Task<MyTimeshiftListData> GetMyTimeshiftListAsync(NiconicoContext context)
+        {
+            MyTimeshiftListData data = new MyTimeshiftListData();
+            var timeshiftPageHtmlText = await context.GetStringAsync("http://live.nicovideo.jp/my_timeshift_list");
+
+            // input要素のクローズを行う
+
+            HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+
+            // Note: fix <input> node not closing issue.
+            htmlDocument.OptionAutoCloseOnEnd = true;
+
+            htmlDocument.LoadHtml(timeshiftPageHtmlText);
+
+            var errors = htmlDocument.ParseErrors.ToArray();
+            if (errors.Any())
+            {
+                foreach (var error in errors)
+                {
+                    System.Diagnostics.Debug.WriteLine(error.ToString());
+                }
+                throw new Exception();
+            }
+
+
+
+            try
+            {
+                var confirmNode = htmlDocument.DocumentNode
+                    .Descendants("input")
+                    .FirstOrDefault(x => x.Id == "confirm")
+                    ;
+
+                if (confirmNode == null) { return null; }
+
+                data.Token = confirmNode.GetAttributeValue("value", "");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("not Loggedin, or HTML layout changed (in http://live.nicovideo.jp/my_timeshift_list). can not parsing MyTimeshiftList HTML.", e);
+            }
+
+            var formNode = htmlDocument.DocumentNode.Descendants("div").First(x => x.Attributes["class"]?.Value == "liveItems clearfix");
+            var liveItemNodes = formNode.GetElementsByClassName("column");
+
+            Regex dateTimeRegex = new Regex(@"(\d\d\d\d)\/(\d?\d)\/(\d?\d)\(\S\)(\d?\d):(\d?\d)");
+            foreach (var liveItemNode in liveItemNodes)
+            {
+                MyTimeshiftListItem item = new MyTimeshiftListItem();
+
+                var nameAnchorNode = liveItemNode.GetElementByClassName("name").Element("a");
+                var title = nameAnchorNode.Attributes["title"];
+                var gateUrl = nameAnchorNode.Attributes["href"];
+
+                item.Id = gateUrl.Value.Split('/').Last();
+
+                var statusNode = liveItemNode.GetElementByClassName("status");
+                var statusSpanNode = statusNode.Element("span");
+                var statusSpanNodeClassName = statusSpanNode.Attributes["class"].Value;
+                var statusTextItems = statusSpanNode.InnerText.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                //【 statusSpanNode.InnerText の具体例 】
+                // 
+                // 視聴する	期限中、何度でも視聴できます	[2018/11/11(日)23:59まで]
+                // 視聴する	[2018/11/11(日)12:37まで]
+                // 視聴する	[視聴期限未定]
+                // 予約中	[2018/11/23(金)11:00放送開始]
+                // 視聴権利用期限が切れています	[2018/11/11(日)12:37まで]
+                // 
+                // TODO: このほか期限切れの表記も必要
+
+                Func<string, DateTimeOffset?> ExpiredTextToDateTimeOffset = (t) => 
+                {
+                    if (dateTimeRegex.IsMatch(t))
+                    {
+                        var match = dateTimeRegex.Match(t);
+                        var times = match.Groups.Cast<Group>().Skip(1).Select(x => int.Parse(x.Value)).ToArray();
+                        return new DateTimeOffset(times[0], times[1], times[2], times[3], times[4], 0, DateTimeOffset.Now.Offset);
+                    }
+                    else { return null; }
+                };
+
+                var timeLimitText = statusTextItems.Last();
+
+                switch (statusSpanNodeClassName)
+                {
+                    case "timeshift_watch":
+
+                        if (timeLimitText == "[視聴期限未定]")
+                        {
+                            item.WatchTimeLimit = DateTimeOffset.MaxValue;
+                        }
+                        else 
+                        {
+                            item.WatchTimeLimit = ExpiredTextToDateTimeOffset(timeLimitText);
+                        }
+
+                        item.IsCanWatch = true;
+                        break;
+                    case "timeshift_reservation":
+                        //if (DateTimeOffset.TryParseExact(timeLimitText, "[yyyy/mm/dd(ddd)HH:MM放送開始]", null, System.Globalization.DateTimeStyles.AssumeLocal, out var timeLimit))
+                        {
+                            //                                item.WatchTimeLimit = timeLimit;
+                        }
+                        break;
+                    case "timeshift_disable":
+                        item.WatchTimeLimit = ExpiredTextToDateTimeOffset(timeLimitText);
+                        break;
+                }
+
+                data._Items.Add(item);
+            }
+            
+
+            return data;
+        }
+    }
+
+    public sealed class MyTimeshiftListData
+    {
+        public string Token { get; internal set; }
+
+        internal List<MyTimeshiftListItem> _Items = new List<MyTimeshiftListItem>();
+
+        public IReadOnlyList<MyTimeshiftListItem> Items => _Items;
+    }
+
+    public sealed class MyTimeshiftListItem
+    {
+        public DateTimeOffset? WatchTimeLimit { get; internal set; }
+        public bool IsCanWatch { get; internal set; }
+        public string Id { get; internal set; }
     }
 }

@@ -119,5 +119,13 @@ namespace Mntone.Nico2.Live.Watch
                 .ContinueWith(prevTask => ParseCrescendoLeoPlayerProps(prevTask.Result));
         }
 
+
+
+
+        public static async Task<ProgramInfo> GetProgramInfoAsync(NiconicoContext context, string liveId)
+        {
+            var json = await context.GetStringAsync($"http://live2.nicovideo.jp/watch/{liveId}/programinfo");
+            return JsonSerializerExtensions.Load<ProgramInfo>(json);
+        }
     }
 }

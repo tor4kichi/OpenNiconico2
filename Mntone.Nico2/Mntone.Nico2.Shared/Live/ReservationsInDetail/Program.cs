@@ -1,5 +1,6 @@
 ﻿using Mntone.Nico2.Images.Illusts;
 using System;
+using System.Linq;
 
 #if WINDOWS_APP
 using Windows.Data.Xml.Dom;
@@ -63,6 +64,42 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
                 : default(ReservationStatus?)
                 ;
         }
+
+        ReservationStatus[] OutDatedStatusList = { ReservationStatus.PRODUCT_ARCHIVE_TIMEOUT, ReservationStatus.USER_TIMESHIFT_DATE_OUT, ReservationStatus.USE_LIMIT_DATE_OUT };
+        public bool IsOutDated
+        {
+            get
+            {
+                var status = GetReservationStatus();
+                if (status != null)
+                {
+                    return OutDatedStatusList.Contains(status.Value);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        ReservationStatus[] WatchAvairableStatusList = { ReservationStatus.WATCH, ReservationStatus.FIRST_WATCH, ReservationStatus.PRODUCT_ARCHIVE_WATCH, ReservationStatus.TSARCHIVE };
+        public bool IsCanWatch
+        {
+            get
+            {
+                var status = GetReservationStatus();
+                if (status != null)
+                {
+                    return WatchAvairableStatusList.Contains(status.Value);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool IsReserved => GetReservationStatus() == ReservationStatus.RESERVED;
     }
 
 
@@ -74,6 +111,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
         TSARCHIVE,
         PRODUCT_ARCHIVE_WATCH,
         PRODUCT_ARCHIVE_TIMEOUT,
-
+        USER_TIMESHIFT_DATE_OUT,
+        USE_LIMIT_DATE_OUT,
     }
 }

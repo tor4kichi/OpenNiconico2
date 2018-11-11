@@ -40,7 +40,7 @@ namespace Mntone.Nico2.Live
 #endif
 
 		/// <summary>
-		/// 非同期操作として番組説明を取得します
+		/// gateページから番組説明を取得します
 		/// </summary>
 		/// <param name="requestId">目的の生放送 ID</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
@@ -50,7 +50,7 @@ namespace Mntone.Nico2.Live
 			return Description.DescriptionClient.GetDescriptionAsync( this._context, requestId ).AsAsyncOperation();
 		}
 #else
-		public Task<Description.DescriptionResponse> GetDescriptionAsync( string requestId )
+		public Task<string> GetDescriptionAsync( string requestId )
 		{
 			return Description.DescriptionClient.GetDescriptionAsync( this._context, requestId );
 		}
@@ -253,6 +253,15 @@ namespace Mntone.Nico2.Live
 		}
 #endif
 
+        /// <summary>
+        /// タイムシフト予約の一覧を取得します。専ら、視聴権使用後の視聴期限を確認する目的で使います。
+        /// </summary>
+        /// <returns></returns>
+        public Task<Reservation.MyTimeshiftListData> GetMyTimeshiftListAsync()
+        {
+            return Reservation.ReservationClient.GetMyTimeshiftListAsync(_context);
+        }
+
 
         /// <summary>
         /// タイムシフト予約を行います。
@@ -413,6 +422,19 @@ namespace Mntone.Nico2.Live
         }
 
 
+        /// <summary>
+        /// 放送情報を取得します。<br />
+        /// 配信終了した放送の情報も取得できるため、<see cref="GetLiveVideoInfoAsync"/> の代替として利用するケースが考えられます。
+        /// </summary>
+        /// <param name="liveId">ニコニコ生放送コンテンツID（先頭lv有り）</param>
+        /// <returns></returns>
+        /// <remarks>公式の放送では情報を取得できません。公式放送には <see cref="GetLiveVideoInfoAsync"/> を使用してください。</remarks>
+        public Task<Watch.ProgramInfo> GetProgramInfoAsync(string liveId)
+        {
+            return Watch.WatchClient.GetProgramInfoAsync(_context, liveId);
+        }
+
+
 
 
         /// <summary>
@@ -466,6 +488,9 @@ namespace Mntone.Nico2.Live
         {
             return WaybackKey.WaybackKeyClient.GetWaybackKeyAsync(_context, threadId);
         }
+
+
+
 
 
 

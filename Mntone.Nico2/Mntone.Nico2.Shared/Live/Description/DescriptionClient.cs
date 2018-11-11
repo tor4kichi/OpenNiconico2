@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mntone.Nico2.Live.Description
@@ -16,17 +17,17 @@ namespace Mntone.Nico2.Live.Description
 			return context.GetClient().GetConvertedStringAsync( NiconicoUrls.LiveGatePageUrl + requestId );
 		}
 
-		public static DescriptionResponse ParseDescriptionData( string userInfoData )
+		public static string ParseDescriptionData( string userInfoData )
 		{
 			var html = new HtmlDocument();
 			html.LoadHtml( userInfoData );
 
 			var htmlHtml = html.DocumentNode.Element( "html" );
 			var language = htmlHtml.GetAttributeValue( "lang", "ja-jp" );
-			return new DescriptionResponse( htmlHtml.Element( "body" ).GetElementById( "all_cover" ).GetElementById( "all" ), language );
+			return htmlHtml.SelectSingleNode("//*[@id=\"jsFollowingAdMain\"]")?.GetElementByClassName("gate_description_area").InnerHtml;
 		}
 
-		public static Task<DescriptionResponse> GetDescriptionAsync( NiconicoContext context, string requestId )
+		public static Task<string> GetDescriptionAsync( NiconicoContext context, string requestId )
 		{
 			return GetDescriptionDataAsync( context, requestId )
 				.ContinueWith( prevTask => ParseDescriptionData( prevTask.Result ) );
