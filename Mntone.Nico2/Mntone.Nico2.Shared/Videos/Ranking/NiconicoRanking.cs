@@ -20,7 +20,7 @@ namespace Mntone.Nico2.Videos.Ranking
 		{
 			var _target = target.ToString();
 			var _timeSpan = timeSpan.ToString();
-			var _category = category.ToString();
+			var _category = category.ToString().ToLower();
 
 			return $"{_target}/{_timeSpan}/{_category}?rss=2.0";
         }
@@ -102,7 +102,14 @@ namespace Mntone.Nico2.Videos.Ranking
 		/// <summary>VOCALOID</summary>
 		vocaloid,	
 		/// <summary>ニコニコインディーズ</summary>
-		nicoindies,	
+		nicoindies,
+
+        /// <summary>ASMR</summary>
+        asmr,
+        /// <summary></summary>
+        mmd,
+        /// <summary>バーチャル</summary>
+        Virtual,
 
 		/// <summary>生活・一般・スポ</summary>
 		g_life2,
@@ -121,10 +128,12 @@ namespace Mntone.Nico2.Videos.Ranking
 		/// <summary>車載動画</summary>
 		drive,		 
 		/// <summary>歴史</summary>
-		history,	 
+		history,
+        /// <summary>鉄道</summary>
+        train,
 
-		/// <summary>政治</summary>
-		g_politics,	 
+        /// <summary>政治</summary>
+        g_politics,	 
 
 		/// <summary>科学・技術</summary>
 		g_tech,      
@@ -154,7 +163,8 @@ namespace Mntone.Nico2.Videos.Ranking
 		radio,		 
 		/// <summary>描いてみた</summary>
 		draw,		 
-		/// <summary></summary>
+		/// <summary>TRPG</summary>
+        trpg,
 
 		/// <summary>その他（合算）</summary>
 		g_other,	 
