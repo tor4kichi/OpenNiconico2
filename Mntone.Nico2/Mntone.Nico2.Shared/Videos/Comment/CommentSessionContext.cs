@@ -114,8 +114,6 @@ namespace Mntone.Nico2.Videos.Comment
                     continue;
                 }
 
-                var isCommunityThread = thread.Label == "community";
-
                 commentCommandList.Add(new PingItem($"ps:{_SeqNum + seqNum}"));
 
                 ThreadKeyResponse threadKey = null;
@@ -150,7 +148,7 @@ namespace Mntone.Nico2.Videos.Comment
                             UserId = UserId,
                             ThreadId = thread.Id.ToString(),
                             Version = "20090904",
-                            Userkey = !isCommunityThread ? UserKey : null,
+                            Userkey = !thread.IsThreadkeyRequired ? UserKey : null,
 
                             Threadkey = threadKey?.ThreadKey,
                             Force184 = threadKey?.Force184,
@@ -173,7 +171,7 @@ namespace Mntone.Nico2.Videos.Comment
                         {
                             UserId = UserId,
                             ThreadId = thread.Id.ToString(),
-                            Userkey = !isCommunityThread ? UserKey : null,
+                            Userkey = !thread.IsThreadkeyRequired ? UserKey : null,
 
                             Threadkey = threadKey?.ThreadKey,
                             Force184 = threadKey?.Force184,
