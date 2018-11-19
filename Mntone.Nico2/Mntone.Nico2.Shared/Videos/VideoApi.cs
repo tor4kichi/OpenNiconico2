@@ -151,49 +151,7 @@ namespace Mntone.Nico2.Videos
 			return Comment.CommentClient.GetCommentAsync(_context, userId, commentServerUrl, threadId, isKeyRequired);
 		}
 
-
-
-        /// <summary>
-        /// DMC動画情報を元にして動画コメントを取得します。
-        /// </summary>
-        /// <param name="flvResponse"></param>
-        /// <returns></returns>
-        public async Task<Comment.NMSG_Response> GetNMSGCommentAsync(Dmc.DmcWatchResponse dmcWatchRes)
-        {
-            if (dmcWatchRes.Video.DmcInfo.Thread.ThreadKeyRequired)
-            {
-                var res = await Comment.CommentClient.GetOfficialVideoNMSGCommentAsync(
-                    _context,
-                     dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
-                     (long)dmcWatchRes.Video.DmcInfo.Thread.OptionalThreadId,
-                     dmcWatchRes.Viewer.Id,
-                     dmcWatchRes.Context.Userkey,
-                     TimeSpan.FromSeconds(dmcWatchRes.Video.Duration)
-                    );
-                res.ThreadType = Comment.ThreadType.ChannelVideo;
-                return res;
-            }
-            else
-            {
-                var hasOwnerThread = dmcWatchRes.Thread.HasOwnerThread.ToBooleanFrom1();
-                var res = await Comment.CommentClient.GetNMSGCommentAsync(
-                    _context,
-                     dmcWatchRes.Video.DmcInfo.Thread.ThreadId,
-                     dmcWatchRes.Viewer.Id,
-                     dmcWatchRes.Context.Userkey,
-                     TimeSpan.FromSeconds(dmcWatchRes.Video.Duration),
-                     hasOwnerThread
-                    );
-                res.ThreadType = hasOwnerThread ? Comment.ThreadType.UserVideoWithOwnerComment : Comment.ThreadType.UserVideo;
-                return res;
-            }
-        }
-        
-
-
-
-
-
+       
 
         /// <summary>
         /// ニコニコ動画へのキーワード検索を行い結果を取得します。
@@ -258,21 +216,6 @@ namespace Mntone.Nico2.Videos
 		{
 			return Comment.CommentClient.PostCommentAsync(_context, commentServerUrl, thread._thread, thread.Ticket, int.Parse(thread.CommentCount)+1, comment, position, commands);
 		}
-
-
-        public Task<Comment.PostCommentResponse> NMSGPostCommentAsync(
-            string threadId,
-            string ticket,
-            int commentCount,
-            int userId,
-            string comment,
-            TimeSpan position,
-            string commands,
-            Comment.ThreadType threadType
-            )
-        {
-            return Comment.CommentClient.NMSGPostCommentAsync(_context, threadId, ticket, commentCount, userId, comment, position, commands, threadType);
-        }
 
         /// <summary>
 		/// 動画ページ内にある動画情報を取得します。
@@ -342,6 +285,20 @@ namespace Mntone.Nico2.Videos
         {
             return Dmc.DmcClient.DmcSessionExitHeartbeatAsync(_context, watch, sessionRes);
         }
+
+
+
+        /// <summary>
+        /// 動画のコメントをやりとりするJSON APIアクセスをラッピングしたCommentSessionContextを取得します。
+        /// DMCサーバーに配置済みの動画で利用できます。Smileサーバーの動画では<see cref="GetCommentAsync(int, string, int, bool)"/>を利用してください。
+        /// </summary>
+        /// <param name="dmc"></param>
+        /// <returns></returns>
+        public Comment.CommentSessionContext GetCommentSessionContext(Dmc.DmcWatchResponse dmc)
+        {
+            return new Comment.CommentSessionContext(_context, dmc);
+        }
+
 
 
 

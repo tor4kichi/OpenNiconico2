@@ -413,6 +413,79 @@ namespace Mntone.Nico2.Videos.Dmc
         public bool IsContinuous { get; set; }
     }
 
+
+    [DataContract]
+    public class ThreadFragment
+    {
+
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "fork")]
+        public int Fork { get; set; }
+
+        [DataMember(Name = "isActive")]
+        public bool IsActive { get; set; }
+
+        [DataMember(Name = "postkeyStatus")]
+        public int PostkeyStatus { get; set; }
+
+        [DataMember(Name = "isDefaultPostTarget")]
+        public bool IsDefaultPostTarget { get; set; }
+
+        [DataMember(Name = "isThreadkeyRequired")]
+        public bool IsThreadkeyRequired { get; set; }
+
+        [DataMember(Name = "isLeafRequired")]
+        public bool IsLeafRequired { get; set; }
+
+        [DataMember(Name = "label")]
+        public string Label { get; set; }
+
+        [DataMember(Name = "isOwnerThread")]
+        public bool IsOwnerThread { get; set; }
+
+        [DataMember(Name = "hasNicoscript")]
+        public bool HasNicoscript { get; set; }
+    }
+
+    [DataContract]
+    public class ThreadId
+    {
+
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "fork")]
+        public int Fork { get; set; }
+    }
+
+    [DataContract]
+    public class Layer
+    {
+
+        [DataMember(Name = "index")]
+        public int Index { get; set; }
+
+        [DataMember(Name = "isTranslucent")]
+        public bool IsTranslucent { get; set; }
+
+        [DataMember(Name = "threadIds")]
+        public IList<ThreadId> ThreadIds { get; set; }
+    }
+
+    [DataContract]
+    public class CommentComposite
+    {
+
+        [DataMember(Name = "threads")]
+        public IList<ThreadFragment> Threads { get; set; }
+
+        [DataMember(Name = "layers")]
+        public IList<Layer> Layers { get; set; }
+    }
+
+
     [DataContract]
     public class Tag
     {
@@ -932,6 +1005,9 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "player")]
         public Player Player { get; set; }
         */
+
+        [DataMember(Name = "commentComposite")]
+        public CommentComposite CommentComposite { get; set; }
 
         [DataMember(Name = "thread")]
         public Thread Thread { get; set; }

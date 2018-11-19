@@ -221,6 +221,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentSessionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\NMSG_RequestParamater.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\NMSG_Response.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\PostCommentResponse.cs" />
