@@ -29,21 +29,21 @@ namespace Mntone.Nico2.Live.Video
         [DataMember(Name = "open_time")]
         private string __OpenTime { get; set; }
 
-        private DateTime? _OpenTime;
-        public DateTime? OpenTime => _OpenTime ?? (_OpenTime = !string.IsNullOrEmpty(__OpenTime) ? DateTime.Parse(__OpenTime) : default(DateTime?));
+        private DateTimeOffset? _OpenTime;
+        public DateTimeOffset? OpenTime => _OpenTime ?? (_OpenTime = !string.IsNullOrEmpty(__OpenTime) ? DateTimeOffset.Parse(__OpenTime) : default(DateTimeOffset?));
 
         [DataMember(Name = "start_time")]
         private string __StartTime { get; set; }
 
-        private DateTime? _StartTime;
-        public DateTime? StartTime => _StartTime ?? (_StartTime = !string.IsNullOrEmpty(__StartTime) ? DateTime.Parse(__StartTime) : default(DateTime?));
+        private DateTimeOffset? _StartTime;
+        public DateTimeOffset? StartTime => _StartTime ?? (_StartTime = !string.IsNullOrEmpty(__StartTime) ? DateTimeOffset.Parse(__StartTime) : default(DateTimeOffset?));
 
 
         [DataMember(Name = "end_time")]
         private string __EndTime { get; set; }
 
-        private DateTime? _EndTime;
-        public DateTime? EndTime => _EndTime ?? (_EndTime = !string.IsNullOrEmpty(__EndTime) ? DateTime.Parse(__EndTime) : default(DateTime?));
+        private DateTimeOffset? _EndTime;
+        public DateTimeOffset? EndTime => _EndTime ?? (_EndTime = !string.IsNullOrEmpty(__EndTime) ? DateTimeOffset.Parse(__EndTime) : default(DateTimeOffset?));
 
 
         [DataMember(Name = "provider_type")]
@@ -154,8 +154,8 @@ namespace Mntone.Nico2.Live.Video
         [DataMember(Name = "_ts_archive_released_time")]
         private string __TsArchiveReleasedTime { get; set; }
 
-        private DateTime? _TsArchiveReleasedTime;
-        public DateTime? TsArchiveReleasedTime => _TsArchiveReleasedTime ?? (_TsArchiveReleasedTime = !string.IsNullOrEmpty(__TsArchiveReleasedTime) ? DateTime.Parse(__TsArchiveReleasedTime) : default(DateTime?));
+        private DateTimeOffset? _TsArchiveReleasedTime;
+        public DateTimeOffset? TsArchiveReleasedTime => _TsArchiveReleasedTime ?? (_TsArchiveReleasedTime = !string.IsNullOrEmpty(__TsArchiveReleasedTime) ? DateTimeOffset.Parse(__TsArchiveReleasedTime) : default(DateTimeOffset?));
 
 
         [DataMember(Name = "_use_tsarchive")]
@@ -164,15 +164,15 @@ namespace Mntone.Nico2.Live.Video
         [DataMember(Name = "_ts_archive_start_time")]
         private string __TsArchiveStartTime { get; set; }
 
-        private DateTime? _TsArchiveStartTime;
-        public DateTime? TsArchiveStartTime => _TsArchiveStartTime ?? (_TsArchiveStartTime = !string.IsNullOrEmpty(__TsArchiveStartTime) ? DateTime.Parse(__TsArchiveStartTime) : default(DateTime?));
+        private DateTimeOffset? _TsArchiveStartTime;
+        public DateTimeOffset? TsArchiveStartTime => _TsArchiveStartTime ?? (_TsArchiveStartTime = !string.IsNullOrEmpty(__TsArchiveStartTime) ? DateTimeOffset.Parse(__TsArchiveStartTime) : default(DateTimeOffset?));
 
 
         [DataMember(Name = "_ts_archive_end_time")]
         private string __TsArchiveEndTime { get; set; }
 
-        private DateTime? _TsArchiveEndTime;
-        public DateTime? TsArchiveEndTime => _TsArchiveEndTime ?? (_TsArchiveEndTime = !string.IsNullOrEmpty(__TsArchiveEndTime) ? DateTime.Parse(__TsArchiveEndTime) : default(DateTime?));
+        private DateTimeOffset? _TsArchiveEndTime;
+        public DateTimeOffset? TsArchiveEndTime => _TsArchiveEndTime ?? (_TsArchiveEndTime = !string.IsNullOrEmpty(__TsArchiveEndTime) ? DateTimeOffset.Parse(__TsArchiveEndTime) : default(DateTimeOffset?));
 
         [DataMember(Name = "_ts_view_limit_num")]
         private string __TsViewLimitNum { get; set; }
