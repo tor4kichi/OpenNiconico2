@@ -65,7 +65,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
                 ;
         }
 
-        ReservationStatus[] OutDatedStatusList = { ReservationStatus.PRODUCT_ARCHIVE_TIMEOUT, ReservationStatus.USER_TIMESHIFT_DATE_OUT, ReservationStatus.USE_LIMIT_DATE_OUT };
+        ReservationStatus[] OutDatedStatusList = { ReservationStatus.PRODUCT_ARCHIVE_TIMEOUT, ReservationStatus.USER_TIMESHIFT_DATE_OUT, ReservationStatus.USE_LIMIT_DATE_OUT, ReservationStatus.LIMIT_DATE_OUT };
         public bool IsOutDated
         {
             get
@@ -113,5 +113,6 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
         PRODUCT_ARCHIVE_TIMEOUT,
         USER_TIMESHIFT_DATE_OUT,
         USE_LIMIT_DATE_OUT,
+        LIMIT_DATE_OUT,
     }
 }
