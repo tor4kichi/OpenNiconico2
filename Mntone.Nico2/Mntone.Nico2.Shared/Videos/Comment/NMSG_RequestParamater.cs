@@ -157,6 +157,10 @@ namespace Mntone.Nico2.Videos.Comment
 
         [DataMember(Name = "postkey")]
         public string PostKey { get; set; }
+
+        [DataMember(Name = "premium")]
+        public string Premium { get; set; } = "0"; // 一般ユーザー:0 プレミアム会員:1
+
     }
 
 

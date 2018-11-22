@@ -33,6 +33,7 @@ namespace Mntone.Nico2.Videos.Comment
         public Dmc.CommentComposite CommenctComposite { get; private set; }
         public string UserId { get; private set; }
         public string UserKey { get; private set; }
+        public bool IsPremium { get; private set; }
 
         private Dmc.ThreadFragment DefaultPostTargetThread => CommenctComposite.Threads.FirstOrDefault(x => x.IsDefaultPostTarget);
 
@@ -48,13 +49,19 @@ namespace Mntone.Nico2.Videos.Comment
 
         private string _Ticket = null;
 
+        public bool CanPostComment => _Ticket != null;
+
+
+
         internal CommentSessionContext(NiconicoContext context, Dmc.DmcWatchResponse dmc)
         {
             Context = context;
 
             CommenctComposite = dmc.CommentComposite;
-            UserId = dmc.Viewer.Id.ToString();
-            UserKey = dmc.Context.Userkey;
+            UserId = dmc.Viewer?.Id.ToString();
+            UserKey = dmc.Context?.Userkey;
+            IsPremium = dmc.Viewer?.IsPremium ?? false;
+
             _LastRes = dmc.Thread.CommentCount;
 
             _ThreadLeavesContentString = ThreadLeaves.MakeContentString(TimeSpan.FromSeconds(dmc.Video.Duration));
@@ -338,6 +345,7 @@ namespace Mntone.Nico2.Videos.Comment
                         UserId = UserId,
                         Content = comment,
                         PostKey = postKey,
+                        Premium = IsPremium ? "1" : "0"
                     }
                 },
                 new PingItem($"pf:{_SeqNum}"),
@@ -358,15 +366,26 @@ namespace Mntone.Nico2.Videos.Comment
             return res;
         }
 
-        public async Task<PostCommentResponse> PostCommentAsync(TimeSpan posision, string comment, string mail)
+
+        /// <summary>
+        /// コメント投稿。登校前に<see cref="GetCommentFirstAsync"/>、または<see cref="GetDifferenceCommentAsync"/>を呼び出して投稿のためのTicketを取得しておく必要があります。
+        /// ログインしていない場合はコメント投稿は出来ません。
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="comment"></param>
+        /// <param name="mail"></param>
+        /// <returns></returns>
+        public async Task<PostCommentResponse> PostCommentAsync(TimeSpan position, string comment, string mail)
         {
             if (_Ticket == null)
             {
                 throw new Exception("not found posting ticket. once call GetCommentFirstAsync() then filling ticket in CommentSessionContext class inside.");
             }
 
+
+
             var postKey = await GetPostKeyAsync(DefaultPostTargetThreadId, _LastRes);
-            var res = await PostCommentAsync_Internal(posision, comment, mail, _Ticket, postKey);
+            var res = await PostCommentAsync_Internal(position, comment, mail, _Ticket, postKey);
 
             if (res.Chat_result.__Status == (int)ChatResult.InvalidPostkey || res.Chat_result.__Status == (int)ChatResult.InvalidTichet)
             {
@@ -376,7 +395,7 @@ namespace Mntone.Nico2.Videos.Comment
                 // ポストキーを再取得
                 postKey = await GetPostKeyAsync(DefaultPostTargetThreadId, _LastRes, forceRefresh: true);
 
-                res = await PostCommentAsync_Internal(posision, comment, mail, _Ticket, postKey);
+                res = await PostCommentAsync_Internal(position, comment, mail, _Ticket, postKey);
             }
 
             return res;
