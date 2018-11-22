@@ -45,7 +45,7 @@ namespace Mntone.Nico2
 
         internal const string VideoUrlBase = "http://www" + DomainBase;
         internal const string VideoApiUrlBase = VideoUrlBase + "api/";
-        internal const string VideoFlapiUrlBase = "http://flapi" + DomainBase + "api/";
+        internal const string VideoFlapiUrlBase = "https://flapi" + DomainBase + "api/";
 
 
         public static string VideoLoginUrl = VideoUrlBase + "login";

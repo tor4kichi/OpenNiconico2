@@ -36,6 +36,9 @@ namespace Mntone.Nico2.Videos.Comment
 
         private Dmc.ThreadFragment DefaultPostTargetThread => CommenctComposite.Threads.FirstOrDefault(x => x.IsDefaultPostTarget);
 
+        private string _DefaultPostTargetThreadId;
+        private string DefaultPostTargetThreadId => _DefaultPostTargetThreadId ?? (_DefaultPostTargetThreadId = DefaultPostTargetThread.Id.ToString());
+
         private int _SubmitTimes = 0;
         private int _SeqNum = 0;
 
@@ -195,9 +198,7 @@ namespace Mntone.Nico2.Videos.Comment
             // コメント取得結果をパース
             var res = ParseNMSGResponseJson(responseString);
 
-            
-            var defaultPostThreadId = DefaultPostTargetThread.Id.ToString();
-            var defaultPostThreadInfo = res.Threads.FirstOrDefault(x => x.Thread == defaultPostThreadId);
+            var defaultPostThreadInfo = res.Threads.FirstOrDefault(x => x.Thread == DefaultPostTargetThreadId);
             if (defaultPostThreadInfo != null)
             {
                 _LastRes = defaultPostThreadInfo.LastRes;
@@ -222,7 +223,7 @@ namespace Mntone.Nico2.Videos.Comment
                 threadKey = await GetThreadKeyAsync(DefaultPostTargetThread.Id);
             }
 
-            List<object> commentCommandList = new List<object>()
+            object[] commentCommandList = new object[]
             {
                 new PingItem($"rs:{_SubmitTimes}"),
                 new PingItem($"ps:{_SeqNum}"),
@@ -232,7 +233,7 @@ namespace Mntone.Nico2.Videos.Comment
                     {
                         Fork = DefaultPostTargetThread.Fork,
                         UserId = UserId,
-                        ThreadId = DefaultPostTargetThread.Id.ToString(),
+                        ThreadId = DefaultPostTargetThreadId,
                         Version = "20061206",
                         Userkey = UserKey,
                         ResFrom = _LastRes,
@@ -246,20 +247,19 @@ namespace Mntone.Nico2.Videos.Comment
             };
 
             // コメント取得リクエストを送信
-            var responseString = await SendCommentCommandAsync(commentCommandList.ToArray());
+            var responseString = await SendCommentCommandAsync(commentCommandList);
 
             // コメント取得結果をパース
             var res = ParseNMSGResponseJson(responseString);
 
 
-            var defaultPostThreadId = DefaultPostTargetThread.Id.ToString();
-            var defaultPostThreadInfo = res.Threads.FirstOrDefault(x => x.Thread == defaultPostThreadId);
+            var defaultPostThreadInfo = res.Threads.FirstOrDefault(x => x.Thread == DefaultPostTargetThreadId);
             if (defaultPostThreadInfo != null)
             {
                 _LastRes = defaultPostThreadInfo.LastRes;
                 _Ticket = defaultPostThreadInfo.Ticket;
 
-                IncrementSequenceNumber(commentCommandList.Count);
+                IncrementSequenceNumber(commentCommandList.Length);
             }
 
             return res;
@@ -323,7 +323,7 @@ namespace Mntone.Nico2.Videos.Comment
             }
 
             var vpos = (int)(posision.TotalMilliseconds * 0.1);
-            List<object> commentCommandList = new List<object>()
+            object[] commentCommandList = new object[]
             {
                 new PingItem($"rs:{_SubmitTimes}"),
                 new PingItem($"ps:{_SeqNum}"),
@@ -331,7 +331,7 @@ namespace Mntone.Nico2.Videos.Comment
                 {
                     Chat = new PostChat()
                     {
-                        ThreadId = DefaultPostTargetThread.Id.ToString(),
+                        ThreadId = DefaultPostTargetThreadId,
                         Vpos = vpos,
                         Mail = mail,
                         Ticket = _Ticket,
@@ -344,13 +344,16 @@ namespace Mntone.Nico2.Videos.Comment
                 new PingItem($"rf:{_SubmitTimes}"),
             };
 
-            var resString = await SendCommentCommandAsync(commentCommandList.ToArray());
+            var resString = await SendCommentCommandAsync(commentCommandList);
 
             var res = NMSGParsePostCommentResult(resString);
 
-            _LastRes = res?.Chat_result.No ?? _LastRes;
+            if (res?.Chat_result.__Status == (int)ChatResult.Success)
+            {
+                _LastRes = res.Chat_result.No;
+            }
 
-            IncrementSequenceNumber(commentCommandList.Count);
+            IncrementSequenceNumber(commentCommandList.Length);
 
             return res;
         }
@@ -362,18 +365,17 @@ namespace Mntone.Nico2.Videos.Comment
                 throw new Exception("not found posting ticket. once call GetCommentFirstAsync() then filling ticket in CommentSessionContext class inside.");
             }
 
-            var postKey = await GetPostKeyAsync(DefaultPostTargetThread.Id.ToString(), _LastRes);
+            var postKey = await GetPostKeyAsync(DefaultPostTargetThreadId, _LastRes);
             var res = await PostCommentAsync_Internal(posision, comment, mail, _Ticket, postKey);
 
-            if (res.Chat_result.Status == ChatResult.InvalidPostkey)
+            if (res.Chat_result.__Status == (int)ChatResult.InvalidPostkey || res.Chat_result.__Status == (int)ChatResult.InvalidTichet)
             {
-                postKey = await GetPostKeyAsync(DefaultPostTargetThread.Id.ToString(), _LastRes, forceRefresh: true);
-                res = await PostCommentAsync_Internal(posision, comment, mail, _Ticket, postKey);
-            }
-            else if (res.Chat_result.Status == ChatResult.InvalidTichet)
-            {
-                // チケット取得し直し
+                // 最新のコメント数とチケットを取得
                 await GetDifferenceCommentAsync();
+
+                // ポストキーを再取得
+                postKey = await GetPostKeyAsync(DefaultPostTargetThreadId, _LastRes, forceRefresh: true);
+
                 res = await PostCommentAsync_Internal(posision, comment, mail, _Ticket, postKey);
             }
 
