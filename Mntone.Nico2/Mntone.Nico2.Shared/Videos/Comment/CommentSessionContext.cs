@@ -209,7 +209,7 @@ namespace Mntone.Nico2.Videos.Comment
             if (defaultPostThreadInfo != null)
             {
                 _LastRes = defaultPostThreadInfo.LastRes;
-                _Ticket = defaultPostThreadInfo.Ticket;
+                _Ticket = defaultPostThreadInfo.Ticket ?? _Ticket;
 
                 IncrementSequenceNumber(commentCommandList.Count);
             }
@@ -264,7 +264,7 @@ namespace Mntone.Nico2.Videos.Comment
             if (defaultPostThreadInfo != null)
             {
                 _LastRes = defaultPostThreadInfo.LastRes;
-                _Ticket = defaultPostThreadInfo.Ticket;
+                _Ticket = defaultPostThreadInfo.Ticket ?? _Ticket;
 
                 IncrementSequenceNumber(commentCommandList.Length);
             }
