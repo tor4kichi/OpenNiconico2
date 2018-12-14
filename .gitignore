@@ -7,3 +7,4 @@ obj
 *.config
 /.vs/OpenNiconico2/v15
 /.vs/OpenNiconico2/DesignTimeBuild/.dtbcache
+project.lock.json
