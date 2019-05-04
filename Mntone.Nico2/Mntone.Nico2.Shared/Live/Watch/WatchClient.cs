@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.Http.Headers;
 
 namespace Mntone.Nico2.Live.Watch
 {
     public sealed class WatchClient
     {
         // Liveのwatchページから再生準備情報を取得します
-        public static Task<string> GetLiveWatchPageHtmlAsync(NiconicoContext context, string liveId, bool forceHtml5 = true)
+        public static async Task<string> GetLiveWatchPageHtmlAsync(NiconicoContext context, string liveId, bool forceHtml5 = true)
         {
             var client = context.GetClient();
-            var forceLepPlayerCookieValue = new HttpCookiePairHeaderValue("player_version", "leo");
-            if (client.DefaultRequestHeaders.Cookie.Contains(forceLepPlayerCookieValue))
-            {
-                client.DefaultRequestHeaders.Cookie.Remove(forceLepPlayerCookieValue);
-            }
-            client.DefaultRequestHeaders.Cookie.Add(forceLepPlayerCookieValue);
-
-            return client.GetStringAsync(NiconicoUrls.Live2WatchPageUrl + liveId);
+            var request = new HttpRequestMessage(HttpMethod.Get, NiconicoUrls.Live2WatchPageUrl + liveId);
+            request.Headers.Add(@"Cookie", "player_version=leo");
+            var res = await client.SendAsync(request);
+            return await res.Content.ReadAsStringAsync();
         }
 
         private static Crescendo.CrescendoLeoProps ParseCrescendoLeoPlayerProps(string html)

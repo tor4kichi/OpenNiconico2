@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -15,53 +11,49 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Stream
 	{
-#if WINDOWS_APP
-		internal Stream( IXmlNode streamXml, IXmlNode rtmpXml, IXmlNode ticketsXml, IXmlNode playerXml )
-#else
 		internal Stream( XElement streamXml, XElement rtmpXml, XElement ticketsXml, XElement playerXml )
-#endif
 		{
-			IsFlashMediaServer = rtmpXml.GetNamedAttributeText( "is_fms" ).ToBooleanFrom1();
+			IsFlashMediaServer = rtmpXml.Element( "is_fms" ).Value.ToBooleanFrom1();
 
-			var rtmptPortXml = rtmpXml.GetNamedAttributeText( "rtmpt_port" );
+			var rtmptPortXml = rtmpXml.Attribute( "rtmpt_port" ).Value;
 			RtmptPort = !string.IsNullOrEmpty( rtmptPortXml ) ? rtmptPortXml.ToUShort() : ( ushort )0u;
 			
-			RtmpUrl = rtmpXml.GetNamedChildNodeText( "url" ).ToUri();
-			Ticket = rtmpXml.GetNamedChildNodeText( "ticket" );
+			RtmpUrl = rtmpXml.Element( "url" ).Value.ToUri();
+			Ticket = rtmpXml.Element( "ticket" ).Value;
 
 			if( ticketsXml != null )
 			{
-				Tickets = ticketsXml.GetChildNodes().ToDictionary(
-					ticketXml => ticketXml.GetNamedAttributeText( "name" ),
-					ticketXml => ticketXml.GetText() );
+				Tickets = ticketsXml.Elements().ToDictionary(
+					ticketXml => ticketXml.Attribute( "name" ).Value,
+					ticketXml => ticketXml.Value );
 			}
 
-			Contents = streamXml.GetNamedChildNode( "contents_list" ).GetChildNodes().Select( contentsXml => new Content( contentsXml ) ).ToList();
+			Contents = streamXml.Element( "contents_list" ).Elements().Select( contentsXml => new Content( contentsXml ) ).ToList();
 
-			var splitTop = streamXml.GetNamedChildNodeText( "split_top" ).ToBooleanFrom1();
+			var splitTop = streamXml.Element( "split_top" ).Value.ToBooleanFrom1();
 			if( splitTop )
 			{
 				Position = VideoPosition.Top;
 			}
 			else
 			{
-				var splitBottom = streamXml.GetNamedChildNodeText( "split_bottom" ).ToBooleanFrom1();
+				var splitBottom = streamXml.Element( "split_bottom" ).Value.ToBooleanFrom1();
 				if( splitBottom )
 				{
 					Position = VideoPosition.Bottom;
 				}
 				else
 				{
-					var background = streamXml.GetNamedChildNodeText( "background_comment" ).ToBooleanFrom1();
+					var background = streamXml.Element( "background_comment" ).Value.ToBooleanFrom1();
 					Position = background ? VideoPosition.Small : VideoPosition.Default;
 				}
 			}
 
-			var aspectXml = streamXml.GetNamedChildNodeText( "aspect" );
+			var aspectXml = streamXml.Element( "aspect" ).Value;
 			Aspect = !string.IsNullOrEmpty( aspectXml ) ? aspectXml.ToVideoAspect() : VideoAspect.Auto;
 
-			BroadcastToken = streamXml.GetNamedChildNodeText( "broadcast_token" );
-			IsQualityOfServiceAnalyticsEnabled = playerXml.GetNamedChildNodeText( "qos_analytics" ).ToBooleanFrom1();
+			BroadcastToken = streamXml.Element( "broadcast_token" ).Value;
+			IsQualityOfServiceAnalyticsEnabled = playerXml.Element( "qos_analytics" ).Value.ToBooleanFrom1();
 		}
 
 		/// <summary>

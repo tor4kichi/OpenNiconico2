@@ -17,15 +17,15 @@ namespace Mntone.Nico2.Images.Illusts.BlogPartsRanking
 		internal Image( XElement imageXml )
 #endif
 		{
-			Id = "im" + imageXml.GetNamedChildNodeText( "id" );
-			//CacheTime = imageNode.GetNamedChildNodeText( "cache_time" ).ToDateTimeOffsetFromIso8601();
+			Id = "im" + imageXml.Element( "id" ).Value;
+			//CacheTime = imageNode.Element( "cache_time" ).ToDateTimeOffsetFromIso8601();
 
-			var titleAndRank = imageXml.GetNamedChildNodeText( "title" );
+			var titleAndRank = imageXml.Element( "title" ).Value;
 			var unitIndex = titleAndRank.IndexOf( "位 ", 1 );
 			Rank = titleAndRank.Substring( 0, unitIndex ).ToUShort();
 			Title = titleAndRank.Substring( unitIndex + 2 );
 
-			UserName = imageXml.GetNamedChildNodeText( "nickname" );
+			UserName = imageXml.Element( "nickname" ).Value;
 		}
 
 		/// <summary>

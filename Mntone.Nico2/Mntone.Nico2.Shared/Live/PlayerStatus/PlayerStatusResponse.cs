@@ -26,32 +26,32 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal PlayerStatusResponse( XElement playerStatusXml )
 #endif
 		{
-			var streamXml = playerStatusXml.GetNamedChildNode( "stream" );
-			var userXml = playerStatusXml.GetNamedChildNode( "user" );
-			var playerXml = playerStatusXml.GetNamedChildNode( "player" );
-			var farreXml = playerStatusXml.GetNamedChildNode( "farre" );
+			var streamXml = playerStatusXml.Element( "stream" );
+			var userXml = playerStatusXml.Element( "user" );
+			var playerXml = playerStatusXml.Element( "player" );
+			var farreXml = playerStatusXml.Element( "farre" );
 
-			LoadedAt = playerStatusXml.GetNamedAttributeText( "time" ).ToDateTimeOffsetFromUnixTime();
+			LoadedAt = playerStatusXml.Attribute( "time" ).Value.ToDateTimeOffsetFromUnixTime();
 			Program = new Program(
 				streamXml,
 				playerXml,
-				playerStatusXml.GetNamedChildNode( "nsen" ),
-				new ProgramTwitter( streamXml, playerStatusXml.GetNamedChildNode( "twitter" ) ) );
+				playerStatusXml.Element( "nsen" ),
+				new ProgramTwitter( streamXml, playerStatusXml.Element( "twitter" ) ) );
 			Room = new Room( streamXml, userXml );
 			Stream = new Stream(
 				streamXml,
-				playerStatusXml.GetNamedChildNode( "rtmp" ),
-				playerStatusXml.GetNamedChildNode( "tickets" ),
+				playerStatusXml.Element( "rtmp" ),
+				playerStatusXml.Element( "tickets" ),
 				playerXml );
 			Comment = new Comment(
 				streamXml,
 				new CommentServer(
-					playerStatusXml.GetNamedChildNode( "ms" ),
-					playerStatusXml.GetNamedChildNode( "tid_list" ) ) );
-			Telop = new Telop( streamXml.GetNamedChildNode( "telop" ) );
+					playerStatusXml.Element( "ms" ),
+					playerStatusXml.Element( "tid_list" ) ) );
+			Telop = new Telop( streamXml.Element( "telop" ) );
 			NetDuetto = new NetDuetto( streamXml );
 			Farre = farreXml != null ? new Farre( farreXml ) : null;
-			Marquee = new Marquee( playerStatusXml.GetNamedChildNode( "marquee" ) );
+			Marquee = new Marquee( playerStatusXml.Element( "marquee" ) );
 			User = new User( streamXml, userXml );
 		}
 

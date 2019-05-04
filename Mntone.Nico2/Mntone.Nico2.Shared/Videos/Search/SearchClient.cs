@@ -14,7 +14,7 @@ namespace Mntone.Nico2.Videos.Search
 			var sortMethodChar = sortMethod.ToChar().ToString();
 			var sortDirChar = sortDir.ToChar().ToString();
 			return await context.GetClient()
-				.GetStringAsync(NiconicoUrls.MakeKeywordSearchUrl(keyword, pageCount, sortMethodChar, sortDirChar));
+				.GetStringAsync(NiconicoUrls.MakeKeywordSearchUrl(System.Net.WebUtility.UrlEncode(keyword), pageCount, sortMethodChar, sortDirChar));
 		}
 
 		public static async Task<string> GetTagSearchDataAsync(NiconicoContext context, string tag, uint pageCount, Sort sortMethod, Order sortDir)
@@ -22,7 +22,7 @@ namespace Mntone.Nico2.Videos.Search
 			var sortMethodChar = sortMethod.ToShortString();
 			var sortDirChar = sortDir.ToShortString();
 			return await context.GetClient()
-				.GetStringAsync(NiconicoUrls.MakeTagSearchUrl(tag, pageCount, sortMethodChar, sortDirChar));
+				.GetStringAsync(NiconicoUrls.MakeTagSearchUrl(System.Net.WebUtility.UrlEncode(tag), pageCount, sortMethodChar, sortDirChar));
 		}
 
 

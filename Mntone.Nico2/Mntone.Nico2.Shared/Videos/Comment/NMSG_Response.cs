@@ -66,9 +66,9 @@ namespace Mntone.Nico2.Videos.Comment
 
         public ThreadType ThreadType { get; internal set; }
 
-        public IEnumerable<NMSG_Chat> ParseComments()
+        public List<NMSG_Chat> ParseComments()
         {
-            return _CommentsSource.Select(x => x.ToObject<NMSG_Chat>());
+            return _CommentsSource.Select(x => x.ToObject<NMSG_Chat>()).ToList();
         }
 
 

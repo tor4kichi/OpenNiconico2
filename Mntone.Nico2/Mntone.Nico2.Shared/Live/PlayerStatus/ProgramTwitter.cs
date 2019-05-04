@@ -19,9 +19,9 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal ProgramTwitter( XElement streamXml, XElement twitterXml )
 #endif
 		{
-			IsEnabled = twitterXml.GetNamedChildNodeText( "live_enabled" ).ToBooleanFrom1();
-			Hashtag = streamXml.GetNamedChildNodeText( "twitter_tag" );
-			VipModeCount = twitterXml.GetNamedChildNodeText( "vip_mode_count" ).ToUInt();
+			IsEnabled = twitterXml.Element( "live_enabled" ).Value.ToBooleanFrom1();
+			Hashtag = streamXml.Element( "twitter_tag" ).Value;
+			VipModeCount = twitterXml.Element( "vip_mode_count" ).Value.ToUInt();
 		}
 
 		/// <summary>

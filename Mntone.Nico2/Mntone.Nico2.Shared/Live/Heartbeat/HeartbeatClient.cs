@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 #if WINDOWS_APP
@@ -18,9 +19,8 @@ namespace Mntone.Nico2.Live.Heartbeat
 				throw new ArgumentException();
 			}
 
-			return context.GetClient()
-				.GetStringAsync( new Uri($"{NiconicoUrls.LiveHeartbeatUrl}?v={requestId}") )
-				.AsTask();
+            return context.GetClient()
+                .GetStringAsync(new Uri($"{NiconicoUrls.LiveHeartbeatUrl}?v={requestId}"));
 		}
 
 		public static HeartbeatResponse ParseHeartbeatData( string heartbeatData )
@@ -32,18 +32,18 @@ namespace Mntone.Nico2.Live.Heartbeat
 			var xml = XDocument.Parse( heartbeatData );
 #endif
 
-			var heartbeatXml = xml.GetDocumentRootNode();
-			if( heartbeatXml.GetName() != "heartbeat" )
+			var heartbeatXml = xml.Root;
+			if( heartbeatXml.Name != "heartbeat" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}
 
-			if( heartbeatXml.GetNamedAttributeText( "status" ) != "ok" )
+			if( heartbeatXml.Attribute( "status" ).Value != "ok" )
 			{
-				var error = heartbeatXml.GetFirstChildNode();
-				var code = error.GetNamedChildNodeText( "code" );
-				var description = error.GetNamedChildNodeText( "description" );
-				var reject = error.GetNamedChildNodeText( "reject" ).ToBooleanFromString();
+				var error = heartbeatXml.Elements().First();
+				var code = error.Element( "code" ).Value;
+				var description = error.Element( "description" ).Value;
+				var reject = error.Element( "reject" ).Value.ToBooleanFromString();
 
 				throw new Exception( "Parse Error: " + description + " (" + code + ')' );
 			}

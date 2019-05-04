@@ -13,7 +13,7 @@ namespace Mntone.Nico2.Images.Users.Data
 	{
 		public static Task<string> GetDataDataAsync( NiconicoContext context, uint requestUserId )
 		{
-			return context.GetClient()
+			return context
 				.GetStringAsync($"{NiconicoUrls.ImageUserDataUrl}{requestUserId}");
         }
 
@@ -26,8 +26,8 @@ namespace Mntone.Nico2.Images.Users.Data
 			var xml = XDocument.Parse( dataData, LoadOptions.None );
 #endif
 
-			var responseXml = xml.GetDocumentRootNode();
-			if( responseXml.GetName() != "response" )
+			var responseXml = xml.Root;
+			if( responseXml.Name != "response" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}

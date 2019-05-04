@@ -63,11 +63,11 @@ namespace Mntone.Nico2.Videos.Comment
 
     public static class CommandTypesHelper
     {
-        public static IEnumerable<CommandType> ParseCommentCommandTypes(string mail)
+        public static List<CommandType> ParseCommentCommandTypes(string mail)
         {
             if (mail == null)
             {
-                return Enumerable.Empty<CommandType>();
+                return new List<CommandType>();
             }
 
             return mail.Split(' ').Select(x =>
@@ -83,7 +83,8 @@ namespace Mntone.Nico2.Videos.Comment
                 }
             })
             .Where(x => x.HasValue)
-            .Select(x => x.Value);
+            .Select(x => x.Value)
+            .ToList();
         }
     }
 }

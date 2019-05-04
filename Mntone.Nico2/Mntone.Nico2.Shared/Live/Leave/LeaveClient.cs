@@ -12,9 +12,8 @@ namespace Mntone.Nico2.Live.Leave
 				throw new ArgumentException();
 			}
 
-			return context.GetClient()
-				.GetStringAsync( new Uri($"{NiconicoUrls.LiveLeaveUrl}?v={requestId}") )
-				.AsTask();
+            return context.GetClient()
+                .GetStringAsync(new Uri($"{NiconicoUrls.LiveLeaveUrl}?v={requestId}"));
 		}
 
 		public static bool ParseLeaveData( string leaveData )

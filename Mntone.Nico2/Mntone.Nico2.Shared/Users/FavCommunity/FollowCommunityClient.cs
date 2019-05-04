@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.Http;
 
 namespace Mntone.Nico2.Users.FollowCommunity
 {
@@ -145,15 +145,15 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			dict.Add("comment", comment ?? "");
 			dict.Add("notify", notify ? "1" : "");
 
-            var content = new HttpFormUrlEncodedContent(dict);
+            var content = new FormUrlEncodedContent(dict);
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
-            request.Headers["Upgrade-Insecure-Requests"] = "1";
-            request.Headers["Referer"] = url;
-            request.Headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+            request.Headers.Add("Referer", url);
+            request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 
             request.Content = content;
-            var postResult = await context.HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            var postResult = await context.HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
 			Debug.WriteLine(postResult);
 
@@ -228,15 +228,15 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			dict.Add("commit_key", token.CommitKey);
 			dict.Add("commit", token.Commit);
 
-            var content = new HttpFormUrlEncodedContent(dict);
+            var content = new FormUrlEncodedContent(dict);
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
-            request.Headers["Upgrade-Insecure-Requests"] = "1";
-            request.Headers["Referer"] = url;
-            request.Headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+            request.Headers.Add("Referer", url);
+            request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 
             request.Content = content;
-            var postResult = await context.HttpClient.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            var postResult = await context.HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             Debug.WriteLine(postResult);
 

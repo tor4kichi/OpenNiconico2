@@ -19,12 +19,12 @@ namespace Mntone.Nico2.Live.Heartbeat
 		internal HeartbeatResponse( XElement heartbeatXml )
 #endif
 		{
-			LoadedAt = heartbeatXml.GetNamedAttributeText( "time" ).ToDateTimeOffsetFromUnixTime();
-			WatchCount = heartbeatXml.GetNamedChildNodeText( "watchCount" ).ToUInt();
-			CommentCount = heartbeatXml.GetNamedChildNodeText( "commentCount" ).ToUInt();
-			IsRestrict = heartbeatXml.GetNamedChildNodeText( "is_restrict" ).ToBooleanFrom1();
-			Ticket = heartbeatXml.GetNamedChildNodeText( "ticket" );
-			WaitDuration = heartbeatXml.GetNamedChildNodeText( "waitTime" ).ToTimeSpanFromSecondsString();
+			LoadedAt = heartbeatXml.Attribute( "time" ).Value.ToDateTimeOffsetFromUnixTime();
+			WatchCount = heartbeatXml.Element( "watchCount" ).Value.ToUInt();
+			CommentCount = heartbeatXml.Element( "commentCount" ).Value.ToUInt();
+			IsRestrict = heartbeatXml.Element( "is_restrict" ).Value.ToBooleanFrom1();
+			Ticket = heartbeatXml.Element( "ticket" ).Value;
+			WaitDuration = heartbeatXml.Element( "waitTime" ).Value.ToTimeSpanFromSecondsString();
 		}
 
 		/// <summary>

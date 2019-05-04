@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 #if WINDOWS_APP
@@ -13,7 +14,7 @@ namespace Mntone.Nico2.Images.Users.Info
 	{
 		public static Task<string> GetInfoDataAsync( NiconicoContext context, uint requestUserId )
 		{
-			return context.GetClient()
+			return context
 				.GetStringAsync($"{NiconicoUrls.ImageUserInfoUrl}{requestUserId}");
 		}
 
@@ -26,14 +27,14 @@ namespace Mntone.Nico2.Images.Users.Info
 			var xml = XDocument.Parse( infoData );
 #endif
 
-			var responseXml = xml.GetDocumentRootNode();
-			if( responseXml.GetName() != "response" )
+			var responseXml = xml.Root;
+			if( responseXml.Name != "response" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}
 
-			var userXml = responseXml.GetFirstChildNode();
-			if( userXml.GetName() != "user" )
+			var userXml = responseXml.Elements().First();
+			if( userXml.Name != "user" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}

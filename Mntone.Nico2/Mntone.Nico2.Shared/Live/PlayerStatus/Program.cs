@@ -20,56 +20,56 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Program( XElement streamXml, XElement playerXml, XElement nsenXml, ProgramTwitter programTwitter )
 #endif
 		{
-			Id = streamXml.GetNamedChildNodeText( "id" );
-			Title = streamXml.GetNamedChildNodeText( "title" );
-			Description = streamXml.GetNamedChildNodeText( "description" );
+			Id = streamXml.Element( "id" ).Value;
+			Title = streamXml.Element( "title" ).Value;
+			Description = streamXml.Element( "description" ).Value;
 
-			WatchCount = streamXml.GetNamedChildNodeText( "watch_count" ).ToUInt();
-			CommentCount = streamXml.GetNamedChildNodeText( "comment_count" ).ToUInt();
+			WatchCount = streamXml.Element( "watch_count" ).Value.ToUInt();
+			CommentCount = streamXml.Element( "comment_count" ).Value.ToUInt();
 
-			CommunityType = streamXml.GetNamedChildNodeText( "provider_type" ).ToCommunityType();
-			CommunityId = streamXml.GetNamedChildNodeText( "default_community" );
-			BroadcasterId = streamXml.GetNamedChildNodeText( "owner_id" ).ToUInt();
-			BroadcasterName = streamXml.GetNamedChildNodeText( "owner_name" );
+			CommunityType = streamXml.Element( "provider_type" ).Value.ToCommunityType();
+			CommunityId = streamXml.Element( "default_community" ).Value;
+			BroadcasterId = streamXml.Element( "owner_id" ).Value.ToUInt();
+			BroadcasterName = streamXml.Element( "owner_name" ).Value;
 
-			International = streamXml.GetNamedChildNodeText( "international" ).ToUShort();
+			International = streamXml.Element( "international" ).Value.ToUShort();
 
-			BaseAt = streamXml.GetNamedChildNodeText( "base_time" ).ToDateTimeOffsetFromUnixTime();
-			OpenedAt = streamXml.GetNamedChildNodeText( "open_time" ).ToDateTimeOffsetFromUnixTime();
-			StartedAt = streamXml.GetNamedChildNodeText( "start_time" ).ToDateTimeOffsetFromUnixTime();
-			EndedAt = streamXml.GetNamedChildNodeText( "end_time" ).ToDateTimeOffsetFromUnixTime();
+			BaseAt = streamXml.Element( "base_time" ).Value.ToDateTimeOffsetFromUnixTime();
+			OpenedAt = streamXml.Element( "open_time" ).Value.ToDateTimeOffsetFromUnixTime();
+			StartedAt = streamXml.Element( "start_time" ).Value.ToDateTimeOffsetFromUnixTime();
+			EndedAt = streamXml.Element( "end_time" ).Value.ToDateTimeOffsetFromUnixTime();
 
-			var timeshiftTimeXml = streamXml.GetNamedChildNodeText( "timeshift_time" );
+			var timeshiftTimeXml = streamXml.Element( "timeshift_time" ).Value;
 			if( !string.IsNullOrEmpty( timeshiftTimeXml ) )
 			{
 				TimeshiftAt = timeshiftTimeXml.ToDateTimeOffsetFromUnixTime();
 			}
 
 #if DEBUG
-			BourbonUrl = streamXml.GetNamedChildNodeText( "bourbon_url" ).ToUri();
+			BourbonUrl = streamXml.Element( "bourbon_url" ).Value.ToUri();
 #endif
-			CrowdedUrl = streamXml.GetNamedChildNodeText( "full_video" ).ToUri();
+			CrowdedUrl = streamXml.Element( "full_video" ).Value.ToUri();
 #if DEBUG
-			AfterUrl = streamXml.GetNamedChildNodeText( "after_video" ).ToUri();
-			BeforeUrl = streamXml.GetNamedChildNodeText( "before_video" ).ToUri();
+			AfterUrl = streamXml.Element( "after_video" ).Value.ToUri();
+			BeforeUrl = streamXml.Element( "before_video" ).Value.ToUri();
 #endif
-			KickOutUrl = streamXml.GetNamedChildNodeText( "kickout_video" ).ToUri();
-			KickOutImageUrl = playerXml.GetNamedChildNode( "dialog_image" ).GetNamedChildNodeText( "oidashi" ).ToUri();
+			KickOutUrl = streamXml.Element( "kickout_video" ).Value.ToUri();
+			KickOutImageUrl = playerXml.Element( "dialog_image" ).Element( "oidashi" ).Value.ToUri();
 
-			var pictureUrl = streamXml.GetNamedChildNodeText( "picture_url" ).ToUri();
+			var pictureUrl = streamXml.Element( "picture_url" ).Value.ToUri();
 			if( pictureUrl != null )
 			{
 				CommunityImageUrl = pictureUrl;
-				CommunitySmallImageUrl = streamXml.GetNamedChildNodeText( "thumb_url" ).ToUri();
+				CommunitySmallImageUrl = streamXml.Element( "thumb_url" ).Value.ToUri();
 			}
 
-			TicketUrl = streamXml.GetNamedChildNodeText( "product_ticket_url" ).ToUri();
-			BannerUrl = streamXml.GetNamedChildNodeText( "product_banner_url" ).ToUri();
-			ShutterUrl = streamXml.GetNamedChildNodeText( "shutter_url" ).ToUri();
-			IsRerun = streamXml.GetNamedChildNodeText( "is_rerun_stream" ).ToBooleanFrom1();
-			IsArchive = streamXml.GetNamedChildNodeText( "archive" ).ToBooleanFrom1();
+			TicketUrl = streamXml.Element( "product_ticket_url" ).Value.ToUri();
+			BannerUrl = streamXml.Element( "product_banner_url" ).Value.ToUri();
+			ShutterUrl = streamXml.Element( "shutter_url" ).Value.ToUri();
+			IsRerun = streamXml.Element( "is_rerun_stream" ).Value.ToBooleanFrom1();
+			IsArchive = streamXml.Element( "archive" ).Value.ToBooleanFrom1();
 
-			var isDJStream = streamXml.GetNamedChildNodeText( "is_dj_stream" );
+			var isDJStream = streamXml.Element( "is_dj_stream" ).Value;
 			if( isDJStream.ToBooleanFrom1() )
 			{
 				ExtendedType = ProgramExtendedType.NewComer;
@@ -78,18 +78,18 @@ namespace Mntone.Nico2.Live.PlayerStatus
 			}
 			else
 			{
-				var isCruiseStream = streamXml.GetNamedChildNodeText( "is_cruise_stream" ).ToBooleanFrom1();
+				var isCruiseStream = streamXml.Element( "is_cruise_stream" ).Value.ToBooleanFrom1();
 				if( isCruiseStream )
 				{
 					ExtendedType = ProgramExtendedType.Cruise;
 					NsenType = string.Empty;
 					NsenCommand = string.Empty;
 				}
-				else if( nsenXml != null && nsenXml.GetNamedChildNodeText( "is_ns_stream" ).ToBooleanFrom1() )
+				else if( nsenXml != null && nsenXml.Element( "is_ns_stream" ).Value.ToBooleanFrom1() )
 				{
 					ExtendedType = ProgramExtendedType.Nsen;
-					NsenType = nsenXml.GetNamedChildNodeText( "nstype" );
-					NsenCommand = nsenXml.GetNamedChildNodeText( "nspanel" );
+					NsenType = nsenXml.Element( "nstype" ).Value;
+					NsenCommand = nsenXml.Element( "nspanel" ).Value;
 				}
 				else
 				{
@@ -99,22 +99,22 @@ namespace Mntone.Nico2.Live.PlayerStatus
 				}
 			}
 
-			IsHighQuality = streamXml.GetNamedChildNodeText( "hqstream" ).ToBooleanFrom1();
-			IsInfinity = streamXml.GetNamedChildNodeText( "infinity_mode" ).ToBooleanFrom1();
-			IsReserved = streamXml.GetNamedChildNodeText( "is_reserved" ).ToBooleanFrom1();
-			IsArchivePlayServer = streamXml.GetNamedChildNodeText( "is_archiveplayserver" ).ToBooleanFrom1();
-			IsTimeshiftEnabled = streamXml.GetNamedChildNodeText( "is_nonarchive_timeshift_enabled" ).ToBooleanFrom1();
+			IsHighQuality = streamXml.Element( "hqstream" ).Value.ToBooleanFrom1();
+			IsInfinity = streamXml.Element( "infinity_mode" ).Value.ToBooleanFrom1();
+			IsReserved = streamXml.Element( "is_reserved" ).Value.ToBooleanFrom1();
+			IsArchivePlayServer = streamXml.Element( "is_archiveplayserver" ).Value.ToBooleanFrom1();
+			IsTimeshiftEnabled = streamXml.Element( "is_nonarchive_timeshift_enabled" ).Value.ToBooleanFrom1();
 
-			var isProductStreamText = streamXml.GetNamedChildNodeText( "is_product_stream" );
+			var isProductStreamText = streamXml.Element( "is_product_stream" );
 			if( isProductStreamText != null )
 			{
-				IsProductEnabled = isProductStreamText.ToBooleanFrom1();
-				IsTrialEnabled = streamXml.GetNamedChildNodeText( "is_trial" ).ToBooleanFrom1();
-				IsBannerForced = streamXml.GetNamedChildNodeText( "product_fixed_banner" ).ToBooleanFrom1();
+				IsProductEnabled = isProductStreamText.Value.ToBooleanFrom1();
+				IsTrialEnabled = streamXml.Element( "is_trial" ).Value.ToBooleanFrom1();
+				IsBannerForced = streamXml.Element( "product_fixed_banner" ).Value.ToBooleanFrom1();
 			}
 
-			IsNoticeBalloonEnabled = playerXml.GetNamedChildNodeText( "is_notice_viewer_balloon_enabled" ).ToBooleanFrom1();
-			IsErrorReportEnabled = playerXml.GetNamedChildNodeText( "error_report" ).ToBooleanFrom1();
+			IsNoticeBalloonEnabled = playerXml.Element( "is_notice_viewer_balloon_enabled" ).Value.ToBooleanFrom1();
+			IsErrorReportEnabled = playerXml.Element( "error_report" ).Value.ToBooleanFrom1();
 
 			Twitter = programTwitter;
 		}

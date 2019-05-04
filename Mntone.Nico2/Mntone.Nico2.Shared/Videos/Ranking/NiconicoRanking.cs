@@ -66,9 +66,10 @@ namespace Mntone.Nico2.Videos.Ranking
 
 	public enum RankingTarget
 	{
-		view,
-		res,
-		mylist,
+        fav, // 総合
+		view, // 再生
+		res,   // コメント数
+		mylist, // マイリスト数
 		
 	}
 

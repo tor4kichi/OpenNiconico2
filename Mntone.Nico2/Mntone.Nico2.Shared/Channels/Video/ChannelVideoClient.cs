@@ -126,7 +126,7 @@ namespace Mntone.Nico2.Channels.Video
                             }
 
                             var commentDescNode = anchor.GetElementByClassName("last_res");
-                            info.CommentSummary = commentDescNode.InnerText;
+                            info.CommentSummary = commentDescNode?.InnerText;
 
                             var lengthNode = anchor.GetElementByClassName("length");
                             info.Length = lengthNode.InnerText.ToTimeSpan();

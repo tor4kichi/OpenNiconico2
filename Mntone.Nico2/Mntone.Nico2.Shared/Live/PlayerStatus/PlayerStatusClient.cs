@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 #if WINDOWS_APP
@@ -30,16 +31,16 @@ namespace Mntone.Nico2.Live.PlayerStatus
 			var xml = XDocument.Parse( playerStatusData );
 #endif
 
-			var getPlayerStatusXml = xml.GetDocumentRootNode();
-			if( getPlayerStatusXml.GetName() != "getplayerstatus" )
+			var getPlayerStatusXml = xml.Root;
+			if( getPlayerStatusXml.Name != "getplayerstatus" )
 			{
 				throw new ParseException( "Parse Error: Node name is invalid." );
 			}
 
-			if( getPlayerStatusXml.GetNamedAttributeText( "status" ) != "ok" )
+			if( getPlayerStatusXml.Attribute( "status" ).Value != "ok" )
 			{
-				var error = getPlayerStatusXml.GetFirstChildNode();
-				var code = error.GetNamedChildNodeText( "code" );
+				var error = getPlayerStatusXml.Elements().First();
+				var code = error.Element( "code" ).Value;
 				switch( code )
 				{
 				case "not_found":

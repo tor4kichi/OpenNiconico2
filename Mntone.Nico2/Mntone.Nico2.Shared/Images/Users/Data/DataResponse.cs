@@ -22,23 +22,23 @@ namespace Mntone.Nico2.Images.Users.Data
 #endif
 		{
 #if DEBUG
-			ImageCount = responseXml.GetNamedChildNodeText( "image_count" ).ToUInt();
+			ImageCount = responseXml.Element( "image_count" ).Value.ToUInt();
 #endif
 
-			var imageListXml = responseXml.GetNamedChildNode( "image_list" );
-			if( imageListXml.GetFirstChildNode().GetFirstChildNode() != null )
+			var imageListXml = responseXml.Element( "image_list" );
+			if( imageListXml.Elements()?.FirstOrDefault()?.Elements().FirstOrDefault() != null )
 			{
-				Images = imageListXml.GetChildNodes().Select( imageXml => new Image( imageXml ) ).ToList();
+				Images = imageListXml.Elements().Select( imageXml => new Image( imageXml ) ).ToList();
 			}
 			else
 			{
 				Images = new List<Image>();
 			}
 
-			var commentListXml = responseXml.GetNamedChildNode( "comment_list" );
-			if( commentListXml.GetFirstChildNode().GetFirstChildNode() != null )
+			var commentListXml = responseXml.Element( "comment_list" );
+			if( commentListXml.Elements()?.FirstOrDefault()?.Elements().FirstOrDefault() != null )
 			{
-				Comments = commentListXml.GetChildNodes().Select( commentXml => new Comment( commentXml ) ).ToList();
+				Comments = commentListXml.Elements().Select( commentXml => new Comment( commentXml ) ).ToList();
 			}
 			else
 			{

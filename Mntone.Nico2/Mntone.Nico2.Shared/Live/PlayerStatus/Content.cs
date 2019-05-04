@@ -19,13 +19,13 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Content( XElement contentsXml )
 #endif
 		{
-			Id = contentsXml.GetNamedAttributeText( "id" );
-			IsAudioDisabled = contentsXml.GetNamedAttributeText( "disableAudio" ).ToBooleanFrom1();
-			IsVideoDisabled = contentsXml.GetNamedAttributeText( "disableVideo" ).ToBooleanFrom1();
-			StartedAt = contentsXml.GetNamedAttributeText( "start_time" ).ToDateTimeOffsetFromUnixTime();
-			Duration = contentsXml.GetNamedAttributeText( "duration" ).ToTimeSpanFromSecondsString();
-			Title = contentsXml.GetNamedAttributeText( "title" );
-			Value = contentsXml.GetText();
+			Id = contentsXml.Attribute( "id" ).Value;
+			IsAudioDisabled = contentsXml.Attribute( "disableAudio" ).Value.ToBooleanFrom1();
+			IsVideoDisabled = contentsXml.Attribute( "disableVideo" ).Value.ToBooleanFrom1();
+			StartedAt = contentsXml.Attribute( "start_time" ).Value.ToDateTimeOffsetFromUnixTime();
+			Duration = contentsXml.Attribute( "duration" ).Value.ToTimeSpanFromSecondsString();
+			Title = contentsXml.Attribute( "title" ).Value;
+			Value = contentsXml.Value;
 		}
 
 		/// <summary>

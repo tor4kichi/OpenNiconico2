@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Dynamic;
 
 namespace Mntone.Nico2.Mylist
 {
@@ -37,7 +38,7 @@ namespace Mntone.Nico2.Mylist
 		{
 			var data = new MylistData();
 
-			data.CreateTime = DateTime.Parse(json.create_time);
+			data.CreateTime = DateTime.Parse(json.create_time as string);
 			data.Description = json.description;
 			data.ItemId = json.item_id;
 

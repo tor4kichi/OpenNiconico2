@@ -20,8 +20,8 @@ namespace Mntone.Nico2.Videos.Thumbnail
 		internal ThumbnailTags( XElement tagsXml )
 #endif
 		{
-			Domain = tagsXml.GetNamedAttributeText( "domain" );
-			Value = tagsXml.GetChildNodes().Select( tagXml => new ThumbnailTag( tagXml ) ).ToList();
+			Domain = tagsXml.Element( "domain" ).Value;
+			Value = tagsXml.Elements().Select( tagXml => new ThumbnailTag( tagXml ) ).ToList();
 		}
 
 		/// <summary>

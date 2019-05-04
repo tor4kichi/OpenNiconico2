@@ -77,7 +77,7 @@ namespace Mntone.Nico2.Videos.Comment
 		[XmlAttribute(AttributeName = "thread")]
 		public string Thread { get; set; }
 		[XmlAttribute(AttributeName = "user_id")]
-		public string User_id { get; set; }
+		public string UserId { get; set; }
 
 
 		/// <summary>
@@ -111,7 +111,7 @@ namespace Mntone.Nico2.Videos.Comment
 		}
 
 
-        public IEnumerable<CommandType> ParseCommandTypes()
+        public List<CommandType> ParseCommandTypes()
         {
             return CommandTypesHelper.ParseCommentCommandTypes(this.Mail);
         }

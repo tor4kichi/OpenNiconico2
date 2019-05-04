@@ -19,28 +19,28 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal User( XElement streamXml, XElement userXml )
 #endif
 		{
-			Id = userXml.GetNamedChildNodeText( "user_id" ).ToUInt();
-			Name = userXml.GetNamedChildNodeText( "nickname" );
-			IsPremium = userXml.GetNamedChildNodeText( "is_premium" ).ToBooleanFrom1();
-			Age = userXml.GetNamedChildNodeText( "userAge" ).ToUShort();
-			Sex = userXml.GetNamedChildNodeText( "userSex" ).ToBooleanFrom1() ? Sex.Male : Sex.Female;
-			Domain = userXml.GetNamedChildNodeText( "userDomain" );
-			Prefecture = ( Prefecture )userXml.GetNamedChildNodeText( "userPrefecture" ).ToInt();
-			Language = userXml.GetNamedChildNodeText( "userLanguage" );
-			HKey = streamXml.GetNamedChildNodeText( "hkey" );
-			IsOwner = streamXml.GetNamedChildNodeText( "is_owner" ).ToBooleanFrom1();
-			IsJoin = userXml.GetNamedChildNodeText( "is_join" ).ToBooleanFrom1();
-			IsReserved = streamXml.GetNamedChildNodeText( "is_timeshift_reserved" ).ToBooleanFrom1();
-			IsPrefecturePreferential = streamXml.GetNamedChildNodeText( "is_priority_prefecture" ).ToBooleanFrom1();
+			Id = userXml.Element( "user_id" ).Value.ToUInt();
+			Name = userXml.Element( "nickname" ).Value;
+			IsPremium = userXml.Element( "is_premium" ).Value.ToBooleanFrom1();
+			Age = userXml.Element( "userAge" ).Value.ToUShort();
+			Sex = userXml.Element( "userSex" ).Value.ToBooleanFrom1() ? Sex.Male : Sex.Female;
+			Domain = userXml.Element( "userDomain" ).Value;
+			Prefecture = ( Prefecture )userXml.Element( "userPrefecture" ).Value.ToInt();
+			Language = userXml.Element( "userLanguage" ).Value;
+			HKey = streamXml.Element( "hkey" ).Value;
+			IsOwner = streamXml.Element( "is_owner" ).Value.ToBooleanFrom1();
+			IsJoin = userXml.Element( "is_join" ).Value.ToBooleanFrom1();
+			IsReserved = streamXml.Element( "is_timeshift_reserved" ).Value.ToBooleanFrom1();
+			IsPrefecturePreferential = streamXml.Element( "is_priority_prefecture" ).Value.ToBooleanFrom1();
 
-			var productPurchasedXml = streamXml.GetNamedChildNodeText( "product_purchased" );
+			var productPurchasedXml = streamXml.Element( "product_purchased" ).Value;
 			if( !string.IsNullOrEmpty( productPurchasedXml ) )
 			{
 				IsPurchased = productPurchasedXml.ToBooleanFrom1();
-				IsSerialUsing = streamXml.GetNamedAttributeText( "is_serial_stream" ).ToBooleanFrom1();
+				IsSerialUsing = streamXml.Attribute( "is_serial_stream" ).Value.ToBooleanFrom1();
 			}
 
-			Twitter = new UserTwitter( userXml.GetNamedChildNode( "twitter_info" ) );
+			Twitter = new UserTwitter( userXml.Element( "twitter_info" ) );
 		}
 
 		/// <summary>

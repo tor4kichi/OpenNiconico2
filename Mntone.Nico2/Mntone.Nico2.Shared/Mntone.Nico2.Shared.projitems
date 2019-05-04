@@ -149,6 +149,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistRss.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicoad\Video\VideoAdHistoryResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\EnumHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\NicocasApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\NicocasResponseBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\NicocasUrls.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\Search\NicocasUserSearchClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\Search\UserSearchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\Search\UserSearchSortKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\Search\UserSearchSortOrder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoItemType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\IconType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\MylistApi.cs" />

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -163,7 +164,7 @@ namespace Mntone.Nico2.Videos.Comment
             Debug.WriteLine(postCommentXml);
 
 
-            var content = new Windows.Web.Http.HttpStringContent(postCommentXml);
+            var content = new StringContent(postCommentXml);
 
             return await context.PostAsync(commentServerUrl, content);
         }

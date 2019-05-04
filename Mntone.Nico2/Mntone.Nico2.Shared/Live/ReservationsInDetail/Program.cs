@@ -21,12 +21,12 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 		internal Program( XElement reservedItemXml )
 #endif
 		{
-			Id = "lv" + reservedItemXml.GetNamedChildNodeText( "vid" );
-			Title = reservedItemXml.GetNamedChildNodeText( "title" );
-			Status = reservedItemXml.GetNamedChildNodeText( "status" );
-			IsUnwatched = reservedItemXml.GetNamedChildNodeText( "unwatch" ).ToBooleanFrom1();
+			Id = "lv" + reservedItemXml.Element( "vid" ).Value;
+			Title = reservedItemXml.Element( "title" ).Value;
+			Status = reservedItemXml.Element( "status" ).Value;
+			IsUnwatched = reservedItemXml.Element( "unwatch" ).Value.ToBooleanFrom1();
 
-			var expire = reservedItemXml.GetNamedChildNodeText( "expire" );
+			var expire = reservedItemXml.Element( "expire" ).Value;
 			ExpiredAt = expire != "0" ? expire.ToDateTimeOffsetFromUnixTime() : DateTimeOffset.MaxValue;
 		}
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
-using Windows.Web.Http;
+
 
 namespace Mntone.Nico2.Live.Reservation
 {
@@ -55,7 +55,7 @@ namespace Mntone.Nico2.Live.Reservation
 
 
 
-        public bool IsOK => Meta.Status == (int)HttpStatusCode.Ok;
+        public bool IsOK => Meta.Status == (int)System.Net.HttpStatusCode.OK;
 
         public bool IsReservationDeuplicated => Data.Description?.EndsWith("duplicated") ?? false;
 

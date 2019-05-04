@@ -20,27 +20,27 @@ namespace Mntone.Nico2.Images.Users.Data
 		internal Image( XElement imageXml )
 #endif
 		{
-			Id = "im" + imageXml.GetNamedChildNodeText( "id" );
-			UserId = imageXml.GetNamedChildNodeText( "user_id" ).ToUInt();
-			Title = imageXml.GetNamedChildNodeText( "title" );
-			Description = imageXml.GetNamedChildNodeText( "description" );
-			ViewCount = imageXml.GetNamedChildNodeText( "view_count" ).ToUInt();
-			CommentCount = imageXml.GetNamedChildNodeText( "comment_count" ).ToUInt();
-			ClipCount = imageXml.GetNamedChildNodeText( "clip_count" ).ToUInt();
-			LastCommentBody = imageXml.GetNamedChildNodeText( "summary" );
-			Genre = ( Genre )imageXml.GetNamedChildNodeText( "genre" ).ToInt();
+			Id = "im" + imageXml.Element( "id" ).Value;
+			UserId = imageXml.Element( "user_id" ).Value.ToUInt();
+			Title = imageXml.Element( "title" ).Value;
+			Description = imageXml.Element( "description" ).Value;
+			ViewCount = imageXml.Element( "view_count" ).Value.ToUInt();
+			CommentCount = imageXml.Element( "comment_count" ).Value.ToUInt();
+			ClipCount = imageXml.Element( "clip_count" ).Value.ToUInt();
+			LastCommentBody = imageXml.Element( "summary" ).Value;
+			Genre = ( Genre )imageXml.Element( "genre" ).Value.ToInt();
 #if DEBUG
-			Site = ( Site )imageXml.GetNamedChildNodeText( "category" ).ToInt();
+			Site = ( Site )imageXml.Element( "category" ).Value.ToInt();
 #endif
-			ImageType = imageXml.GetNamedChildNodeText( "image_type" ).ToUShort();
-			IllustType = imageXml.GetNamedChildNodeText( "illust_type" ).ToUShort();
-			InspectionStatus = imageXml.GetNamedChildNodeText( "inspection_status" ).ToUShort();
-			IsAnonymous = imageXml.GetNamedChildNodeText( "anonymous_flag" ).ToBooleanFrom1();
-			PublicStatus = imageXml.GetNamedChildNodeText( "public_status" ).ToUShort();
-			IsDeleted = imageXml.GetNamedChildNodeText( "delete_flag" ).ToBooleanFrom1();
-			DeleteType = imageXml.GetNamedChildNodeText( "delete_type" ).ToUShort();
-			//CacheTime = ( imageNode.GetNamedChildNodeText( "cache_time" ) + "+09:00" ).ToDateTimeOffsetFromIso8601();
-			PostedAt = ( imageXml.GetNamedChildNodeText( "created" ) + "+09:00" ).ToDateTimeOffsetFromIso8601();
+			ImageType = imageXml.Element( "image_type" ).Value.ToUShort();
+			IllustType = imageXml.Element( "illust_type" ).Value.ToUShort();
+			InspectionStatus = imageXml.Element( "inspection_status" ).Value.ToUShort();
+			IsAnonymous = imageXml.Element( "anonymous_flag" ).Value.ToBooleanFrom1();
+			PublicStatus = imageXml.Element( "public_status" ).Value.ToUShort();
+			IsDeleted = imageXml.Element( "delete_flag" ).Value.ToBooleanFrom1();
+			DeleteType = imageXml.Element( "delete_type" ).Value.ToUShort();
+			//CacheTime = ( imageNode.Element( "cache_time" ) + "+09:00" ).ToDateTimeOffsetFromIso8601();
+			PostedAt = ( imageXml.Element( "created" ).Value + "+09:00" ).ToDateTimeOffsetFromIso8601();
 		}
 
 		/// <summary>

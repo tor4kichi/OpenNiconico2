@@ -17,10 +17,10 @@ namespace Mntone.Nico2.Images.Illusts.BlogParts
 		internal Image( XElement imageXml )
 #endif
 		{
-			Id = "im" + imageXml.GetNamedChildNodeText( "id" );
-			//CacheTime = imageXml.GetNamedChildNodeText( "cache_time" ).ToDateTimeOffsetFromIso8601();
-			Title = imageXml.GetNamedChildNodeText( "title" );
-			UserName = imageXml.GetNamedChildNodeText( "nickname" );
+			Id = "im" + imageXml.Element( "id" ).Value;
+			//CacheTime = imageXml.Element( "cache_time" ).ToDateTimeOffsetFromIso8601();
+			Title = imageXml.Element( "title" ).Value;
+			UserName = imageXml.Element( "nickname" ).Value;
 		}
 
 		/// <summary>

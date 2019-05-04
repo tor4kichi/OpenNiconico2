@@ -17,11 +17,11 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Farre( XElement farreXml )
 #endif
 		{
-			IsEnabled = farreXml.GetNamedChildNodeText( "farremode" ).ToBooleanFrom1();
-			IsAvatarmakerEnabled = farreXml.GetNamedChildNodeText( "avatarmaker_enabled" ).ToBooleanFrom1();
-			IsInvokeAvatarmakerEnabled = farreXml.GetNamedChildNodeText( "is_invoke_avatarmaker" ).ToBooleanFrom1();
-			IsMultiAngleEnabled = farreXml.GetNamedChildNodeText( "multi_angle" ).ToBooleanFrom1();
-			MultiAngleCount = farreXml.GetNamedChildNodeText( "multi_angle_num" ).ToUShort();
+			IsEnabled = farreXml.Element( "farremode" ).Value.ToBooleanFrom1();
+			IsAvatarmakerEnabled = farreXml.Element( "avatarmaker_enabled" ).Value.ToBooleanFrom1();
+			IsInvokeAvatarmakerEnabled = farreXml.Element( "is_invoke_avatarmaker" ).Value.ToBooleanFrom1();
+			IsMultiAngleEnabled = farreXml.Element( "multi_angle" ).Value.ToBooleanFrom1();
+			MultiAngleCount = farreXml.Element( "multi_angle_num" ).Value.ToUShort();
 		}
 
 		/// <summary>

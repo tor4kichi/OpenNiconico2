@@ -19,13 +19,13 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal UserTwitter( XElement twitterInfoXml )
 #endif
 		{
-			IsEnabled = twitterInfoXml.GetNamedChildNodeText( "status" ) == "enabled";
-			ScreenName = twitterInfoXml.GetNamedChildNodeText( "screen_name" );
-			FollowersCount = twitterInfoXml.GetNamedChildNodeText( "followers_count" ).ToUInt();
-			IsVip = twitterInfoXml.GetNamedChildNodeText( "is_vip" ).ToBooleanFrom1();
-			ProfileImageUrl = twitterInfoXml.GetNamedChildNodeText( "profile_image_url" ).ToUri();
-			IsAuthenticationRequired = twitterInfoXml.GetNamedChildNodeText( "after_auth" ).ToBooleanFrom1();
-			Token = twitterInfoXml.GetNamedChildNodeText( "tweet_token" );
+			IsEnabled = twitterInfoXml.Element( "status" ).Value == "enabled";
+			ScreenName = twitterInfoXml.Element( "screen_name" ).Value;
+			FollowersCount = twitterInfoXml.Element( "followers_count" ).Value.ToUInt();
+			IsVip = twitterInfoXml.Element( "is_vip" ).Value.ToBooleanFrom1();
+			ProfileImageUrl = twitterInfoXml.Element( "profile_image_url" ).Value.ToUri();
+			IsAuthenticationRequired = twitterInfoXml.Element( "after_auth" ).Value.ToBooleanFrom1();
+			Token = twitterInfoXml.Element( "tweet_token" ).Value;
 		}
 
 		/// <summary>

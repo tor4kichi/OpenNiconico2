@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.Http.Headers;
 
 namespace Mntone.Nico2.Videos.WatchAPI
 {
@@ -41,31 +41,18 @@ namespace Mntone.Nico2.Videos.WatchAPI
             try
             {
                 var client = context.GetClient();
-
-                var watchHtml5Player = new HttpCookiePairHeaderValue("watch_html5", "1");
-                if (client.DefaultRequestHeaders.Cookie.Contains(watchHtml5Player))
-                {
-                    client.DefaultRequestHeaders.Cookie.Remove(watchHtml5Player);
-                }
-                client.DefaultRequestHeaders.Cookie.Add(watchHtml5Player);
-
-                var watchFlashPlayer = new HttpCookiePairHeaderValue("watch_flash", "1");
-                var old = client.DefaultRequestHeaders.Cookie.SingleOrDefault(x => x.Name == "watch_flash");
-                if (old != null)
-                {
-                    client.DefaultRequestHeaders.Cookie.Remove(old);
-                }
-                client.DefaultRequestHeaders.Cookie.Add(watchFlashPlayer);
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Cookie", "watch_html5=1");
 
                 var res = await context.GetClient()
-                    .GetAsync(url);
+                    .SendAsync(request);
 
-                if (res.StatusCode == Windows.Web.Http.HttpStatusCode.Forbidden)
+                if (res.StatusCode == HttpStatusCode.Forbidden)
                 {
                     throw new WebException("require payment.");
                 }
 
-                var text = await res.Content.ReadAsStringAsync().AsTask();
+                var text = await res.Content.ReadAsStringAsync();
 
                 var htmlDocument = new HtmlAgilityPack.HtmlDocument();
                 htmlDocument.LoadHtml(text);

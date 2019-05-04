@@ -20,8 +20,8 @@ namespace Mntone.Nico2.Images.Users.Info
 		internal InfoResponse( XElement userInfoXml )
 #endif
 		{
-			UserId = userInfoXml.GetNamedChildNodeText( "id" ).ToUInt();
-			UserName = userInfoXml.GetNamedChildNodeText( "nickname" );
+			UserId = userInfoXml.Element( "id" ).Value.ToUInt();
+			UserName = userInfoXml.Element( "nickname" ).Value;
 		}
 
 		/// <summary>

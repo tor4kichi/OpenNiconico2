@@ -19,9 +19,9 @@ namespace Mntone.Nico2.Videos.Thumbnail
 		internal ThumbnailTag( XElement tagXml )
 #endif
 		{
-			Category = tagXml.GetNamedAttributeText( "category" ).ToBooleanFrom1();
-			Lock = tagXml.GetNamedAttributeText( "lock" ).ToBooleanFrom1();
-			Value = tagXml.GetText();
+			Category = tagXml.Attribute( "category" ).Value.ToBooleanFrom1();
+			Lock = tagXml.Attribute( "lock" ).Value.ToBooleanFrom1();
+			Value = tagXml.Value;
 		}
 
 		// シリアライズのためにデフォルトコンストラクタを用意しておく

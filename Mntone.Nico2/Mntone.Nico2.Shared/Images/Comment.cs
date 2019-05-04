@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Linq;
 
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Images
 {
@@ -13,21 +10,17 @@ namespace Mntone.Nico2.Images
 	/// </summary>
 	public sealed class Comment
 	{
-#if WINDOWS_APP
-		internal Comment( IXmlNode commentXml )
-#else
 		internal Comment( XElement commentXml )
-#endif
 		{
-			Id = commentXml.GetNamedChildNodeText( "comment_id" ).ToULong();
-			ImageId = "im" + commentXml.GetNamedChildNodeText( "image_id" );
-			ResId = commentXml.GetNamedChildNodeText( "res_id" ).ToULong();
-			Value = commentXml.GetNamedChildNodeText( "content" );
-			Command = commentXml.GetNamedChildNodeText( "command" );
-			PostedAt = ( commentXml.GetNamedChildNodeText( "created" ) + "+09:00" ).ToDateTimeOffsetFromIso8601();
-			Frame = commentXml.GetNamedChildNodeText( "frame" ).ToInt();
-			UserHash = commentXml.GetNamedChildNodeText( "user_hash" );
-			IsAnonymous = commentXml.GetNamedChildNodeText( "anonymous_flag" ).ToBooleanFrom1();
+			Id = commentXml.Element( "comment_id" ).Value.ToULong();
+			ImageId = "im" + commentXml.Element( "image_id" ).Value;
+			ResId = commentXml.Element( "res_id" ).Value.ToULong();
+			Value = commentXml.Element( "content" ).Value;
+			Command = commentXml.Element( "command" ).Value;
+			PostedAt = ( commentXml.Element( "created" ).Value + "+09:00" ).ToDateTimeOffsetFromIso8601();
+			Frame = commentXml.Element( "frame" ).Value.ToInt();
+			UserHash = commentXml.Element( "user_hash" ).Value;
+			IsAnonymous = commentXml.Element( "anonymous_flag" ).Value.ToBooleanFrom1();
 		}
 
 		/// <summary>

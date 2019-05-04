@@ -15,24 +15,20 @@ namespace Mntone.Nico2.Images.Illusts.BlogPartsRanking
 	/// </summary>
 	public sealed class BlogPartsRankingResponse
 	{
-#if WINDOWS_APP
-		internal BlogPartsRankingResponse( IXmlNode responseXml )
-#else
 		internal BlogPartsRankingResponse( XElement responseXml )
-#endif
 		{
 #if DEBUG
-			BaseUrl = responseXml.GetNamedChildNodeText( "base_url" ).ToUri();
+			BaseUrl = responseXml.Element( "base_url" ).Value.ToUri();
 #endif
-			PageUrl = responseXml.GetNamedChildNodeText( "icon_url" ).ToUri();
+			PageUrl = responseXml.Element( "icon_url" ).Value.ToUri();
 #if DEBUG
-			ImageBaseUrl = responseXml.GetNamedChildNodeText( "image_url" ).ToUri();
+			ImageBaseUrl = responseXml.Element( "image_url" ).Value.ToUri();
 #endif
 
-			var imageListXml = responseXml.GetNamedChildNode( "image_list" );
-			if( imageListXml.GetFirstChildNode().GetFirstChildNode() != null )
+			var imageListXml = responseXml.Element( "image_list" );
+			if( imageListXml.FirstNode?.Document?.FirstNode != null )
 			{
-				Images = imageListXml.GetChildNodes().Select( imageXml => new Image( imageXml ) ).ToList();
+				Images = imageListXml.Elements().Select( imageXml => new Image( imageXml ) ).ToList();
 			}
 			else
 			{

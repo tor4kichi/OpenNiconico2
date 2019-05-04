@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Windows.Web.Http;
 using System.Threading.Tasks;
-using Windows.Web.Http.Filters;
-using Windows.Foundation.Metadata;
 
-#if WINDOWS_APP
-using Windows.Foundation;
-#endif
+using System.Net;
+using System.Net.Http;
+
 
 namespace Mntone.Nico2
 {
@@ -65,143 +61,127 @@ namespace Mntone.Nico2
 			}
 		}
 
-
-        
-        public void ClearAuthenticationCache()
-        {
-            if (ApiInformation.IsMethodPresent("Windows.Web.Http.Filters.HttpBaseProtocolFilter", "ClearAuthenticationCache"))
-            {
-                // Call the method here
-                ProtocolFilter?.ClearAuthenticationCache();
-            }
-        }
-
         /// <summary>
         /// 非同期操作としてログイン要求を送信します。
         /// ログイン完了後、ログインが正常にできているかをチェックし、その状態をセッションに記録します。
         /// </summary>
         /// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
-		public IAsyncOperation<NiconicoSignInStatus> SignInAsync()
-#else
         public async Task<NiconicoSignInStatus> SignInAsync()
-#endif
 		{
-			var request = new Dictionary<string, string>();
-
-			request.Add( MailTelName, this.AuthenticationToken.MailOrTelephone );
-			request.Add( PasswordName, this.AuthenticationToken.Password );
-
-			return await this.GetClient()
-				.PostAsync( new Uri(NiconicoUrls.LogOnApiUrl), new HttpFormUrlEncodedContent(request))
-				.AsTask()
-				.ContinueWith( prevTask => 
+            var req = new HttpRequestMessage(HttpMethod.Post, new Uri(NiconicoUrls.LogOnApiUrl))
+            {
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>()
                 {
-                    if (prevTask.IsCompleted && !prevTask.IsFaulted)
-                    {
-                        const string TwoFactorAuthSite = @"https://account.nicovideo.jp/mfa";
+                    { MailTelName, this.AuthenticationToken.MailOrTelephone },
+                    { PasswordName, this.AuthenticationToken.Password },
+                })
+            };
 
-                        if (prevTask.Result.RequestMessage.RequestUri.OriginalString.StartsWith(TwoFactorAuthSite))
-                        {
-                            LastRedirectHttpRequestMessage = prevTask.Result.RequestMessage;
-                            LastRedirectHttpContent = prevTask.Result.Content;
-                            return Task.FromResult(NiconicoSignInStatus.TwoFactorAuthRequired);
-                        }
-                    }
+            try
+            {
+                // 自動リダイレクトが有効だと、クッキー認証の情報がCookieContainerに保存されず
+                // ログインセッションを張るのに失敗してしまう
 
-                    return this.GetIsSignedInOnInternalAsync();
-                } )
-				.Unwrap()
-#if WINDOWS_APP
-				.AsAsyncOperation()
-#endif
-;
-		}
+                // HttpClient = null; としているのはHttpClientHanlderの再設定させたい
+                // 自動リダイレクトをログイン時のみOFFに設定させたいため
+                HttpClient = null;
+                var httpClient = this.GetClient(h => h.AllowAutoRedirect = false);
 
-        public IHttpContent LastRedirectHttpContent { get; private set; }
+                var res = await httpClient
+                    .SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+
+                const string TwoFactorAuthSite = @"https://account.nicovideo.jp/mfa";
+
+                if (res.RequestMessage.RequestUri.OriginalString.StartsWith(TwoFactorAuthSite))
+                {
+                    LastRedirectHttpRequestMessage = res.RequestMessage;
+                    LastRedirectHttpContent = res.Content;
+                    return NiconicoSignInStatus.TwoFactorAuthRequired;
+                }
+
+                return await this.GetIsSignedInOnInternalAsync();
+            }
+            finally
+            {
+                // HttpClient = null; としているのはHttpClientHanlderの再設定させたい
+                // 自動リダイレクトをログイン処理が終わったら再度有効にしたい
+                HttpClient = null;
+            }
+
+        }
+
+        public HttpContent LastRedirectHttpContent { get; private set; }
         public HttpRequestMessage LastRedirectHttpRequestMessage { get; private set; }
 
 
-		/// <summary>
-		/// 非同期操作としてログイン確認のための要求を送信します。
-		/// ログインが正常にできている場合、その状態をセッションに記録します。
-		/// </summary>
-		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
-		public IAsyncOperation<NiconicoSignInStatus> GetIsSignedInAsync()
-		{
-			return this.GetIsSignedInOnInternalAsync().AsAsyncOperation();
-		}
-#else
-		public Task<NiconicoSignInStatus> GetIsSignedInAsync()
+        /// <summary>
+        /// 非同期操作としてログイン確認のための要求を送信します。
+        /// ログインが正常にできている場合、その状態をセッションに記録します。
+        /// </summary>
+        /// <returns>非同期操作を表すオブジェクト</returns>
+        public Task<NiconicoSignInStatus> GetIsSignedInAsync()
 		{
 			return this.GetIsSignedInOnInternalAsync();
 		}
-#endif
 
-		internal Task<NiconicoSignInStatus> GetIsSignedInOnInternalAsync()
+
+		internal async Task<NiconicoSignInStatus> GetIsSignedInOnInternalAsync()
 		{
-			return this.GetClient()
-				.GetAsync( new Uri(NiconicoUrls.TopPageUrl) )
-				.AsTask()
-				.ContinueWith( (prevTask) =>
-				{
-					var response = prevTask.Result;
-					if( response.StatusCode == Windows.Web.Http.HttpStatusCode.Ok )
-					{
-						var authFlag = response.Headers[XNiconicoAuthflag].ToUInt();
-						var auth = (NiconicoAccountAuthority)authFlag;
-						return auth != NiconicoAccountAuthority.NotSignedIn ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;						
-					}
-					else if( response.StatusCode == Windows.Web.Http.HttpStatusCode.ServiceUnavailable )
-					{
-						return NiconicoSignInStatus.ServiceUnavailable;
-					}
+            var response = await this.GetClient()
+                .GetAsync(new Uri(NiconicoUrls.TopPageUrl));
 
-					return NiconicoSignInStatus.Failed;
-				} );
-		}
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                if (response.Headers.TryGetValues(XNiconicoAuthflag, out var flags))
+                {
+                    var authFlag = flags.First().ToUInt();
+                    var auth = (NiconicoAccountAuthority)authFlag;
+                    return auth != NiconicoAccountAuthority.NotSignedIn ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;
+                }
+            }
+            else if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+            {
+                return NiconicoSignInStatus.ServiceUnavailable;
+            }
+
+            return NiconicoSignInStatus.Failed;
+        }
 
 		/// <summary>
 		/// 非同期操作としてログオフ要求を送信します
 		/// </summary>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
-		public IAsyncOperation<NiconicoSignInStatus> SignOutOffAsync()
-#else
-		public Task<NiconicoSignInStatus> SignOutOffAsync()
-#endif
+		public async Task<NiconicoSignInStatus> SignOutOffAsync()
 		{
-			return this.GetClient()
-				.GetAsync( new Uri(NiconicoUrls.LogOffUrl) )
-				.AsTask()
-				.ContinueWith( prevTask =>
-				{
-					return this.GetIsSignedInOnInternalAsync();
-				} )
-				.Unwrap()
-#if WINDOWS_APP
-				.AsAsyncOperation()
-#endif
-;
-		}
+            await this.GetClient()
+                .GetAsync(new Uri(NiconicoUrls.LogOffUrl));
+	        return await this.GetIsSignedInOnInternalAsync();
+        }
 
-		internal HttpClient GetClient()
+        CookieContainer CookieContainer = new CookieContainer();
+
+		internal HttpClient GetClient(Action<HttpClientHandler> modifier = null)
 		{
-			if( this.HttpClient == null )
+            if( this.HttpClient == null )
 			{
-                this.ProtocolFilter = new HttpBaseProtocolFilter();
-				ProtocolFilter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
+                var handler = new HttpClientHandler();
+                handler.CookieContainer = CookieContainer;
+                modifier?.Invoke(handler);
 
-                this.HttpClient = new HttpClient(ProtocolFilter);
-				this.HttpClient.DefaultRequestHeaders.Add( "user-agent", this._AdditionalUserAgent != null
+                this.HttpClient = new HttpClient(handler);
+
+                this.HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
-
-				this.HttpClient.DefaultRequestHeaders.Add( "accept-language", "ja, en;q=0.5" );
             }
 			return this.HttpClient;
 		}
+
+
+        public string GetCurrentNicoVideoCookieHeader()
+        {
+            return CookieContainer.GetCookieHeader(new Uri(NiconicoUrls.TopPageUrl));
+        }
 
 		internal Task<HttpResponseMessage> GetAsync(string url)
 		{
@@ -236,12 +216,12 @@ namespace Mntone.Nico2
 				keyvalues.Add("token", token);
 			}
 
-			var content = new HttpFormUrlEncodedContent(keyvalues);
+			var content = new FormUrlEncodedContent(keyvalues);
 
 			return await this.PostAsync(url, content);
 		}
 
-		internal async Task<string> PostAsync(string url, IHttpContent content)
+		internal async Task<string> PostAsync(string url, HttpContent content)
 		{
 			using (var res = await GetClient().PostAsync(new Uri(url), content))
 			{
@@ -258,7 +238,7 @@ namespace Mntone.Nico2
 		}
 
 
-		#region APIs
+#region APIs
 
 		/// <summary>
 		/// ニコニコ動画の API 群
@@ -362,6 +342,17 @@ namespace Mntone.Nico2
         }
         private Embed.EmbedApi _Embed = null;
 
+
+        /// <summary>
+		/// ニコニコ 組み込み系 API 郡
+		/// </summary>
+		public Nicocas.NicocasApi Nicocas
+        {
+            get { return this._Nicocas ?? (this._Nicocas = new Nico2.Nicocas.NicocasApi(this)); }
+        }
+        private Nicocas.NicocasApi _Nicocas = null;
+
+
         #endregion
 
 
@@ -399,10 +390,10 @@ namespace Mntone.Nico2
 		}
 		private string _AdditionalUserAgent = null;
 
-		#endregion
+#endregion
 
 
-		#region field
+#region field
 
 		private const string XNiconicoId = "x-niconico-id";
 		private const string XNiconicoAuthflag = "x-niconico-authflag";
@@ -412,9 +403,8 @@ namespace Mntone.Nico2
 		internal const string DefaultUserAgent = "OpenNiconico/2.0";
 		private readonly Uri NiconicoCookieUrl = new Uri( "http://nicovideo.jp/" );
 
-		public HttpBaseProtocolFilter ProtocolFilter { get; private set; }
-		public HttpClient HttpClient { get; private set; }
+        public HttpClient HttpClient { get; private set; }
 
-		#endregion
-	}
+        #endregion
+    }
 }

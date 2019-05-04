@@ -103,13 +103,34 @@ namespace Mntone.Nico2.Videos.Dmc
         public string ThreadKey { get; set; }
     }
 
+
+    [DataContract]
+    public class HlsEncryptionV1
+    {
+
+        [DataMember(Name = "encrypted_key")]
+        public string EncryptedKey { get; set; }
+
+        [DataMember(Name = "key_uri")]
+        public string KeyUri { get; set; }
+    }
+
+    [DataContract]
+    public class Encryption
+    {
+
+        [DataMember(Name = "hls_encryption_v1")]
+        public HlsEncryptionV1 HlsEncryptionV1 { get; set; }
+    }
+
     [DataContract]
     public class AuthTypes
     {
 
-        [DataMember(Name = "http")]
-        public string Http { get; set; }
+        [DataMember(Name = "hls")]
+        public string Hls { get; set; }
     }
+
 
     [DataContract]
     public class UrlInfo
@@ -264,6 +285,12 @@ namespace Mntone.Nico2.Videos.Dmc
 
         [DataMember(Name = "quality")]
         public Quality Quality { get; set; }
+
+        [DataMember(Name = "encryption")]
+        public Encryption Encryption { get; set; }
+
+        [DataMember(Name = "tracking_id")]
+        public string TrackingId { get; set; }
     }
 
     [DataContract]

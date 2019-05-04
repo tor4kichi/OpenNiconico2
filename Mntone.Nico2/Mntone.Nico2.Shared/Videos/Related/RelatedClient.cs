@@ -31,7 +31,7 @@ namespace Mntone.Nico2.Videos.Related
         {
             var serializer = new XmlSerializer(typeof(T));
 
-            using (var stream = new StringReader(xml))
+            using (var stream = new StringReader(xml.DecodeUTF8()))
             {
                 return (T)serializer.Deserialize(stream);
             }

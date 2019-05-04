@@ -22,7 +22,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 		{
 			if( reservedItemsXml != null )
 			{
-				ReservedProgram = reservedItemsXml.GetChildNodes().Select( reservedItemXml => new Program( reservedItemXml ) ).ToList();
+				ReservedProgram = reservedItemsXml.Elements().Select( reservedItemXml => new Program( reservedItemXml ) ).ToList();
 			}
 			else
 			{

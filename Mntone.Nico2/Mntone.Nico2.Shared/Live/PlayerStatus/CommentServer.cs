@@ -22,20 +22,20 @@ namespace Mntone.Nico2.Live.PlayerStatus
 #endif
 		{
 #if WINDOWS_APP
-			Host = commentServerXml.GetNamedChildNodeText( "addr" ).ToHostName();
+			Host = commentServerXml.Element( "addr" ).ToHostName();
 #else
-			Host = commentServerXml.GetNamedChildNodeText( "addr" );
+			Host = commentServerXml.Element( "addr" ).Value;
 #endif
-			Port = commentServerXml.GetNamedChildNodeText( "port" ).ToUShort();
-			if( threadIdsXml.GetFirstChildNode() != null )
+			Port = commentServerXml.Element( "port" ).Value.ToUShort();
+			if( threadIdsXml.HasElements )
 			{
-				ThreadIds = threadIdsXml.GetChildNodes().Select( threadIdXml => threadIdXml.GetText().ToUInt() ).ToList();
+				ThreadIds = threadIdsXml.Elements().Select( threadIdXml => threadIdXml.Value.ToUInt() ).ToList();
 			}
 			else
 			{
 				ThreadIds = new List<uint>()
 				{
-					commentServerXml.GetNamedChildNodeText( "thread" ).ToUInt()
+					commentServerXml.Element( "thread" ).Value.ToUInt()
 				};
 			}
 		}

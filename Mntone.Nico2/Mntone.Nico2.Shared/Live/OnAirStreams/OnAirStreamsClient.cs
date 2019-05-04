@@ -14,9 +14,8 @@ namespace Mntone.Nico2.Live.OnAirStreams
 				sb.Append( "&zpage=" );
 				sb.Append( pageIndex );
 			}
-			return context.GetClient()
-				.GetStringAsync( new Uri(sb.ToString()) )
-				.AsTask();
+            return context.GetClient()
+                .GetStringAsync(new Uri(sb.ToString()));
 		}
 
 		public static Task<string> GetOnAirStreamsRecentDataAsync(

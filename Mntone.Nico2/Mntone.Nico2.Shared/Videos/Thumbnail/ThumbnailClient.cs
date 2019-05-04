@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 #if WINDOWS_APP
@@ -31,22 +32,22 @@ namespace Mntone.Nico2.Videos.Thumbnail
 			var xml = XDocument.Parse( thumbnailData );
 #endif
 
-			var thumbRes = xml.GetDocumentRootNode();
-			if( thumbRes.GetName() != "nicovideo_thumb_response" )
+			var thumbRes = xml.Root;
+			if( thumbRes.Name.LocalName != "nicovideo_thumb_response" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}
 
-			if( thumbRes.GetNamedAttributeText( "status" ) != "ok" )
+			if( thumbRes.Attribute( "status" ).Value != "ok" )
 			{
-				var error = thumbRes.GetFirstChildNode();
-				var code = error.GetNamedChildNodeText( "code" );
-				var description = error.GetNamedChildNodeText( "description" );
+				var error = thumbRes.Elements().First();
+				var code = error.Element( "code" );
+				var description = error.Element( "description" );
 
 				throw new Exception( "Parse Error: " + description + " (" + code + ')' );
 			}
 
-			return new ThumbnailResponse( thumbRes.GetFirstChildNode() );
+			return new ThumbnailResponse( thumbRes.Elements().First() );
 		}
 
 		public static Task<ThumbnailResponse> GetThumbnailAsync( NiconicoContext context, string requestId )

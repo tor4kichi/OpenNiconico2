@@ -20,29 +20,29 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Comment( XElement streamXml, CommentServer commentServer )
 #endif
 		{
-			IsLocked = streamXml.GetNamedChildNodeText( "comment_lock" ).ToBooleanFrom1();
+			IsLocked = streamXml.Element( "comment_lock" ).Value.ToBooleanFrom1();
 
-			var scale = streamXml.GetNamedChildNodeText( "font_scale" );
+			var scale = streamXml.Element( "font_scale" ).Value;
 			Scale = !string.IsNullOrEmpty( scale ) ? scale.ToSingle() : 1.0f;
 
-			Perm = streamXml.GetNamedChildNodeText( "perm" );
+			Perm = streamXml.Element( "perm" ).Value;
 
-			var splitTop = streamXml.GetNamedChildNodeText( "split_top" ).ToBooleanFrom1();
+			var splitTop = streamXml.Element( "split_top" ).Value.ToBooleanFrom1();
 			if( splitTop )
 			{
 				Position = CommentPosition.Bottom;
 			}
 			else
 			{
-				var splitBottom = streamXml.GetNamedChildNodeText( "split_bottom" ).ToBooleanFrom1();
+				var splitBottom = streamXml.Element( "split_bottom" ).Value.ToBooleanFrom1();
 				if( splitBottom )
 				{
 					Position = CommentPosition.Top;
 				}
 				else
 				{
-					var isTop = streamXml.GetNamedChildNodeText( "header_comment" ).ToBooleanFrom1();
-					var isBottom = streamXml.GetNamedChildNodeText( "footer_comment" ).ToBooleanFrom1();
+					var isTop = streamXml.Element( "header_comment" ).Value.ToBooleanFrom1();
+					var isBottom = streamXml.Element( "footer_comment" ).Value.ToBooleanFrom1();
 					if( isTop )
 					{
 						Position = isBottom ? CommentPosition.Both : CommentPosition.Top;
@@ -54,18 +54,18 @@ namespace Mntone.Nico2.Live.PlayerStatus
 				}
 			}
 
-			FilteringLevel = ( CommentFilteringLevel )streamXml.GetNamedChildNodeText( "ng_scoring" ).ToUShort();
-			SexMode = ( CommentSexMode )streamXml.GetNamedChildNodeText( "danjo_comment_mode" ).ToInt();
+			FilteringLevel = ( CommentFilteringLevel )streamXml.Element( "ng_scoring" ).Value.ToUShort();
+			SexMode = ( CommentSexMode )streamXml.Element( "danjo_comment_mode" ).Value.ToInt();
 
-			var quesheetXml = streamXml.GetNamedChildNode( "quesheet" );
+			var quesheetXml = streamXml.Element( "quesheet" );
 			if( quesheetXml != null )
 			{
-				Commands = quesheetXml.GetChildNodes().Select( queXml => new Command( queXml ) ).ToList();
+				Commands = quesheetXml.Elements().Select( queXml => new Command( queXml ) ).ToList();
 			}
 
-			IsRestrict = streamXml.GetNamedChildNodeText( "is_restrict" ).ToBooleanFrom1();
+			IsRestrict = streamXml.Element( "is_restrict" ).Value.ToBooleanFrom1();
 
-			var productCommentXml = streamXml.GetNamedChildNodeText( "product_comment" );
+			var productCommentXml = streamXml.Element( "product_comment" ).Value;
 			if( !string.IsNullOrEmpty( productCommentXml ) )
 			{
 				LimitMode = ( CommentLimitMode )productCommentXml.ToInt();

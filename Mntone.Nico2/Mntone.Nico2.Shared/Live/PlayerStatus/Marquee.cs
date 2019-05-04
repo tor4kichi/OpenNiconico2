@@ -19,10 +19,10 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Marquee( XElement marqueeXml )
 #endif
 		{
-			Category = marqueeXml.GetNamedChildNodeText( "category" );
-			GameKey = marqueeXml.GetNamedChildNodeText( "game_key" );
-			GameTime = marqueeXml.GetNamedChildNodeText( "game_time" ).ToDateTimeOffsetFromUnixTime();
-			IsNotInterruptionForced = marqueeXml.GetNamedChildNodeText( "force_nicowari_off" ).ToBooleanFrom1();
+			Category = marqueeXml.Element( "category" ).Value;
+			GameKey = marqueeXml.Element( "game_key" ).Value;
+			GameTime = marqueeXml.Element( "game_time" ).Value.ToDateTimeOffsetFromUnixTime();
+			IsNotInterruptionForced = marqueeXml.Element( "force_nicowari_off" ).Value.ToBooleanFrom1();
 		}
 
 		/// <summary>

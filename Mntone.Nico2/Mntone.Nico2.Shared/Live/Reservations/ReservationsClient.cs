@@ -28,21 +28,21 @@ namespace Mntone.Nico2.Live.Reservations
 			var xml = XDocument.Parse( reservationsInDatailData );
 #endif
 
-			var responseXml = xml.GetDocumentRootNode();
-			if( responseXml.GetName() != "nicolive_video_response" )
+			var responseXml = xml.Root;
+			if( responseXml.Name.LocalName != "nicolive_video_response" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}
 
-			var listXml = responseXml.GetFirstChildNode();
-			if( listXml.GetName() != "timeshift_reserved_list" )
+			var listXml = responseXml.Element("timeshift_reserved_list");
+			if( listXml != null)
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}
 
-			if( listXml.GetFirstChildNode() != null )
+			if( listXml != null )
 			{
-				return listXml.GetChildNodes().Select( vidXml => "lv" + vidXml.GetText() ).ToList();
+				return listXml.Elements().Select( vidXml => "lv" + vidXml.Value ).ToList();
 			}
 			return new List<string>();
 		}

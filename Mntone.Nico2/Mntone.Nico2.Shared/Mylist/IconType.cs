@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
+#if WINDOWS_UWP
 using Windows.UI;
+#else
+using System.Drawing;
+#endif
+
+
 
 namespace Mntone.Nico2.Mylist
 {
@@ -19,8 +26,10 @@ namespace Mntone.Nico2.Mylist
 		Purple,
     }
 
-	public static class IconTypeExtention
+
+    public static class IconTypeExtention
 	{
+#if WINDOWS_UWP
 		public static Color ToColor(this IconType iconType)
 		{
 			switch (iconType)
@@ -49,6 +58,38 @@ namespace Mntone.Nico2.Mylist
 					throw new NotSupportedException($"not support {nameof(IconType)}.{iconType.ToString()}");
 			}
 		}
-	}
+#else
+        public static Color ToColor(this IconType iconType)
+        {
+            switch (iconType)
+            {
+                case IconType.Default:
+                    return Color.LightYellow;
+                case IconType.Cyan:
+                    return Color.LightCyan;
+                case IconType.SmokeWhite:
+                    return Color.WhiteSmoke;
+                case IconType.Dark:
+                    return Color.DarkGray;
+                case IconType.Red:
+                    return Color.Red;
+                case IconType.Orenge:
+                    return Color.Orange;
+                case IconType.Green:
+                    return Color.Green;
+                case IconType.SkyBlue:
+                    return Color.SkyBlue;
+                case IconType.Blue:
+                    return Color.Blue;
+                case IconType.Purple:
+                    return Color.Purple;
+                default:
+                    throw new NotSupportedException($"not support {nameof(IconType)}.{iconType.ToString()}");
+            }
+        }
+#endif
+
+
+    }
 
 }

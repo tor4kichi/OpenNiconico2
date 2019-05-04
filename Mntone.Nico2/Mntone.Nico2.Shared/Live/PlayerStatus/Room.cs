@@ -19,10 +19,10 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Room( XElement streamXml, XElement userXml )
 #endif
 		{
-			Name = userXml.GetNamedChildNodeText( "room_label" );
-			SeatId = userXml.GetNamedChildNodeText( "room_seetno" ).ToUInt();
+			Name = userXml.Element( "room_label" ).Value;
+			SeatId = userXml.Element( "room_seetno" ).Value.ToUInt();
 
-			SeatToken = userXml.GetNamedChildNodeText( "seat_token" );
+			SeatToken = userXml.Element( "seat_token" ).Value;
 		}
 
 		/// <summary>

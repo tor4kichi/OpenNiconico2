@@ -22,10 +22,10 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Command( XElement queXml )
 #endif
 		{
-			Position = TimeSpan.FromTicks( queXml.GetNamedAttributeText( "vpos" ).ToLong() * 10000 );
-			Mail = queXml.GetNamedAttributeText( "mail" );
-			Name = queXml.GetNamedAttributeText( "name" );
-			Value = queXml.GetText();
+			Position = TimeSpan.FromTicks( queXml.Attribute( "vpos" ).Value.ToLong() * 10000 );
+			Mail = queXml.Attribute( "mail" ).Value;
+			Name = queXml.Attribute( "name" ).Value;
+			Value = queXml.Value;
 		}
 
 		/// <summary>

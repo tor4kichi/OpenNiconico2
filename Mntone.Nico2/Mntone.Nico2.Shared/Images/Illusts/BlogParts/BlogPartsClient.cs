@@ -13,12 +13,12 @@ namespace Mntone.Nico2.Images.Illusts.BlogParts
 	{
 		public static Task<string> GetClipDataAsync( NiconicoContext context, uint requestClipId )
 		{
-			return context.GetClient().GetStringAsync($"{NiconicoUrls.ImageBlogPartsUrl }clip&key={requestClipId}");
+			return context.GetStringAsync($"{NiconicoUrls.ImageBlogPartsUrl }clip&key={requestClipId}");
         }
 
 		public static Task<string> GetUserDataAsync( NiconicoContext context, uint requestUserId )
 		{
-			return context.GetClient().GetStringAsync($"{NiconicoUrls.ImageBlogPartsUrl }user&key={requestUserId}");
+			return context.GetStringAsync($"{NiconicoUrls.ImageBlogPartsUrl }user&key={requestUserId}");
 		}
 
 		public static BlogPartsResponse ParseBlogPartsData( string blogPartsData )
@@ -30,8 +30,8 @@ namespace Mntone.Nico2.Images.Illusts.BlogParts
 			var xml = XDocument.Parse( blogPartsData );
 #endif
 
-			var responseXml = xml.GetDocumentRootNode();
-			if( responseXml.GetName() != "response" )
+			var responseXml = xml.Root;
+			if( responseXml.Name != "response" )
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}

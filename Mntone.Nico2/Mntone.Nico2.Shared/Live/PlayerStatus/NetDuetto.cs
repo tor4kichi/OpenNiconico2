@@ -17,8 +17,8 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal NetDuetto( XElement streamXml )
 #endif
 		{
-			IsEnabled = streamXml.GetNamedChildNodeText( "allow_netduetto" ).ToBooleanFrom1();
-			Token = streamXml.GetNamedChildNodeText( "nd_token" );
+			IsEnabled = streamXml.Element( "allow_netduetto" ).Value.ToBooleanFrom1();
+			Token = streamXml.Element( "nd_token" ).Value;
 		}
 
 		/// <summary>

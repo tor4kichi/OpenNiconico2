@@ -19,13 +19,13 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		internal Telop( XElement telopNode )
 #endif
 		{
-			IsEnabled = telopNode.GetNamedChildNodeText( "enable" ).ToBooleanFrom1();
+			IsEnabled = telopNode.Element( "enable" ).Value.ToBooleanFrom1();
 
-			var mailXml = telopNode.GetNamedChildNodeText( "mail" );
+			var mailXml = telopNode.Element( "mail" ).Value;
 			if( !string.IsNullOrEmpty( mailXml ) )
 			{
 				Mail = mailXml;
-				Value = telopNode.GetNamedChildNodeText( "caption" );
+				Value = telopNode.Element( "caption" ).Value;
 			}
 			else
 			{

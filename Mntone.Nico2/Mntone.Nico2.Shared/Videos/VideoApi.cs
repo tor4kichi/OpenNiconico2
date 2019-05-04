@@ -248,9 +248,11 @@ namespace Mntone.Nico2.Videos
         public Task<Dmc.DmcSessionResponse> GetDmcSessionResponse(
             Dmc.DmcWatchResponse watchData,
             Dmc.VideoContent videoQuality = null,
-            Dmc.AudioContent audioQuality = null)
+            Dmc.AudioContent audioQuality = null,
+            bool hlsMode = false
+            )
         {
-            return Dmc.DmcClient.GetDmcSessionResponseAsync(_context, watchData, videoQuality, audioQuality);
+            return Dmc.DmcClient.GetDmcSessionResponseAsync(_context, watchData, videoQuality, audioQuality, hlsMode);
         }
 
 
@@ -286,6 +288,12 @@ namespace Mntone.Nico2.Videos
             return Dmc.DmcClient.DmcSessionExitHeartbeatAsync(_context, watch, sessionRes);
         }
 
+
+
+        public Task<bool> SendOfficialHlsWatchAsync(string contentId, string trackId)
+        {
+            return Dmc.DmcClient.SendOfficialHlsWatchAsync(_context, contentId, trackId);
+        }
 
 
         /// <summary>
