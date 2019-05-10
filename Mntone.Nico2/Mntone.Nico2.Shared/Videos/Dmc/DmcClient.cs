@@ -307,20 +307,26 @@ namespace Mntone.Nico2.Videos.Dmc
             // モバイルの時は最後の動画品質をモバイル画質として断定して指定
             // それ以外の場合、対象画質とそれ以下の有効な画質をすべて指定
             var requestVideoQuality = new List<string>();
-            if (videoQuality != null)
+            if (videoQuality?.Available ?? false)
             {
-                if (videoQuality.Available)
-                {
-                    requestVideoQuality.Add(videoQuality.Id);
-                }
+                requestVideoQuality.Add(videoQuality.Id);
             }
-            var fallbackVideoQuality = qualities.Videos.Last();
-            if (videoQuality.Id != fallbackVideoQuality.Id)
+            else
             {
+                var fallbackVideoQuality = qualities.Videos.Last();
                 requestVideoQuality.Add(fallbackVideoQuality.Id);
             }
 
-            var requestAudioQuality = new List<string>() { qualities.Audios.Last().Id };
+            var requestAudioQuality = new List<string>();
+            if (audioQuality?.Available ?? false)
+            {
+                requestAudioQuality.Add(audioQuality.Id);
+            }
+            else
+            {
+                var fallbackAudioQuality = qualities.Audios.Last();
+                requestAudioQuality.Add(fallbackAudioQuality.Id);
+            }
 
             var sessionUrl = $"{session.Urls[0].Url}?_format=json";
             var useSsl = true; // session.Urls[0].IsSsl;
