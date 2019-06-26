@@ -566,6 +566,20 @@ namespace Mntone.Nico2.Users
         #endregion
 
 
+        #region Series
+
+        public Task<Series.SeriesDetails> GetSeriesDetailsAsync(string seriesId)
+        {
+            return Series.SeriesClient.GetSeriesDetailsAsync(_context, seriesId);
+        }
+
+        public Task<Series.SeriesList> GetUserSeriesListAsync(string userId)
+        {
+            return Series.SeriesClient.GetUserSeriesAsync(_context, userId);
+        }
+
+        #endregion
+
         #region field
 
         private NiconicoContext _context;

@@ -80,7 +80,7 @@ namespace Mntone.Nico2.Communities
 		/// <param name="communityId">"co"から始まるコミュニティID</param>
 		/// <param name="page">1 以上のページ数</param>
 		/// <returns></returns>
-		public Task<NiconicoVideoRss> GetCommunityVideoAsync(string communityId, uint page)
+		public Task<RssVideoResponse> GetCommunityVideoAsync(string communityId, uint page)
 		{
 			return Video.CommunityVideoClient.GetCommunityVideosAsync(_context, communityId, page);
 		}

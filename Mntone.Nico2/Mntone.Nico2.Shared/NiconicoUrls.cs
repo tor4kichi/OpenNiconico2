@@ -450,6 +450,11 @@ namespace Mntone.Nico2
         public static string RecommendApiUrl = $"{VideoUrlBase}api/recommendations";
 
 
+        // Series
+        public static string MakeUserSeriesPageUrl(string userId) => $"{VideoUrlBase}user/{userId}/series";
+
+
+        public static string MakeSeriesPageUrl(string seriesId) => $"{VideoUrlBase}series/{seriesId}";
 
         #endregion
 

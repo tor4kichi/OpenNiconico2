@@ -217,6 +217,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\MylistItem\MylistItemResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\NG\NGClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\NG\NGCommentResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Series\SeriesClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Series\UserSeriesData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\UserApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Info\InfoResponse.cs" />
@@ -226,6 +228,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Video\UserVideoRss.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VideoRssContentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\ChatResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Comment\CommentClient.cs" />
@@ -251,7 +254,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\HistoriesResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\History.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRanking.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRankingRss.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingGenre.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingHotTopicTerm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Recommend\RecommendClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Recommend\RecommendResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Related\RelatedClient.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,172 +10,131 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using System.ServiceModel.Syndication;
 
 namespace Mntone.Nico2.Videos.Ranking
 {
+    public static class EnumExtensions
+    {
+        public static string GetDescription<E>(this E enumValue)
+            where E : Enum
+        {
+            var gm = enumValue.GetType().GetMember(enumValue.ToString());
+            var attributes = gm[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+            var description = ((DescriptionAttribute)attributes[0]).Description;
+            return description;
+        }
+    }
+
+   
 	public sealed class NiconicoRanking
 	{
-		public const string NiconicoRankingDomain = "http://www.nicovideo.jp/ranking/";
+        public const string NiconicoRankingGenreDomain = "https://www.nicovideo.jp/ranking/genre/";
 
-		internal static string MakeRankingUrlParameters(RankingTarget target, RankingTimeSpan timeSpan, RankingCategory category)
+		public static async Task<RssVideoResponse> GetRankingRssAsync(RankingGenre genre, RankingTerm? term = null, string tag = null, int page = 1)
 		{
-			var _target = target.ToString();
-			var _timeSpan = timeSpan.ToString();
-			var _category = category.ToString().ToLower();
+            var dict = new Dictionary<string, string>();
+            if (term != null)
+            {
+                dict.Add(nameof(term), term?.GetDescription());
+            }
+            if (tag != null)
+            {
+                dict.Add(nameof(tag), Uri.EscapeUriString(tag));
+            }
+            if (page != 1)
+            {
+                dict.Add(nameof(page), page.ToString());
+            }
 
-			return $"{_target}/{_timeSpan}/{_category}?rss=2.0";
-        }
+            dict.Add("rss", "2.0");
+            dict.Add("lang", "ja-jp");
 
-		public static async Task<NiconicoVideoRss> GetRankingData(RankingTarget target, RankingTimeSpan timeSpan, RankingCategory category)
-		{
-			var rssUrl = NiconicoRankingDomain + MakeRankingUrlParameters(target, timeSpan, category);
-
-			//			var rssParameters = Uri.EscapeUriString();
-
-			try
-			{
-				using (HttpClient client = new HttpClient())
-				{
-					HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, rssUrl);
-
-					request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue("ja", 0.5));
-					request.Headers.UserAgent.Add(new ProductInfoHeaderValue("NicoPlayerHohoema_UWP", "1.0"));
-
-					var result = await client.SendAsync(request);
-					using (var contentStream = await result.Content.ReadAsStreamAsync())
-					{
-						var serializer = new XmlSerializer(typeof(NiconicoVideoRss));
-
-						return (NiconicoVideoRss)serializer.Deserialize(contentStream);
-					}
-				}
-			}
-			catch (HttpRequestException reqException)
-			{
-
-			}
-			catch (Exception e)
-			{
-
-			}
-
-			return null;
+            try
+            {
+                return await VideoRssContentHelper.GetRssVideoResponseAsync(
+                    $"{NiconicoRankingGenreDomain}{genre.GetDescription()}?{HttpQueryExtention.DictionaryToQuery(dict)}"
+                    );
+            }
+            catch
+            {
+                return new RssVideoResponse() { IsOK = false, Items = new List<RssVideoData>() };
+            }
 		}
 	}
 
-	// see@ http://nicowiki.com/?RSS%E3%83%95%E3%82%A3%E3%83%BC%E3%83%89%E4%B8%80%E8%A6%A7
+    
 
-	public enum RankingTarget
-	{
-        fav, // 総合
-		view, // 再生
-		res,   // コメント数
-		mylist, // マイリスト数
-		
-	}
+    
 
-	public enum RankingTimeSpan
-	{
-		hourly,
-		daily,
-		weekly,
-		monthly,
-		total,
-	}
+    public static class RankingRssDataExtensions
+    {
+        public static string GetVideoId(this RssVideoData data)
+        {
+            return data.WatchPageUrl.OriginalString.Substring(@"https://www.nicovideo.jp/watch/".Length);
+        }
 
-	public enum RankingCategory
-	{
-		/// <summary>カテゴリ合算</summary>
-		all,
+        public static string GetRankTrimmingTitle(this RssVideoData data)
+        {
+            var index = data.RawTitle.IndexOf('：');
+            return data.RawTitle.Substring(index + 1);
+        }
 
-		/// <summary>エンタメ・音楽</summary>
-		g_ent2,
+        public static RankingVideoMoreData GetMoreData(this RssVideoData data)
+        {
+            /* data.Description 
+             
+             <p class="nico-thumbnail"><img alt="異世界かるてっと 第12話" src="https://nicovideo.cdn.nimg.jp/thumbnails/35292329/35292329.7495360" width="94" height="70" border="0"/></p>
+             <p class="nico-description">動画一覧はこちら第11話 watch/1560410886「Nアニメ」無料動画や最新情報・生放送・マ</p>
+             <p class="nico-info"><small><strong class="nico-info-length">11:50</strong>｜<strong class="nico-info-date">2019年06月26日 00：45：00</strong> 投稿<br/><strong>合計</strong>&nbsp;&#x20;再生：<strong class="nico-info-total-view">81,344</strong>&nbsp;&#x20;コメント：<strong class="nico-info-total-res">3,555</strong>&nbsp;&#x20;マイリスト：<strong class="nico-info-total-mylist">600</strong></small></p>
+             
+             */
 
-		/// <summary>エンターテイメント</summary>
-		ent,　　	
-		/// <summary>音楽</summary>
-		music,      
-		/// <summary>謳ってみた</summary>
-		sing,		
-		/// <summary>踊ってみた</summary>
-		dance,		
-		/// <summary>演奏してみた</summary>
-		play,		
-		/// <summary>VOCALOID</summary>
-		vocaloid,	
-		/// <summary>ニコニコインディーズ</summary>
-		nicoindies,
+            var lines = data.Description.Split(separator: new char[] { '\n' }, options: StringSplitOptions.RemoveEmptyEntries);
 
-        /// <summary>ASMR</summary>
-        asmr,
-        /// <summary></summary>
-        mmd,
-        /// <summary>バーチャル</summary>
-        Virtual,
+            var thumbnailNode = HtmlAgilityPack.HtmlNode.CreateNode(lines[0].TrimStart());
+            //var descriptionNode = HtmlAgilityPack.HtmlNode.CreateNode(lines[1]);
+            var infoNode = HtmlAgilityPack.HtmlNode.CreateNode(lines[2].TrimStart());
+            var img = thumbnailNode.Element("img");
 
-		/// <summary>生活・一般・スポ</summary>
-		g_life2,
-		/// <summary>動物</summary>
-		animal,		 
-		/// <summary>料理</summary>
-		cooking,	 
-		/// <summary>自然</summary>
-		nature,		 
-		/// <summary>旅行</summary>
-		travel,		 
-		/// <summary>スポーツ</summary>
-		sport,		 
-		/// <summary>ニコニコ動画講座</summary>
-		lecture,	 
-		/// <summary>車載動画</summary>
-		drive,		 
-		/// <summary>歴史</summary>
-		history,
-        /// <summary>鉄道</summary>
-        train,
+            var infoContainer = infoNode.Element("small");
 
-        /// <summary>政治</summary>
-        g_politics,	 
+            // ex) 11:50
+            var lengthNode = infoContainer.GetElementByClassName("nico-info-length");
 
-		/// <summary>科学・技術</summary>
-		g_tech,      
-		/// <summary>科学</summary>
-		science,	 
-		/// <summary>ニコニコ技術部</summary>
-		tech,		 
-		/// <summary>ニコニコ手芸部</summary>
-		handcraft,   
-		/// <summary>作ってみた</summary>
-		make,        
+            // ex) 2019年06月26日 00：45：00
+            //var dateNode = infoContainer.GetElementByClassName("nico-info-date");
 
-		/// <summary>アニメ・ゲーム・絵</summary>
-		g_culture2,  
+            // ex) 81,344
+            var watchCountNode = infoContainer.GetElementByClassName("nico-info-total-view");
+            var commentCountNode = infoContainer.GetElementByClassName("nico-info-total-res");
+            var mylistCountNode = infoContainer.GetElementByClassName("nico-info-total-mylist");
 
-		/// <summary>アニメ</summary>
-		anime,		
-		/// <summary>ゲーム</summary>
-		game,		
-		/// <remarks>実況プレイ動画</remarks>
-		jikkyo,
-		/// <summary>東方</summary>
-		toho,		
-		/// <summary>アイドルマスター</summary>
-		imas,		 
-		/// <summary>ラジオ</summary>
-		radio,		 
-		/// <summary>描いてみた</summary>
-		draw,		 
-		/// <summary>TRPG</summary>
-        trpg,
+            var result = new RankingVideoMoreData()
+            {
+                Title = img.GetAttributeValue("alt", string.Empty),
+                ThumbnailUrl = img.GetAttributeValue("src", string.Empty),
+                Length = lengthNode.InnerText.ToTimeSpan(),
+                WatchCount = int.Parse(new string(watchCountNode.InnerText.Where(c => Char.IsDigit(c)).ToArray())),
+                CommentCount = int.Parse(new string(commentCountNode.InnerText.Where(c => Char.IsDigit(c)).ToArray())),
+                MylistCount = int.Parse(new string(mylistCountNode.InnerText.Where(c => Char.IsDigit(c)).ToArray())),
+            };
 
-		/// <summary>その他（合算）</summary>
-		g_other,	 
+            return result;
+        }
+    }
 
-		/// <summary>例のアレ</summary>
-		are,		
-		/// <summary>日記</summary>
-		diary,		 
-		/// <summary>その他</summary>
-		other,		 
-	}
+
+
+
+    public class RankingVideoMoreData
+    {
+        public string Title { get; set; }
+        public TimeSpan Length { get; set; }
+        public string ThumbnailUrl { get; set; }
+        public int WatchCount { get; set; }
+        public int CommentCount { get; set; }
+        public int MylistCount { get; set; }
+    }
+	
 }

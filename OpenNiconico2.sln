@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mntone.Nico2.Shared", "Mntone.Nico2\Mntone.Nico2.Shared\Mntone.Nico2.Shared.shproj", "{F1F0B094-2632-4141-88C1-05B082EBAC91}"
 EndProject
@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ruleset", "Ruleset", "{F019
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mntone.Nico2.UWP", "Mntone.Nico2.UWP\Mntone.Nico2.UWP.csproj", "{BBF8857D-550A-4228-B9FC-52C38D5346F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mntone.Nico2.NetStandard", "Mntone.Nico2.NetStandard\Mntone.Nico2.NetStandard.csproj", "{5B622614-40AA-4B35-940C-ED285C16141E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mntone.Nico2.NetStandard", "Mntone.Nico2.NetStandard\Mntone.Nico2.NetStandard.csproj", "{5B622614-40AA-4B35-940C-ED285C16141E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnttone.Nico2.UnitTest", "Mnttone.Nico2.UnitTest\Mnttone.Nico2.UnitTest.csproj", "{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -74,6 +76,26 @@ Global
 		{5B622614-40AA-4B35-940C-ED285C16141E}.Release|x64.Build.0 = Release|Any CPU
 		{5B622614-40AA-4B35-940C-ED285C16141E}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B622614-40AA-4B35-940C-ED285C16141E}.Release|x86.Build.0 = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|ARM.Build.0 = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|x64.Build.0 = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Debug|x86.Build.0 = Debug|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|ARM.Build.0 = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|ARM64.Build.0 = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|x64.ActiveCfg = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|x64.Build.0 = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +104,7 @@ Global
 		{F1F0B094-2632-4141-88C1-05B082EBAC91} = {D13D0642-48F5-4059-840E-D958B3021ABE}
 		{BBF8857D-550A-4228-B9FC-52C38D5346F1} = {D13D0642-48F5-4059-840E-D958B3021ABE}
 		{5B622614-40AA-4B35-940C-ED285C16141E} = {D13D0642-48F5-4059-840E-D958B3021ABE}
+		{AE32DE90-6A01-4FC9-912C-7E1D2453BC48} = {D13D0642-48F5-4059-840E-D958B3021ABE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D63986D6-2957-4732-A586-D141DF401217}
