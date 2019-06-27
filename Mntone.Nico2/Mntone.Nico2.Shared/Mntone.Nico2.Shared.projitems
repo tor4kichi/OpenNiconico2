@@ -255,7 +255,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Histories\History.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\NiconicoRanking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingGenre.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingHotTopicTerm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingGenrePickedTag.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Ranking\RankingTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Recommend\RecommendClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Recommend\RecommendResponse.cs" />
