@@ -1,10 +1,5 @@
 ﻿using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,13 +8,9 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class User
 	{
-#if WINDOWS_APP
-		internal User( IXmlNode streamXml, IXmlNode userXml )
-#else
-		internal User( XElement streamXml, XElement userXml )
-#endif
-		{
-			Id = userXml.Element( "user_id" ).Value.ToUInt();
+        internal User(XElement streamXml, XElement userXml)
+        {
+            Id = userXml.Element( "user_id" ).Value.ToUInt();
 			Name = userXml.Element( "nickname" ).Value;
 			IsPremium = userXml.Element( "is_premium" ).Value.ToBooleanFrom1();
 			Age = userXml.Element( "userAge" ).Value.ToUShort();

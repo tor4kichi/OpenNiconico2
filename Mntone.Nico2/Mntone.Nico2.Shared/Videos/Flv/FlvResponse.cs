@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 using Windows.Networking;
 #endif
 
@@ -46,7 +46,7 @@ namespace Mntone.Nico2.Videos.Flv
 			ChannelFilter = SafeGetValue(wwwFormData, "ng_ch") ?? string.Empty;
 			FlashMediaServerToken = SafeGetValue(wwwFormData, "fmst") ?? string.Empty;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 			AppsHost = wwwFormData["hms"].ToHostName();
 #else
 			AppsHost = SafeGetValue(wwwFormData, "hms");
@@ -172,7 +172,7 @@ namespace Mntone.Nico2.Videos.Flv
 		/// <summary>
 		/// ニコニコアプリのホスト名
 		/// </summary>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public HostName AppsHost { get; private set; }
 #else
 		public string AppsHost { get; private set; }

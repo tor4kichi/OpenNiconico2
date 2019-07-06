@@ -1,8 +1,4 @@
-﻿#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
-using System.Xml.Linq;
-#endif
+﻿using System.Xml.Linq;
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -11,11 +7,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Farre
 	{
-#if WINDOWS_APP
-		internal Farre( IXmlNode farreXml )
-#else
 		internal Farre( XElement farreXml )
-#endif
 		{
 			IsEnabled = farreXml.Element( "farremode" ).Value.ToBooleanFrom1();
 			IsAvatarmakerEnabled = farreXml.Element( "avatarmaker_enabled" ).Value.ToBooleanFrom1();

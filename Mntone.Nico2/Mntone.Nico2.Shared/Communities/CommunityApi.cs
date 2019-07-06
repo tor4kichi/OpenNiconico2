@@ -1,12 +1,12 @@
-﻿using Mntone.Nico2.Videos.Ranking;
+﻿using System;
+using Mntone.Nico2.Videos.Ranking;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-#if WINDOWS_APP
-using System;
+#if WINDOWS_UWP
 using Windows.Foundation;
 using Windows.Storage.Streams;
 #else
-using System.Threading.Tasks;
 #endif
 
 namespace Mntone.Nico2.Communities
@@ -26,7 +26,7 @@ namespace Mntone.Nico2.Communities
 		/// </summary>
 		/// <param name="requestCommunityId">目的のコミュニティー ID</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<IBuffer> GetIconAsync( string requestCommunityId )
 		{
 			return Icon.IconClient.GetIconAsync( this._context, requestCommunityId ).AsAsyncOperation();

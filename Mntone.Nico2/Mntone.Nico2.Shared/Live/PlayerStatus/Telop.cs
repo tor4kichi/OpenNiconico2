@@ -1,10 +1,5 @@
 ﻿using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,11 +8,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Telop
 	{
-#if WINDOWS_APP
-		internal Telop( IXmlNode telopNode )
-#else
 		internal Telop( XElement telopNode )
-#endif
 		{
 			IsEnabled = telopNode.Element( "enable" ).Value.ToBooleanFrom1();
 

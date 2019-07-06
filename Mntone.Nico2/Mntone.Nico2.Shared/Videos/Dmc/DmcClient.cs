@@ -4,10 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+
+using System.Net;
+#if WINDOWS_UWP
+using Windows.Web.Http;
+#else
+using System.Net.Http;
+#endif
+
 
 namespace Mntone.Nico2.Videos.Dmc
 {
@@ -40,9 +46,9 @@ namespace Mntone.Nico2.Videos.Dmc
 
             try
             {
-                var res = await context.GetClient().SendAsync(requestMessage);
+                var res = await context.SendAsync(requestMessage);
 
-                if (res.StatusCode == HttpStatusCode.Forbidden)
+                if (res.ReasonPhrase == "Forbidden")
                 {
                     throw new WebException("require payment.");
                 }
@@ -102,15 +108,14 @@ namespace Mntone.Nico2.Videos.Dmc
             try
             {
                 var client = context.GetClient();
-
                 var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+                message.Headers.Cookie.TryParseAdd("watch_html5=1");
+                message.Headers.Cookie.TryParseAdd("watch_flash=0");
+                
 
-                message.Headers.Add(@"Cookie", "watch_html5=1, watch_flash=0");
+                var res = await context.SendAsync(message);
 
-                var res = await context.GetClient()
-                    .SendAsync(message);
-
-                if (res.StatusCode == HttpStatusCode.Forbidden)
+                if (res.ReasonPhrase == "Forbidden")
                 {
                     throw new WebException("require payment.");
                 }
@@ -423,8 +428,12 @@ namespace Mntone.Nico2.Videos.Dmc
 
 //            var decodedJson = WebUtility.HtmlEncode(requestJson);
             var decodedJson = requestJson;
-
+#if WINDOWS_UWP
+            return await context.PostAsync(sessionUrl, new HttpStringContent(decodedJson, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+#else
             return await context.PostAsync(sessionUrl, new StringContent(decodedJson, UnicodeEncoding.UTF8, "application/json"));
+#endif
+
         }
 
 
@@ -454,10 +463,10 @@ namespace Mntone.Nico2.Videos.Dmc
                 .ContinueWith(prevTask => ParseDmcSessionResponse(prevTask.Result));
         }
 
-        #endregion
+#endregion
 
 
-        #region DmcSessionHeartbeat
+#region DmcSessionHeartbeat
 
         public static async Task DmcSessionFirstHeartbeatAsync(
             NiconicoContext context,
@@ -471,8 +480,13 @@ namespace Mntone.Nico2.Videos.Dmc
             var message = new HttpRequestMessage(HttpMethod.Options, new Uri(sessionUrl));
             message.Headers.Add("Access-Control-Request-Method", "POST");
             message.Headers.Add("Access-Control-Request-Headers", "content-type");
+#if WINDOWS_UWP
             message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
-            var result = await context.GetClient().SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+#else
+            message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
+#endif
+
+            var result = await context.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
             if (!result.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine(result.ToString());
@@ -499,9 +513,14 @@ namespace Mntone.Nico2.Videos.Dmc
             {
                 NullValueHandling = NullValueHandling.Ignore
             });
-            message.Content = new StringContent(requestJson, UnicodeEncoding.UTF8, "application/json");
 
-            var result = await context.GetClient().SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+#if WINDOWS_UWP
+            message.Content = new HttpStringContent(requestJson, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
+#else
+            message.Content = new StringContent(requestJson, UnicodeEncoding.UTF8, "application/json");
+#endif
+
+            var result = await context.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
             if (!result.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine(result.ToString());
@@ -521,7 +540,7 @@ namespace Mntone.Nico2.Videos.Dmc
             message.Headers.Add("Access-Control-Request-Method", "POST");
             message.Headers.Add("Access-Control-Request-Headers", "content-type");
             message.Headers.UserAgent.Add(context.HttpClient.DefaultRequestHeaders.UserAgent.First());
-            var result = await context.GetClient().SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+            var result = await context.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
             if (!result.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine(result.ToString());
@@ -548,19 +567,22 @@ namespace Mntone.Nico2.Videos.Dmc
                 NullValueHandling = NullValueHandling.Ignore
             });
 
+#if WINDOWS_UWP
+            message.Content = new HttpStringContent(requestJson, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
+#else
             message.Content = new StringContent(requestJson, UnicodeEncoding.UTF8, "application/json");
-
-            var result = await context.GetClient().SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+#endif
+            var result = await context.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
             if (!result.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine(result.ToString());
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region nvapi Watch
+#region nvapi Watch
 
         public static async Task<bool> SendOfficialHlsWatchAsync(
             NiconicoContext context,
@@ -571,31 +593,41 @@ namespace Mntone.Nico2.Videos.Dmc
             var uri = new Uri($"https://nvapi.nicovideo.jp/v1/2ab0cbaa/watch?t={Uri.EscapeDataString(trackId)}");
             var refererUri = new Uri($"https://www.nicovideo.jp/watch/{contentId}");
 
-            var optionReq = new HttpRequestMessage(HttpMethod.Options, uri);
-            optionReq.Headers.Add("Access-Control-Request-Headers", "x-frontend-id,x-frontend-version");
-            optionReq.Headers.Add("Access-Control-Request-Method", "GET");
-            optionReq.Headers.Referrer = refererUri;
-            optionReq.Headers.Add("Origin", "https://www.nicovideo.jp");
+            {
+                var optionReq = new HttpRequestMessage(HttpMethod.Options, uri);
+                optionReq.Headers.Add("Access-Control-Request-Headers", "x-frontend-id,x-frontend-version");
+                optionReq.Headers.Add("Access-Control-Request-Method", "GET");
+                optionReq.Headers.Add("Origin", "https://www.nicovideo.jp");
+#if WINDOWS_UWP
+                optionReq.Headers.Referer = refererUri;
+#else
+                optionReq.Headers.Referrer = refererUri;
+#endif
+                var optionRes = await context.SendAsync(optionReq);
 
-            var optionRes = await context.HttpClient.SendAsync(optionReq);
-
-            if (!optionRes.IsSuccessStatusCode) { return false; }
-
+                if (!optionRes.IsSuccessStatusCode) { return false; }
+            }
             //var allowHeaders = res.Headers["Access-Control-Allow-Headers"];
 
-            var watchReq = new HttpRequestMessage(HttpMethod.Get, uri);
-            
-            watchReq.Headers.Add("X-Frontend-Id", "6");
-            watchReq.Headers.Add("X-Frontend-Version", "0");
-            watchReq.Headers.Referrer = refererUri;
-            optionReq.Headers.Add("Origin", "https://www.nicovideo.jp");
+            {
+                var watchReq = new HttpRequestMessage(HttpMethod.Get, uri);
 
-            var watchRes = await context.HttpClient.SendAsync(watchReq);
+                watchReq.Headers.Add("X-Frontend-Id", "6");
+                watchReq.Headers.Add("X-Frontend-Version", "0");
+#if WINDOWS_UWP
+                watchReq.Headers.Referer = refererUri;
+#else
+                watchReq.Headers.Referrer = refererUri;
+#endif
+                watchReq.Headers.Add("Origin", "https://www.nicovideo.jp");
 
-            return watchRes.IsSuccessStatusCode;
+                var watchRes = await context.SendAsync(watchReq);
+
+                return watchRes.IsSuccessStatusCode;
+            }
         }
 
-        #endregion
+#endregion
 
     }
 }

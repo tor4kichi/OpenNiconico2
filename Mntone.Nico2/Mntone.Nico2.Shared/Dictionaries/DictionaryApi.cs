@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 using System;
 using Windows.Foundation;
 #else
@@ -25,7 +25,7 @@ namespace Mntone.Nico2.Dictionaries
 		/// </summary>
 		/// <param name="targetWord">目的の単語</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<bool> WordExistAsync( string targetWord )
 		{
 			return WordExist.WordExistClient.WordExistAsync( _context, targetWord ).AsAsyncOperation();
@@ -42,7 +42,7 @@ namespace Mntone.Nico2.Dictionaries
 		/// </summary>
 		/// <param name="targetWord">目的の単語</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<Summary.SummaryResponse> GetSummaryAsync( string targetWord )
 		{
 			return Summary.SummaryClient.GetSummaryAsync( _context, targetWord ).AsAsyncOperation();
@@ -60,7 +60,7 @@ namespace Mntone.Nico2.Dictionaries
 		/// <param name="targetCategory">目的のカテゴリー</param>
 		/// <param name="targetWord">目的の単語</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<bool> ExistAsync( Category targetCategory, string targetWord )
 		{
 			return Exist.ExistClient.ExistAsync( _context, targetCategory, targetWord ).AsAsyncOperation();
@@ -76,7 +76,7 @@ namespace Mntone.Nico2.Dictionaries
 		/// [非ログオン可] 非同期操作として大百科に最近登録された単語の一覧を取得します
 		/// </summary>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<Recent.RecentResponse> GetRecentAsync()
 		{
 			return Recent.RecentClient.GetRecentAsync( _context ).AsAsyncOperation();

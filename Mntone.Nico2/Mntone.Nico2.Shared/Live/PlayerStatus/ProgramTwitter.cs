@@ -1,10 +1,5 @@
 ﻿using System;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,11 +8,8 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class ProgramTwitter
 	{
-#if WINDOWS_APP
-		internal ProgramTwitter( IXmlNode streamXml, IXmlNode twitterXml )
-#else
 		internal ProgramTwitter( XElement streamXml, XElement twitterXml )
-#endif
+
 		{
 			IsEnabled = twitterXml.Element( "live_enabled" ).Value.ToBooleanFrom1();
 			Hashtag = streamXml.Element( "twitter_tag" ).Value;

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-
-#if WINDOWS_APP
 using System;
+using System.Threading.Tasks;
+
+#if WINDOWS_UWP
 using Windows.Foundation;
 using Windows.Storage.Streams;
 #else
-using System.Threading.Tasks;
 #endif
 
 namespace Mntone.Nico2.Channels
@@ -25,7 +25,7 @@ namespace Mntone.Nico2.Channels
 		/// </summary>
 		/// <param name="requestChannelId">目的のチャンネル ID</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<IBuffer> GetIconAsync( string requestChannelId )
 		{
 			return Icon.IconClient.GetIconAsync( this._context, requestChannelId ).AsAsyncOperation();

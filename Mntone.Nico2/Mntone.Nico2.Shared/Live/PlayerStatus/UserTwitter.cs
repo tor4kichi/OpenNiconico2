@@ -1,10 +1,5 @@
 ﻿using System;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,11 +8,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class UserTwitter
 	{
-#if WINDOWS_APP
-		internal UserTwitter( IXmlNode twitterInfoXml )
-#else
 		internal UserTwitter( XElement twitterInfoXml )
-#endif
 		{
 			IsEnabled = twitterInfoXml.Element( "status" ).Value == "enabled";
 			ScreenName = twitterInfoXml.Element( "screen_name" ).Value;

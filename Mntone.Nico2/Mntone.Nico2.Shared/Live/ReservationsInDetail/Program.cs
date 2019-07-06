@@ -1,12 +1,7 @@
-﻿using Mntone.Nico2.Images.Illusts;
-using System;
+﻿using System;
 using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
+
 
 namespace Mntone.Nico2.Live.ReservationsInDetail
 {
@@ -15,11 +10,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 	/// </summary>
 	public sealed class Program
 	{
-#if WINDOWS_APP
-		internal Program( IXmlNode reservedItemXml )
-#else
 		internal Program( XElement reservedItemXml )
-#endif
 		{
 			Id = "lv" + reservedItemXml.Element( "vid" ).Value;
 			Title = reservedItemXml.Element( "title" ).Value;

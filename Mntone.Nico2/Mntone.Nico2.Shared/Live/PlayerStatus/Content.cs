@@ -1,10 +1,5 @@
 ﻿using System;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,11 +8,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Content
 	{
-#if WINDOWS_APP
-		internal Content( IXmlNode contentsXml )
-#else
 		internal Content( XElement contentsXml )
-#endif
 		{
 			Id = contentsXml.Attribute( "id" ).Value;
 			IsAudioDisabled = contentsXml.Attribute( "disableAudio" ).Value.ToBooleanFrom1();

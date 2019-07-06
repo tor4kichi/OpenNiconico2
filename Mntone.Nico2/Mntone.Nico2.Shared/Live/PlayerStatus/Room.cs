@@ -1,10 +1,5 @@
 ﻿using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,11 +8,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Room
 	{
-#if WINDOWS_APP
-		internal Room( IXmlNode streamXml, IXmlNode userXml )
-#else
 		internal Room( XElement streamXml, XElement userXml )
-#endif
 		{
 			Name = userXml.Element( "room_label" ).Value;
 			SeatId = userXml.Element( "room_seetno" ).Value.ToUInt();

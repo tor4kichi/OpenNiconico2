@@ -2,12 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.Reservations
 {
@@ -21,13 +16,7 @@ namespace Mntone.Nico2.Live.Reservations
 
 		public static IReadOnlyList<string> ParseReservationsData( string reservationsInDatailData )
 		{
-#if WINDOWS_APP
-			var xml = new XmlDocument();
-			xml.LoadXml( reservationsInDatailData, new XmlLoadSettings { ElementContentWhiteSpace = false, MaxElementDepth = 5 } );
-#else
 			var xml = XDocument.Parse( reservationsInDatailData );
-#endif
-
 			var responseXml = xml.Root;
 			if( responseXml.Name.LocalName != "nicolive_video_response" )
 			{

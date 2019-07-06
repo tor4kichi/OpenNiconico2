@@ -5,7 +5,7 @@ namespace Mntone.Nico2
 	/// <summary>
 	/// パース失敗例外
 	/// </summary>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 	internal sealed class ParseException
 #else
 	public sealed class ParseException

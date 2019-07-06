@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+
+#if WINDOWS_UWP
+using Windows.Web.Http;
+#else
+using System.Net.Http;
+#endif
 
 namespace Mntone.Nico2.Users.FollowCommunity
 {
@@ -25,8 +30,7 @@ namespace Mntone.Nico2.Users.FollowCommunity
                 url += "?page=" + (page + 1).ToString();
             }
 
-            return context.GetClient()
-				.GetConvertedStringAsync(url);
+            return context.GetConvertedStringAsync(url);
 		}
 
 
@@ -138,22 +142,27 @@ namespace Mntone.Nico2.Users.FollowCommunity
 
 			await Task.Delay(1000);
 
-			// http://com.nicovideo.jp/motion/id に情報をpostする
-			var dict = new Dictionary<string, string>();
-			dict.Add("mode", "commit");
-			dict.Add("title", title ?? "フォローリクエスト");
-			dict.Add("comment", comment ?? "");
-			dict.Add("notify", notify ? "1" : "");
-
-            var content = new FormUrlEncodedContent(dict);
+            // http://com.nicovideo.jp/motion/id に情報をpostする
+            var dict = new Dictionary<string, string>()
+            {
+                { "mode", "commit" },
+                { "title", title ?? "フォローリクエスト"},
+                { "comment", comment ?? ""},
+                { "notify", notify ? "1" : ""},
+            };
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             request.Headers.Add("Upgrade-Insecure-Requests", "1");
             request.Headers.Add("Referer", url);
             request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 
-            request.Content = content;
-            var postResult = await context.HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+#if WINDOWS_UWP
+            request.Content = new HttpFormUrlEncodedContent(dict);
+#else
+            request.Content = new FormUrlEncodedContent(dict);
+#endif
+
+            var postResult = await context.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
 			Debug.WriteLine(postResult);
 
@@ -223,12 +232,16 @@ namespace Mntone.Nico2.Users.FollowCommunity
 		{
 			var url = NiconicoUrls.CommunityLeavePageUrl + token.CommunityId;
 			var dict = new Dictionary<string, string>();
-
 			dict.Add("time", token.Time);
 			dict.Add("commit_key", token.CommitKey);
 			dict.Add("commit", token.Commit);
 
+#if WINDOWS_UWP
+            var content = new HttpFormUrlEncodedContent(dict);
+#else
             var content = new FormUrlEncodedContent(dict);
+#endif
+
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             request.Headers.Add("Upgrade-Insecure-Requests", "1");
@@ -236,7 +249,7 @@ namespace Mntone.Nico2.Users.FollowCommunity
             request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 
             request.Content = content;
-            var postResult = await context.HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            var postResult = await context.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             Debug.WriteLine(postResult);
 

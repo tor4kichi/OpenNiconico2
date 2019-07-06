@@ -1,8 +1,4 @@
-﻿#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
-using System.Xml.Linq;
-#endif
+﻿using System.Xml.Linq;
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -11,11 +7,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class NetDuetto
 	{
-#if WINDOWS_APP
-		internal NetDuetto( IXmlNode streamXml )
-#else
 		internal NetDuetto( XElement streamXml )
-#endif
 		{
 			IsEnabled = streamXml.Element( "allow_netduetto" ).Value.ToBooleanFrom1();
 			Token = streamXml.Element( "nd_token" ).Value;

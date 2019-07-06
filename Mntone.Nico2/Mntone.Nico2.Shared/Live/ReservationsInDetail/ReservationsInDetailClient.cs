@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.ReservationsInDetail
 {
@@ -18,13 +13,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 
 		public static ReservationsInDetailResponse ParseReservationsInDetailData( string reservationsInDatailData )
 		{
-#if WINDOWS_APP
-			var xml = new XmlDocument();
-			xml.LoadXml( reservationsInDatailData, new XmlLoadSettings { ElementContentWhiteSpace = false, MaxElementDepth = 5 } );
-#else
 			var xml = XDocument.Parse( reservationsInDatailData );
-#endif
-
 			var responseXml = xml.Root;
 			if( responseXml.Name != "nicolive_video_response" )
 			{

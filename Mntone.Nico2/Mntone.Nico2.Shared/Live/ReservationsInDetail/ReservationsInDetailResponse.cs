@@ -1,11 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.ReservationsInDetail
 {
@@ -14,11 +9,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 	/// </summary>
 	public sealed class ReservationsInDetailResponse
 	{
-#if WINDOWS_APP
-		internal ReservationsInDetailResponse( IXmlNode reservedItemsXml )
-#else
 		internal ReservationsInDetailResponse( XElement reservedItemsXml )
-#endif
 		{
 			if( reservedItemsXml != null )
 			{

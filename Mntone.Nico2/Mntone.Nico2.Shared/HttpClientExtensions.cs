@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 using Windows.Web.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Storage.Streams;
@@ -19,7 +19,7 @@ namespace Mntone.Nico2
 		public static Task<HttpResponseMessage> GetAsync(this HttpClient client, string uri)
 		{
 			return client.GetAsync(new Uri(uri))
-#if WINDOWS_APP
+#if WINDOWS_UWP
                 .AsTask()
 #endif
                 ;
@@ -28,7 +28,7 @@ namespace Mntone.Nico2
 		public static Task<string> GetStringAsync(this HttpClient client, string uri)
 		{
 			return client.GetStringAsync(new Uri(uri))
-#if WINDOWS_APP
+#if WINDOWS_UWP
                 .AsTask()
 #endif
                 ;
@@ -43,9 +43,8 @@ namespace Mntone.Nico2
 
 		public static async Task<string> GetConvertedStringAsync(this HttpClient client, string uri, Encoding encoding)
 		{
-#if WINDOWS_APP
-            var buffer = awiat client.GetBufferAsync(new Uri(uri));
-            var byteArray = buffer.ToArray();
+#if WINDOWS_UWP
+            var byteArray = await client.GetByteArrayAsync(uri);
             return Encoding.UTF8.GetString(byteArray, 0, byteArray.Length);
 #else
             var stream = await client.GetStreamAsync(uri);
@@ -58,7 +57,7 @@ namespace Mntone.Nico2
 
 		public static Task<byte[]> GetByteArrayAsync(this HttpClient client, string uri)
 		{
-#if WINDOWS_APP
+#if WINDOWS_UWP
             return client
 				.GetBufferAsync(new Uri(uri))
 				.AsTask()

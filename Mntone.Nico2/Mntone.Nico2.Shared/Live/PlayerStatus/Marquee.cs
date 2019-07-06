@@ -1,10 +1,5 @@
 ﻿using System;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -13,11 +8,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Marquee
 	{
-#if WINDOWS_APP
-		internal Marquee( IXmlNode marqueeXml )
-#else
 		internal Marquee( XElement marqueeXml )
-#endif
 		{
 			Category = marqueeXml.Element( "category" ).Value;
 			GameKey = marqueeXml.Element( "game_key" ).Value;

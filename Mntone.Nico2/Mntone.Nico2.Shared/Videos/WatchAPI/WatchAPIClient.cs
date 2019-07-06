@@ -4,9 +4,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
+
 using System.Text;
 using System.Threading.Tasks;
+
+
+#if WINDOWS_UWP
+using Windows.Web.Http;
+#else
+using System.Net.Http;
+#endif
 
 namespace Mntone.Nico2.Videos.WatchAPI
 {
@@ -41,13 +48,17 @@ namespace Mntone.Nico2.Videos.WatchAPI
             try
             {
                 var client = context.GetClient();
+#if WINDOWS_UWP
+                var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+#else
                 var request = new HttpRequestMessage(HttpMethod.Get, url);
+#endif
+
                 request.Headers.Add("Cookie", "watch_html5=1");
 
-                var res = await context.GetClient()
-                    .SendAsync(request);
+                var res = await context.SendAsync(request);
 
-                if (res.StatusCode == HttpStatusCode.Forbidden)
+                if (res.ReasonPhrase == "Forbidden")
                 {
                     throw new WebException("require payment.");
                 }

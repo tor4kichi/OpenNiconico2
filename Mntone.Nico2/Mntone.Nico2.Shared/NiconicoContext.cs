@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+#if WINDOWS_UWP
+using Windows.Web;
+using Windows.Web.Http;
+using Windows.Web.Http.Filters;
+#else
 using System.Net;
 using System.Net.Http;
-
+#endif
 
 namespace Mntone.Nico2
 {
@@ -70,7 +75,12 @@ namespace Mntone.Nico2
 		{
             var req = new HttpRequestMessage(HttpMethod.Post, new Uri(NiconicoUrls.LogOnApiUrl))
             {
-                Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+#if WINDOWS_UWP
+                Content = new HttpFormUrlEncodedContent(new Dictionary<string, string>()
+#else
+
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>() 
+#endif
                 {
                     { MailTelName, this.AuthenticationToken.MailOrTelephone },
                     { PasswordName, this.AuthenticationToken.Password },
@@ -84,18 +94,32 @@ namespace Mntone.Nico2
 
                 // HttpClient = null; としているのはHttpClientHanlderの再設定させたい
                 // 自動リダイレクトをログイン時のみOFFに設定させたいため
-                HttpClient = null;
-                var httpClient = this.GetClient(h => h.AllowAutoRedirect = false);
 
-                var res = await httpClient
-                    .SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+                /*
+                var httpClient = new HttpClient(new HttpClientHandler()
+                {
+                    AllowAutoRedirect = false,
+                    CookieContainer = CookieContainer
+                }
+                );
+
+                httpClient.DefaultRequestHeaders.Add("User-Agent", this._AdditionalUserAgent != null
+                    ? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
+                    : NiconicoContext.DefaultUserAgent);
+
+
+    */
+                await GetAsync(NiconicoUrls.VideoLoginUrl);
+
+                await Task.Delay(1000);
+
+                var res = await SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
 
                 const string TwoFactorAuthSite = @"https://account.nicovideo.jp/mfa";
 
                 if (res.RequestMessage.RequestUri.OriginalString.StartsWith(TwoFactorAuthSite))
                 {
                     LastRedirectHttpRequestMessage = res.RequestMessage;
-                    LastRedirectHttpContent = res.Content;
                     return NiconicoSignInStatus.TwoFactorAuthRequired;
                 }
 
@@ -105,12 +129,43 @@ namespace Mntone.Nico2
             {
                 // HttpClient = null; としているのはHttpClientHanlderの再設定させたい
                 // 自動リダイレクトをログイン処理が終わったら再度有効にしたい
-                HttpClient = null;
             }
-
         }
 
-        public HttpContent LastRedirectHttpContent { get; private set; }
+        
+        
+        
+
+
+        public async Task<NiconicoSignInStatus> MfaAsync(Uri location, string code, bool isTrustedDevice, string deviceName)
+        {
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, location)
+            {
+#if WINDOWS_UWP
+                Content = new HttpFormUrlEncodedContent(new Dictionary<string, string>()
+#else
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+#endif
+                {
+                    { "otp", code },
+                    { "loginBtn", "ログイン" },
+                    { "is_mfa_trusted_device", isTrustedDevice ? "true" : "false" },
+                    { "device_name", "Edge (Windows)" }
+                })
+            };
+
+            requestMessage.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; ServiceUI 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299");
+            requestMessage.Headers.Add("Referer", location.OriginalString);
+            requestMessage.Headers.Add("Origin", "https://account.nicovideo.jp");
+            requestMessage.Headers.Add("Upgrade-Insecure-Requests", "1");
+            requestMessage.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+
+            var result = await SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+//            var result = await GetClient().SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+
+            return result.IsSuccessStatusCode ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;
+        }
+
         public HttpRequestMessage LastRedirectHttpRequestMessage { get; private set; }
 
 
@@ -130,14 +185,23 @@ namespace Mntone.Nico2
             var response = await this.GetClient()
                 .GetAsync(new Uri(NiconicoUrls.TopPageUrl));
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
+#if WINDOWS_UWP
+                if (response.Headers.TryGetValue(XNiconicoAuthflag, out var flags))
+                {
+                    var authFlag = flags.ToUInt();
+                    var auth = (NiconicoAccountAuthority)authFlag;
+                    return auth != NiconicoAccountAuthority.NotSignedIn ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;
+                }
+#else
                 if (response.Headers.TryGetValues(XNiconicoAuthflag, out var flags))
                 {
                     var authFlag = flags.First().ToUInt();
                     var auth = (NiconicoAccountAuthority)authFlag;
                     return auth != NiconicoAccountAuthority.NotSignedIn ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;
                 }
+#endif
             }
             else if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
@@ -158,57 +222,101 @@ namespace Mntone.Nico2
 	        return await this.GetIsSignedInOnInternalAsync();
         }
 
+#if WINDOWS_UWP
+        HttpCookieManager CookieContainer;
+#else
         CookieContainer CookieContainer = new CookieContainer();
+#endif
 
-		internal HttpClient GetClient(Action<HttpClientHandler> modifier = null)
+        internal HttpClient GetClient()
 		{
             if( this.HttpClient == null )
 			{
-                var handler = new HttpClientHandler();
-                handler.CookieContainer = CookieContainer;
-                modifier?.Invoke(handler);
-
-                this.HttpClient = new HttpClient(handler);
-
-                this.HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
+#if WINDOWS_UWP
+                var filter = new HttpBaseProtocolFilter()
+                {
+                };
+                HttpClient = new HttpClient(filter);
+                CookieContainer = filter.CookieManager;
+#else
+                HttpClient = new HttpClient(
+                    new HttpClientHandler() 
+                    {
+                        CookieContainer = CookieContainer
+                    });
+#endif
+                HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
+
+
+
             }
-			return this.HttpClient;
+            return this.HttpClient;
 		}
 
 
         public string GetCurrentNicoVideoCookieHeader()
         {
+#if WINDOWS_UWP
+            return string.Join(" ", CookieContainer.GetCookies(new Uri(NiconicoUrls.TopPageUrl)));
+#else
             return CookieContainer.GetCookieHeader(new Uri(NiconicoUrls.TopPageUrl));
+#endif
+
         }
 
-		internal Task<HttpResponseMessage> GetAsync(string url)
+        internal async Task<HttpResponseMessage> GetAsync(string url)
 		{
-			return GetClient().GetAsync(url);
-		}
+#if WINDOWS_UWP
+            return await GetClient().GetAsync(new Uri(url));
+#else
+            return await GetClient().GetAsync(url);
+#endif
 
-		internal Task<string> GetStringAsync(string url, Dictionary<string, string> query)
+        }
+
+        internal async Task<string> GetStringAsync(string url, Dictionary<string, string> query)
 		{
 			var queryText = String.Join("&", query.Select(x => x.Key + "=" + Uri.EscapeDataString(x.Value)));
 			var realUri = $"{url}?{queryText}";
 
-			return GetClient().GetStringAsync(realUri);
-		}
+            return await GetStringAsync(realUri);
+        }
 
-		internal Task<string> GetStringAsync(string url)
+        internal async Task<string> GetStringAsync(string url)
 		{
-			return GetClient().GetStringAsync(url);
+#if WINDOWS_UWP
+            return await GetClient().GetStringAsync(new Uri(url));
+#else
+            return await GetClient().GetConvertedStringAsync(url);
+#endif
 		}
 
-		internal Task<string> PostAsync(string url, bool withToken = true)
+        internal async Task<string> GetConvertedStringAsync(string url)
+        {
+            return await GetClient().GetConvertedStringAsync(url);
+        }
+
+
+        internal Task<string> PostAsync(string url, bool withToken = true)
 		{
 			Dictionary<string, string> keyvalues = new Dictionary<string, string>();
 
 			return this.PostAsync(url, keyvalues, withToken);
 		}
 
-		internal async Task<string> PostAsync(string url, Dictionary<string, string> keyvalues, bool withToken = true)
+        internal Task<string> PostAsync(string url, string stringContent)
+        {
+#if WINDOWS_UWP
+            var content = new HttpStringContent(stringContent);
+#else
+            var content = new StringContent(stringContent);
+#endif
+            return this.PostAsync(url, content);
+        }
+
+        internal async Task<string> PostAsync(string url, Dictionary<string, string> keyvalues, bool withToken = true)
 		{
 			if (withToken && !keyvalues.ContainsKey("token"))
 			{
@@ -216,12 +324,36 @@ namespace Mntone.Nico2
 				keyvalues.Add("token", token);
 			}
 
-			var content = new FormUrlEncodedContent(keyvalues);
+#if WINDOWS_UWP
+            var content = new HttpFormUrlEncodedContent(keyvalues);
+#else
+            var content = new FormUrlEncodedContent(keyvalues);
+#endif
 
-			return await this.PostAsync(url, content);
+
+            return await this.PostAsync(url, content);
 		}
+        internal async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
+        {
+#if WINDOWS_UWP
+            return await GetClient().SendRequestAsync(request, completionOption);
+#else
+            return await GetClient().SendAsync(request, completionOption);
+#endif
+        }
 
-		internal async Task<string> PostAsync(string url, HttpContent content)
+
+#if WINDOWS_UWP
+
+#else
+            
+#endif
+
+#if WINDOWS_UWP
+        internal async Task<string> PostAsync(string url, IHttpContent content)
+#else
+            internal async Task<string> PostAsync(string url, HttpContent content)
+#endif
 		{
 			using (var res = await GetClient().PostAsync(new Uri(url), content))
 			{
@@ -257,15 +389,6 @@ namespace Mntone.Nico2
 			get { return this._Live ?? ( this._Live = new Live.LiveApi( this ) ); }
 		}
 		private Live.LiveApi _Live = null;
-
-		/// <summary>
-		/// ニコニコ静画の API 群
-		/// </summary>
-		public Images.ImageApi Image
-		{
-			get { return this._Image ?? ( this._Image = new Images.ImageApi( this ) ); }
-		}
-		private Images.ImageApi _Image = null;
 
 		/// <summary>
 		/// ニコニコ検索の API 群
@@ -353,10 +476,10 @@ namespace Mntone.Nico2
         private Nicocas.NicocasApi _Nicocas = null;
 
 
-        #endregion
+#endregion
 
 
-        #region property (and related field)
+#region property (and related field)
 
         /// <summary>
         /// ニコニコ　トークン
@@ -405,6 +528,6 @@ namespace Mntone.Nico2
 
         public HttpClient HttpClient { get; private set; }
 
-        #endregion
+#endregion
     }
 }

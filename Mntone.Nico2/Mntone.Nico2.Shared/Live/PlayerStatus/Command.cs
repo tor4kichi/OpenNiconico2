@@ -1,10 +1,5 @@
 ﻿using System;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -16,11 +11,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </remarks>
 	public sealed class Command
 	{
-#if WINDOWS_APP
-		internal Command( IXmlNode queXml )
-#else
 		internal Command( XElement queXml )
-#endif
 		{
 			Position = TimeSpan.FromTicks( queXml.Attribute( "vpos" ).Value.ToLong() * 10000 );
 			Mail = queXml.Attribute( "mail" ).Value;

@@ -1,12 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-using Windows.Networking;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -15,17 +9,9 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class CommentServer
 	{
-#if WINDOWS_APP
-		internal CommentServer( IXmlNode commentServerXml, IXmlNode threadIdsXml )
-#else
 		internal CommentServer( XElement commentServerXml, XElement threadIdsXml )
-#endif
 		{
-#if WINDOWS_APP
-			Host = commentServerXml.Element( "addr" ).ToHostName();
-#else
 			Host = commentServerXml.Element( "addr" ).Value;
-#endif
 			Port = commentServerXml.Element( "port" ).Value.ToUShort();
 			if( threadIdsXml.HasElements )
 			{
@@ -43,11 +29,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 		/// <summary>
 		/// ホスト名
 		/// </summary>
-#if WINDOWS_APP
-		public HostName Host { get; private set; }
-#else
 		public string Host { get; private set; }
-#endif
 
 		/// <summary>
 		/// ポート番号

@@ -15,8 +15,7 @@ namespace Mntone.Nico2
 
             var info = new MylistAdditionInfo() { GroupId = group_id };
 
-            var documentText = await context.GetClient()
-                .GetStringAsync(api);
+            var documentText = await context.GetStringAsync(api);
 
 
             var htmlDocument = new HtmlDocument();
@@ -54,8 +53,7 @@ namespace Mntone.Nico2
 		{
 			var api = NiconicoUrls.MylistMyPageUrl;
 
-			return await context.GetClient()
-				.GetStringAsync(api)
+			return await context.GetStringAsync(api)
 				.ContinueWith(x => x.Result.Substring(x.Result.IndexOf("NicoAPI.token = \"") + 17, 60));
 
 		}

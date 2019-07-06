@@ -1,13 +1,12 @@
 ﻿using Mntone.Nico2.Mylist;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
-#if WINDOWS_APP
-using System;
+#if WINDOWS_UWP
 using Windows.Foundation;
 using Windows.Storage.Streams;
 #else
-using System.Threading.Tasks;
 #endif
 
 namespace Mntone.Nico2.Users
@@ -27,7 +26,7 @@ namespace Mntone.Nico2.Users
 		/// </summary>
 		/// <param name="requestUserId">目的のユーザー ID</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<IBuffer> GetIconAsync( uint requestUserId )
 		{
 			return Icon.IconClient.GetIconAsync( this._context, requestUserId ).AsAsyncOperation();
@@ -43,7 +42,7 @@ namespace Mntone.Nico2.Users
 		/// 非同期操作としてユーザー情報を取得します
 		/// </summary>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<Info.InfoResponse> GetInfoAsync()
 		{
 			return Info.InfoClient.GetInfoAsync( this._context ).AsAsyncOperation();

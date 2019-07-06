@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 using Windows.Networking;
 #endif
 
@@ -120,7 +120,7 @@ namespace Mntone.Nico2
 			return new Uri( value );
 		}
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public static HostName ToHostName( this string value )
 		{
 			return new HostName( value );

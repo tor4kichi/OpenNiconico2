@@ -20,7 +20,7 @@ namespace Mntone.Nico2.Videos.Comment
 
         public static async Task<string> GetThreadKeyDataAsync(NiconicoContext context, long threadId)
         {
-            return await context.GetClient()
+            return await context
                 .GetStringAsync(NiconicoUrls.VideoThreadKeyApiUrl + threadId.ToString());
         }
 
@@ -61,8 +61,7 @@ namespace Mntone.Nico2.Videos.Comment
             var param = HttpQueryExtention.DictionaryToQuery(paramDict);
             var commentUrl = $"{commentServerUrl}thread?{Uri.EscapeUriString(param)}";
 
-            return await context.GetClient()
-                .GetStringAsync(commentUrl);
+            return await context.GetStringAsync(commentUrl);
         }
 
 
@@ -163,10 +162,7 @@ namespace Mntone.Nico2.Videos.Comment
 
             Debug.WriteLine(postCommentXml);
 
-
-            var content = new StringContent(postCommentXml);
-
-            return await context.PostAsync(commentServerUrl, content);
+            return await context.PostAsync(commentServerUrl, postCommentXml);
         }
 
 

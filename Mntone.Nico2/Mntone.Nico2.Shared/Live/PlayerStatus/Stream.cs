@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Xml.Linq;
 
 namespace Mntone.Nico2.Live.PlayerStatus

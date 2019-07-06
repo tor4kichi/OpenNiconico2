@@ -1,12 +1,12 @@
-﻿#if WINDOWS_APP
-using System;
+﻿using System;
+using Mntone.Nico2.Mylist;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+#if WINDOWS_UWP
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
 #else
-using Mntone.Nico2.Mylist;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 #endif
 
 namespace Mntone.Nico2.Videos
@@ -31,7 +31,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="requestId">目的の動画 ID</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		[Overload( "GetFlvAsync" )]
 		public IAsyncOperation<Flv.FlvResponse> GetFlvAsync( string requestId )
 		{
@@ -44,29 +44,11 @@ namespace Mntone.Nico2.Videos
 		}
 #endif
 
-	
-		/// <summary>
-		/// 非同期操作として thumbnail 情報を取得します
-		/// </summary>
-		/// <param name="requestId">目的の動画 ID</param>
-		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
-		public IAsyncOperation<Thumbnail.ThumbnailResponse> GetThumbnailAsync( string requestId )
-		{
-			return Thumbnail.ThumbnailClient.GetThumbnailAsync( _context, requestId ).AsAsyncOperation();
-		}
-#else
-		public Task<Thumbnail.ThumbnailResponse> GetThumbnailAsync( string requestId )
-		{
-			return Thumbnail.ThumbnailClient.GetThumbnailAsync( _context, requestId );
-		}
-#endif
-
 		/// <summary>
 		/// 非同期操作として videoviewhistory/list 情報を取得します
 		/// </summary>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<Histories.HistoriesResponse> GetHistoriesAsync()
 		{
 			return Histories.HistoriesClient.GetHistoriesAsync( _context ).AsAsyncOperation();
@@ -95,7 +77,7 @@ namespace Mntone.Nico2.Videos
         /// <param name="token">視聴履歴を取得したときに取得したトークン</param>
         /// <param name="requestId">目的の動画 ID</param>
         /// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<RemoveHistory.RemoveHistoryResponse> RemoveHistoryAsync( string token, string requestId )
 		{
 			return RemoveHistory.RemoveHistoryClient.RemoveHistoryAsync( _context, token, requestId ).AsAsyncOperation();
@@ -113,7 +95,7 @@ namespace Mntone.Nico2.Videos
 		/// </summary>
 		/// <param name="token">視聴履歴を取得したときに取得したトークン</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<RemoveHistory.RemoveHistoryResponse> RemoveAllHistoriesAsync( string token )
 		{
 			return RemoveHistory.RemoveHistoryClient.RemoveAllHistoriesAsync( _context, token ).AsAsyncOperation();

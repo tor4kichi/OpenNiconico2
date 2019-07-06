@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
+
 using System.Text;
 using System.Threading.Tasks;
 
+#if WINDOWS_UWP
+using Windows.Web.Http;
+#else
+using System.Net.Http;
+#endif
 namespace Mntone.Nico2.Live.Watch
 {
     public sealed class WatchClient
@@ -12,10 +17,13 @@ namespace Mntone.Nico2.Live.Watch
         // Liveのwatchページから再生準備情報を取得します
         public static async Task<string> GetLiveWatchPageHtmlAsync(NiconicoContext context, string liveId, bool forceHtml5 = true)
         {
-            var client = context.GetClient();
+#if WINDOWS_UWP
+            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(NiconicoUrls.Live2WatchPageUrl + liveId));
+#else
             var request = new HttpRequestMessage(HttpMethod.Get, NiconicoUrls.Live2WatchPageUrl + liveId);
+#endif
             request.Headers.Add(@"Cookie", "player_version=leo");
-            var res = await client.SendAsync(request);
+            var res = await context.SendAsync(request);
             return await res.Content.ReadAsStringAsync();
         }
 

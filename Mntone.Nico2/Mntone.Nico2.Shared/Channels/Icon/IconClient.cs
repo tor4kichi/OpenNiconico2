@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 using Windows.Storage.Streams;
 #else
 using System.Net.Http;
@@ -12,10 +12,10 @@ namespace Mntone.Nico2.Channels.Icon
 {
 	internal sealed class IconClient
 	{
-#if WINDOWS_APP
-		public static Task<IBuffer> GetIconAsync( NiconicoContext context, string requestId )
+#if WINDOWS_UWP
+		public static async Task<IBuffer> GetIconAsync( NiconicoContext context, string requestId )
 #else
-		public static Task<byte[]> GetIconAsync( NiconicoContext context, string requestId )
+		public static async Task<byte[]> GetIconAsync( NiconicoContext context, string requestId )
 #endif
 		{
 			if( !NiconicoRegex.IsChannelId( requestId ) )
@@ -24,9 +24,9 @@ namespace Mntone.Nico2.Channels.Icon
 			}
 
 			var channelNumber = requestId.Substring( 2 ).ToUInt();
-			return context.GetClient()
-#if WINDOWS_APP
-				.GetBufferAsync( string.Format( NiconicoUrls.ChannelIconUrl, channelNumber ) );
+			return await context.GetClient()
+#if WINDOWS_UWP
+				.GetBufferAsync( new Uri(string.Format( NiconicoUrls.ChannelIconUrl, channelNumber )) );
 #else
 				.GetByteArrayAsync( string.Format( NiconicoUrls.ChannelIconUrl, channelNumber ) );
 #endif

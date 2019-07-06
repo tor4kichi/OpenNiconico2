@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -14,11 +9,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Program
 	{
-#if WINDOWS_APP
-		internal Program( IXmlNode streamXml, IXmlNode playerXml, IXmlNode nsenXml, ProgramTwitter programTwitter )
-#else
 		internal Program( XElement streamXml, XElement playerXml, XElement nsenXml, ProgramTwitter programTwitter )
-#endif
 		{
 			Id = streamXml.Element( "id" ).Value;
 			Title = streamXml.Element( "title" ).Value;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mntone.Nico2.Videos.Ranking
 {
-    public class RankingGenrePickedTag
+    public sealed class RankingGenrePickedTag
     {
         public string DisplayName { get; set; }
         public string Tag { get; set; }

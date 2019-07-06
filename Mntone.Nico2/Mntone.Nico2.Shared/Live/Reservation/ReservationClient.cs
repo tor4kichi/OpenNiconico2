@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
+
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-#if WINDOWS_APP
+#if WINDOWS_UWP
 using Windows.Web.Http;
+#else 
+using System.Net.Http;
 #endif
 
 namespace Mntone.Nico2.Live.Reservation
@@ -39,10 +41,15 @@ namespace Mntone.Nico2.Live.Reservation
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri("http://live.nicovideo.jp/api/timeshift.reservations"))
             {
+#if WINDOWS_UWP
+                Content = new HttpFormUrlEncodedContent(dict)
+#else
                 Content = new FormUrlEncodedContent(dict)
+#endif
+
             };
 
-            var response = await context.GetClient().SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead);
+            var response = await context.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead);
 
             return await response.Content.ReadAsStringAsync();
         }

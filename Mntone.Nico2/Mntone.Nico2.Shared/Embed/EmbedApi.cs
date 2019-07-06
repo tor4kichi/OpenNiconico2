@@ -1,12 +1,12 @@
-﻿#if WINDOWS_APP
-using System;
-using Windows.Foundation;
-using Windows.Foundation.Metadata;
-#else
-using Mntone.Nico2.Mylist;
+﻿using Mntone.Nico2.Mylist;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+#if WINDOWS_UWP
+using Windows.Foundation;
+using Windows.Foundation.Metadata;
+#else
 #endif
 
 

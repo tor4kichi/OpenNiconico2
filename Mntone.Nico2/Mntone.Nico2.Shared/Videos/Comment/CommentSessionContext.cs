@@ -81,9 +81,7 @@ namespace Mntone.Nico2.Videos.Comment
                 NullValueHandling = NullValueHandling.Ignore,
             });
 
-            var content = new StringContent(requestParamsJson);
-
-            return await Context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, content);
+            return await Context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, requestParamsJson);
         }
 
 

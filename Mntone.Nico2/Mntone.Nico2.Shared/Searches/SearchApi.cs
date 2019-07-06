@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-
-#if WINDOWS_APP
 using System;
+using System.Threading.Tasks;
+
+#if WINDOWS_UWP
 using Windows.Foundation;
 #else
-using System.Threading.Tasks;
 #endif
 
 namespace Mntone.Nico2.Searches
@@ -24,7 +24,7 @@ namespace Mntone.Nico2.Searches
 		/// </summary>
 		/// <param name="targetWord">目的の単語</param>
 		/// <returns>非同期操作を表すオブジェクト</returns>
-#if WINDOWS_APP
+#if WINDOWS_UWP
 		public IAsyncOperation<Suggestion.SuggestionResponse> GetSuggestionAsync( string targetWord )
 		{
 			return Suggestion.SuggestionClient.GetSuggestionAsync( this._context, targetWord ).AsAsyncOperation();

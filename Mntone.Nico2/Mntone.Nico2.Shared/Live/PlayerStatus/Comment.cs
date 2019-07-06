@@ -1,11 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -14,11 +9,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// </summary>
 	public sealed class Comment
 	{
-#if WINDOWS_APP
-		internal Comment( IXmlNode streamXml, CommentServer commentServer )
-#else
 		internal Comment( XElement streamXml, CommentServer commentServer )
-#endif
 		{
 			IsLocked = streamXml.Element( "comment_lock" ).Value.ToBooleanFrom1();
 

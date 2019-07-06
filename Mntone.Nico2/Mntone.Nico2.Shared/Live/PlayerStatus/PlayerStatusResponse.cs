@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#if WINDOWS_APP
-using Windows.Data.Xml.Dom;
-#else
 using System.Xml.Linq;
-#endif
 
 namespace Mntone.Nico2.Live.PlayerStatus
 {
@@ -20,11 +16,7 @@ namespace Mntone.Nico2.Live.PlayerStatus
 	/// -->
 	public sealed class PlayerStatusResponse
 	{
-#if WINDOWS_APP
-		internal PlayerStatusResponse( IXmlNode playerStatusXml )
-#else
 		internal PlayerStatusResponse( XElement playerStatusXml )
-#endif
 		{
 			var streamXml = playerStatusXml.Element( "stream" );
 			var userXml = playerStatusXml.Element( "user" );
