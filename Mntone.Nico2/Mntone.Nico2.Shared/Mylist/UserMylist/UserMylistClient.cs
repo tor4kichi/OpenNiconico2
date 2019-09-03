@@ -32,6 +32,7 @@ namespace Mntone.Nico2.Mylist.UserMylist
 
 
 			var articleBody = body
+                .GetElementByClassName("BaseLayout")
 				.GetElementByClassName("wrapper")
 				.GetElementById("mylist")
 				.GetElementByClassName("articleBody");

@@ -18,9 +18,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mntone.Nico2.NetStandard", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mnttone.Nico2.UnitTest", "Mnttone.Nico2.UnitTest\Mnttone.Nico2.UnitTest.csproj", "{AE32DE90-6A01-4FC9-912C-7E1D2453BC48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mntone.Nico2.NetCore", "Mntone.Nico2.NetCore\Mntone.Nico2.NetCore.csproj", "{4E63CE28-4DC5-4885-BFDA-E729B98D6F29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mntone.Nico2.NetCore", "Mntone.Nico2.NetCore\Mntone.Nico2.NetCore.csproj", "{4E63CE28-4DC5-4885-BFDA-E729B98D6F29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mntone.Nico2.UWP_Latest", "Mntone.Nico2.UWP_Latest\Mntone.Nico2.UWP_Latest.csproj", "{CC63EF1D-ECD6-478D-8852-5C45FBBF697A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A1B97F4E-153C-4743-9FB4-965A174F7F5F}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

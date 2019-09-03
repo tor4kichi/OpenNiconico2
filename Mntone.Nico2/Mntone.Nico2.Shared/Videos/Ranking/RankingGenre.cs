@@ -11,7 +11,7 @@ namespace Mntone.Nico2.Videos.Ranking
         [Description("all")]
         All,
         /// <summary>話題</summary>
-        [Description("hot_topic")]
+        [Description("hot-topic")]
         HotTopic,
         /// <summary>エンターテイメント</summary>
         [Description("entertainment")]

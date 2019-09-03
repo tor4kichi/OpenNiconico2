@@ -46,6 +46,7 @@ namespace Mntone.Nico2.Users.FollowCommunity
 			var articlBodyElem = rootHtml
 				.Element("html")
 				.Element("body")
+                .GetElementByClassName("BaseLayout")
 				.GetElementsByClassName("wrapper").First()
 				.GetElementById("favCommunity")
 				.GetElementByClassName("articleBody");

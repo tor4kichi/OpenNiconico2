@@ -1,0 +1,9 @@
+﻿<Project>
+  <PropertyGroup>
+   <Copyright>copyright © tor4k</Copyright>
+   <Product>OpenNiconico2</Product>
+   <Company>tor4k</Company>
+   <Authors>tor4k</Authors>
+   <Owners>tor4k</Owners>
+</PropertyGroup>
+</Project>

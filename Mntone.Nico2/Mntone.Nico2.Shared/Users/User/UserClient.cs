@@ -27,7 +27,8 @@ namespace Mntone.Nico2.Users.User
 
 			var body = html.DocumentNode
 				.GetElementByTagName("html")
-				.GetElementByTagName("body");
+				.GetElementByTagName("body")
+                .GetElementByClassName("BaseLayout");
 			var userDetail = body.GetElementByClassName("userDetail");
 			var avatar = userDetail.GetElementByClassName("avatar");
 			var profile = userDetail.GetElementByClassName("profile");

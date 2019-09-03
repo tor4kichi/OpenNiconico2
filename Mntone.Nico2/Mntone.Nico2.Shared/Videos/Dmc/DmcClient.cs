@@ -109,9 +109,12 @@ namespace Mntone.Nico2.Videos.Dmc
             {
                 var client = context.GetClient();
                 var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+#if WINDOWS_UWP
                 message.Headers.Cookie.TryParseAdd("watch_html5=1");
                 message.Headers.Cookie.TryParseAdd("watch_flash=0");
-                
+#else
+                message.Headers.Add("Cookie", "watch_html5=1, watch_flash=0");
+#endif
 
                 var res = await context.SendAsync(message);
 
@@ -289,10 +292,10 @@ namespace Mntone.Nico2.Videos.Dmc
                 .ContinueWith(prevTask => ParseDmcWatchResponseData(prevTask.Result));
         }
 
-        #endregion
+#endregion
 
 
-        #region DmcSession
+#region DmcSession
 
         public static async Task<string> GetDmcSessionResponseDataAsync(
             NiconicoContext context, 

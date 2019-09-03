@@ -19,18 +19,21 @@ namespace Mntone.Nico2.Users.Info
 
 			try
 			{
-				this.IsPremium = info.IsPremium.ToBooleanFromString();
+				this.IsPremium = info.IsPremium;
 			}
 			catch { }
 
 			try
 			{
-				this.IsOver18 = uint.Parse(info.Age) >= 18;
+				this.IsOver18 = info.Age >= 18;
 			}
 			catch { }
 
 
-			var profileHtml = bodyHtml.GetElementByClassName("userDetail").GetElementByClassName("profile");
+			var profileHtml = bodyHtml
+                .GetElementByClassName("BaseLayout")
+                .GetElementByClassName("userDetail")
+                .GetElementByClassName("profile");
 			try
 			{
 				var h2Html = profileHtml.Element("h2");

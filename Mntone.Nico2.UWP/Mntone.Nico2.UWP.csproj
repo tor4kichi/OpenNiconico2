@@ -112,6 +112,9 @@
     <Compile Include="XmlDocumentExtentions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CodeHollow.FeedReader">
+      <Version>1.2.1</Version>
+    </PackageReference>
     <PackageReference Include="HtmlAgilityPack.NetCore">
       <Version>1.5.0.1</Version>
     </PackageReference>

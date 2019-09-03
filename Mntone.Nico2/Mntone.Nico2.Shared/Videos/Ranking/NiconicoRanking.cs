@@ -11,11 +11,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-#if WINDOWS_UWP
-using Windows.Web.Syndication;
-#else
-using System.ServiceModel.Syndication;
-#endif
 
 namespace Mntone.Nico2.Videos.Ranking
 {
@@ -37,7 +32,7 @@ namespace Mntone.Nico2.Videos.Ranking
         public static class Constants
         {
             public const string NiconicoRankingGenreDomain = "https://www.nicovideo.jp/ranking/genre/";
-            public const string NiconicoRankingHotTopicDomain = "https://www.nicovideo.jp/ranking/hot_topic";
+            public const string NiconicoRankingHotTopicDomain = "https://www.nicovideo.jp/ranking/hot-topic";
 
             public const int MaxPage = 10;
             public const int MaxPageWithTag = 3;
@@ -95,7 +90,7 @@ namespace Mntone.Nico2.Videos.Ranking
             var root = doc.DocumentNode;
 
             // ページ上の .RankingFilterTag となる要素を列挙する
-            var tagAnchorNodes = root.SelectNodes("/html/body/div[3]/div[2]/div[1]/section[2]/ul/li/a");
+            var tagAnchorNodes = root.SelectNodes("/html/body/div[2]/div[3]/div[2]/div[1]/section[2]/ul/li/a");
 
             return tagAnchorNodes
                 .Select(x => new RankingGenrePickedTag()
