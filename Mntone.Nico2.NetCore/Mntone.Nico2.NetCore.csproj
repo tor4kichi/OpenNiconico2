@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <Import Project="..\Mntone.Nico2\Mntone.Nico2.Shared\Mntone.Nico2.Shared.projitems" Label="Shared" />

@@ -9,12 +9,12 @@ namespace Mntone.Nico2.Mylist
 {
     public static class MylistJsonSerializeHelper
     {
-		public static List<MylistGroupData> ParseMylistGroupListJson(string json)
+		public static List<LoginUserMylistGroup> ParseMylistGroupListJson(string json)
 		{
-			var parsedJson = JsonConvert.DeserializeObject< LoginUserMylistGroupData>(json);
+			var parsedJson = JsonConvert.DeserializeObject<LoginUserMylistGroupResponse>(json);
 
 			return parsedJson.mylistgroup
-				.Cast<MylistGroupData>()
+				.Cast<LoginUserMylistGroup>()
 				.ToList();
 		}
 

@@ -198,7 +198,7 @@ namespace Mntone.Nico2.Searches.Video
 
 		[DataMember(Name = "tag")]
 		[JsonConverter(typeof(SingleOrArrayConverter<Tag>))]
-		public IList<Tag> TagItems { get; set; }
+		public List<Tag> TagItems { get; set; }
 	}
 
 	[DataContract]
@@ -212,7 +212,7 @@ namespace Mntone.Nico2.Searches.Video
 
 		[DataMember(Name = "video_info")]
 		[JsonConverter(typeof(SingleOrArrayConverter<VideoInfo>))]
-		public IList<VideoInfo> VideoInfoItems { get; private set; }
+		public List<VideoInfo> VideoInfoItems { get; private set; }
 
 		[DataMember(Name = "total_count")]
 		public string __total_count { get; private set; }

@@ -14,17 +14,9 @@ namespace Mntone.Nico2.Videos.RemoveHistory
 		{ }
 
 		[DataMember( Name = "status" )]
-		private string StatusImpl
-		{
-			get { return string.Empty; }
-			set
-			{
-				if( value != "ok" )
-				{
-					throw new Exception( "Parse Error." );
-				}
-			}
-		}
+		private string StatusImpl { get; set; }
+
+		public bool IsOK => StatusImpl == "ok";
 
 		/// <summary>
 		/// 履歴の件数

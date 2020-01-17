@@ -94,7 +94,7 @@ namespace Mntone.Nico2.Users.MylistGroup
 
 
 
-		public static Task<List<MylistGroupData>> GetMylistGroupListAsync(NiconicoContext context)
+		public static Task<List<LoginUserMylistGroup>> GetMylistGroupListAsync(NiconicoContext context)
 		{
 			return GetMylistGroupListDataAsync(context)
 				.ContinueWith(prevTask => MylistJsonSerializeHelper.ParseMylistGroupListJson(prevTask.Result));

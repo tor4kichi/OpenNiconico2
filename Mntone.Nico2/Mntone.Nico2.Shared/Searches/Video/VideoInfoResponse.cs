@@ -40,7 +40,7 @@ namespace Mntone.Nico2.Searches.Video
 
         [DataMember(Name = "tag_info")]
         [JsonConverter(typeof(SingleOrArrayConverter<TagInfo>))]
-        public IList<TagInfo> TagInfo { get; set; }
+        public List<TagInfo> TagInfo { get; set; }
     }
 
     [DataContract]

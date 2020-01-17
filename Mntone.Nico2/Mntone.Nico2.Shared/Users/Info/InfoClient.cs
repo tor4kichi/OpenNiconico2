@@ -80,28 +80,24 @@ namespace Mntone.Nico2.Users.Info
 
             UserMyPageJSInfo info = new UserMyPageJSInfo();
 
-
-            var items = new (string id, Action<UserMyPageJSInfo, string> act)[] {
-                ("user.user_id", (UserMyPageJSInfo data, string val) => data.Id = new string(val.Skip("parseInt('".Length).TakeWhile(x => x != '\'').ToArray())),
-                ("user.login_status", (UserMyPageJSInfo data, string val) => { }),
-                ("user.member_status", (UserMyPageJSInfo data, string val) => data.IsPremium = val == "premium"),
-                ("user.birthday", (UserMyPageJSInfo data, string val) => data.Age = (int)(DateTime.Now - DateTime.Parse(val)).TotalDays / 365),
-                ("user.sex", (UserMyPageJSInfo data, string val) => { }),
-                ("user.country", (UserMyPageJSInfo data, string val) => { }),
-                ("user.prefecture", (UserMyPageJSInfo data, string val) => { }),
-                ("user.ui_area", (UserMyPageJSInfo data, string val) => { }),
-                ("user.ui_lang", (UserMyPageJSInfo data, string val) => { }),
-            }.ToDictionary(x => x.id);
-
             for (int index = 0; index < splited.Length; index += 2)
             {
                 var key = splited[index].Trim(' ', '\n'); ;
                 var value = splited[index + 1].Trim('\'', ' ', '\n');
 
-                if (items.TryGetValue(key, out var item))
+                if (key == "user.user_id")
                 {
-                    item.act(info, value);
+                    info.Id = new string(value.Skip("parseInt('".Length).TakeWhile(x => x != '\'').ToArray());
                 }
+                else if (key == "user.member_status")
+                {
+                    info.IsPremium = value == "premium";
+                }
+                else if (key == "user.birthday")
+                {
+                    info.Age = (int)(DateTime.Now - DateTime.Parse(value)).TotalDays / 365;
+                }
+
             }
 
 			return new InfoResponse(htmlHtml.Element("body"), language, info);

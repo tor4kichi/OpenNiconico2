@@ -245,7 +245,7 @@ namespace Mntone.Nico2.Users
 		/// ログイン中のユーザーのマイリストグループ一覧を取得
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<MylistGroupData>> GetMylistGroupListAsync()
+		public Task<List<LoginUserMylistGroup>> GetMylistGroupListAsync()
 		{
 			return Users.MylistGroup.MylistGroupClient.GetMylistGroupListAsync(_context);
 		}
@@ -338,7 +338,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<List<MylistData>> GetMylistItemListAsync(string group_id)
 		{
-			if (MylistGroupData.IsDeflist(group_id))
+			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.GetDeflistAsync(_context);
 			}
@@ -358,7 +358,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> AddMylistItemAsync(string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
-			if (MylistGroupData.IsDeflist(group_id))
+			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.AddDeflistAsync(_context, item_type, item_id, description);
 			}
@@ -391,7 +391,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistItemAsync(string group_id, NiconicoItemType item_type, string item_id, string description)
 		{
-			if (MylistGroupData.IsDeflist(group_id))
+			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.UpdateDeflistAsync(_context, item_type, item_id, description);
 			}
@@ -421,7 +421,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> RemoveMylistItemAsync(string group_id, NiconicoItemType item_type, params string[] itemIdList)
 		{
-			if (MylistGroupData.IsDeflist(group_id))
+			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.RemoveDeflistAsync(_context, item_type, itemIdList);
 			}
@@ -451,13 +451,13 @@ namespace Mntone.Nico2.Users
 				return Task.FromResult(ContentManageResult.Success);
 			}
 
-			if (MylistGroupData.IsDeflist(target_group_id))
+			if (LoginUserMylistGroupData.IsDeflist(target_group_id))
 			{
 				// とりあえずマイリストへのコピーはサポートしていない
 				throw new NotSupportedException("not support mylist item copy to Deflist(とりあえずマイリスト)");
 			}
 
-			if (MylistGroupData.IsDeflist(group_id))
+			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.CopyDeflistAsync(_context, target_group_id, itemType, itemIdList);
 			}
@@ -482,13 +482,13 @@ namespace Mntone.Nico2.Users
 				return Task.FromResult(ContentManageResult.Success);
 			}
 
-			if (MylistGroupData.IsDeflist(target_group_id))
+			if (LoginUserMylistGroupData.IsDeflist(target_group_id))
 			{
 				// とりあえずマイリストへの移動はサポートしていない
 				throw new NotSupportedException("not support mylist item move to Deflist(とりあえずマイリスト)");
 			}
 
-			if (MylistGroupData.IsDeflist(group_id))
+			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
 				return Deflist.DeflistClient.MoveDeflistAsync(_context, target_group_id, itemType, itemIdList);
 			}
@@ -509,17 +509,29 @@ namespace Mntone.Nico2.Users
 			return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, group_id);
 		}
 
-		#endregion
+        public Task<MylistGroupDetail> GetDeflistMylistGroupDetailAsync()
+        {
+            return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, DefMylistId);
+        }
+
+        /// <summary>
+        /// とりあえずマイリストのマイリストID
+        /// </summary>
+        public const string DefMylistId = "0";
 
 
-		#region Follow Community
 
-		/// <summary>
-		/// マイページのお気に入りコミュニティにアクセスして
-		/// HTMLを解析してお気に入りコミュニティを取得します
-		/// </summary>
-		/// <returns></returns>
-		public Task<FollowCommunity.FollowCommunityResponse> GetFollowCommunityAsync(int page)
+        #endregion
+
+
+        #region Follow Community
+
+        /// <summary>
+        /// マイページのお気に入りコミュニティにアクセスして
+        /// HTMLを解析してお気に入りコミュニティを取得します
+        /// </summary>
+        /// <returns></returns>
+        public Task<FollowCommunity.FollowCommunityResponse> GetFollowCommunityAsync(int page)
 		{
 			return FollowCommunity.FollowCommunityClient.GetFollowCommunityAsync(_context, page);
 		}
