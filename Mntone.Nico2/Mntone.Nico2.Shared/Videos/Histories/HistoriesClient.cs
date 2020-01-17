@@ -75,18 +75,18 @@ namespace Mntone.Nico2.Videos.Histories
                 {
                     var videoId = node.Id.Split('_').Last();
                     var imageNode = node.Descendants("img").First();
-                    var thumbnailUrl = imageNode.GetAttributeValue("data-original", "");
-                    if (thumbnailUrl == "")
+                    var thumbnailUrl = imageNode.GetAttributeValue("data-original", string.Empty);
+                    if (thumbnailUrl == string.Empty)
                     {
-                        thumbnailUrl = imageNode.GetAttributeValue("src", "");
+                        thumbnailUrl = imageNode.GetAttributeValue("src", string.Empty);
                     }
 
-                    var title = imageNode.GetAttributeValue("alt", "");
+                    var title = imageNode.GetAttributeValue("alt", string.Empty);
 
-                    var videoTimeNode = node.GetElementByClassName("thumbContainer").Element("span");
-                    var videoTime = videoTimeNode?.InnerText.ToTimeSpan() ?? TimeSpan.Zero;
-
-                    var sectionNode = node.GetElementByClassName("section");
+                    var thumbContainer = node.GetElementByClassName("VideoThumbnailContainer");
+                    var videoTime = thumbContainer.GetElementByClassName("videoTime").InnerText.ToTimeSpan();
+                    
+                    var sectionNode = node.GetElementByClassName("VideoItem-videoDetail");
                     var watchTimeNode = sectionNode.GetElementByClassName("posttime");
                     var watchTimeText = watchTimeNode.InnerText.Split(' ', '年', '月', '日', ':').Select(x => int.TryParse(x, out var s) ? s : 0).ToArray();
                     var watchTime = new DateTime(watchTimeText[0], watchTimeText[1], watchTimeText[2], watchTimeText[4], watchTimeText[5], 0);
