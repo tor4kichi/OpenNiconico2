@@ -90,7 +90,9 @@ namespace Mntone.Nico2.Videos.Ranking
             var root = doc.DocumentNode;
 
             // ページ上の .RankingFilterTag となる要素を列挙する
-            var tagAnchorNodes = root.SelectNodes("/html/body/div[2]/div[3]/div[2]/div[1]/section[2]/ul/li/a");
+            var tagAnchorNodes = 
+                root.SelectNodes(@"//section[@class=""RepresentedTagsContainer""]/ul/li/a")
+                ?? root.SelectNodes(@"//section[@class=""HotTopicsContainer""]/ul/li/a");
 
             return tagAnchorNodes
                 .Select(x => new RankingGenrePickedTag()
