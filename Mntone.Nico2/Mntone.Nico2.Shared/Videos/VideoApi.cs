@@ -315,7 +315,19 @@ namespace Mntone.Nico2.Videos
         }
 
 
+        #region Series
 
+        /// <summary>
+        /// Get series videos.
+        /// </summary>
+        /// <param name="seriesId"></param>
+        /// <returns></returns>
+        public Task<Series.SeriesDetails> GetSeriesVideosAsync(string seriesId)
+        {
+            return Series.SeriesVideosClient.GetSeriesDetailsAsync(_context, seriesId);
+        }
+
+        #endregion
 
         #region field
 

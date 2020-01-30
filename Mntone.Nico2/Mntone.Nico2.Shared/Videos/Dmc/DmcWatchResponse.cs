@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Linq;
@@ -225,6 +226,16 @@ namespace Mntone.Nico2.Videos.Dmc
     }
 
     [DataContract]
+    public class Loudness
+    {
+        [DataMember(Name = "integratedLoudness")]
+        public double IntegratedLoudness { get; set; }
+
+        [DataMember(Name = "truePeak")]
+        public double TruePeak { get; set; }
+    }
+
+    [DataContract]
     public class AudioContent
     {
 
@@ -239,6 +250,14 @@ namespace Mntone.Nico2.Videos.Dmc
 
         [DataMember(Name = "sampling_rate")]
         public int SamplingRate { get; set; }
+
+        [DataMember(Name = "loudness")]
+        public Loudness Loudness { get; set; }
+
+        [DataMember(Name = "loudness_correction_value")]
+        public IList<LoudnessCorrectionValue> LoudnessCorrectionValue { get; set; }
+
+        public double VideoLoudnessCorrectionValue => LoudnessCorrectionValue.First(x => x.Type == "video").Value;
     }
 
     [DataContract]
@@ -294,6 +313,17 @@ namespace Mntone.Nico2.Videos.Dmc
     }
 
     [DataContract]
+    public class LoudnessCorrectionValue
+    {
+
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
+
+        [DataMember(Name = "value")]
+        public double Value { get; set; }
+    }
+
+    [DataContract]
     public class SmileInfo
     {
 
@@ -308,6 +338,11 @@ namespace Mntone.Nico2.Videos.Dmc
 
         [DataMember(Name = "qualityIds")]
         public IList<string> QualityIds { get; set; }
+
+        [DataMember(Name = "loudnessCorrectionValue")]
+        public IList<LoudnessCorrectionValue> LoudnessCorrectionValue { get; set; }
+
+        public double VideoLoudnessCorrectionValue => LoudnessCorrectionValue.First(x => x.Type == "video").Value;
     }
 
     [DataContract]
@@ -1022,6 +1057,119 @@ namespace Mntone.Nico2.Videos.Dmc
     }
 
     [DataContract]
+    public class SeriesVideoMetaCount
+    {
+        [DataMember(Name = "view")]
+        public int ViewCount { get; set; }
+
+        [DataMember(Name = "comment")]
+        public int CommentCount { get; set; }
+
+        [DataMember(Name = "mylist")]
+        public int MylistCount { get; set; }
+    }
+
+
+    [DataContract]
+    public class SeriesVideoOwner
+    {
+        [DataMember(Name = "ownerType")]
+        public string OwnerType { get; set; }
+
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "iconUrl")]
+        public string IconUrl { get; set; }
+    }
+
+
+    [DataContract]
+    public class SeriesVideoThumbnail
+    {
+        [DataMember(Name = "url")]
+        public string Url { get; set; }
+
+        [DataMember(Name = "middleUrl")]
+        public string MiddleUrl { get; set; }
+
+        [DataMember(Name = "largeUrl")]
+        public string LargeUrl { get; set; }
+    }
+
+
+    [DataContract]
+    public class SeriesVideo
+    {
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
+
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+
+        [DataMember(Name = "title")]
+        public string Title { get; set; }
+
+        [DataMember(Name = "registeredAt")]
+        public DateTime RegisteredAt { get; set; }
+
+        [DataMember(Name = "count")]
+        public SeriesVideoMetaCount MetaCount { get; set; }
+
+        [DataMember(Name = "thumbnail")]
+        public SeriesVideoThumbnail Thumbnail { get; set; }
+
+        [DataMember(Name = "duration")]
+        public int Duration { get; set; }
+
+        [DataMember(Name = "shortDescription")]
+        public string ShortDescription { get; set; }
+
+        [DataMember(Name = "latestCommentSummary")]
+        public string LatestCommentSummary { get; set; }
+
+        [DataMember(Name = "isChannelVideo")]
+        public bool IsChannelVideo { get; set; }
+
+        [DataMember(Name = "isPaymentRequired")]
+        public bool IsPaymentRequired { get; set; }
+
+        [DataMember(Name = "owner")]
+        public SeriesVideoOwner owner { get; set; }
+
+        }
+
+    [DataContract]
+    public class Series
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "title")]
+        public string Title { get; set; }
+
+        [DataMember(Name = "thumbnailUrl")]
+        public string ThumbnailUrl { get; set; }
+
+        [DataMember(Name = "createdAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [DataMember(Name = "updatedAt")]
+        public DateTime UpdatedAt { get; set; }
+
+        [DataMember(Name = "prevVideo")]
+        public SeriesVideo PrevVideo { get; set; }
+
+        [DataMember(Name = "nextVideo")]
+        public SeriesVideo NextVideo { get; set; }
+    }
+
+
+
+    [DataContract]
     public class DmcWatchResponse
     {
 
@@ -1071,6 +1219,9 @@ namespace Mntone.Nico2.Videos.Dmc
 
         [DataMember(Name = "liveTopics")]
         public LiveTopics LiveTopics { get; set; }
+
+        [DataMember(Name = "series")]
+        public Series Series { get; set; }
     }
 
 

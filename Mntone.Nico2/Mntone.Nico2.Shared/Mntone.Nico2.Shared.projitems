@@ -239,6 +239,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\RemoveHistory\RemoveHistoryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Search\SearchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Series\SeriesVideoData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videos\Series\SeriesVideosClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\VideoApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcWatchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\TagRelatedMarquee.cs" />

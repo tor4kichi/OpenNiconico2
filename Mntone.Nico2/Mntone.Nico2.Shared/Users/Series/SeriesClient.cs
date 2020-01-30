@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Mntone.Nico2.Users.Series
         }
 
         
-        private static List<Series> ParseUserSeriesHtml(string html)
+        private static List<Videos.Series.Series> ParseUserSeriesHtml(string html)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(html);
@@ -23,13 +24,15 @@ namespace Mntone.Nico2.Users.Series
             var seriesRootNode = doc.DocumentNode;
             if (seriesRootNode == null) { throw new ArgumentException(); }
 
-            var seriesListContainerItemNodes = seriesRootNode.SelectNodes("//*[@id='series-app']/div/div/div");
+            var seriesContainerNode = seriesRootNode.SelectSingleNode(@"//div[@id=""series-app""]");
+            var seriesListContainerItemNodes = seriesContainerNode.SelectNodes("div/div/div");
 
-            
+
+
             return seriesListContainerItemNodes
                 .Select(seriesContainer => 
                 {
-                    var series = new Series();
+                    var series = new Videos.Series.Series();
                     var bodyNode = seriesContainer.SelectSingleNode("//div[@class='SeriesMediaObject-body']");
                     var titleNode = bodyNode.Element("a");
                     series.Title = titleNode.InnerText;
@@ -46,10 +49,10 @@ namespace Mntone.Nico2.Users.Series
                 .ToList();
         }
 
-        public static async Task<SeriesList> GetUserSeriesAsync(NiconicoContext context, string userId)
+        public static async Task<UserSeriesList> GetUserSeriesAsync(NiconicoContext context, string userId)
         {
             var html = await GetUserSeriesHtmlAsync(context, userId);
-            return new SeriesList()
+            return new UserSeriesList()
             {
                 Series = ParseUserSeriesHtml(html),
                 UserId = userId
@@ -58,24 +61,5 @@ namespace Mntone.Nico2.Users.Series
 
 
 
-
-
-
-        private static Task<string> GetUserSeriesDetailsHtmlAsync(NiconicoContext context, string seriesId)
-        {
-            return context.GetStringAsync(NiconicoUrls.MakeSeriesPageUrl(seriesId));
-        }
-
-        private static SeriesDetails ParseSeriesDetailsHtml(string html)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public static async Task<SeriesDetails> GetSeriesDetailsAsync(NiconicoContext context, string seriesId)
-        {
-            var html = await GetUserSeriesDetailsHtmlAsync(context, seriesId);
-            return ParseSeriesDetailsHtml(html);
-        }
     }
 }

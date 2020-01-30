@@ -212,10 +212,6 @@ namespace Mntone.Nico2.Users
 
 
 
-
-
-
-
 		#region Mylist
 
 
@@ -579,12 +575,7 @@ namespace Mntone.Nico2.Users
 
         #region Series
 
-        public Task<Series.SeriesDetails> GetSeriesDetailsAsync(string seriesId)
-        {
-            return Series.SeriesClient.GetSeriesDetailsAsync(_context, seriesId);
-        }
-
-        public Task<Series.SeriesList> GetUserSeriesListAsync(string userId)
+        public Task<Series.UserSeriesList> GetUserSeriesListAsync(string userId)
         {
             return Series.SeriesClient.GetUserSeriesAsync(_context, userId);
         }
