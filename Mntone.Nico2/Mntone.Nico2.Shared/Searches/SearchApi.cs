@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
+using Mntone.Nico2.Searches.Live;
+using System.Linq.Expressions;
 
 #if WINDOWS_UWP
 using Windows.Foundation;
@@ -125,33 +127,32 @@ namespace Mntone.Nico2.Searches
 		/// <summary>
 		/// 生放送情報の検索結果を取得します。
 		/// </summary>
-		/// <param name="word">キーワードまたはタグ</param>
-		/// <param name="isTagSearch">タグ検索とするか</param>
-		/// <param name="provider">検索対象の生放送提供者種別。無指定の場合すべて</param>
-		/// <param name="from">検索開始位置</param>
-		/// <param name="length">検索結果の希望取得数</param>
-		/// <param name="order">順番。無指定の場合はAccending(古いものが先に来る）</param>
-		/// <param name="sort"></param>
-		/// <param name="mode"></param>
-		/// <returns></returns>
-		public Task<Live.NicoliveVideoResponse> LiveSearchAsync(
-			string word,
-			bool isTagSearch,
-			Nico2.Live.CommunityType? provider = null,
-			uint from = 0,
-			uint length = 30,
-			Order? order = null,
-			Live.NicoliveSearchSort? sort = null,
-			Live.NicoliveSearchMode? mode = null
+		/// <param name="q">検索キーワード</param>
+		/// <param name="offset">返ってくるコンテンツの取得オフセット。最大:1600</param>
+		/// <param name="limit">返ってくるコンテンツの最大数。最大:100</param>
+		/// <param name="targets">検索対象のフィールド</param>
+		/// <param name="fields">レスポンスに含みたいヒットしたコンテンツのフィールド</param>
+		/// <param name="sortType">ソート順（デフォルトは降順/Decsending）。昇順指定する場合は LiveSearchSortType.SortAcsending を | で繋いで指定します。</param>
+		/// <param name="filterExpression">検索結果をフィルタの条件にマッチするコンテンツだけに絞ります。</param>
+		/// <see cref="https://site.nicovideo.jp/search-api-docs/search.html"/>
+		public Task<Live.LiveSearchResponse> LiveSearchAsync(
+			string q,
+			int offset,
+			int limit,
+			SearchTargetType targets = SearchTargetType.All,
+			LiveSearchFieldType fields = LiveSearchFieldType.All,
+			LiveSearchSortType sortType = LiveSearchSortType.StartTime | LiveSearchSortType.SortDecsending,
+			Expression<Func<SearchFilterField, bool>> filterExpression = null
 			)
 		{
 			return Live.LiveSearchClient.GetLiveSearchAsync(_context,
-				word, isTagSearch, provider,
-				from,
-				length,
-				order,
-				sort,
-				mode
+				q,
+				offset,
+				limit,
+				targets,
+				fields,
+				sortType,
+				filterExpression
 				);
 		}
 

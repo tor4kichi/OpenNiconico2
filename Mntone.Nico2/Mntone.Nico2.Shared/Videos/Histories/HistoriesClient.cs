@@ -84,7 +84,7 @@ namespace Mntone.Nico2.Videos.Histories
                     var title = imageNode.GetAttributeValue("alt", string.Empty);
 
                     var thumbContainer = node.GetElementByClassName("VideoThumbnailContainer");
-                    var videoTime = thumbContainer.GetElementByClassName("videoTime").InnerText.ToTimeSpan();
+                    var videoTime = thumbContainer.GetElementByClassName("videoTime")?.InnerText.ToTimeSpan() ?? TimeSpan.Zero;
                     
                     var sectionNode = node.GetElementByClassName("VideoItem-videoDetail");
                     var watchTimeNode = sectionNode.GetElementByClassName("posttime");

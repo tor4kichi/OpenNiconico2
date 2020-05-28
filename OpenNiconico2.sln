@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Mntone.Nico2\Mntone.Nico2.Shared\Mntone.Nico2.Shared.projitems*{5b622614-40aa-4b35-940c-ed285c16141e}*SharedItemsImports = 5
 		Mntone.Nico2\Mntone.Nico2.Shared\Mntone.Nico2.Shared.projitems*{bbf8857d-550a-4228-b9fc-52c38d5346f1}*SharedItemsImports = 4
 		Mntone.Nico2\Mntone.Nico2.Shared\Mntone.Nico2.Shared.projitems*{cc63ef1d-ecd6-478d-8852-5c45fbbf697a}*SharedItemsImports = 4
 		Mntone.Nico2\Mntone.Nico2.Shared\Mntone.Nico2.Shared.projitems*{f1f0b094-2632-4141-88c1-05b082ebac91}*SharedItemsImports = 13

@@ -5,12 +5,17 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+#if WINDOWS_UWP
+using Windows.Web.Http;
+
+#else 
+using System.Net.Http;
+#endif
 
 namespace Mntone.Nico2.Videos.Ranking
 {
