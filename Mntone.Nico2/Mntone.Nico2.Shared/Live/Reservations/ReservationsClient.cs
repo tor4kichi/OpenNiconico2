@@ -24,7 +24,7 @@ namespace Mntone.Nico2.Live.Reservations
 			}
 
 			var listXml = responseXml.Element("timeshift_reserved_list");
-			if( listXml != null)
+			if( listXml == null)
 			{
 				throw new Exception( "Parse Error: Node name is invalid." );
 			}

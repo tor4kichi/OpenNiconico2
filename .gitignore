@@ -11,3 +11,4 @@ project.lock.json
 /.vs/OpenNiconico2/v16/Server/sqlite3/storage.ide-wal
 /.vs/OpenNiconico2/v16/Server/sqlite3/storage.ide-shm
 /.vs/OpenNiconico2/v16/Server/sqlite3/db.lock
+.vs/OpenNiconico2/DesignTimeBuild/.dtbcache.v2

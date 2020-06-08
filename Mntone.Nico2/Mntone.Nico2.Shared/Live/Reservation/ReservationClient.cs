@@ -46,9 +46,9 @@ namespace Mntone.Nico2.Live.Reservation
 #else
                 Content = new FormUrlEncodedContent(dict)
 #endif
-
             };
 
+            requestMessage.Headers.Add("origin", "https://live.nicovideo.jp");
             var response = await context.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead);
 
             return await response.Content.ReadAsStringAsync();
