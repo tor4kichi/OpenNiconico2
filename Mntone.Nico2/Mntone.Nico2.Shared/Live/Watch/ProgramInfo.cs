@@ -99,7 +99,15 @@ namespace Mntone.Nico2.Live.Watch
         public DateTime EndAt => DateTimeOffset.FromUnixTimeSeconds(__EndAt).LocalDateTime;
 
         [DataMember(Name = "status")]
-        public string Status { get; set; }
+        public string __Status { get; set; }
+
+        public StatusType Status => __Status switch
+        {
+            "onAir" => StatusType.OnAir,
+            "reserved" => StatusType.ComingSoon,
+            "closed" => StatusType.Closed,
+            _ => throw new NotSupportedException()
+        };
 
         [DataMember(Name = "categories")]
         public IList<string> Categories { get; set; }

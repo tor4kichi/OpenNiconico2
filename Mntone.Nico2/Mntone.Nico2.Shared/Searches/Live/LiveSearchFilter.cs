@@ -62,19 +62,30 @@ namespace Mntone.Nico2.Searches.Live
 	public class ExpressionSearchFilter : ISearchFilter
 	{
 		private List<KeyValuePair<string, string>> _keyValues;
+        private readonly Expression<Func<SearchFilterField, bool>> _compareOpExpression;
 
-		public ExpressionSearchFilter(Expression<Func<SearchFilterField, bool>> compareOpExpression)
+        public ExpressionSearchFilter(Expression<Func<SearchFilterField, bool>> compareOpExpression)
 		{
-			_keyValues = ConvertToKeyValues(compareOpExpression.Body as BinaryExpression);
+            _compareOpExpression = compareOpExpression;
+        }
+
+		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
+		{
+			return _keyValues ?? (_keyValues = ConvertToKeyValues(_compareOpExpression.Body as BinaryExpression));
 		}
 
 		private List<KeyValuePair<string, string>> ConvertToKeyValues(BinaryExpression operation)
 		{
-			// Note: BinaryExpressionとして OR か NOT が含まれる場合は常にJsonFilterとして構築する
-			// 単一の比較、または複数の比較をAndのみで繋げている場合はfiltersとして構築する
+			// see@: https://site.nicovideo.jp/search-api-docs/search.html
+			
+			// フィルタとして指定できるパラメータにfitlersとjsonFiltersがあり
+			// jsonFiltersの方でのみNOTやORの条件検索ができます。ただしクライアント側にしろAPI側にしろ処理が重い。
+			// filtersは常にANDのみで除外条件指定もできませんが軽いです。
 
-			// 事前にBinaryExpressionの左辺式と右辺式を末端まで調べて ORかNOT が含まれていないかをチェックする
+			// 故に、BinaryExpressionとして OR か NOT が含まれる場合は常にJsonFilterとして構築し
+			// 単一の比較、または複数の比較をAndのみで繋げている場合はfiltersとして構築します
 
+			// 事前にBinaryExpressionの左・右辺式を末端まで調べて、OR/NOT が含まれていないかをチェックする
 			bool isNeedJsonFilter = false;
 			Stack<BinaryExpression> expressions = new Stack<BinaryExpression>();
 			expressions.Push(operation);
@@ -200,10 +211,6 @@ namespace Mntone.Nico2.Searches.Live
 			}
 		}
 
-		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
-		{
-			return _keyValues;
-		}
 	}
 
 

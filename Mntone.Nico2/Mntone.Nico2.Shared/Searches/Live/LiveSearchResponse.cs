@@ -74,12 +74,12 @@ namespace Mntone.Nico2.Searches.Live
 
 
 
-        public CommunityType? GetCommunityType() => ProviderType switch
+        public CommunityType GetCommunityType() => ProviderType switch
         {
             "community" => CommunityType.Community,
             "channel" => CommunityType.Channel,
             "official" => CommunityType.Official,
-            _ => null
+            _ => CommunityType.Community
         };
     }
 

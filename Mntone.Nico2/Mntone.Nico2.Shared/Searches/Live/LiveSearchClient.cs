@@ -30,16 +30,16 @@ namespace Mntone.Nico2.Searches.Live
 			Expression<Func<SearchFilterField, bool>> filterExpression = null
 			)
 		{
-			if (filterExpression != null)
-			{
-				var expressionFilter = new ExpressionSearchFilter(filterExpression);
-
-				return GetLiveSearchAsync(context, q, offset, limit, targets, fields, sortType, expressionFilter);
-			}
-			else
-            {
-				return GetLiveSearchAsync(context, q, offset, limit, targets, fields, sortType, default(ISearchFilter));
-			}
+			return GetLiveSearchAsync(
+				context, 
+				q, 
+				offset, 
+				limit, 
+				targets, 
+				fields, 
+				sortType,
+				searchFilter: filterExpression != null ? new ExpressionSearchFilter(filterExpression) : default(ISearchFilter)
+				);
 		}
 
 

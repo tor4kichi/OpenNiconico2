@@ -599,16 +599,16 @@ namespace Mntone.Nico2.Live.Watch.Crescendo
         public Supplier Supplier { get; set; }
 
         [DataMember(Name = "openTime")]
-        public int OpenTime { get; set; }
+        public long OpenTime { get; set; }
 
         [DataMember(Name = "beginTime")]
-        public int BeginTime { get; set; }
+        public long BeginTime { get; set; }
 
         [DataMember(Name = "endTime")]
-        public int EndTime { get; set; }
+        public long EndTime { get; set; }
 
         [DataMember(Name = "scheduledEndTime")]
-        public int ScheduledEndTime { get; set; }
+        public long ScheduledEndTime { get; set; }
 
         [DataMember(Name = "status")]
         public string Status { get; set; }

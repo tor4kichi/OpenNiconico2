@@ -125,6 +125,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mylist\UserMylist\UserMylistRss.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nicoad\Video\VideoAdHistoryResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nicocas\EnumHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\Live\NicocasLiveClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nicocas\Live\NicocasLiveProgramResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nicocas\NicocasApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nicocas\NicocasResponseBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nicocas\NicocasUrls.cs" />

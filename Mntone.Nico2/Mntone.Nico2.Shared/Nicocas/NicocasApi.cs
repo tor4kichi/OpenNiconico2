@@ -28,5 +28,13 @@ namespace Mntone.Nico2.Nicocas
         {
             return Search.NicocasUserSearchClient.SearchUsersAsync(_context, searchWord, offset, limit, sort, order);
         }
+
+
+
+
+        public Task<Live.NicoCasLiveProgramResponse> GetLiveProgramAsync(string liveId)
+        {
+            return Live.NicocasLiveClient.GetLiveProgramAsync(_context, liveId);
+        }
     }
 }
