@@ -59,7 +59,8 @@ namespace Mntone.Nico2.Videos.Comment
             Context = context;
 
             CommenctComposite = dmc.CommentComposite;
-            UserId = dmc.Viewer?.Id.ToString();
+            var userId = dmc.Viewer?.Id.ToString();
+            UserId = userId == null || userId == "0" ? "" : userId;
             UserKey = dmc.Context?.Userkey;
             IsPremium = dmc.Viewer?.IsPremium ?? false;
 
