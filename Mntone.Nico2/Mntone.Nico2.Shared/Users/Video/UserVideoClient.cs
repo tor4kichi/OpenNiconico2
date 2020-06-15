@@ -15,7 +15,7 @@ namespace Mntone.Nico2.Users.Video
 		public static Task<string> GetUserDataAsync(NiconicoContext context, uint user_id, uint page, Sort sortMethod, Order sortDir)
 		{
 			var url = NiconicoUrls.MakeUserVideoRssUrl(user_id.ToString(), page, sortMethod.ToShortString(), sortDir.ToShortString());
-			return context.GetClient()
+			return context
 				.GetStringAsync(url);
 		}
 

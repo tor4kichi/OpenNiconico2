@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Net;
+using Mntone.Nico2.JsonHelpers;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 #else
@@ -17,6 +18,7 @@ using System.Net.Http;
 
 namespace Mntone.Nico2.Videos.Dmc
 {
+    
     internal sealed class DmcClient
     {
         #region DmcWatchResponse
@@ -107,7 +109,6 @@ namespace Mntone.Nico2.Videos.Dmc
 
             try
             {
-                var client = context.GetClient();
                 var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
 #if WINDOWS_UWP
                 message.Headers.Cookie.TryParseAdd("watch_html5=1");
@@ -155,11 +156,16 @@ namespace Mntone.Nico2.Videos.Dmc
                 {
                     var videoInfoNode = htmlDocument.GetElementbyId("js-initial-watch-data");
                     var watchDataRawString = videoInfoNode.GetAttributeValue("data-api-data", "");
-                    var htmlDecoded = WebUtility.HtmlDecode(watchDataRawString);
+                    
 
                     var jsonSerializer = new JsonSerializer();
                     jsonSerializer.NullValueHandling = NullValueHandling.Include;
                     jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
+                    jsonSerializer.MissingMemberHandling = MissingMemberHandling.Ignore;
+                    jsonSerializer.StringEscapeHandling = StringEscapeHandling.EscapeHtml;
+                    jsonSerializer.Converters.Add(new HtmlEncodingConverter());
+
+                    var htmlDecoded = WebUtility.HtmlDecode(watchDataRawString);
 
                     DmcWatchResponse dmcWatchResponse = jsonSerializer.Deserialize<DmcWatchResponse>(new JsonTextReader(new StringReader(htmlDecoded)));
 
@@ -179,6 +185,10 @@ namespace Mntone.Nico2.Videos.Dmc
                          DmcWatchResponse = dmcWatchResponse,
                          DmcWatchEnvironment = dmcWatchEnvironment
                     };
+                }
+                catch (AggregateException e)
+                {
+                    throw;
                 }
                 catch
                 {
@@ -285,6 +295,13 @@ namespace Mntone.Nico2.Videos.Dmc
             }
         }
 
+        private static void JsonSerializer_Error(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)
+        {
+            if (e.ErrorContext.Path == "video.translation")
+            {
+                e.ErrorContext.Handled = true;
+            }
+        }
 
         public static Task<DmcWatchData> GetDmcWatchResponseAsync(NiconicoContext context, string requestId, HarmfulContentReactionType harmfulReactType)
         {

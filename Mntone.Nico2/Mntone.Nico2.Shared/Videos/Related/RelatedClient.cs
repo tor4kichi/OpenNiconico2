@@ -23,7 +23,7 @@ namespace Mntone.Nico2.Videos.Related
 
             var query = HttpQueryExtention.DictionaryToQuery(dict);
 
-            return await context.GetClient()
+            return await context
                 .GetStringAsync($"{NiconicoUrls.RelatedVideoApiUrl}?{query}");
         }
 
@@ -56,7 +56,7 @@ namespace Mntone.Nico2.Videos.Related
 
             var query = HttpQueryExtention.DictionaryToQuery(dict);
 
-            return await context.GetClient()
+            return await context
                 .GetStringAsync($"{NiconicoUrls.VideoPlaylistApiUrl}?{query}");
         }
 

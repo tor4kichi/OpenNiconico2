@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mntone.Nico2.JsonHelpers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,12 @@ namespace Mntone.Nico2
 	{
 		public static T Load<T>(string data, JsonSerializerSettings settings = null)
 		{
+			if (settings == null)
+            {
+				settings = new JsonSerializerSettings();
+			}
+
+			settings.Converters.Add(new HtmlEncodingConverter());
 			return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data, settings);
 		}
 	}

@@ -8,7 +8,7 @@ namespace Mntone.Nico2.Live.ReservationsInDetail
 	{
 		public static Task<string> GetReservationsInDetailDataAsync( NiconicoContext context )
 		{
-			return context.GetClient().GetConvertedStringAsync( NiconicoUrls.LiveWatchingReservationDetailListUrl );
+			return context.GetConvertedStringAsync( NiconicoUrls.LiveWatchingReservationDetailListUrl );
 		}
 
 		public static ReservationsInDetailResponse ParseReservationsInDetailData( string reservationsInDatailData )

@@ -16,7 +16,7 @@ namespace Mntone.Nico2.Live.CKey
 				throw new ArgumentException();
 			}
 
-			return context.GetClient()
+			return context
 				.GetStringAsync($"{NiconicoUrls.LiveCKeyUrl}?referer_id={refererId}&id={requestId}");
 		}
 

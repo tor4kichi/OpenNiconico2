@@ -13,7 +13,7 @@ namespace Mntone.Nico2.Mylist.UserMylist
     {
 		public static async Task<string> GetUserMylistDataAsync(NiconicoContext context, string user_id)
 		{
-			return await context.GetClient()
+			return await context
 				.GetConvertedStringAsync(NiconicoUrls.MakeUserPageUrl(user_id) + "/mylist");
 		}
 

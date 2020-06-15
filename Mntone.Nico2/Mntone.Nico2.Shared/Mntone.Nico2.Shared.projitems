@@ -43,6 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)HtmlDocumentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpQueryExtention.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonHelpers\HtmlEncodingConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonSerializerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\MyPage\DetailCategoryType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\MyPage\DetailCategoryTypeExtensions.cs" />

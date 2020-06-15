@@ -389,7 +389,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public int MylistCount { get; set; }
 
         [DataMember(Name = "translation")]
-        public bool Translation { get; set; }
+        public object Translation { get; set; }
 
         [DataMember(Name = "translator")]
         public object Translator { get; set; }

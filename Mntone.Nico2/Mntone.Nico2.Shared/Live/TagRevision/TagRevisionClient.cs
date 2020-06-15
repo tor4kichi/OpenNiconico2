@@ -13,7 +13,7 @@ namespace Mntone.Nico2.Live.TagRevision
 				throw new ArgumentException();
 			}
 
-			return context.GetClient().GetConvertedStringAsync( NiconicoUrls.LiveTagRevisionUrl + requestId );
+			return context.GetConvertedStringAsync( NiconicoUrls.LiveTagRevisionUrl + requestId );
 		}
 
 		public static ushort ParseTagRevisionData( string tagRevisionData )

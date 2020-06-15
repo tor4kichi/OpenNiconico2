@@ -13,7 +13,7 @@ namespace Mntone.Nico2.Live.Tags
 				throw new ArgumentException();
 			}
 
-			return context.GetClient().GetConvertedStringAsync( NiconicoUrls.LiveGatePageUrl + requestId );
+			return context.GetConvertedStringAsync( NiconicoUrls.LiveGatePageUrl + requestId );
 		}
 
 		public static TagsResponse ParseTagsData( string tagsData )

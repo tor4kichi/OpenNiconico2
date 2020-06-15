@@ -19,7 +19,7 @@ namespace Mntone.Nico2.Users.Info
 	{
 		public static Task<string> GetInfoDataAsync( NiconicoContext context )
 		{
-			return context.GetClient().GetConvertedStringAsync( NiconicoUrls.UserPageUrl + "/top" );
+			return context.GetConvertedStringAsync( NiconicoUrls.UserPageUrl + "/top" );
 		}
 
 

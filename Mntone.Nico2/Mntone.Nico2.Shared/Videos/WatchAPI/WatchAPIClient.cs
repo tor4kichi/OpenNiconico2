@@ -47,7 +47,6 @@ namespace Mntone.Nico2.Videos.WatchAPI
 
             try
             {
-                var client = context.GetClient();
 #if WINDOWS_UWP
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
 #else

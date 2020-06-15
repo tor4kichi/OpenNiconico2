@@ -7,7 +7,7 @@ namespace Mntone.Nico2.Live.PostKey
 	{
 		public static Task<string> GetPostKeyDataAsync( NiconicoContext context, uint threadId, uint blockNo )
 		{
-			return context.GetClient().GetStringAsync(
+			return context.GetStringAsync(
 					$"{NiconicoUrls.LivePostKeyUrl}?thread={threadId}&block_no={blockNo}"
 				);
 		}

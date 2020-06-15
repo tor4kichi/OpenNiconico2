@@ -9,7 +9,7 @@ namespace Mntone.Nico2.Live.MyPage
 	{
 		public static Task<string> GetMyPageDataAsync( NiconicoContext context )
 		{
-			return context.GetClient().GetConvertedStringAsync( NiconicoUrls.LiveMyPageUrl );
+			return context.GetConvertedStringAsync( NiconicoUrls.LiveMyPageUrl );
 		}
 
 		public static MyPageResponse ParseMyPageData( string myPageData )

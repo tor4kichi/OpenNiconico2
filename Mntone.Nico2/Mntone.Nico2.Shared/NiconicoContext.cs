@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +15,17 @@ using System.Net.Http;
 
 namespace Mntone.Nico2
 {
+#if DEBUG_NICO_URL
+	internal static class UrlDebugHelper
+    {
+		internal static void DebugLog(string url)
+        {
+			Debug.WriteLine($"[DEBUG_URL] " + url);
+        }
+    }
+#endif
+
+
 	/// <summary>
 	/// ニコニコの API コンテクスト
 	/// </summary>
@@ -73,7 +85,7 @@ namespace Mntone.Nico2
         /// <returns>非同期操作を表すオブジェクト</returns>
         public async Task<NiconicoSignInStatus> SignInAsync()
 		{
-            var req = new HttpRequestMessage(HttpMethod.Post, new Uri(NiconicoUrls.LogOnApiUrl))
+			var req = new HttpRequestMessage(HttpMethod.Post, new Uri(NiconicoUrls.LogOnApiUrl))
             {
 #if WINDOWS_UWP
                 Content = new HttpFormUrlEncodedContent(new Dictionary<string, string>()
@@ -139,7 +151,7 @@ namespace Mntone.Nico2
 
         public async Task<NiconicoSignInStatus> MfaAsync(Uri location, string code, bool isTrustedDevice, string deviceName)
         {
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, location)
+			var requestMessage = new HttpRequestMessage(HttpMethod.Post, location)
             {
 #if WINDOWS_UWP
                 Content = new HttpFormUrlEncodedContent(new Dictionary<string, string>()
@@ -182,8 +194,7 @@ namespace Mntone.Nico2
 
 		internal async Task<NiconicoSignInStatus> GetIsSignedInOnInternalAsync()
 		{
-            var response = await this.GetClient()
-                .GetAsync(new Uri(NiconicoUrls.TopPageUrl));
+            var response = await GetAsync(NiconicoUrls.TopPageUrl);
 
             if (response.IsSuccessStatusCode)
             {
@@ -217,8 +228,7 @@ namespace Mntone.Nico2
 		/// <returns>非同期操作を表すオブジェクト</returns>
 		public async Task<NiconicoSignInStatus> SignOutOffAsync()
 		{
-            await this.GetClient()
-                .GetAsync(new Uri(NiconicoUrls.LogOffUrl));
+            await this.GetAsync(NiconicoUrls.LogOffUrl);
 	        return await this.GetIsSignedInOnInternalAsync();
         }
 
@@ -235,8 +245,10 @@ namespace Mntone.Nico2
 #if WINDOWS_UWP
                 var filter = new HttpBaseProtocolFilter()
                 {
+					
                 };
-                HttpClient = new HttpClient(filter);
+
+				HttpClient = new HttpClient(filter);
                 CookieContainer = filter.CookieManager;
 #else
                 HttpClient = new HttpClient(
@@ -245,7 +257,7 @@ namespace Mntone.Nico2
                         CookieContainer = CookieContainer
                     });
 #endif
-                HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
+				HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
 
@@ -268,8 +280,12 @@ namespace Mntone.Nico2
 
         internal async Task<HttpResponseMessage> GetAsync(string url)
 		{
+#if DEBUG_NICO_URL
+			UrlDebugHelper.DebugLog(url);
+#endif
+
 #if WINDOWS_UWP
-            return await GetClient().GetAsync(new Uri(url));
+			return await GetClient().GetAsync(new Uri(url));
 #else
             return await GetClient().GetAsync(url);
 #endif
@@ -286,8 +302,12 @@ namespace Mntone.Nico2
 
         internal async Task<string> GetStringAsync(string url)
 		{
+#if DEBUG_NICO_URL
+			UrlDebugHelper.DebugLog(url);
+#endif
+
 #if WINDOWS_UWP
-            return await GetClient().GetStringAsync(new Uri(url));
+			return await GetClient().GetStringAsync(new Uri(url));
 #else
             return await GetClient().GetConvertedStringAsync(url);
 #endif
@@ -295,7 +315,10 @@ namespace Mntone.Nico2
 
         internal async Task<string> GetConvertedStringAsync(string url)
         {
-            return await GetClient().GetConvertedStringAsync(url);
+#if DEBUG_NICO_URL
+			UrlDebugHelper.DebugLog(url);
+#endif
+			return await GetClient().GetConvertedStringAsync(url);
         }
 
 
@@ -309,7 +332,7 @@ namespace Mntone.Nico2
         internal Task<string> PostAsync(string url, string stringContent)
         {
 #if WINDOWS_UWP
-            var content = new HttpStringContent(stringContent);
+			var content = new HttpStringContent(stringContent);
 #else
             var content = new StringContent(stringContent);
 #endif
@@ -318,6 +341,10 @@ namespace Mntone.Nico2
 
         internal async Task<string> PostAsync(string url, Dictionary<string, string> keyvalues, bool withToken = true)
 		{
+#if DEBUG_NICO_URL
+			UrlDebugHelper.DebugLog(url);
+#endif
+
 			if (withToken && !keyvalues.ContainsKey("token"))
 			{
 				var token = await this.GetToken();
@@ -333,10 +360,16 @@ namespace Mntone.Nico2
 
             return await this.PostAsync(url, content);
 		}
+
+
         internal async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
+#if DEBUG_NICO_URL
+			UrlDebugHelper.DebugLog(request.RequestUri.OriginalString);
+#endif
+
 #if WINDOWS_UWP
-            return await GetClient().SendRequestAsync(request, completionOption);
+			return await GetClient().SendRequestAsync(request, completionOption);
 #else
             return await GetClient().SendAsync(request, completionOption);
 #endif
@@ -355,6 +388,10 @@ namespace Mntone.Nico2
             internal async Task<string> PostAsync(string url, HttpContent content)
 #endif
 		{
+#if DEBUG_NICO_URL
+			UrlDebugHelper.DebugLog(url);
+#endif
+
 			using (var res = await GetClient().PostAsync(new Uri(url), content))
 			{
 				if (res.IsSuccessStatusCode)

@@ -19,7 +19,7 @@ namespace Mntone.Nico2.Users.Follow
     {
 		public static Task<string> GetFavUsersDataAsync(NiconicoContext context)
 		{
-			return context.GetClient()
+			return context
 				.GetStringAsync($"{NiconicoUrls.UserFavListApiUrl}");
 		}
 
@@ -28,7 +28,7 @@ namespace Mntone.Nico2.Users.Follow
 
 		public static Task<string> ExistFollowDataAsync(NiconicoContext context, NiconicoItemType item_type, string item_id)
 		{
-			return context.GetClient()
+			return context
 				.GetStringAsync($"{NiconicoUrls.UserFavExistApiUrl}?{nameof(item_type)}={(uint)item_type}&{nameof(item_id)}={item_id}");
 		}
 

@@ -16,7 +16,7 @@ namespace Mntone.Nico2.Live.Vote
 				throw new ArgumentException();
 			}
 
-			return context.GetClient()
+			return context
 				.GetStringAsync( $"{NiconicoUrls.LiveVoteUrl}?v={requestId}&id={choiceNumber}" );
 				
 		}

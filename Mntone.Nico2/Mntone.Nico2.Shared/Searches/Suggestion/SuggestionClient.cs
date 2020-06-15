@@ -8,7 +8,6 @@ namespace Mntone.Nico2.Searches.Suggestion
 		public static Task<string> GetSuggestionDataAsync( NiconicoContext context, string targetWord )
 		{
 			return context
-				.GetClient()
 				.GetConvertedStringAsync( NiconicoUrls.SearchSuggestionUrl + Uri.EscapeUriString( targetWord ) );
 		}
 

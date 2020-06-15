@@ -13,23 +13,23 @@ namespace Mntone.Nico2.Videos.Flv
 //				throw new ArgumentException();
 			}
 
-			await context.GetClient()
+			await context
 					.GetAsync($"{NiconicoUrls.VideoWatchPageUrl}{requestId}");
 
 			await Task.Delay(1000);
 
-			return await context.GetClient()
+			return await context
 				.GetStringAsync($"{NiconicoUrls.VideoFlvUrl}{requestId}?as3=1");
 		}
 
 		public static async Task<string> GetFlvDataAsync( NiconicoContext context, string requestId, string cKey )
 		{
-			await context.GetClient()
+			await context
 					.GetAsync($"{NiconicoUrls.VideoWatchPageUrl}{requestId}");
 
 			await Task.Delay(1000);
 
-			return await context.GetClient()
+			return await context
 				.GetStringAsync($"{NiconicoUrls.VideoFlvUrl}{requestId}?as3=1");
 		}
 

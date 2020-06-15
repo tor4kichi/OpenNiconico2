@@ -15,7 +15,7 @@ namespace Mntone.Nico2.Users.NG
 
 			dict.Add("mode", "get");
 
-			return context.GetClient()
+			return context
 				.GetStringAsync(NiconicoUrls.UserNGCommentUrl + "?mode=get");
 		}
 

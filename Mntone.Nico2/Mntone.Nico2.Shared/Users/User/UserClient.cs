@@ -14,7 +14,7 @@ namespace Mntone.Nico2.Users.User
 		private static Task<string> GetUserDetailDataAsync(NiconicoContext context, string user_id)
 		{
 			// 投稿動画件数を同時に取得するため、ユーザーのvideoページからHTMLを取得する
-			return context.GetClient()
+			return context
 				.GetConvertedStringAsync($"{NiconicoUrls.MakeUserPageUrl(user_id)}/video");
 		}
 
@@ -139,7 +139,7 @@ namespace Mntone.Nico2.Users.User
 
 		private static Task<string> GetUserDataAsync(NiconicoContext context, string user_id)
 		{
-			return context.GetClient()
+			return context
 				.GetStringAsync($"{NiconicoUrls.CE_UserApiUrl}?{nameof(user_id)}={user_id}");
 		}
 

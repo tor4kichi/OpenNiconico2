@@ -14,7 +14,7 @@ namespace Mntone.Nico2.Communities.Detail
     {
 		public static Task<string> GetCommunitySammaryPageHtmlAsync(NiconicoContext context, string communityId)
 		{
-			return context.GetClient()
+			return context
 				.GetConvertedStringAsync(NiconicoUrls.CommynitySammaryPageUrl + communityId);
 		}
 
