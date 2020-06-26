@@ -570,21 +570,21 @@ namespace Mntone.Nico2.Users
             return Users.Follow.FollowClient.DeleteFollowChannelAsync(_context, channelId);
         }
 
-        #endregion
+		#endregion
 
 
-        #region Series
+		#region Series
 
-        public Task<Series.UserSeriesList> GetUserSeriesListAsync(string userId)
-        {
-            return Series.SeriesClient.GetUserSeriesAsync(_context, userId);
-        }
+		public Task<Series.UserSeriesResponse> GetUserSeiresAsync(string userId)
+		{
+			return Series.SeriesClient.GetUserSeriesAsync(_context, userId);
+		}
 
-        #endregion
+		#endregion
 
-        #region field
+		#region field
 
-        private NiconicoContext _context;
+		private NiconicoContext _context;
 
 		#endregion
 	}

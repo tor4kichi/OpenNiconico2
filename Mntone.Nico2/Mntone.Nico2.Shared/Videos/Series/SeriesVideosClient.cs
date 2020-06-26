@@ -9,10 +9,7 @@ namespace Mntone.Nico2.Videos.Series
 {
     internal sealed class SeriesVideosClient
     {
-
-
-
-
+        
         private static Task<string> GetUserSeriesDetailsHtmlAsync(NiconicoContext context, string seriesId)
         {
             return context.GetStringAsync(NiconicoUrls.MakeSeriesPageUrl(seriesId));
@@ -39,7 +36,7 @@ namespace Mntone.Nico2.Videos.Series
             }
 
             {
-                var ownerSeriesListNodes = root.SelectNodes("/html/body/div/div[3]/div[1]/div[2]/div[1]/div/ul/div");
+                var ownerSeriesListNodes = root.SelectNodes("/html/body/div/div[3]/div[1]/div[2]/div[1]/div/ul/li");
                 seriesDetails.OwnerSeries = ownerSeriesListNodes.Select(node =>
                 {
                     var anchorNode = node.SelectSingleNode("a");
@@ -62,7 +59,7 @@ namespace Mntone.Nico2.Videos.Series
 
                 var detailFigure = detailMedia.Descendants("div").ElementAt(0);
                 var seriesThumbnailImageDiv = detailFigure.SelectSingleNode("div/div");
-                var detailBody = detailMedia.Descendants("div").ElementAt(1);
+                var detailBody = detailMedia.Elements("div").ElementAt(1);
                 var detailDescription = seriesDetailsChildren.ElementAt(1);
                 var expandedDescTextNode = detailDescription.SelectSingleNode("div/div/div/div[1]/div");
                 seriesDetails.DescriptionHTML = expandedDescTextNode.InnerHtml;
@@ -70,7 +67,7 @@ namespace Mntone.Nico2.Videos.Series
                 {
                     ThumbnailUrl = new Uri(seriesThumbnailImageDiv.GetAttributeValue("data-background-image", string.Empty)),
                     Count = _AsExtractNumber(detailBody.Elements("div").ElementAt(1).InnerText),
-                    Title = seriesThumbnailImageDiv.GetAttributeValue("alt", string.Empty)
+                    Title = seriesThumbnailImageDiv.GetAttributeValue("alt", string.Empty),
                 };
 
                 var seriesVideoListContainer = seriesDetailsChildren.ElementAt(2);
@@ -91,13 +88,39 @@ namespace Mntone.Nico2.Videos.Series
                         seriesVideo.ThumbnailUrl = new Uri(thumbnailImageNode.GetAttributeValue("data-background-image", string.Empty));
                         seriesVideo.Title = thumbnailImageNode.GetAttributeValue("alt", string.Empty);
 
-                        var videoLengthNode = VideoThumbnailNodeChildren.ElementAt(1);
+                        var videoLengthNode = VideoThumbnailNodeChildren.FirstOrDefault(x => x.GetAttributeValue("class", default(string)) == "VideoLength");
                         seriesVideo.Duration = videoLengthNode.InnerText.ToTimeSpan();
                     }
                     {
                         var mediaObjectBodyNodeChildren = mediaObjectContentNodeChildren.ElementAt(1).Elements("div");
                         var videoRegisteredAtNode = mediaObjectBodyNodeChildren.ElementAt(0);
-                        seriesVideo.PostAt = videoRegisteredAtNode.InnerText.ToDateTimeOffsetFromIso8601().DateTime;
+                        var videoRegisteredAtText = videoRegisteredAtNode.InnerText;
+                        if (videoRegisteredAtText.Contains("/"))
+                        {
+                            // ex) 2020/06/24 18:00 投稿
+                            var videoRegisteredAtDateTimeText = string.Join(" ", videoRegisteredAtText.Trim().Split(' ').Take(2));
+                            seriesVideo.PostAt = videoRegisteredAtDateTimeText.ToDateTimeOffsetFromIso8601().DateTime;
+                        }
+                        else 
+                        {
+                            if (videoRegisteredAtText.Contains("時間"))
+                            {
+                                // ex) 19時間前 投稿
+                                var time = int.Parse(new string(videoRegisteredAtText.TrimStart(' ', '\t', '\n').TakeWhile(c => char.IsDigit(c)).ToArray()));
+                                seriesVideo.PostAt = DateTime.Now - TimeSpan.FromHours(time);
+                            }
+                            else if (videoRegisteredAtText.Contains("分"))
+                            {
+                                // ex) 19分前 投稿 
+                                // があるか知らないけど念の為
+                                var time = int.Parse(new string(videoRegisteredAtText.TakeWhile(c => char.IsDigit(c)).ToArray()));
+                                seriesVideo.PostAt = DateTime.Now - TimeSpan.FromMinutes(time);
+                            }
+                            else
+                            {
+                                seriesVideo.PostAt = DateTime.Now;
+                            }
+                        }
                         var titleNode = mediaObjectBodyNodeChildren.ElementAt(1);
                         //var descNode = mediaObjectBodyNodeChildren.ElementAt(2);
                         var videoMetaCountChildren = mediaObjectBodyNodeChildren.ElementAt(3).Elements("span");

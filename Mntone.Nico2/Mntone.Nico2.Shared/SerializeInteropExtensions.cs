@@ -22,32 +22,32 @@ namespace Mntone.Nico2
 
 		public static short ToShort( this string value )
 		{
-			return short.Parse( value );
+			return short.Parse( value, System.Globalization.NumberStyles.AllowThousands);
 		}
 
 		public static ushort ToUShort( this string value )
 		{
-			return ushort.Parse( value );
+			return ushort.Parse( value, System.Globalization.NumberStyles.AllowThousands);
 		}
 
 		public static int ToInt( this string value )
 		{
-			return int.Parse( value );
+			return int.Parse( value, System.Globalization.NumberStyles.AllowThousands);
 		}
 
 		public static uint ToUInt( this string value )
 		{
-			return uint.Parse( value );
+			return uint.Parse( value, System.Globalization.NumberStyles.AllowThousands);
 		}
 
 		public static long ToLong( this string value )
 		{
-			return long.Parse( value );
+			return long.Parse( value, System.Globalization.NumberStyles.AllowThousands);
 		}
 
 		public static ulong ToULong( this string value )
 		{
-			return ulong.Parse( value );
+			return ulong.Parse( value, System.Globalization.NumberStyles.AllowThousands);
 		}
 
 		public static float ToSingle( this string value )
