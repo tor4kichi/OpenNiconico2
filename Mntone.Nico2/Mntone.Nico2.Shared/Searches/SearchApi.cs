@@ -156,6 +156,26 @@ namespace Mntone.Nico2.Searches
 				);
 		}
 
+		public Task<Live.LiveSearchResponse> LiveSearchAsync(
+			string q,
+			int offset,
+			int limit,
+			SearchTargetType targets = SearchTargetType.All,
+			LiveSearchFieldType fields = LiveSearchFieldType.All,
+			LiveSearchSortType sortType = LiveSearchSortType.StartTime | LiveSearchSortType.SortDecsending,
+			ISearchFilter searchFilter = null
+			)
+		{
+			return Live.LiveSearchClient.GetLiveSearchAsync(_context,
+				q,
+				offset,
+				limit,
+				targets,
+				fields,
+				sortType,
+				searchFilter
+				);
+		}
 
 
 		#region field

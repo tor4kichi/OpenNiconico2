@@ -67,7 +67,7 @@ namespace Mntone.Nico2
 		public static string VideoWatchPageUrl { get { return VideoUrlBase + "watch/"; } }
 
 
-        public static string VideoHistoryMyPageUrl { get { return VideoUrlBase + "my/history"; } }
+        public static string VideoHistoryMyPageUrl { get { return VideoUrlBase + "my/history/video"; } }
 
         internal static string VideoFlvUrl { get { return VideoFlapiUrlBase + "getflv/"; } }
 		internal static string VideoThumbInfoUrl { get { return "http://ext.nicovideo.jp/api/getthumbinfo/"; } }

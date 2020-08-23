@@ -29,7 +29,7 @@ namespace Mntone.Nico2.Users.Info
 			}
 			catch { }
 
-
+			/*
 			var profileHtml = bodyHtml
                 .GetElementByClassName("BaseLayout")
                 .GetElementByClassName("userDetail")
@@ -43,7 +43,7 @@ namespace Mntone.Nico2.Users.Info
 			{
 				//throw new Exception("ユーザー名の取得に失敗しました", ex);
 			}
-
+			*/
 			/*
 			{
 				var accountIdHtml = profileHtml.GetElementByClassName( "account" ).GetElementByClassName( "accountNumber" ).Element( "span" );

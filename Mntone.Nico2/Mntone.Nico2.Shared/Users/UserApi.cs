@@ -2,6 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mntone.Nico2.Users.Mylist;
+using Mntone.Nico2.Users.Follow;
 
 #if WINDOWS_UWP
 using Windows.Foundation;
@@ -71,9 +73,9 @@ namespace Mntone.Nico2.Users
 		/// ログイン中のユーザーのお気に入り登録しているユーザーの一覧を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<Follow.FollowData>> GetFollowUsersAsync()
+		public Task<Follow.FollowUsersResponse> GetFollowUsersAsync(uint pageSize = 25, Follow.FollowUsersResponse lastFollowUserRes = null)
 		{
-			return Follow.FollowClient.GetFollowUsersAsync(_context);
+			return Follow.FollowClient.GetFollowUsersAsync(_context, pageSize, lastFollowUserRes);
 		}
 
 
@@ -82,7 +84,7 @@ namespace Mntone.Nico2.Users
 		/// ログイン中ユーザーがお気に入り登録しているタグの一覧を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<string>> GetFollowTagsAsync()
+		public Task<FollowTagsResponse> GetFollowTagsAsync()
 		{
 			return Follow.FollowClient.GetFollowTagsAsync(_context);
 		}
@@ -92,9 +94,9 @@ namespace Mntone.Nico2.Users
 		/// ログイン中のユーザーがお気に入り登録しているマイリストの一覧を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<Follow.FollowData>> GetFollowMylistsAsync()
+		public Task<FollowMylistResponse> GetFollowMylistsAsync(uint sampleItemsCount = 3)
 		{
-			return Follow.FollowClient.GetFollowMylistAsync(_context);
+			return Follow.FollowClient.GetFollowMylistAsync(_context, sampleItemsCount);
 		}
 
 
@@ -106,7 +108,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> ExistUserFollowAsync(NiconicoItemType itemType, string item_id)
 		{
-			return Follow.FollowClient.ExistFollowAsync(_context, itemType, item_id);
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -118,7 +120,7 @@ namespace Mntone.Nico2.Users
 		/// <remarks>tagのお気に入り登録は AddFollowTagAsync を利用してください</remarks>
 		public Task<ContentManageResult> AddUserFollowAsync(NiconicoItemType itemType, string item_id)
 		{
-			return Follow.FollowClient.AddFollowAsync(_context, itemType, item_id);
+			throw new NotImplementedException();
 		}
 
 
@@ -131,7 +133,7 @@ namespace Mntone.Nico2.Users
 		/// <remarks>タグのお気に入り解除には RemoveFollowTagAsync を利用してください</remarks>
 		public Task<ContentManageResult> RemoveUserFollowAsync(NiconicoItemType itemType, string item_id)
 		{
-			return Follow.FollowClient.RemoveFollowAsync(_context, itemType, item_id);
+			throw new NotImplementedException();
 		}
 
 
@@ -143,7 +145,7 @@ namespace Mntone.Nico2.Users
 		/// <remarks>タグはコンテンツではないため、お気に入りAPIのアクセス手段が他と異なります。</remarks>
 		public Task<ContentManageResult> AddFollowTagAsync(string tag)
 		{
-			return Follow.FollowClient.AddFollowTagAsync(_context, tag);
+			throw new NotImplementedException();
 		}
 
 
@@ -155,7 +157,7 @@ namespace Mntone.Nico2.Users
 		/// <remarks>Tagの文字列に全角の数字が含まれる場合は、すべて半角に変換して扱う必要があります。</remarks>
 		public Task<ContentManageResult> RemoveFollowTagAsync(string tag)
 		{
-			return Follow.FollowClient.RemoveFollowTagAsync(_context, tag);
+			throw new NotImplementedException();
 		}
 
 
@@ -241,9 +243,14 @@ namespace Mntone.Nico2.Users
 		/// ログイン中のユーザーのマイリストグループ一覧を取得
 		/// </summary>
 		/// <returns></returns>
-		public Task<List<LoginUserMylistGroup>> GetMylistGroupListAsync()
+		public Task<MylistGroupsResponse> GetLoginUserMylistGroupsAsync()
 		{
-			return Users.MylistGroup.MylistGroupClient.GetMylistGroupListAsync(_context);
+			return MylistClient.GetLoginUserMylistGroupsAsync(_context);
+		}
+
+		public Task<MylistGroupsResponse> GetMylistGroupsAsync(int userId)
+		{
+			return MylistClient.GetMylistGroupsAsync(_context, userId);
 		}
 
 
@@ -253,7 +260,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> CreateMylistGroupAsync(string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, name, description, is_public, default_sort, iconType);
+			return MylistClient.AddMylistGroupAsync(_context, name, description, is_public, default_sort, iconType);
 		}
 
 
@@ -263,7 +270,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> CreateMylistGroupAsync(MylistGroupData groupData)
 		{
-			return MylistGroup.MylistGroupClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.GetIsPublic(), MylistDefaultSort.FirstRetrieve_Descending, groupData.GetIconType());
+			return MylistClient.AddMylistGroupAsync(_context, groupData.Name, groupData.Description, groupData.GetIsPublic(), MylistDefaultSort.FirstRetrieve_Descending, groupData.GetIconType());
 		}
 
 		/// <summary>
@@ -278,7 +285,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistGroupAsync(string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
 		{
-			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, group_id, name, description, is_public, default_sort, iconType);
+			return MylistClient.UpdateMylistGroupAsync(_context, group_id, name, description, is_public, default_sort, iconType);
 		}
 
 
@@ -289,7 +296,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> UpdateMylistGroupAsync(MylistGroupData groupData)
 		{
-			return MylistGroup.MylistGroupClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.GetIsPublic(), MylistDefaultSort.FirstRetrieve_Descending, groupData.GetIconType());
+			return MylistClient.UpdateMylistGroupAsync(_context, groupData.Id, groupData.Name, groupData.Description, groupData.GetIsPublic(), MylistDefaultSort.FirstRetrieve_Descending, groupData.GetIconType());
 		}
 
 
@@ -300,7 +307,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> RemoveMylistGroupAsync(string group_id)
 		{
-			return MylistGroup.MylistGroupClient.RemoveMylistGroupAsync(_context, group_id);
+			return MylistClient.RemoveMylistGroupAsync(_context, group_id);
 		}
 
 
@@ -311,7 +318,13 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> RemoveMylistGroupAsync(MylistGroupData groupData)
 		{
-			return MylistGroup.MylistGroupClient.RemoveMylistGroupAsync(_context, groupData.Id);
+			return MylistClient.RemoveMylistGroupAsync(_context, groupData.Id);
+		}
+
+
+		public Task<WatchAfterMylistGroupItemsResponse> GetWatchAfterMylistGroupItemsAsync(MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize = 25, uint page = 0)
+		{
+			return MylistClient.GetWatchAfterMylistGroupItemsAsync(_context, sortKey, sortOrder, pageSize, page);
 		}
 
 		/// <summary>
@@ -320,28 +333,15 @@ namespace Mntone.Nico2.Users
 		/// <param name="group_id">マイリストグループID</param>
 		/// <returns></returns>
 		/// <remarks>http://api.ce.nicovideo.jp/nicoapi/v1 を利用してマイリストを取得します。</remarks>
-		public Task<Mylist.NicoVideoResponse> GetMylistListAsync(string group_id, uint from = 0, uint limit = 50, Sort sortMethod = Sort.FirstRetrieve, Order sortDir = Order.Descending)
+		public Task<MylistGroupItemsResponse> GetLoginUserMylistGroupItemsAsync(long group_id, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize = 25, uint page = 0)
 		{
-			return MylistItem.MylistItemClient.GetMylistListAsync(_context, group_id, from, limit, sortMethod, sortDir);
+			return MylistClient.GetLoginUserMylistGroupItemsAsync(_context, group_id, sortKey, sortOrder, pageSize, page);
 		}
 
 
-
-		/// <summary>
-		/// マイリストに登録されたアイテムの一覧を取得
-		/// </summary>
-		/// <param name="group_id">マイリストグループID</param>
-		/// <returns></returns>
-		public Task<List<MylistData>> GetMylistItemListAsync(string group_id)
+		public Task<MylistGroupItemsResponse> GetMylistGroupItemsAsync(long group_id, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize = 25, uint page = 0)
 		{
-			if (LoginUserMylistGroupData.IsDeflist(group_id))
-			{
-				return Deflist.DeflistClient.GetDeflistAsync(_context);
-			}
-			else
-			{
-				return MylistItem.MylistItemClient.GetMylistItemAsync(_context, group_id);
-			}
+			return MylistClient.GetMylistGroupItemsAsync(_context, group_id, sortKey, sortOrder, pageSize, page);
 		}
 
 		/// <summary>
@@ -356,11 +356,11 @@ namespace Mntone.Nico2.Users
 		{
 			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.AddDeflistAsync(_context, item_type, item_id, description);
+				return MylistClient.AddDeflistAsync(_context, item_type, item_id, description);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.AddMylistItemAsync(_context, group_id, item_type, item_id, description);
+				return MylistClient.AddMylistItemAsync(_context, group_id, item_type, item_id, description);
 			}
 		}
 
@@ -373,7 +373,7 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<ContentManageResult> AddMylistItemAsync(string group_id, MylistData mylistData)
 		{
-			return MylistItem.MylistItemClient.AddMylistItemAsync(_context, mylistData.GroupId, mylistData.ItemType, mylistData.ItemId, mylistData.Description);
+			return MylistClient.AddMylistItemAsync(_context, mylistData.GroupId, mylistData.ItemType, mylistData.ItemId, mylistData.Description);
 		}
 
 
@@ -389,11 +389,11 @@ namespace Mntone.Nico2.Users
 		{
 			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.UpdateDeflistAsync(_context, item_type, item_id, description);
+				return MylistClient.UpdateDeflistAsync(_context, item_type, item_id, description);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.UpdateMylistItemAsync(_context, group_id, item_type, item_id, description);
+				return MylistClient.UpdateMylistItemAsync(_context, group_id, item_type, item_id, description);
 			}
 		}
 
@@ -419,11 +419,11 @@ namespace Mntone.Nico2.Users
 		{
 			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.RemoveDeflistAsync(_context, item_type, itemIdList);
+				return MylistClient.RemoveDeflistAsync(_context, item_type, itemIdList);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.RemoveMylistItemAsync(_context, group_id, item_type, itemIdList);
+				return MylistClient.RemoveMylistItemAsync(_context, group_id, item_type, itemIdList);
 			}
 		}
 
@@ -455,11 +455,11 @@ namespace Mntone.Nico2.Users
 
 			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.CopyDeflistAsync(_context, target_group_id, itemType, itemIdList);
+				return MylistClient.CopyDeflistAsync(_context, target_group_id, itemType, itemIdList);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.CopyMylistItemAsync(_context, group_id, target_group_id, itemType, itemIdList);
+				return MylistClient.CopyMylistItemAsync(_context, group_id, target_group_id, itemType, itemIdList);
 			}
 
 		}
@@ -486,11 +486,11 @@ namespace Mntone.Nico2.Users
 
 			if (LoginUserMylistGroupData.IsDeflist(group_id))
 			{
-				return Deflist.DeflistClient.MoveDeflistAsync(_context, target_group_id, itemType, itemIdList);
+				return MylistClient.MoveDeflistAsync(_context, target_group_id, itemType, itemIdList);
 			}
 			else
 			{
-				return MylistItem.MylistItemClient.MoveMylistItemAsync(_context, group_id, target_group_id, itemType, itemIdList);
+				return MylistClient.MoveMylistItemAsync(_context, group_id, target_group_id, itemType, itemIdList);
 			}
 
 		}
@@ -502,12 +502,12 @@ namespace Mntone.Nico2.Users
 		/// <returns></returns>
 		public Task<MylistGroupDetail> GetMylistGroupDetailAsync(string group_id)
 		{
-			return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, group_id);
+			return MylistClient.GetMylistGroupDetailAsync(_context, group_id);
 		}
 
         public Task<MylistGroupDetail> GetDeflistMylistGroupDetailAsync()
         {
-            return MylistGroup.MylistGroupClient.GetMylistGroupDetailAsync(_context, DefMylistId);
+            return MylistClient.GetMylistGroupDetailAsync(_context, DefMylistId);
         }
 
         /// <summary>
@@ -522,14 +522,9 @@ namespace Mntone.Nico2.Users
 
         #region Follow Community
 
-        /// <summary>
-        /// マイページのお気に入りコミュニティにアクセスして
-        /// HTMLを解析してお気に入りコミュニティを取得します
-        /// </summary>
-        /// <returns></returns>
-        public Task<FollowCommunity.FollowCommunityResponse> GetFollowCommunityAsync(int page)
+        public Task<FollowCommunityResponse> GetFollowCommunityAsync(uint limit = 25, uint page = 0)
 		{
-			return FollowCommunity.FollowCommunityClient.GetFollowCommunityAsync(_context, page);
+			return Follow.FollowClient.GetFollowCommunityAsync(_context, limit, page);
 		}
 
 
@@ -554,9 +549,9 @@ namespace Mntone.Nico2.Users
         #region Follow Channel
 
 
-        public Task<List<Users.Follow.ChannelFollowData>> GetFollowChannelAsync()
+        public Task<FollowChannelResponse> GetFollowChannelAsync(uint limit = 25, uint page = 0)
         {
-            return Users.Follow.FollowClient.GetFollowChannelAsync(_context);
+            return FollowClient.GetFollowChannelAsync(_context, limit, page);
         }
 
 
@@ -575,9 +570,9 @@ namespace Mntone.Nico2.Users
 
 		#region Series
 
-		public Task<Series.UserSeriesResponse> GetUserSeiresAsync(string userId)
+		public Task<Series.UserSeriesResponse> GetUserSeiresAsync(string userId, uint page, uint pageSize = 25)
 		{
-			return Series.SeriesClient.GetUserSeriesAsync(_context, userId);
+			return Series.SeriesClient.GetUserSeriesAsync(_context, userId, page, pageSize);
 		}
 
 		#endregion

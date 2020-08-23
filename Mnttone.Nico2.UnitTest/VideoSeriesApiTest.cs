@@ -15,7 +15,7 @@ namespace Mnttone.Nico2.UnitTest
         public async Task UserSeriesTestAsync(string userId)
         {
             var context = new NiconicoContext() { AdditionalUserAgent = "OpenNiconico_Test@tor4kichi" };
-            var response = await context.User.GetUserSeiresAsync(userId);
+            var response = await context.User.GetUserSeiresAsync(userId, 0);
         }
 
 

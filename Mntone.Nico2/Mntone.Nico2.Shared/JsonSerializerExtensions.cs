@@ -18,7 +18,7 @@ namespace Mntone.Nico2
 				settings = new JsonSerializerSettings();
 			}
 
-			settings.Converters.Add(new HtmlEncodingConverter());
+			//settings.Converters.Add(new HtmlEncodingConverter());
 			return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data, settings);
 		}
 	}

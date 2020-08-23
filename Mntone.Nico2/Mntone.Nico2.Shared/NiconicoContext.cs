@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Web;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
+using Windows.Web.Http.Headers;
 #else
 using System.Net;
 using System.Net.Http;
@@ -260,11 +262,18 @@ namespace Mntone.Nico2
 				HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
+				HttpClient.DefaultRequestHeaders.Add("X-Frontend-Id", "6");
+				HttpClient.DefaultRequestHeaders.Add("X-Frontend-Version", "0");
+				HttpClient.DefaultRequestHeaders.Add("X-Niconico-Language", "ja-jp");
+
+				HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+				HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+				HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-site");
+				HttpClient.DefaultRequestHeaders.Add("Origin", "https://www.nicovideo.jp");
 
 
-
-            }
-            return this.HttpClient;
+			}
+			return this.HttpClient;
 		}
 
 
@@ -299,6 +308,20 @@ namespace Mntone.Nico2
 
             return await GetStringAsync(realUri);
         }
+
+#if WINDOWS_UWP
+		internal async Task<T> GetJsonAsAsync<T>(string url, JsonSerializerSettings settings = null, Action<HttpRequestHeaderCollection> headerModifier = null)
+#else
+		internal async Task<T> GetJsonAsAsync<T>(string url, JsonSerializerSettings settings = null, Action<System.Net.Http.Headers.HttpRequestHeaders> headerModifier = null)
+#endif
+		{
+			var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+			headerModifier?.Invoke(request.Headers);
+			var message = await SendAsync(request);
+			var json = await message.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<T>(json, settings);
+        }
+
 
         internal async Task<string> GetStringAsync(string url)
 		{
@@ -407,7 +430,17 @@ namespace Mntone.Nico2
 		}
 
 
-#region APIs
+
+		internal async Task PrepareCorsAsscessAsync(string uri)
+		{
+			var optionReq = new HttpRequestMessage(HttpMethod.Options, new Uri(uri));
+			optionReq.Headers.Add("Access-Control-Request-Headers", "x-frontend-id,x-frontend-version,x-niconico-language");
+			optionReq.Headers.Add("Access-Control-Request-Method", "GET");
+			var res = await SendAsync(optionReq, HttpCompletionOption.ResponseHeadersRead);
+		}
+
+
+		#region APIs
 
 		/// <summary>
 		/// ニコニコ動画の API 群

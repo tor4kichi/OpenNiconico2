@@ -310,7 +310,7 @@ namespace Mntone.Nico2.Videos.Ranking
     {
         public static string GetVideoId(this RssVideoData data)
         {
-            return data.WatchPageUrl.OriginalString.Substring(@"https://www.nicovideo.jp/watch/".Length);
+            return data.WatchPageUrl.Segments.Last();
         }
 
         public static string GetRankTrimmingTitle(this RssVideoData data)

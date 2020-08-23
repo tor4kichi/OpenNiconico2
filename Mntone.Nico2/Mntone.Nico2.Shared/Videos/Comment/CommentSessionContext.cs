@@ -119,7 +119,7 @@ namespace Mntone.Nico2.Videos.Comment
             var seqNum = _SeqNum;
             foreach (var thread in CommenctComposite.Threads)
             {
-                if (!thread.IsActive)
+                if (!thread.IsActive || thread.Label == "easy")
                 {
                     continue;
                 }

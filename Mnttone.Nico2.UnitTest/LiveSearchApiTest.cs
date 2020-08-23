@@ -18,7 +18,7 @@ namespace Mnttone.Nico2.UnitTest
         public async Task LiveSearchTestAsync(string keyword)
         {
             var context = new NiconicoContext() { AdditionalUserAgent = "OpenNiconico_Test@tor4kichi" };
-            var response = await context.Search.LiveSearchAsync(keyword, 0, 10);
+            var response = await context.Search.LiveSearchAsync(keyword, 0, 10, searchFilter: null);
             Assert.IsTrue(response.IsOK);
             
         }
@@ -99,7 +99,8 @@ namespace Mnttone.Nico2.UnitTest
                 0,
                 10,
                 fields: LiveSearchFieldType.All,
-                sortType: LiveSearchSortType.CommentCounter
+                sortType: LiveSearchSortType.CommentCounter,
+                searchFilter: null
                 );
             Assert.IsTrue(response.IsOK);
 

@@ -2,6 +2,7 @@
 using Mntone.Nico2.Mylist;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mntone.Nico2.Users.Video;
 
 #if WINDOWS_UWP
 using Windows.Foundation;
@@ -315,6 +316,16 @@ namespace Mntone.Nico2.Videos
         }
 
 
+        #region UserVideos
+
+        public Task<Mntone.Nico2.Videos.Users.UserVideosResponse> GetUserVideosAsync(uint userId, uint page)
+        {
+            return Mntone.Nico2.Videos.Users.UserVideosClient.GetUserVideoResponse(_context, userId, page);
+        }
+
+        #endregion
+
+
         #region Series
 
         /// <summary>
@@ -328,6 +339,10 @@ namespace Mntone.Nico2.Videos
         }
 
         #endregion
+
+
+
+
 
         #region field
 

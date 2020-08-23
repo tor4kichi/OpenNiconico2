@@ -126,10 +126,12 @@ namespace Mntone.Nico2.Users.User
 		}
 
 
-		public static Task<UserDetail> GetUserDetailAsync(NiconicoContext context, string user_id)
+		public static async Task<UserDetail> GetUserDetailAsync(NiconicoContext context, string user_id)
 		{
-			return GetUserDetailDataAsync(context, user_id)
-				.ContinueWith(prevTask => ParseUserDetailData(prevTask.Result));
+			var json = await GetUserDetailDataAsync(context, user_id);
+			var result = ParseUserDetailData(json);
+			result.UserId = user_id;
+			return result;
 		}
 
 

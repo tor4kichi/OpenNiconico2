@@ -1140,7 +1140,7 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "owner")]
         public SeriesVideoOwner owner { get; set; }
 
-        }
+    }
 
     [DataContract]
     public class Series
