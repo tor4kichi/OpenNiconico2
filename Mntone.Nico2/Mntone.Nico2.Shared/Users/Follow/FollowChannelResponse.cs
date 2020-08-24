@@ -13,9 +13,9 @@
         public FollowChannelMeta Meta { get; set; }
 
         [JsonProperty("data")]
-        public List<Datum> Data { get; set; }
+        public List<FollowChannel> Data { get; set; }
 
-        public partial class Datum
+        public partial class FollowChannel
         {
             [JsonProperty("session")]
             public Session Session { get; set; }

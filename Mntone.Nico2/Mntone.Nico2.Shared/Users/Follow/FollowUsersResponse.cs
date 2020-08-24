@@ -20,13 +20,13 @@ namespace Mntone.Nico2.Users.Follow
     public partial class FollowUserData
     {
         [JsonProperty("items")]
-        public List<Item> Items { get; set; }
+        public List<UserFollowItem> Items { get; set; }
 
         [JsonProperty("summary")]
         public Summary Summary { get; set; }
     }
 
-    public partial class Item
+    public partial class UserFollowItem
     {
         [JsonProperty("type")]
         public FollowType Type { get; set; }

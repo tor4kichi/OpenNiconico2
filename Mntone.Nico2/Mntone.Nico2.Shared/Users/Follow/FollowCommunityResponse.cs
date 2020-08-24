@@ -13,10 +13,10 @@
         public FollowCommunityMeta Meta { get; set; }
 
         [JsonProperty("data")]
-        public List<Datum> Data { get; set; }
+        public List<FollowCommunity> Data { get; set; }
 
 
-        public partial class Datum
+        public partial class FollowCommunity
         {
             [JsonProperty("id")]
             public long Id { get; set; }

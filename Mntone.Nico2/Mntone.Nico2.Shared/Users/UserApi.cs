@@ -100,78 +100,58 @@ namespace Mntone.Nico2.Users
 		}
 
 
-		/// <summary>
-		/// 指定したアイテムがログイン中ユーザーにお気に入り登録されているかをチェックします。
-		/// </summary>
-		/// <param name="itemType"></param>
-		/// <param name="item_id"></param>
-		/// <returns></returns>
-		public Task<ContentManageResult> ExistUserFollowAsync(NiconicoItemType itemType, string item_id)
-		{
-			throw new NotImplementedException();
-		}
 
-		/// <summary>
-		/// 指定したアイテムをログイン中ユーザーのお気に入りに登録します。
-		/// </summary>
-		/// <param name="itemType"></param>
-		/// <param name="item_id"></param>
-		/// <returns></returns>
-		/// <remarks>tagのお気に入り登録は AddFollowTagAsync を利用してください</remarks>
-		public Task<ContentManageResult> AddUserFollowAsync(NiconicoItemType itemType, string item_id)
+
+
+		public Task<ContentManageResult> AddFollowUserAsync(string userId)
 		{
-			throw new NotImplementedException();
+			return Follow.FollowClient.AddFollowUserAsync(_context, userId);
 		}
 
 
-		/// <summary>
-		/// 指定したアイテムをログイン中ユーザーのお気に入り登録から削除します。
-		/// </summary>
-		/// <param name="itemType"></param>
-		/// <param name="item_id"></param>
-		/// <returns></returns>
-		/// <remarks>タグのお気に入り解除には RemoveFollowTagAsync を利用してください</remarks>
-		public Task<ContentManageResult> RemoveUserFollowAsync(NiconicoItemType itemType, string item_id)
+
+		public Task<ContentManageResult> RemoveFollowUserAsync(string userId)
 		{
-			throw new NotImplementedException();
+			return Follow.FollowClient.RemoveFollowUserAsync(_context, userId);
 		}
 
 
-		/// <summary>
-		/// 指定されたタグをログイン中ユーザーのお気に入りに登録します。
-		/// </summary>
-		/// <param name="tag"></param>
-		/// <returns></returns>
-		/// <remarks>タグはコンテンツではないため、お気に入りAPIのアクセス手段が他と異なります。</remarks>
+
+
+
 		public Task<ContentManageResult> AddFollowTagAsync(string tag)
 		{
-			throw new NotImplementedException();
+			return Follow.FollowClient.AddFollowTagAsync(_context, tag);
 		}
 
 
-		/// <summary>
-		/// 指定されたタグをログイン中ユーザーのお気に入り登録から削除します。
-		/// </summary>
-		/// <param name="tag"></param>
-		/// <returns></returns>
-		/// <remarks>Tagの文字列に全角の数字が含まれる場合は、すべて半角に変換して扱う必要があります。</remarks>
 		public Task<ContentManageResult> RemoveFollowTagAsync(string tag)
 		{
-			throw new NotImplementedException();
+			return Follow.FollowClient.RemoveFollowTagAsync(_context, tag);
 		}
 
 
-
-
-		/// <summary>
-		/// ユーザーのプロフィールを含む詳細データを取得します。
-		/// データ取得のためにニコニコ動画のユーザーページへアクセスします。
-		/// </summary>
-		/// <param name="userId"></param>
-		/// <returns></returns>
-		public Task<User.UserDetail> GetUserDetail(uint userId)
+		public Task<ContentManageResult> AddFollowMylistAsync(string mylistId)
 		{
-			return GetUserDetail(userId.ToString());
+			return Follow.FollowClient.AddFollowMylistAsync(_context, mylistId);
+		}
+
+
+		public Task<ContentManageResult> RemoveFollowMylistAsync(string mylistId)
+		{
+			return Follow.FollowClient.RemoveFollowMylistAsync(_context, mylistId);
+		}
+
+
+		/// <summary>
+		/// ユーザーのプロフィールを含む詳細データを取得します。
+		/// データ取得のためにニコニコ動画のユーザーページへアクセスします。
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		public Task<User.UserDetailResponse.UserDetails> GetUserDetailAsync(uint userId)
+		{
+			return GetUserDetailAsync(userId.ToString());
 		}
 
 		/// <summary>
@@ -180,7 +160,7 @@ namespace Mntone.Nico2.Users
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns></returns>
-		public Task<User.UserDetail> GetUserDetail(string userId)
+		public Task<User.UserDetailResponse.UserDetails> GetUserDetailAsync(string userId)
 		{
 			return User.UserClient.GetUserDetailAsync(_context, userId);
 
@@ -528,19 +508,14 @@ namespace Mntone.Nico2.Users
 		}
 
 
-		public Task<bool> AddFollowCommunityAsync(string communityId, string title = "", string comment = "", bool notify = false)
+		public Task<ContentManageResult> AddFollowCommunityAsync(string communityId)
 		{
-			return FollowCommunity.FollowCommunityClient.AddFollowCommunity(_context, communityId, title, comment, notify);
+			return FollowClient.AddFollowCommunityAsync(_context, communityId);
 		}
 
-		public Task<FollowCommunity.CommunityLeaveToken> GetFollowCommunityLeaveTokenAsync(string communityId)
+		public Task<ContentManageResult> RemoveFollowCommunityAsync(string communityId)
 		{
-			return FollowCommunity.FollowCommunityClient.GetCommunityLeaveToken(_context, communityId);
-		}
-
-		public Task<bool> RemoveFollowCommunityAsync(FollowCommunity.CommunityLeaveToken leaveToken)
-		{
-			return FollowCommunity.FollowCommunityClient.RemoveFollowCommunity(_context, leaveToken);
+			return FollowClient.RemoveFollowCommunityAsync(_context, communityId);
 		}
 
         #endregion

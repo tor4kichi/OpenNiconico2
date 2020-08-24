@@ -1,8 +1,10 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -18,120 +20,21 @@ namespace Mntone.Nico2.Users.User
 				.GetConvertedStringAsync($"{NiconicoUrls.MakeUserPageUrl(user_id)}/video");
 		}
 
-		private static UserDetail ParseUserDetailData(string rawHtml)
+		private static UserDetailResponse ParseUserDetailData(string rawHtml)
 		{
 			var html = new HtmlDocument();
 			html.LoadHtml(rawHtml);
-
-			UserDetail data = new UserDetail();
-
-			var body = html.DocumentNode
-				.GetElementByTagName("html")
-				.GetElementByTagName("body")
-                .GetElementByClassName("BaseLayout");
-			var userDetail = body.GetElementByClassName("userDetail");
-			var avatar = userDetail.GetElementByClassName("avatar");
-			var profile = userDetail.GetElementByClassName("profile");
-
-
-			data.ThumbnailUri = avatar.GetElementByTagName("img")
-				.GetAttributeValue("src", "");
-
-			var nickname = profile.GetElementByTagName("h2")
-				.InnerText;
-			data.Nickname = nickname.Remove(nickname.Length - 2);
-
-			var accountItems = profile.GetElementByClassName("account")
-				.GetElementsByTagName("p")
-				.ToArray();
-
-			data.IsPremium = accountItems[0].GetElementByTagName("span")
-				.InnerText.EndsWith("プレミアム会員");
-
-			try
-			{
-                /*
-				var stats = profile.GetElementByClassName("stats");
-				var statsItems = stats.SelectNodes("./li//span");
-
-				var statsItemNumbers = statsItems.Select(x => 
-				{
-					var numberWithUnit = x.InnerText.Where(y => y != ',');
-					var numberText = string.Join("", numberWithUnit.TakeWhile(y => y >= '0' && y <= '9'));
-					return uint.Parse(numberText);
-				})
-				.ToArray();
-                */
-
-                //				data.FollowerCount = statsItemNumbers[0];
-                //				data.StampCount = statsItemNumbers[1];
-                //data.NiconicoPoint = statsItemNumbers[2];
-                //data.CreateScore = statsItemNumbers[3];
-            }
-            catch (Exception) { }
-
-			try
-			{
-				data.Description = profile
-					.GetElementByClassName("userDetailComment")
-					.GetElementById("user_description")
-					?.GetElementById("description_full")
-					?.GetElementByTagName("span")
-					?.InnerHtml ?? "";
-			}
-			catch
-			{
-				data.Description = "";
-			}
-
-
-			var video = body
-				.GetElementByClassName("wrapper")
-				.GetElementById("video");
-
-
-
-			// ex) 投稿動画（606件）
-			// 先頭5文字をスキップして、以降の任意桁数の数字を抽出
-			try
-			{
-                var videoCountElem = video.GetElementByTagName("h3");
-                if (videoCountElem != null)
-                {
-                    var countStr = new String(videoCountElem.InnerText.Skip(5).TakeWhile(x => x >= '0' && x <= '9').ToArray());
-                    if (countStr.Count() > 0)
-                    {
-                        data.TotalVideoCount = uint.Parse(
-                            countStr
-                            );
-                    }
-                    else
-                    {
-                        data.IsOwnerVideoPrivate = true;
-                    }
-                }
-                else
-                {
-                    data.IsOwnerVideoPrivate = true;
-                }
-            }
-			catch
-			{
-				// 投稿動画非公開の場合
-				data.TotalVideoCount = 0;
-				data.IsOwnerVideoPrivate = true;
-			}
-
-			return data;
+			var jsInitializeUserPageDataNode = html.GetElementbyId("js-initial-userpage-data");
+			var initialDataAttr = jsInitializeUserPageDataNode.Attributes["data-initial-data"];
+			return JsonConvert.DeserializeObject<UserDetailResponse>(WebUtility.HtmlDecode(initialDataAttr.Value));
 		}
 
 
-		public static async Task<UserDetail> GetUserDetailAsync(NiconicoContext context, string user_id)
+		public static async Task<UserDetailResponse.UserDetails> GetUserDetailAsync(NiconicoContext context, string user_id)
 		{
-			var json = await GetUserDetailDataAsync(context, user_id);
-			var result = ParseUserDetailData(json);
-			result.UserId = user_id;
-			return result;
+			var htmlText = await context
+				.GetConvertedStringAsync($"https://www.nicovideo.jp/user/{user_id}");			
+			return ParseUserDetailData(htmlText).Container.Details;
 		}
 
 

@@ -262,6 +262,7 @@ namespace Mntone.Nico2
 				HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
 					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
 					: NiconicoContext.DefaultUserAgent );
+
 				HttpClient.DefaultRequestHeaders.Add("X-Frontend-Id", "6");
 				HttpClient.DefaultRequestHeaders.Add("X-Frontend-Version", "0");
 				HttpClient.DefaultRequestHeaders.Add("X-Niconico-Language", "ja-jp");
@@ -323,7 +324,21 @@ namespace Mntone.Nico2
         }
 
 
-        internal async Task<string> GetStringAsync(string url)
+#if WINDOWS_UWP
+		internal async Task<T> GetJsonAsAsync<T>(HttpMethod httpMethod, string url, JsonSerializerSettings settings = null, Action<HttpRequestHeaderCollection> headerModifier = null)
+#else
+		internal async Task<T> GetJsonAsAsync<T>(HttpMethod httpMethod, string url, JsonSerializerSettings settings = null, Action<System.Net.Http.Headers.HttpRequestHeaders> headerModifier = null)
+#endif
+		{
+			var request = new HttpRequestMessage(httpMethod, new Uri(url));
+			headerModifier?.Invoke(request.Headers);
+			var message = await SendAsync(request);
+			var json = await message.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<T>(json, settings);
+		}
+
+
+		internal async Task<string> GetStringAsync(string url)
 		{
 #if DEBUG_NICO_URL
 			UrlDebugHelper.DebugLog(url);
@@ -431,11 +446,11 @@ namespace Mntone.Nico2
 
 
 
-		internal async Task PrepareCorsAsscessAsync(string uri)
+		internal async Task PrepareCorsAsscessAsync(HttpMethod httpMethod, string uri)
 		{
 			var optionReq = new HttpRequestMessage(HttpMethod.Options, new Uri(uri));
-			optionReq.Headers.Add("Access-Control-Request-Headers", "x-frontend-id,x-frontend-version,x-niconico-language");
-			optionReq.Headers.Add("Access-Control-Request-Method", "GET");
+			optionReq.Headers.Add("Access-Control-Request-Headers", "x-frontend-id,x-frontend-version,x-niconico-language,x-request-with");
+			optionReq.Headers.Add("Access-Control-Request-Method", httpMethod.Method);
 			var res = await SendAsync(optionReq, HttpCompletionOption.ResponseHeadersRead);
 		}
 

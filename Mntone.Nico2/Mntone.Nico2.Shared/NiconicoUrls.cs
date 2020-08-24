@@ -304,7 +304,7 @@ namespace Mntone.Nico2
 
 
 
-		private const string CommunityUrlBase = "http://com" + DomainBase;
+		private const string CommunityUrlBase = "https://com" + DomainBase;
 
 		public static string CommynitySearchPageUrl = CommunityUrlBase + "search/";
 

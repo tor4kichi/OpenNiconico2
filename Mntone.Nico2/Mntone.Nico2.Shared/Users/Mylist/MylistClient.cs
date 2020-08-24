@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 #else
+using System.Net.Http;
 #endif
 
 namespace Mntone.Nico2.Users.Mylist
@@ -150,7 +151,7 @@ namespace Mntone.Nico2.Users.Mylist
 		public static async Task<MylistGroupItemsResponse> GetLoginUserMylistGroupItemsAsync(NiconicoContext context, long mylistId, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize, uint pageCount)
 		{
 			var uri = $"https://nvapi.nicovideo.jp/v1/users/me/mylists/{mylistId}?sortKey={sortKey.ToQueryString()}&sortOrder={sortOrder.ToQueryString()}&pageSize={pageSize}&page={pageCount + 1}";
-			await context.PrepareCorsAsscessAsync(uri);
+			await context.PrepareCorsAsscessAsync(HttpMethod.Get, uri);
 			return await context.GetJsonAsAsync<MylistGroupItemsResponse>(uri, Converter.Settings);
 		}
 
@@ -257,7 +258,7 @@ namespace Mntone.Nico2.Users.Mylist
 		public static async Task<WatchAfterMylistGroupItemsResponse> GetWatchAfterMylistGroupItemsAsync(NiconicoContext context, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize, uint pageCount)
 		{
 			var uri = $"https://nvapi.nicovideo.jp/v1/users/me/watch-later?sortKey={sortKey.ToQueryString()}&sortOrder={sortOrder.ToQueryString()}&pageSize={pageSize}&page={pageCount + 1}";
-			await context.PrepareCorsAsscessAsync(uri);
+			await context.PrepareCorsAsscessAsync(HttpMethod.Get, uri);
 			return await context.GetJsonAsAsync<WatchAfterMylistGroupItemsResponse>(uri, Converter.Settings,
 				haaders => 
 				{
