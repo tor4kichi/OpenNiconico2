@@ -30,6 +30,7 @@ namespace Mntone.Nico2.NicoRepo
         public int Limit { get; set; }
     }
 
+    /*
     [DataContract]
     public class Sender
     {
@@ -54,6 +55,7 @@ namespace Mntone.Nico2.NicoRepo
         [DataMember(Name = "trigger")]
         public string Trigger { get; set; }
     }
+    */
 
     [DataContract]
     public class Urls

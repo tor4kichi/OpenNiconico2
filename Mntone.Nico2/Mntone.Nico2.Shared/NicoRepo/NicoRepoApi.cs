@@ -7,13 +7,10 @@ namespace Mntone.Nico2.NicoRepo
 {
     public sealed class NicoRepoApi
     {
-        #region field
-
+        
         private NiconicoContext _context;
 
-        #endregion
-
-        #region Urls
+        #region NicoRepo ver1
 
         public static readonly string NicoRepoApiBaseUrl = $"{NiconicoUrls.VideoApiUrlBase}nicorepo/";
         public static readonly string NicoRepoTimelineApiUrl = $"{NicoRepoApi.NicoRepoApiBaseUrl}timeline/";
@@ -48,7 +45,6 @@ namespace Mntone.Nico2.NicoRepo
             return $"{NicoRepoTimelineApiUrl}user/{userId.ToString()}?{HttpQueryExtention.DictionaryToQuery(dict)}";
         }
 
-        #endregion
 
         internal NicoRepoApi(NiconicoContext context)
         {
@@ -64,6 +60,35 @@ namespace Mntone.Nico2.NicoRepo
         public Task<NicoRepoResponse> GetUserNicoRepo(uint userId, string lastNicoRepoItemId = null)
         {
             return UserNicoRepo.UserNicoRepoClient.GetUserNicoRepoAsync(_context, userId, lastNicoRepoItemId);
+        }
+
+
+        #endregion
+
+
+        const string NicorepoTimelineApiUrl = "https://public.api.nicovideo.jp/v1/timelines/nicorepo/last-1-month/my/pc/entries.json";
+
+
+        public Task<NicoRepoEntriesResponse> GetLoginUserNicoRepoEntriesAsync(NicoRepoType type, NicoRepoDisplayTarget target, string untilId = null)
+        {
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            if (type != NicoRepoType.All)
+            {
+                param.Add("object%5Btype%5D", type.ToString().ToCamelCase());
+
+                param.Add("type", type switch
+                {
+                    NicoRepoType.Video => "upload",
+                    NicoRepoType.Program => "onair",
+                    NicoRepoType.Image => "add",
+                    NicoRepoType.ComicStory => "add",
+                    NicoRepoType.Article => "add",
+                    NicoRepoType.Game => "add",
+                    _ => throw new NotSupportedException()
+                });
+            }
+
+            return _context.GetJsonAsAsync<NicoRepoEntriesResponse>(NicorepoTimelineApiUrl + "?" + HttpQueryExtention.DictionaryToQuery(param));
         }
 
         // TODO: ユーザーニコレポのミュート一覧取得
