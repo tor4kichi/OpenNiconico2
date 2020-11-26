@@ -153,6 +153,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoUrls.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\LoginUserNicoRepo\LoginUserNicoRepoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoEntriesResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoTimelineType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\UserNicoRepo\UserNicoRepoClient.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Users\Follow\FollowUsersResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Follow\TagStringHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Icon\IconClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Users\Likes\UserLikesClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Mylist\MylistClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Mylist\MylistGroupItemsResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Users\Mylist\MylistGroupsResponse.cs" />

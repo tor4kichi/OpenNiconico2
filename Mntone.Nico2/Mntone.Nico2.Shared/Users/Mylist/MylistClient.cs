@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -25,40 +26,94 @@ namespace Mntone.Nico2.Users.Mylist
 			return context.PostAsync(NiconicoUrls.MylistGroupGetUrl, dict);
 		}
 
-		public static Task<string> AddMylistGroupDataAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType icon_id)
+		public class MylistCreateResultResponse
+        {
+			[JsonProperty("meta")]
+			public Meta Meta { get; set; }
+
+			[JsonProperty("data")]
+			public MylistCreateResultData Data { get; set; }
+
+			public class MylistCreateResultData
+            {
+				[JsonProperty("mylistId")]
+				public uint MylistId { get; set; }
+            }
+		}
+
+		public class MylistUpdateResultResponse
+		{
+			[JsonProperty("meta")]
+			public Meta Meta { get; set; }
+		}
+
+		public static async Task<string> AddMylistGroupAsync(NiconicoContext context, string name, string description, bool isPublic, MylistSortKey defaultSortKey, MylistSortOrder defaultSortOrder)
 		{
 			var dict = new Dictionary<string, string>();
 
-			dict.Add(nameof(name), name);
-			dict.Add(nameof(description), description);
-			dict.Add(nameof(is_public), is_public.ToString1Or0());
-			dict.Add(nameof(default_sort), ((uint)default_sort).ToString());
-			dict.Add(nameof(icon_id), ((uint)icon_id).ToString());
+			dict.Add("name", name);
+			dict.Add("description", description);
+			dict.Add("isPublic", isPublic.ToString1Or0());
+			dict.Add("defaultSortKey", defaultSortKey.ToQueryString());
+			dict.Add("defaultSortOrder", defaultSortOrder.ToQueryString());
 
-			return context.PostAsync(NiconicoUrls.MylistGroupAddUrl, dict);
+			var request = new HttpRequestMessage(HttpMethod.Post, new Uri($"https://nvapi.nicovideo.jp/v1/users/me/mylists"));
+#if WINDOWS_UWP
+			request.Content = new HttpFormUrlEncodedContent(dict);
+			request.Headers.Referer = new Uri("https://www.nicovideo.jp/my/mylist");
+#else
+			request.Content = new FormUrlEncodedContent(dict);
+			request.Headers.Referrer = new Uri($"https://www.nicovideo.jp/my/mylist");
+#endif
+			request.Headers.Add("X-Request-With", "https://www.nicovideo.jp");
+
+			var res = await context.SendAsync(request);
+			var json = await res.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<MylistCreateResultResponse>(json).Data?.MylistId.ToString();
 		}
 
 
-		public static Task<string> UpdateMylistGroupDataAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType icon_id)
+		public static async Task<bool> UpdateMylistGroupAsync(NiconicoContext context, string mylistId, string name, string description, bool isPublic, MylistSortKey defaultSortKey, MylistSortOrder defaultSortOrder)
 		{
 			var dict = new Dictionary<string, string>();
-			dict.Add(nameof(group_id), group_id);
-			dict.Add(nameof(name), name);
-			dict.Add(nameof(description), description);
-			dict.Add(nameof(is_public), is_public.ToString1Or0());
-			dict.Add(nameof(default_sort), ((uint)default_sort).ToString());
-			dict.Add(nameof(icon_id), ((uint)icon_id).ToString());
+			dict.Add("name", name);
+			dict.Add("description", description);
+			dict.Add("isPublic", isPublic.ToString1Or0());
+			dict.Add("defaultSortKey", defaultSortKey.ToQueryString());
+			dict.Add("defaultSortOrder", defaultSortOrder.ToQueryString());
 
-			return context.PostAsync(NiconicoUrls.MylistGroupUpdateUrl, dict);
+			var request = new HttpRequestMessage(HttpMethod.Put, new Uri($"https://nvapi.nicovideo.jp/v1/users/me/mylists/{mylistId}"));
+#if WINDOWS_UWP
+			request.Content = new HttpFormUrlEncodedContent(dict);
+			request.Headers.Referer = new Uri($"https://www.nicovideo.jp/my/mylist/{mylistId}");
+#else
+			request.Content = new FormUrlEncodedContent(dict);
+			request.Headers.Referrer = new Uri($"https://www.nicovideo.jp/my/mylist/{mylistId}");
+#endif
+			request.Headers.Add("X-Request-With", "https://www.nicovideo.jp");
+
+
+			var res = await context.SendAsync(request);
+			var json = await res.Content.ReadAsStringAsync();
+			var result = JsonConvert.DeserializeObject<MylistUpdateResultResponse>(json);
+			return result.Meta.Status == 200;
 		}
 
 
-		public static Task<string> RemoveMylistGroupDataAsync(NiconicoContext context, string group_id)
+		public static async Task<bool> RemoveMylistGroupAsync(NiconicoContext context, string mylistId)
 		{
-			var dict = new Dictionary<string, string>();
-			dict.Add(nameof(group_id), group_id);
+			var request = new HttpRequestMessage(HttpMethod.Delete, new Uri($"https://nvapi.nicovideo.jp/v1/users/me/mylists/{mylistId}"));
+#if WINDOWS_UWP
+			request.Headers.Referer = new Uri($"https://www.nicovideo.jp/my/mylist/{mylistId}");
+#else
+			request.Headers.Referrer = new Uri($"https://www.nicovideo.jp/my/mylist/{mylistId}");
+#endif
+			request.Headers.Add("X-Request-With", "https://www.nicovideo.jp");
 
-			return context.PostAsync(NiconicoUrls.MylistGroupRemoveUrl, dict);
+			var res = await context.SendAsync(request);
+			var json = await res.Content.ReadAsStringAsync();
+			var result = JsonConvert.DeserializeObject<MylistUpdateResultResponse>(json);
+			return result.Meta.Status == 200;
 		}
 
 
@@ -115,25 +170,6 @@ namespace Mntone.Nico2.Users.Mylist
 				});
 		}
 
-
-		public static Task<ContentManageResult> AddMylistGroupAsync(NiconicoContext context, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
-		{
-			return AddMylistGroupDataAsync(context, name, description, is_public, default_sort, iconType)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
-
-		public static Task<ContentManageResult> UpdateMylistGroupAsync(NiconicoContext context, string group_id, string name, string description, bool is_public, MylistDefaultSort default_sort, IconType iconType)
-		{
-			return UpdateMylistGroupDataAsync(context, group_id, name, description, is_public, default_sort, iconType)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
-
-
-		public static Task<ContentManageResult> RemoveMylistGroupAsync(NiconicoContext context, string group_id)
-		{
-			return RemoveMylistGroupDataAsync(context, group_id)
-				.ContinueWith(prevTask => ContentManagerResultHelper.ParseJsonResult(prevTask.Result));
-		}
 
 
 
@@ -196,63 +232,51 @@ namespace Mntone.Nico2.Users.Mylist
 			return ContentManagerResultHelper.ParseJsonResult(json);
 		}
 
-		public static async Task<ContentManageResult> RemoveMylistItemAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, params string[] itemIdList)
+		public sealed class MylistContentResult
+        {
+			[DataMember(Name="meta")]
+			public MylistContentResultMeta Meta { get; set; }
+        }
+
+		public sealed class MylistContentResultMeta
+        {
+			[DataMember(Name ="status")]
+			public int Status { get; set; }
+        }
+
+		public static async Task<ContentManageResult> RemoveMylistItemAsync(NiconicoContext context, string group_id, params string[] itemIdList)
 		{
-			var dict = new Dictionary<string, string>();
+			string url = $"https://nvapi.nicovideo.jp/v1/users/me/mylists/{group_id}/items?itemIds=" + string.Join("%2C", itemIdList);
 
-			dict.Add(nameof(group_id), group_id);
-
-			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(item_type);
-
-			foreach (var item_id in itemIdList)
-			{
-				dict.Add(key, item_id);
-			}
-
-			var json = await context.PostAsync(NiconicoUrls.MylistRemoveUrl, dict);
-			return ContentManagerResultHelper.ParseJsonResult(json);
+			var res = await context.SendAsync(new HttpRequestMessage(HttpMethod.Delete, new Uri(url)));
+			var json = await res.Content.ReadAsStringAsync();
+			var result = Newtonsoft.Json.JsonConvert.DeserializeObject<MylistContentResult>(json);
+			return result.Meta.Status == 200 ? ContentManageResult.Success : ContentManageResult.Failed;
 		}
 
-		public static async Task<ContentManageResult> CopyMylistItemAsync(NiconicoContext context, string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
+		public static async Task<ContentManageResult> CopyMylistItemAsync(NiconicoContext context, string group_id, string target_group_id, params string[] itemIdList)
 		{
-			var dict = new Dictionary<string, string>();
+			var url = $"https://nvapi.nicovideo.jp/v1/users/me/copy-mylist-items?from={group_id}&to={target_group_id}&itemIds={string.Join("%2C", itemIdList)}";
 
-			dict.Add(nameof(group_id), group_id);
-			dict.Add(nameof(target_group_id), target_group_id);
-
-			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-			foreach (var item_id in itemIdList)
-			{
-				dict.Add(key, item_id);
-			}
-
-			var json = await context.PostAsync(NiconicoUrls.MylistCopyUrl, dict);
-			return ContentManagerResultHelper.ParseJsonResult(json);
+			var json = await context.PostAsync(url);
+			var result = Newtonsoft.Json.JsonConvert.DeserializeObject<MylistContentResult>(json);
+			return result.Meta.Status == 200 ? ContentManageResult.Success : ContentManageResult.Failed;
 		}
 
 
-		public static async Task<ContentManageResult> MoveMylistItemAsync(NiconicoContext context, string group_id, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
+		public static async Task<ContentManageResult> MoveMylistItemAsync(NiconicoContext context, string group_id, string target_group_id, params string[] itemIdList)
 		{
-			var dict = new Dictionary<string, string>();
+			var url = $"https://nvapi.nicovideo.jp/v1/users/me/move-mylist-items?from={group_id}&to={target_group_id}&itemIds={string.Join("%2C", itemIdList)}";
 
-			dict.Add(nameof(group_id), group_id);
-			dict.Add(nameof(target_group_id), target_group_id);
-
-			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-			foreach (var item_id in itemIdList)
-			{
-				dict.Add(key, item_id);
-			}
-
-			var json = await context.PostAsync(NiconicoUrls.MylistMoveUrl, dict);
-
-			return ContentManagerResultHelper.ParseJsonResult(json);
+			var json = await context.PostAsync(url);
+			var result = Newtonsoft.Json.JsonConvert.DeserializeObject<MylistContentResult>(json);
+			return result.Meta.Status == 200 ? ContentManageResult.Success : ContentManageResult.Failed;
 		}
 
-#endregion
+		#endregion
 
 
-#region WatchAfter
+		#region WatchAfter
 
 
 		public static async Task<WatchAfterMylistGroupItemsResponse> GetWatchAfterMylistGroupItemsAsync(NiconicoContext context, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize, uint pageCount)
@@ -308,57 +332,38 @@ namespace Mntone.Nico2.Users.Mylist
 			return ContentManagerResultHelper.ParseJsonResult(json);
 		}
 
-		public static async Task<ContentManageResult> RemoveDeflistAsync(NiconicoContext context, NiconicoItemType itemType, params string[] itemIdList)
+		public static async Task<ContentManageResult> RemoveDeflistAsync(NiconicoContext context, params string[] itemIdList)
 		{
-			var dict = new Dictionary<string, string>();
+			string url = $"https://nvapi.nicovideo.jp/v1/users/me/deflist/items?itemIds=" + string.Join("%2C", itemIdList);
 
-			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-
-			foreach (var item_id in itemIdList)
-			{
-				dict.Add(key, item_id);
-			}
-
-			var json = await context.PostAsync(NiconicoUrls.MylistDeflistRemoveUrl, dict);
-				return ContentManagerResultHelper.ParseJsonResult(json);
+			var req = new HttpRequestMessage(HttpMethod.Delete, new Uri(url));
+			var res = await context.SendAsync(req);
+			var json = await res.Content.ReadAsStringAsync();
+			var result = Newtonsoft.Json.JsonConvert.DeserializeObject<MylistContentResult>(json);
+			return result.Meta.Status == 200 ? ContentManageResult.Success : ContentManageResult.Failed;
 		}
 
-		public static async Task<ContentManageResult> MoveDeflistAsync(NiconicoContext context, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
+		public static async Task<ContentManageResult> MoveDeflistAsync(NiconicoContext context, string target_group_id, params string[] itemIdList)
 		{
-			var dict = new Dictionary<string, string>();
+			var url = $"https://nvapi.nicovideo.jp/v1/users/me/move-mylist-items?from=deflist&to={target_group_id}&itemIds={string.Join("%2C", itemIdList)}";
 
-			dict.Add(nameof(target_group_id), target_group_id);
-
-			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-			foreach (var item_id in itemIdList)
-			{
-				dict.Add(key, item_id);
-			}
-
-			var json = await context.PostAsync(NiconicoUrls.MylistDeflistMoveUrl, dict);
-			return ContentManagerResultHelper.ParseJsonResult(json);
+			var json = await context.PostAsync(url);
+			var result = Newtonsoft.Json.JsonConvert.DeserializeObject<MylistContentResult>(json);
+			return result.Meta.Status == 200 ? ContentManageResult.Success : ContentManageResult.Failed;
 		}
 
 
-		public static async Task<ContentManageResult> CopyDeflistAsync(NiconicoContext context, string target_group_id, NiconicoItemType itemType, params string[] itemIdList)
+		public static async Task<ContentManageResult> CopyDeflistAsync(NiconicoContext context, string target_group_id, params string[] itemIdList)
 		{
-			var dict = new Dictionary<string, string>();
+			var url = $"https://nvapi.nicovideo.jp/v1/users/me/copy-mylist-items?from=deflist&to={target_group_id}&itemIds={string.Join("%2C", itemIdList)}";
 
-			dict.Add(nameof(target_group_id), target_group_id);
-
-			var key = NiconicoQueryHelper.Make_idlist_QueryKeyString(itemType);
-
-			foreach (var item_id in itemIdList)
-			{
-				dict.Add(key, item_id);
-			}
-
-			var json = await context.PostAsync(NiconicoUrls.MylistDeflistCopyUrl, dict);
-			return ContentManagerResultHelper.ParseJsonResult(json);
+			var json = await context.PostAsync(url);
+			var result = Newtonsoft.Json.JsonConvert.DeserializeObject<MylistContentResult>(json);
+			return result.Meta.Status == 200 ? ContentManageResult.Success : ContentManageResult.Failed;
 		}
 
 
-#endregion
+		#endregion
 	}
 
 

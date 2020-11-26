@@ -978,8 +978,83 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "isMyMemory")]
         public bool IsMyMemory { get; set; }
 
+        [DataMember(Name = "isLiked")]
+        public bool IsLiked { get; set; }
+
+        [DataMember(Name = "highestRepresentedTagRanking")]
+        public HighestRepresentedTagRanking[] HighestRepresentedTagRanking { get; set; }
+
+        [DataMember(Name = "highestGenreRanking")]
+        public HighestGenreRanking HighestGenreRanking { get; set; }
+
         [DataMember(Name = "ownerNGList")]
         public IList<OwnerNGList> OwnerNGList { get; set; }
+    }
+
+    public partial class HighestGenreRanking
+    {
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+
+        [DataMember(Name = "rank")]
+        public long Rank { get; set; }
+
+        [DataMember(Name = "genre")]
+        public string Genre { get; set; }
+
+        [DataMember(Name = "dateTime")]
+        public string DateTime { get; set; }
+    }
+
+    public partial class HighestRepresentedTagRanking
+    {
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+
+        [DataMember(Name = "tag")]
+        public string Tag { get; set; }
+
+        [DataMember(Name = "regularizedTag")]
+        public string RegularizedTag { get; set; }
+
+        [DataMember(Name = "rank")]
+        public long Rank { get; set; }
+
+        [DataMember(Name = "genre")]
+        public string Genre { get; set; }
+
+        [DataMember(Name = "dateTime")]
+        public string DateTime { get; set; }
+    }
+
+    public partial class EasyComment
+    {
+        [DataMember(Name = "phrases")]
+        public Phrase[] Phrases { get; set; }
+    }
+
+    public partial class Phrase
+    {
+        [DataMember(Name = "text")]
+        public string Text { get; set; }
+
+        [DataMember(Name = "nicodic")]
+        public Nicodic Nicodic { get; set; }
+    }
+
+    public partial class Nicodic
+    {
+        [DataMember(Name = "title")]
+        public string Title { get; set; }
+
+        [DataMember(Name = "viewTitle")]
+        public string ViewTitle { get; set; }
+
+        [DataMember(Name = "summary")]
+        public string Summary { get; set; }
+
+        [DataMember(Name = "link")]
+        public Uri Link { get; set; }
     }
 
     [DataContract]
@@ -1222,6 +1297,9 @@ namespace Mntone.Nico2.Videos.Dmc
 
         [DataMember(Name = "series")]
         public Series Series { get; set; }
+
+        [DataMember(Name = "easyComment")]
+        public EasyComment EasyComment { get; set; }
     }
 
 

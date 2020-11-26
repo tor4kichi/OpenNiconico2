@@ -145,7 +145,6 @@ namespace Mntone.Nico2.Users.Follow
             //            await PrepareCorsAsscessAsync(HttpMethod.Post, uri);
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(uri));
-            request.Content = new HttpFormUrlEncodedContent(new Dictionary<string, string>());
             
 #if WINDOWS_UWP
             request.Headers.Referer = communityJoinPageUrl;
