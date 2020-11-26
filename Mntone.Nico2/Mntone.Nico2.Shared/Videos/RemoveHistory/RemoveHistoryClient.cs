@@ -8,7 +8,7 @@ namespace Mntone.Nico2.Videos.RemoveHistory
 		public static Task<string> RemoveHistoryDataAsync(
 			NiconicoContext context, string token, string requestId )
 		{
-			if( !NiconicoRegex.IsVideoId( requestId ) )
+			if( !NiconicoRegex.IsVideoId( requestId ) && !uint.TryParse(requestId, out var _) )
 			{
 				throw new ArgumentException();
 			}
