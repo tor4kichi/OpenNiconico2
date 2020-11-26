@@ -105,9 +105,9 @@ namespace Mntone.Nico2.Videos.Comment
 			return uint.Parse(No);
 		}
 
-		public uint GetVpos()
+		public int GetVpos()
 		{
-			return uint.Parse(Vpos);
+			return int.Parse(Vpos);
 		}
 
 
