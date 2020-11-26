@@ -41,13 +41,45 @@ namespace Mntone.Nico2
 		/// 非ログイン API 用に使用できます
 		/// </remarks>
 		public NiconicoContext()
-		{ }
+		{
+#if WINDOWS_UWP
+			var filter = new HttpBaseProtocolFilter()
+			{
 
-		/// <summary>
-		/// コンストラクター
-		/// </summary>
-		/// <param name="token">認証トークン</param>
+			};
+
+			HttpClient = new HttpClient(filter);
+			CookieContainer = filter.CookieManager;
+#else
+                HttpClient = new HttpClient(
+                    new HttpClientHandler() 
+                    {
+                        CookieContainer = CookieContainer
+                    });
+#endif
+			HttpClient.DefaultRequestHeaders.Add("User-Agent", this._AdditionalUserAgent != null
+				? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
+				: NiconicoContext.DefaultUserAgent);
+
+			HttpClient.DefaultRequestHeaders.Add("Referer", "https://www.nicovideo.jp/");
+			HttpClient.DefaultRequestHeaders.Add("X-Frontend-Id", "6");
+			HttpClient.DefaultRequestHeaders.Add("X-Frontend-Version", "0");
+			HttpClient.DefaultRequestHeaders.Add("X-Niconico-Language", "ja-jp");
+
+			HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+			HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+			HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-site");
+			HttpClient.DefaultRequestHeaders.Add("X-Request-With", "https://www.nicovideo.jp");
+
+			HttpClient.DefaultRequestHeaders.Add("Origin", "https://www.nicovideo.jp");
+		}
+
+			/// <summary>
+			/// コンストラクター
+			/// </summary>
+			/// <param name="token">認証トークン</param>
 		public NiconicoContext( NiconicoAuthenticationToken token )
+			: this()
 		{
 			this.AuthenticationToken = token;
 		}
@@ -175,7 +207,7 @@ namespace Mntone.Nico2
             requestMessage.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
 
             var result = await SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
-//            var result = await GetClient().SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+//            var result = await HttpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
 
             return result.IsSuccessStatusCode ? NiconicoSignInStatus.Success : NiconicoSignInStatus.Failed;
         }
@@ -240,44 +272,6 @@ namespace Mntone.Nico2
         CookieContainer CookieContainer = new CookieContainer();
 #endif
 
-        internal HttpClient GetClient()
-		{
-            if( this.HttpClient == null )
-			{
-#if WINDOWS_UWP
-                var filter = new HttpBaseProtocolFilter()
-                {
-					
-                };
-
-				HttpClient = new HttpClient(filter);
-                CookieContainer = filter.CookieManager;
-#else
-                HttpClient = new HttpClient(
-                    new HttpClientHandler() 
-                    {
-                        CookieContainer = CookieContainer
-                    });
-#endif
-				HttpClient.DefaultRequestHeaders.Add( "User-Agent", this._AdditionalUserAgent != null
-					? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
-					: NiconicoContext.DefaultUserAgent );
-
-				HttpClient.DefaultRequestHeaders.Add("X-Frontend-Id", "6");
-				HttpClient.DefaultRequestHeaders.Add("X-Frontend-Version", "0");
-				HttpClient.DefaultRequestHeaders.Add("X-Niconico-Language", "ja-jp");
-
-				HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-				HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-				HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-site");
-				HttpClient.DefaultRequestHeaders.Add("Origin", "https://www.nicovideo.jp");
-
-
-			}
-			return this.HttpClient;
-		}
-
-
         public string GetCurrentNicoVideoCookieHeader()
         {
 #if WINDOWS_UWP
@@ -295,9 +289,9 @@ namespace Mntone.Nico2
 #endif
 
 #if WINDOWS_UWP
-			return await GetClient().GetAsync(new Uri(url));
+			return await HttpClient.GetAsync(new Uri(url));
 #else
-            return await GetClient().GetAsync(url);
+            return await HttpClient.GetAsync(url);
 #endif
 
         }
@@ -345,9 +339,9 @@ namespace Mntone.Nico2
 #endif
 
 #if WINDOWS_UWP
-			return await GetClient().GetStringAsync(new Uri(url));
+			return await HttpClient.GetStringAsync(new Uri(url));
 #else
-            return await GetClient().GetConvertedStringAsync(url);
+            return await HttpClient.GetConvertedStringAsync(url);
 #endif
 		}
 
@@ -356,7 +350,7 @@ namespace Mntone.Nico2
 #if DEBUG_NICO_URL
 			UrlDebugHelper.DebugLog(url);
 #endif
-			return await GetClient().GetConvertedStringAsync(url);
+			return await HttpClient.GetConvertedStringAsync(url);
         }
 
 
@@ -407,9 +401,9 @@ namespace Mntone.Nico2
 #endif
 
 #if WINDOWS_UWP
-			return await GetClient().SendRequestAsync(request, completionOption);
+			return await HttpClient.SendRequestAsync(request, completionOption);
 #else
-            return await GetClient().SendAsync(request, completionOption);
+            return await HttpClient.SendAsync(request, completionOption);
 #endif
         }
 
@@ -430,7 +424,7 @@ namespace Mntone.Nico2
 			UrlDebugHelper.DebugLog(url);
 #endif
 
-			using (var res = await GetClient().PostAsync(new Uri(url), content))
+			using (var res = await HttpClient.PostAsync(new Uri(url), content))
 			{
 				if (res.IsSuccessStatusCode)
 				{

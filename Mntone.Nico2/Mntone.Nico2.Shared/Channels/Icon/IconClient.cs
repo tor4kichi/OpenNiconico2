@@ -24,7 +24,7 @@ namespace Mntone.Nico2.Channels.Icon
 			}
 
 			var channelNumber = requestId.Substring( 2 ).ToUInt();
-			return await context.GetClient()
+			return await context.HttpClient
 #if WINDOWS_UWP
 				.GetBufferAsync( new Uri(string.Format( NiconicoUrls.ChannelIconUrl, channelNumber )) );
 #else

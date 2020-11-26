@@ -23,7 +23,7 @@ namespace Mntone.Nico2.Communities.Icon
             var communityNumber = requestId.Substring(2).ToUInt();
             try
             {
-                return await context.GetClient()
+                return await context.HttpClient
                     .GetBufferAsync(new Uri(string.Format(NiconicoUrls.CommunityIconUrl, communityNumber / 10000, communityNumber)));
             }
             catch (AggregateException ex)
@@ -34,7 +34,7 @@ namespace Mntone.Nico2.Communities.Icon
                 }
             }
 
-            return await context.GetClient().GetBufferAsync(new Uri(NiconicoUrls.CommunityBlankIconUrl));
+            return await context.HttpClient.GetBufferAsync(new Uri(NiconicoUrls.CommunityBlankIconUrl));
 		}
 #else
 		public static async Task<byte[]> GetIconAsync( NiconicoContext context, string requestId )
@@ -47,7 +47,7 @@ namespace Mntone.Nico2.Communities.Icon
             var communityNumber = requestId.Substring(2).ToUInt();
             try
             {
-                return await context.GetClient()
+                return await context.HttpClient
 				    .GetByteArrayAsync( string.Format( NiconicoUrls.CommunityIconUrl, communityNumber / 10000, communityNumber ) );
             }
             catch (AggregateException ex)
@@ -58,7 +58,7 @@ namespace Mntone.Nico2.Communities.Icon
                 }
             }
 
-            return await context.GetClient().GetByteArrayAsync( NiconicoUrls.CommunityBlankIconUrl );
+            return await context.HttpClient.GetByteArrayAsync( NiconicoUrls.CommunityBlankIconUrl );
         }
 #endif
     }

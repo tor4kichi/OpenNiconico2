@@ -10,7 +10,7 @@ namespace Mntone.Nico2.Live.Reservations
 	{
 		public static Task<string> GetReservationsDataAsync( NiconicoContext context )
 		{
-			return context.GetClient()
+			return context.HttpClient
 				.GetStringAsync(NiconicoUrls.LiveWatchingReservationListUrl);
 		}
 
