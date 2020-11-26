@@ -50,4 +50,27 @@ namespace Mntone.Nico2.Searches.Video
         [DataMember(Name = "nicovideo_video_response")]
         public VideoInfoResponse NicovideoVideoResponse { get; set; }
     }
+
+    [DataContract]
+    public class VideoInfoArrayResponseContainer
+    {
+
+        [DataMember(Name = "nicovideo_video_response")]
+        public VideoInfoArrayResponse DataContainer { get; set; }
+    }
+
+    [DataContract]
+    public class VideoInfoArrayResponse
+    {
+        [DataMember(Name = "video_info")]
+        [JsonConverter(typeof(SingleOrArrayConverter<VideoInfoResponse>))]
+        public VideoInfoResponse[] Items { get; set; }
+
+        [DataMember(Name = "count")]
+        public string Count { get; set; }
+
+        [DataMember(Name = "@status")]
+        public string Status { get; set; }
+
+    }
 }

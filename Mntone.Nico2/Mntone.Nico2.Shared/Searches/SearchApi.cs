@@ -48,6 +48,13 @@ namespace Mntone.Nico2.Searches
                 );
         }
 
+		public Task<Video.VideoInfoArrayResponse> GetVideoInfoArrayAsync(
+			IEnumerable<string> videoIdList
+			)
+        {
+			return Video.VideoSearchClient.GetVideoInfoArrayAsync(_context, videoIdList);
+        }
+
 
         public Task<Video.VideoListingResponse> VideoSearchWithKeywordAsync(
 			string keyword

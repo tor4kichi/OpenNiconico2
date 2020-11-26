@@ -8,6 +8,7 @@ namespace Mntone.Nico2.Searches.Video
     public sealed class VideoSearchClient
     {
         #region Video Info
+
         public static async Task<string> GetVideoDataAsync(NiconicoContext context, string videoId)
         {
             var dict = new Dictionary<string, string>();
@@ -35,12 +36,34 @@ namespace Mntone.Nico2.Searches.Video
         }
 
 
-        #endregion
+		#endregion
+
+		#region VideoInfo Array
+
+		public static async Task<string> GetVideoArrayDataAsync(NiconicoContext context, IEnumerable<string> videoIdList)
+		{
+			var dict = new Dictionary<string, string>();
+			dict.Add("__format", "json");
+			dict.Add("v", string.Join(',', videoIdList));
+
+			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_VIDEO_INFO_ARRAY, dict);
+		}
+
+		public static async Task<VideoInfoArrayResponse> GetVideoInfoArrayAsync(
+			NiconicoContext context
+			, IEnumerable<string> videoIdList
+			)
+		{
+			var json = await GetVideoArrayDataAsync(context, videoIdList);
+			var res = JsonSerializerExtensions.Load<VideoInfoArrayResponseContainer>(json);
+			return res.DataContainer;
+		}
 
 
+		#endregion
 
 
-        public static async Task<string> GetKeywordSearchDataAsync(
+		public static async Task<string> GetKeywordSearchDataAsync(
 			NiconicoContext context
 			, string str
 			, uint from
