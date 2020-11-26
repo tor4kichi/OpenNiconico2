@@ -27,8 +27,8 @@ namespace Mntone.Nico2.Channels.Info
         [DataMember(Name = "update_time")]
         public string UpdateTime { get; set; }
 
-        [DataMember(Name = "dfp_setting")]
-        public string DfpSetting { get; set; }
+        //[DataMember(Name = "dfp_setting")]
+        //public string DfpSetting { get; set; }
 
         [DataMember(Name = "screen_name")]
         public string ScreenName { get; set; }
