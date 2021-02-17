@@ -24,7 +24,7 @@ namespace Mntone.Nico2.Videos.Series
 
             var root = doc.DocumentNode;
             {
-                var ownerAreaNode = root.SelectSingleNode("/html/body/div/div[3]/div[1]/div[1]/div[1]");
+                var ownerAreaNode = root.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/div[1]");
                 var imageNode = ownerAreaNode.Descendants("img").FirstOrDefault();
                 var anchorNode = ownerAreaNode.Descendants("a").FirstOrDefault();
                 seriesDetails.Owner = new SeriesOwner()
@@ -36,7 +36,7 @@ namespace Mntone.Nico2.Videos.Series
             }
 
             {
-                var ownerSeriesListNodes = root.SelectNodes("/html/body/div/div[3]/div[1]/div[2]/div[1]/div/ul/li");
+                var ownerSeriesListNodes = root.SelectNodes("/html/body/div[3]/div[1]/div[2]/div[1]/div/ul/li");
                 seriesDetails.OwnerSeries = ownerSeriesListNodes.Select(node =>
                 {
                     var anchorNode = node.SelectSingleNode("a");
@@ -53,7 +53,7 @@ namespace Mntone.Nico2.Videos.Series
                     return int.Parse(new string(str.Where(c => char.IsDigit(c)).ToArray()));
                 };
 
-                var seriesetailContainerNode = root.SelectSingleNode("/html/body/div/div[3]/div[1]/div[2]/div[2]/div");
+                var seriesetailContainerNode = root.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/div[2]/div");
                 var seriesDetailsChildren = seriesetailContainerNode.Elements("div");
                 var detailMedia = seriesDetailsChildren.ElementAt(0);
 
