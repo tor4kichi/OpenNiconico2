@@ -30,8 +30,21 @@ namespace Mntone.Nico2.NicoRepo
         public NicoRepoEntry[] Data { get; set; }
 
         [JsonProperty("errors")]
-        public string[] Errors { get; set; }
+        public Error[] Errors { get; set; }
     }
+
+    public partial class Error
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("errorCode")]
+        public string ErrorCode { get; set; }
+
+        [JsonProperty("errorReasonCodes")]
+        public string[] ErrorReasonCodes { get; set; }
+    }
+
 
     public partial class NicoRepoEntry
     {
