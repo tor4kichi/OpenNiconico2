@@ -88,6 +88,24 @@ namespace Mntone.Nico2.NicoRepo
                 });
             }
 
+            if (target != NicoRepoDisplayTarget.All)
+            {
+                param.Add("list", target switch
+                {
+                    NicoRepoDisplayTarget.Self => "self",
+                    NicoRepoDisplayTarget.User => "followingUser",
+                    NicoRepoDisplayTarget.Channel => "followingChannel",
+                    NicoRepoDisplayTarget.Community => "followingCommunity",
+                    NicoRepoDisplayTarget.Mylist => "followingMylist",
+                    _ => throw new NotSupportedException(target.ToString()),
+                });
+            }
+
+            if (untilId != null)
+            {
+                param.Add("untilId", untilId);
+            }
+
             return _context.GetJsonAsAsync<NicoRepoEntriesResponse>(NicorepoTimelineApiUrl + "?" + HttpQueryExtention.DictionaryToQuery(param));
         }
 

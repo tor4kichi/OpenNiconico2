@@ -14,472 +14,254 @@ namespace Mntone.Nico2.Videos.Dmc
         public DmcWatchEnvironment DmcWatchEnvironment { get; set; }
     }
 
+    public class DmcApiWatchResponse
+    {
+        [DataMember(Name = "data")]
+        public DmcWatchResponse Data { get; set; }
+
+        [DataMember(Name = "meta")]
+        public Meta Meta { get; set; }
+    }
+    
 
 
     #region Initial Watch Data
-
-    [DataContract]
-    public class DmcVideo
+    public class DmcWatchResponse
     {
+        [DataMember(Name = "ads")]
+        public Ads Ads { get; set; }
 
-        [DataMember(Name = "video_id")]
-        public string VideoId { get; set; }
+        [DataMember(Name = "category")]
+        public object Category { get; set; }
 
-        [DataMember(Name = "length_seconds")]
-        public int LengthSeconds { get; set; }
+        [DataMember(Name = "channel")]
+        public Channel Channel { get; set; }
 
-        [DataMember(Name = "deleted")]
-        public int Deleted { get; set; }
+        [DataMember(Name = "client")]
+        public Client Client { get; set; }
+
+        [DataMember(Name = "comment")]
+        public Comment Comment { get; set; }
+
+        [DataMember(Name = "community")]
+        public object Community { get; set; }
+
+        [DataMember(Name = "easyComment")]
+        public EasyComment EasyComment { get; set; }
+
+        [DataMember(Name = "external")]
+        public External External { get; set; }
+
+        [DataMember(Name = "genre")]
+        public WelcomeGenre Genre { get; set; }
+
+        [DataMember(Name = "marquee")]
+        public Marquee Marquee { get; set; }
+
+        [DataMember(Name = "media")]
+        public Media Media { get; set; }
+
+        [DataMember(Name = "okReason")]
+        public string OkReason { get; set; }
+
+        [DataMember(Name = "owner")]
+        public WelcomeOwner Owner { get; set; }
+
+        [DataMember(Name = "pcWatchPage")]
+        public PcWatchPage PcWatchPage { get; set; }
+
+        [DataMember(Name = "player")]
+        public Player Player { get; set; }
+
+        [DataMember(Name = "ppv")]
+        public object Ppv { get; set; }
+
+        [DataMember(Name = "ranking")]
+        public Ranking Ranking { get; set; }
+
+        [DataMember(Name = "series")]
+        public Series Series { get; set; }
+
+        [DataMember(Name = "smartphone")]
+        public object Smartphone { get; set; }
+
+        [DataMember(Name = "system")]
+        public SystemClass System { get; set; }
+
+        [DataMember(Name = "tag")]
+        public Tag Tag { get; set; }
+
+        [DataMember(Name = "video")]
+        public WelcomeVideo Video { get; set; }
+
+        [DataMember(Name = "videoAds")]
+        public VideoAds VideoAds { get; set; }
+
+        [DataMember(Name = "viewer")]
+        public WelcomeViewer Viewer { get; set; }
+
+        [DataMember(Name = "waku")]
+        public Waku Waku { get; set; }
     }
 
-    [DataContract]
-    public class DmcThread
+    public class Ads
     {
-
-        [DataMember(Name = "server_url")]
-        public string ServerUrl { get; set; }
-
-        [DataMember(Name = "sub_server_url")]
-        public string SubServerUrl { get; set; }
-
-        [DataMember(Name = "thread_id")]
-        public int ThreadId { get; set; }
-
-        [DataMember(Name = "nicos_thread_id")]
-        public object NicosThreadId { get; set; }
-
-        [DataMember(Name = "optional_thread_id")]
-        public object OptionalThreadId { get; set; }
-
-        [DataMember(Name = "thread_key_required")]
-        public bool ThreadKeyRequired { get; set; }
-
-        [DataMember(Name = "channel_ng_words")]
-        public IList<object> ChannelNgWords { get; set; }
-
-        [DataMember(Name = "owner_ng_words")]
-        public IList<object> OwnerNgWords { get; set; }
-
-        [DataMember(Name = "maintenances_ng")]
-        public bool MaintenancesNg { get; set; }
-
-        [DataMember(Name = "postkey_available")]
-        public bool PostkeyAvailable { get; set; }
-
-        [DataMember(Name = "ng_revision")]
-        public int? NgRevision { get; set; }
+        [DataMember(Name = "isAvailable")]
+        public bool IsAvailable { get; set; }
     }
 
-    [DataContract]
-    public class User
+    public class Channel
     {
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
 
-        [DataMember(Name = "user_id")]
-        public int UserId { get; set; }
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
 
-        [DataMember(Name = "is_premium")]
-        public bool IsPremium { get; set; }
+        [DataMember(Name = "isOfficialAnime")]
+        public bool IsOfficialAnime { get; set; }
 
-        [DataMember(Name = "nickname")]
-        public string Nickname { get; set; }
+        [DataMember(Name = "isDisplayAdBanner")]
+        public bool IsDisplayAdBanner { get; set; }
+
+        [DataMember(Name = "thumbnail")]
+        public ChannelThumbnail Thumbnail { get; set; }
+
+        [DataMember(Name = "viewer")]
+        public ChannelViewer Viewer { get; set; }
     }
 
-    [DataContract]
-    public class Hiroba
+    public class ChannelThumbnail
     {
-
-        [DataMember(Name = "fms_token")]
-        public object FmsToken { get; set; }
-
-        [DataMember(Name = "server_url")]
-        public string ServerUrl { get; set; }
-
-        [DataMember(Name = "server_port")]
-        public int? ServerPort { get; set; }
-
-        [DataMember(Name = "thread_id")]
-        public int? ThreadId { get; set; }
-
-        [DataMember(Name = "thread_key")]
-        public string ThreadKey { get; set; }
-    }
-
-
-    [DataContract]
-    public class HlsEncryptionV1
-    {
-
-        [DataMember(Name = "encrypted_key")]
-        public string EncryptedKey { get; set; }
-
-        [DataMember(Name = "key_uri")]
-        public string KeyUri { get; set; }
-    }
-
-    [DataContract]
-    public class Encryption
-    {
-
-        [DataMember(Name = "hls_encryption_v1")]
-        public HlsEncryptionV1 HlsEncryptionV1 { get; set; }
-    }
-
-    [DataContract]
-    public class AuthTypes
-    {
-
-        [DataMember(Name = "hls")]
-        public string Hls { get; set; }
-    }
-
-
-    [DataContract]
-    public class UrlInfo
-    {
-
         [DataMember(Name = "url")]
-        public string Url { get; set; }
+        public Uri Url { get; set; }
 
-        [DataMember(Name = "is_well_known_port")]
-        public bool IsWellKnownPort { get; set; }
-
-        [DataMember(Name = "is_ssl")]
-        public bool IsSsl { get; set; }
+        [DataMember(Name = "smallUrl")]
+        public Uri SmallUrl { get; set; }
     }
 
-    [DataContract]
-    public class SessionApi
+    public class ChannelViewer
     {
+        [DataMember(Name = "follow")]
+        public Follow Follow { get; set; }
+    }
 
-        [DataMember(Name = "recipe_id")]
-        public string RecipeId { get; set; }
+    public class Follow
+    {
+        [DataMember(Name = "isFollowed")]
+        public bool IsFollowed { get; set; }
 
-        [DataMember(Name = "player_id")]
-        public string PlayerId { get; set; }
-
-        [DataMember(Name = "videos")]
-        public IList<string> Videos { get; set; }
-
-        [DataMember(Name = "audios")]
-        public IList<string> Audios { get; set; }
-
-        [DataMember(Name = "movies")]
-        public IList<object> Movies { get; set; }
-
-        [DataMember(Name = "protocols")]
-        public IList<string> Protocols { get; set; }
-
-        [DataMember(Name = "auth_types")]
-        public AuthTypes AuthTypes { get; set; }
-
-        [DataMember(Name = "service_user_id")]
-        public string ServiceUserId { get; set; }
+        [DataMember(Name = "isBookmarked")]
+        public bool IsBookmarked { get; set; }
 
         [DataMember(Name = "token")]
         public string Token { get; set; }
 
-        [DataMember(Name = "signature")]
-        public string Signature { get; set; }
-
-        [DataMember(Name = "content_id")]
-        public string ContentId { get; set; }
-
-        [DataMember(Name = "heartbeat_lifetime")]
-        public int HeartbeatLifetime { get; set; }
-
-        [DataMember(Name = "content_key_timeout")]
-        public int ContentKeyTimeout { get; set; }
-
-        [DataMember(Name = "priority")]
-        public double Priority { get; set; }
-
-        [DataMember(Name = "urls")]
-        public IList<UrlInfo> Urls { get; set; }
+        [DataMember(Name = "tokenTimestamp")]
+        public long TokenTimestamp { get; set; }
     }
 
-    [DataContract]
-    public class Resolution
+    public class Client
     {
+        [DataMember(Name = "nicosid")]
+        public string Nicosid { get; set; }
 
-        [DataMember(Name = "width")]
-        public int Width { get; set; }
+        [DataMember(Name = "watchId")]
+        public string WatchId { get; set; }
 
-        [DataMember(Name = "height")]
-        public int Height { get; set; }
+        [DataMember(Name = "watchTrackId")]
+        public string WatchTrackId { get; set; }
     }
 
-    [DataContract]
-    public class VideoContent
+    public class Comment
     {
+        [DataMember(Name = "server")]
+        public Server Server { get; set; }
 
+        [DataMember(Name = "keys")]
+        public Keys Keys { get; set; }
+
+        [DataMember(Name = "layers")]
+        public Layer[] Layers { get; set; }
+
+        [DataMember(Name = "threads")]
+        public Thread[] Threads { get; set; }
+
+        [DataMember(Name = "ng")]
+        public Ng Ng { get; set; }
+
+        [DataMember(Name = "isAttentionRequired")]
+        public bool IsAttentionRequired { get; set; }
+    }
+
+    public class Keys
+    {
+        [DataMember(Name = "userKey")]
+        public string UserKey { get; set; }
+    }
+
+    public class Layer
+    {
+        [DataMember(Name = "index")]
+        public int Index { get; set; }
+
+        [DataMember(Name = "isTranslucent")]
+        public bool IsTranslucent { get; set; }
+
+        [DataMember(Name = "threadIds")]
+        public ThreadId[] ThreadIds { get; set; }
+    }
+
+    public class ThreadId
+    {
         [DataMember(Name = "id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
-        [DataMember(Name = "available")]
-        public bool Available { get; set; }
-
-        [DataMember(Name = "bitrate")]
-        public int Bitrate { get; set; }
-
-        [DataMember(Name = "resolution")]
-        public Resolution Resolution { get; set; }
+        [DataMember(Name = "fork")]
+        public int Fork { get; set; }
     }
 
-    [DataContract]
-    public class Loudness
+    public class Ng
     {
-        [DataMember(Name = "integratedLoudness")]
-        public double IntegratedLoudness { get; set; }
+        [DataMember(Name = "ngScore")]
+        public NgScore NgScore { get; set; }
 
-        [DataMember(Name = "truePeak")]
-        public double TruePeak { get; set; }
+        [DataMember(Name = "channel")]
+        public object[] Channel { get; set; }
+
+        [DataMember(Name = "owner")]
+        public object[] Owner { get; set; }
+
+        [DataMember(Name = "viewer")]
+        public NgViewer Viewer { get; set; }
     }
 
-    [DataContract]
-    public class AudioContent
+    public class NgScore
     {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "available")]
-        public bool Available { get; set; }
-
-        [DataMember(Name = "bitrate")]
-        public int Bitrate { get; set; }
-
-        [DataMember(Name = "sampling_rate")]
-        public int SamplingRate { get; set; }
-
-        [DataMember(Name = "loudness")]
-        public Loudness Loudness { get; set; }
-
-        [DataMember(Name = "loudness_correction_value")]
-        public IList<LoudnessCorrectionValue> LoudnessCorrectionValue { get; set; }
-
-        public double VideoLoudnessCorrectionValue => LoudnessCorrectionValue.First(x => x.Type == "video").Value;
+        [DataMember(Name = "isDisabled")]
+        public bool IsDisabled { get; set; }
     }
 
-    [DataContract]
-    public class Quality
+    public class NgViewer
     {
+        [DataMember(Name = "revision")]
+        public int Revision { get; set; }
 
-        [DataMember(Name = "videos")]
-        public IList<VideoContent> Videos { get; set; }
+        [DataMember(Name = "count")]
+        public int Count { get; set; }
 
-        [DataMember(Name = "audios")]
-        public IList<AudioContent> Audios { get; set; }
+        [DataMember(Name = "items")]
+        public object[] Items { get; set; }
     }
 
-    [DataContract]
-    public class DmcInfo
+    public class Server
     {
-
-        [DataMember(Name = "time")]
-        public int Time { get; set; }
-
-        [DataMember(Name = "time_ms")]
-        public long TimeMs { get; set; }
-
-        [DataMember(Name = "video")]
-        public DmcVideo Video { get; set; }
-
-        [DataMember(Name = "thread")]
-        public DmcThread Thread { get; set; }
-
-        [DataMember(Name = "user")]
-        public User User { get; set; }
-
-        [DataMember(Name = "hiroba")]
-        public Hiroba Hiroba { get; set; }
-
-        [DataMember(Name = "error")]
-        public object Error { get; set; }
-
-        [DataMember(Name = "session_api")]
-        public SessionApi SessionApi { get; set; }
-
-        [DataMember(Name = "storyboard_session_api")]
-        public object StoryboardSessionApi { get; set; }
-
-        [DataMember(Name = "quality")]
-        public Quality Quality { get; set; }
-
-        [DataMember(Name = "encryption")]
-        public Encryption Encryption { get; set; }
-
-        [DataMember(Name = "tracking_id")]
-        public string TrackingId { get; set; }
-    }
-
-    [DataContract]
-    public class LoudnessCorrectionValue
-    {
-
-        [DataMember(Name = "type")]
-        public string Type { get; set; }
-
-        [DataMember(Name = "value")]
-        public double Value { get; set; }
-    }
-
-    [DataContract]
-    public class SmileInfo
-    {
-
         [DataMember(Name = "url")]
-        public string Url { get; set; }
-
-        [DataMember(Name = "isSlowLine")]
-        public bool IsSlowLine { get; set; }
-
-        [DataMember(Name = "currentQualityId")]
-        public string CurrentQualityId { get; set; }
-
-        [DataMember(Name = "qualityIds")]
-        public IList<string> QualityIds { get; set; }
-
-        [DataMember(Name = "loudnessCorrectionValue")]
-        public IList<LoudnessCorrectionValue> LoudnessCorrectionValue { get; set; }
-
-        public double VideoLoudnessCorrectionValue => LoudnessCorrectionValue.First(x => x.Type == "video").Value;
+        public Uri Url { get; set; }
     }
 
-    [DataContract]
-    public class Video
+    public class Thread
     {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "title")]
-        public string Title { get; set; }
-
-        [DataMember(Name = "originalTitle")]
-        public string OriginalTitle { get; set; }
-
-        [DataMember(Name = "description")]
-        public string Description { get; set; }
-
-        [DataMember(Name = "originalDescription")]
-        public string OriginalDescription { get; set; }
-
-        [DataMember(Name = "thumbnailURL")]
-        public string ThumbnailURL { get; set; }
-
-        [DataMember(Name = "postedDateTime")]
-        public string PostedDateTime { get; set; }
-
-        [DataMember(Name = "originalPostedDateTime")]
-        public object OriginalPostedDateTime { get; set; }
-
-        [DataMember(Name = "width")]
-        public int? Width { get; set; }
-
-        [DataMember(Name = "height")]
-        public int? Height { get; set; }
-
-        [DataMember(Name = "duration")]
-        public int Duration { get; set; }
-
-        [DataMember(Name = "viewCount")]
-        public int ViewCount { get; set; }
-
-        [DataMember(Name = "mylistCount")]
-        public int MylistCount { get; set; }
-
-        [DataMember(Name = "translation")]
-        public object Translation { get; set; }
-
-        [DataMember(Name = "translator")]
-        public object Translator { get; set; }
-
-        [DataMember(Name = "movieType")]
-        public string MovieType { get; set; }
-
-        [DataMember(Name = "badges")]
-        public object Badges { get; set; }
-
-        [DataMember(Name = "introducedNicoliveDJInfo")]
-        public object IntroducedNicoliveDJInfo { get; set; }
-
-        [DataMember(Name = "dmcInfo")]
-        public DmcInfo DmcInfo { get; set; }
-
-        [DataMember(Name = "backCommentType")]
-        public object BackCommentType { get; set; }
-
-        [DataMember(Name = "isCommentExpired")]
-        public bool IsCommentExpired { get; set; }
-
-        [DataMember(Name = "isWide")]
-        public string IsWide { get; set; }
-
-        [DataMember(Name = "isOfficialAnime")]
-        public object IsOfficialAnime { get; set; }
-
-        [DataMember(Name = "isNoBanner")]
-        public object IsNoBanner { get; set; }
-
-        [DataMember(Name = "isDeleted")]
-        public bool IsDeleted { get; set; }
-
-        [DataMember(Name = "isTranslated")]
-        public bool IsTranslated { get; set; }
-
-        [DataMember(Name = "isR18")]
-        public bool IsR18 { get; set; }
-
-        [DataMember(Name = "isAdult")]
-        public bool IsAdult { get; set; }
-
-        [DataMember(Name = "isNicowari")]
-        public object IsNicowari { get; set; }
-
-        [DataMember(Name = "isPublic")]
-        public bool IsPublic { get; set; }
-
-        [DataMember(Name = "isPublishedNicoscript")]
-        public object IsPublishedNicoscript { get; set; }
-
-        [DataMember(Name = "isNoNGS")]
-        public object IsNoNGS { get; set; }
-
-        [DataMember(Name = "isCommunityMemberOnly")]
-        public string IsCommunityMemberOnly { get; set; }
-
-        [DataMember(Name = "isCommonsTreeExists")]
-        public bool? IsCommonsTreeExists { get; set; }
-
-        [DataMember(Name = "isNoIchiba")]
-        public bool IsNoIchiba { get; set; }
-
-        [DataMember(Name = "isOfficial")]
-        public bool IsOfficial { get; set; }
-
-        [DataMember(Name = "isMonetized")]
-        public bool IsMonetized { get; set; }
-
-        [DataMember(Name = "smileInfo")]
-        public SmileInfo SmileInfo { get; set; }
-    }
-
-    [DataContract]
-    public class Player
-    {
-
-        [DataMember(Name = "playerInfoXMLUpdateTIme")]
-        public int PlayerInfoXMLUpdateTIme { get; set; }
-
-        [DataMember(Name = "isContinuous")]
-        public bool IsContinuous { get; set; }
-    }
-
-
-    [DataContract]
-    public class ThreadFragment
-    {
-
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
@@ -489,551 +271,47 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "isActive")]
         public bool IsActive { get; set; }
 
-        [DataMember(Name = "postkeyStatus")]
-        public int PostkeyStatus { get; set; }
-
         [DataMember(Name = "isDefaultPostTarget")]
         public bool IsDefaultPostTarget { get; set; }
 
-        [DataMember(Name = "isThreadkeyRequired")]
-        public bool IsThreadkeyRequired { get; set; }
+        [DataMember(Name = "isEasyCommentPostTarget")]
+        public bool IsEasyCommentPostTarget { get; set; }
 
         [DataMember(Name = "isLeafRequired")]
         public bool IsLeafRequired { get; set; }
 
-        [DataMember(Name = "label")]
-        public string Label { get; set; }
-
         [DataMember(Name = "isOwnerThread")]
         public bool IsOwnerThread { get; set; }
 
+        [DataMember(Name = "isThreadkeyRequired")]
+        public bool IsThreadkeyRequired { get; set; }
+
+        [DataMember(Name = "threadkey")]
+        public object Threadkey { get; set; }
+
+        [DataMember(Name = "is184Forced")]
+        public bool Is184Forced { get; set; }
+
         [DataMember(Name = "hasNicoscript")]
         public bool HasNicoscript { get; set; }
+
+        [DataMember(Name = "label")]
+        public string Label { get; set; }
+
+        [DataMember(Name = "postkeyStatus")]
+        public int PostkeyStatus { get; set; }
+
+        [DataMember(Name = "server")]
+        public Uri Server { get; set; }
     }
 
-    [DataContract]
-    public class ThreadId
-    {
-
-        [DataMember(Name = "id")]
-        public int Id { get; set; }
-
-        [DataMember(Name = "fork")]
-        public int Fork { get; set; }
-    }
-
-    [DataContract]
-    public class Layer
-    {
-
-        [DataMember(Name = "index")]
-        public int Index { get; set; }
-
-        [DataMember(Name = "isTranslucent")]
-        public bool IsTranslucent { get; set; }
-
-        [DataMember(Name = "threadIds")]
-        public IList<ThreadId> ThreadIds { get; set; }
-    }
-
-    [DataContract]
-    public class CommentComposite
-    {
-
-        [DataMember(Name = "threads")]
-        public IList<ThreadFragment> Threads { get; set; }
-
-        [DataMember(Name = "layers")]
-        public IList<Layer> Layers { get; set; }
-    }
-
-
-    [DataContract]
-    public class Tag
-    {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
-
-        [DataMember(Name = "isCategory")]
-        public bool IsCategory { get; set; }
-
-        [DataMember(Name = "isCategoryCandidate")]
-        public object IsCategoryCandidate { get; set; }
-
-        [DataMember(Name = "isDictionaryExists")]
-        public bool IsDictionaryExists { get; set; }
-
-        [DataMember(Name = "isLocked")]
-        public bool IsLocked { get; set; }
-    }
-
-    [DataContract]
-    public class Item
-    {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "requestId")]
-        public string RequestId { get; set; }
-
-        [DataMember(Name = "title")]
-        public string Title { get; set; }
-
-        [DataMember(Name = "thumbnailURL")]
-        public string ThumbnailURL { get; set; }
-
-        [DataMember(Name = "viewCounter")]
-        public string __ViewCounter { get; set; }
-
-        private int? _ViewCounter;
-        public int ViewCounter => (_ViewCounter ?? (_ViewCounter = int.Parse(__ViewCounter))).Value;
-
-        // Note: numResは文字列と数値のどちらもあるようなので高度な柔軟性を維持しつつ臨機応変に対応する
-        // というか数値に統一されていないのは大変遺憾である。ぷち怒
-        [DataMember(Name = "numRes")]
-        public object __NumRes { get; set; }
-
-        private int? _NumRes;
-        public int NumRes
-        {
-            get
-            {
-                if (!_NumRes.HasValue)
-                {
-                    if (__NumRes is long)
-                    {
-                        _NumRes = (int)(long)__NumRes;
-                    }
-                    if (__NumRes is string)
-                    {
-                        _NumRes = int.Parse((string)__NumRes);
-                    }
-                }
-
-                return _NumRes ?? 0;
-            }
-        }
-
-
-        [DataMember(Name = "mylistCounter")]
-        public string __MylistCounter { get; set; }
-
-        private int? _MylistCounter;
-        public int MylistCounter => (_MylistCounter ?? (_MylistCounter = int.Parse(__MylistCounter))).Value;
-
-
-        [DataMember(Name = "firstRetrieve")]
-        public string __FirstRetrieve { get; set; }
-
-        private DateTime? _FirstRetrieve;
-        public DateTime FirstRetrieve => (_FirstRetrieve ?? (_FirstRetrieve = DateTime.Parse(__FirstRetrieve))).Value;
-
-        [DataMember(Name = "lengthSeconds")]
-        public string __LengthSeconds { get; set; }
-
-        private TimeSpan? _LengthSeconds;
-        public TimeSpan LengthSeconds => (_LengthSeconds ?? (_LengthSeconds = TimeSpan.FromSeconds(int.Parse(__LengthSeconds)))).Value;
-
-
-        [DataMember(Name = "threadUpdateTime")]
-        public string __ThreadUpdateTime { get; set; }
-
-        private DateTime? _ThreadUpdateTime;
-        public DateTime ThreadUpdateTime => (_ThreadUpdateTime ?? (_ThreadUpdateTime = DateTime.Parse(__ThreadUpdateTime))).Value;
-
-        [DataMember(Name = "createTime")]
-        public string __CreateTime { get; set; }
-
-        private DateTime? _CreateTime;
-        public DateTime CreateTime => (_CreateTime ?? (_CreateTime = DateTime.Parse(__CreateTime))).Value;
-
-
-        [DataMember(Name = "width")]
-        public int? Width { get; set; }
-
-        [DataMember(Name = "height")]
-        public int? Height { get; set; }
-
-        [DataMember(Name = "isTranslated")]
-        public bool IsTranslated { get; set; }
-
-        [DataMember(Name = "mylistComment")]
-        public int? MylistComment { get; set; }
-
-        [DataMember(Name = "tkasType")]
-        public object TkasType { get; set; }
-
-        [DataMember(Name = "hasData")]
-        public bool HasData { get; set; }
-    }
-
-    [DataContract]
-    public class Playlist
-    {
-        [DataMember(Name = "watchId")]
-        public string WatchId { get; set; }
-
-        [DataMember(Name = "referer")]
-        public string Referer { get; set; }
-
-        [DataMember(Name = "parameter")]
-        public string Parameter { get; set; }
-    }
-
-    [DataContract]
-    public class Owner
-    {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "nickname")]
-        public string Nickname { get; set; }
-
-        [DataMember(Name = "stampExp")]
-        public string StampExp { get; set; }
-
-        [DataMember(Name = "iconURL")]
-        public string IconURL { get; set; }
-
-        [DataMember(Name = "nicoliveInfo")]
-        public object NicoliveInfo { get; set; }
-
-        [DataMember(Name = "channelInfo")]
-        public object ChannelInfo { get; set; }
-
-        [DataMember(Name = "isUserVideoPublic")]
-        public bool IsUserVideoPublic { get; set; }
-
-        [DataMember(Name = "isUserMyVideoPublic")]
-        public bool IsUserMyVideoPublic { get; set; }
-
-        [DataMember(Name = "isUserOpenListPublic")]
-        public bool IsUserOpenListPublic { get; set; }
-    }
-
-    [DataContract]
-    public class Viewer
-    {
-
-        [DataMember(Name = "id")]
-        public int Id { get; set; }
-
-        [DataMember(Name = "nickname")]
-        public string Nickname { get; set; }
-
-        [DataMember(Name = "prefecture")]
-        public int? Prefecture { get; set; }
-
-        [DataMember(Name = "sex")]
-        public int? Sex { get; set; }
-
-        [DataMember(Name = "age")]
-        public int? Age { get; set; }
-
-        [DataMember(Name = "isPremium")]
-        public bool IsPremium { get; set; }
-
-        [DataMember(Name = "isPrivileged")]
-        public bool? IsPrivileged { get; set; }
-
-        [DataMember(Name = "isPostLocked")]
-        public bool? IsPostLocked { get; set; }
-
-        [DataMember(Name = "isHtrzm")]
-        public bool? IsHtrzm { get; set; }
-
-        [DataMember(Name = "isTwitterConnection")]
-        public bool? IsTwitterConnection { get; set; }
-    }
-
-    [DataContract]
-    public class Channel
-    {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
-
-        [DataMember(Name = "iconURL")]
-        public string IconURL { get; set; }
-
-        [DataMember(Name = "favoriteToken")]
-        public string FavoriteToken { get; set; }
-
-        [DataMember(Name = "favoriteTokenTime")]
-        public int? FavoriteTokenTime { get; set; }
-
-        [DataMember(Name = "isFavorited")]
-        public bool IsFavorited { get; set; }
-
-        [DataMember(Name = "ngList")]
-        public IList<NgList> NgList { get; set; }
-
-        [DataMember(Name = "threadType")]
-        public string ThreadType { get; set; }
-
-        [DataMember(Name = "globalId")]
-        public string GlobalId { get; set; }
-    }
-
-    [DataContract]
-    public class NgList
-    {
-
-        [DataMember(Name = "source")]
-        public string Source { get; set; }
-
-        [DataMember(Name = "destination")]
-        public string Destination { get; set; }
-    }
-
-    [DataContract]
-    public class Ad
-    {
-
-        [DataMember(Name = "vastMetaData")]
-        public object VastMetaData { get; set; }
-    }
-
-    [DataContract]
-    public class TagRelatedBanner
-    {
-
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "url")]
-        public string Url { get; set; }
-
-        [DataMember(Name = "title")]
-        public string Title { get; set; }
-
-        [DataMember(Name = "thumbnailURL")]
-        public string ThumbnailURL { get; set; }
-    }
-
-    [DataContract]
-    public class Lead
-    {
-
-        [DataMember(Name = "tagRelatedMarquee")]
-        public WatchAPI.TagRelatedMarquee TagRelatedMarquee { get; set; }
-
-        [DataMember(Name = "tagRelatedBanner")]
-        public TagRelatedBanner TagRelatedBanner { get; set; }
-
-        [DataMember(Name = "nicosdkApplicationBanner")]
-        public object NicosdkApplicationBanner { get; set; }
-
-        [DataMember(Name = "videoEndBannerIn")]
-        public object VideoEndBannerIn { get; set; }
-
-        [DataMember(Name = "videoEndOverlay")]
-        public object VideoEndOverlay { get; set; }
-    }
-
-    [DataContract]
-    public class OwnerNGList
-    {
-
-        [DataMember(Name = "source")]
-        public string Source { get; set; }
-
-        [DataMember(Name = "destination")]
-        public string Destination { get; set; }
-    }
-
-    [DataContract]
-    public class Context
-    {
-
-        [DataMember(Name = "playFrom")]
-        public object PlayFrom { get; set; }
-
-        [DataMember(Name = "initialPlaybackPosition")]
-        public object InitialPlaybackPosition { get; set; }
-
-        [DataMember(Name = "initialPlaybackType")]
-        public object InitialPlaybackType { get; set; }
-
-        [DataMember(Name = "playLength")]
-        public object PlayLength { get; set; }
-
-        [DataMember(Name = "returnId")]
-        public object ReturnId { get; set; }
-
-        [DataMember(Name = "returnTo")]
-        public object ReturnTo { get; set; }
-
-        [DataMember(Name = "returnMsg")]
-        public object ReturnMsg { get; set; }
-
-        [DataMember(Name = "watchId")]
-        public string WatchId { get; set; }
-
-        [DataMember(Name = "isNoMovie")]
-        public object IsNoMovie { get; set; }
-
-        [DataMember(Name = "isNoRelatedVideo")]
-        public object IsNoRelatedVideo { get; set; }
-
-        [DataMember(Name = "isDownloadCompleteWait")]
-        public object IsDownloadCompleteWait { get; set; }
-
-        [DataMember(Name = "isNoNicotic")]
-        public object IsNoNicotic { get; set; }
-
-        [DataMember(Name = "isNeedPayment")]
-        public bool IsNeedPayment { get; set; }
-
-        [DataMember(Name = "isAdultRatingNG")]
-        public bool IsAdultRatingNG { get; set; }
-
-        [DataMember(Name = "isPlayable")]
-        public object IsPlayable { get; set; }
-
-        [DataMember(Name = "isTranslatable")]
-        public bool IsTranslatable { get; set; }
-
-        [DataMember(Name = "isTagUneditable")]
-        public bool IsTagUneditable { get; set; }
-
-        [DataMember(Name = "isVideoOwner")]
-        public bool IsVideoOwner { get; set; }
-
-        [DataMember(Name = "isThreadOwner")]
-        public bool IsThreadOwner { get; set; }
-
-        [DataMember(Name = "isOwnerThreadEditable")]
-        public object IsOwnerThreadEditable { get; set; }
-
-        [DataMember(Name = "useChecklistCache")]
-        public object UseChecklistCache { get; set; }
-
-        [DataMember(Name = "isDisabledMarquee")]
-        public object IsDisabledMarquee { get; set; }
-
-        [DataMember(Name = "isDictionaryDisplayable")]
-        public bool IsDictionaryDisplayable { get; set; }
-
-        [DataMember(Name = "isDefaultCommentInvisible")]
-        public bool IsDefaultCommentInvisible { get; set; }
-
-        [DataMember(Name = "accessFrom")]
-        public object AccessFrom { get; set; }
-
-        [DataMember(Name = "csrfToken")]
-        public string CsrfToken { get; set; }
-
-        [DataMember(Name = "translationVersionJsonUpdateTime")]
-        public int TranslationVersionJsonUpdateTime { get; set; }
-
-        [DataMember(Name = "userkey")]
-        public string Userkey { get; set; }
-
-        [DataMember(Name = "watchAuthKey")]
-        public string WatchAuthKey { get; set; }
-
-        [DataMember(Name = "watchTrackId")]
-        public string WatchTrackId { get; set; }
-
-        [DataMember(Name = "watchPageServerTime")]
-        public long WatchPageServerTime { get; set; }
-
-        [DataMember(Name = "isAuthenticationRequired")]
-        public bool IsAuthenticationRequired { get; set; }
-
-        [DataMember(Name = "isPeakTime")]
-        public object IsPeakTime { get; set; }
-
-        [DataMember(Name = "ngRevision")]
-        public int? NgRevision { get; set; }
-
-        [DataMember(Name = "categoryName")]
-        public string CategoryName { get; set; }
-
-        [DataMember(Name = "categoryKey")]
-        public string CategoryKey { get; set; }
-
-        [DataMember(Name = "categoryGroupName")]
-        public string CategoryGroupName { get; set; }
-
-        [DataMember(Name = "categoryGroupKey")]
-        public string CategoryGroupKey { get; set; }
-
-        [DataMember(Name = "yesterdayRank")]
-        public int? YesterdayRank { get; set; }
-
-        [DataMember(Name = "highestRank")]
-        public int? HighestRank { get; set; }
-
-        [DataMember(Name = "isMyMemory")]
-        public bool IsMyMemory { get; set; }
-
-        [DataMember(Name = "isLiked")]
-        public bool IsLiked { get; set; }
-
-        [DataMember(Name = "highestRepresentedTagRanking")]
-        public HighestRepresentedTagRanking[] HighestRepresentedTagRanking { get; set; }
-
-        [DataMember(Name = "highestGenreRanking")]
-        public HighestGenreRanking HighestGenreRanking { get; set; }
-
-        [DataMember(Name = "ownerNGList")]
-        public IList<OwnerNGList> OwnerNGList { get; set; }
-    }
-
-    public partial class HighestGenreRanking
-    {
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "rank")]
-        public long Rank { get; set; }
-
-        [DataMember(Name = "genre")]
-        public string Genre { get; set; }
-
-        [DataMember(Name = "dateTime")]
-        public string DateTime { get; set; }
-    }
-
-    public partial class HighestRepresentedTagRanking
-    {
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "tag")]
-        public string Tag { get; set; }
-
-        [DataMember(Name = "regularizedTag")]
-        public string RegularizedTag { get; set; }
-
-        [DataMember(Name = "rank")]
-        public long Rank { get; set; }
-
-        [DataMember(Name = "genre")]
-        public string Genre { get; set; }
-
-        [DataMember(Name = "dateTime")]
-        public string DateTime { get; set; }
-    }
-
-    public partial class EasyComment
+    public class EasyComment
     {
         [DataMember(Name = "phrases")]
         public Phrase[] Phrases { get; set; }
     }
 
-    public partial class Phrase
+    public class Phrase
     {
         [DataMember(Name = "text")]
         public string Text { get; set; }
@@ -1042,7 +320,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public Nicodic Nicodic { get; set; }
     }
 
-    public partial class Nicodic
+    public class Nicodic
     {
         [DataMember(Name = "title")]
         public string Title { get; set; }
@@ -1057,127 +335,409 @@ namespace Mntone.Nico2.Videos.Dmc
         public Uri Link { get; set; }
     }
 
-    [DataContract]
-    public class TopicItem
+    public class External
     {
+        [DataMember(Name = "commons")]
+        public Commons Commons { get; set; }
 
+        [DataMember(Name = "ichiba")]
+        public Ichiba Ichiba { get; set; }
+    }
+
+    public class Commons
+    {
+        [DataMember(Name = "hasContentTree")]
+        public bool HasContentTree { get; set; }
+    }
+
+    public class Ichiba
+    {
+        [DataMember(Name = "isEnabled")]
+        public bool IsEnabled { get; set; }
+    }
+
+    public class WelcomeGenre
+    {
+        [DataMember(Name = "key")]
+        public string Key { get; set; }
+
+        [DataMember(Name = "label")]
+        public string Label { get; set; }
+
+        [DataMember(Name = "isImmoral")]
+        public bool IsImmoral { get; set; }
+
+        [DataMember(Name = "isDisabled")]
+        public bool IsDisabled { get; set; }
+
+        [DataMember(Name = "isNotSet")]
+        public bool IsNotSet { get; set; }
+    }
+
+    public class Marquee
+    {
+        [DataMember(Name = "isDisabled")]
+        public bool IsDisabled { get; set; }
+
+        [DataMember(Name = "tagRelatedLead")]
+        public object TagRelatedLead { get; set; }
+    }
+
+    public class Media
+    {
+        [DataMember(Name = "delivery")]
+        public Delivery Delivery { get; set; }
+
+        [DataMember(Name = "deliveryLegacy")]
+        public object DeliveryLegacy { get; set; }
+    }
+
+    public class Delivery
+    {
+        [DataMember(Name = "recipeId")]
+        public string RecipeId { get; set; }
+
+        [DataMember(Name = "encryption")]
+        public object Encryption { get; set; }
+
+        [DataMember(Name = "movie")]
+        public Movie Movie { get; set; }
+
+        [DataMember(Name = "storyboard")]
+        public object Storyboard { get; set; }
+
+        [DataMember(Name = "trackingId")]
+        public string TrackingId { get; set; }
+    }
+
+    public class Movie
+    {
+        [DataMember(Name = "contentId")]
+        public string ContentId { get; set; }
+
+        [DataMember(Name = "audios")]
+        public AudioContent[] Audios { get; set; }
+
+        [DataMember(Name = "videos")]
+        public VideoContent[] Videos { get; set; }
+
+        [DataMember(Name = "session")]
+        public Session Session { get; set; }
+    }
+
+    public class AudioContent
+    {
         [DataMember(Name = "id")]
         public string Id { get; set; }
 
-        [DataMember(Name = "title")]
-        public string Title { get; set; }
+        [DataMember(Name = "isAvailable")]
+        public bool IsAvailable { get; set; }
 
-        [DataMember(Name = "thumbnailURL")]
-        public string ThumbnailURL { get; set; }
-
-        [DataMember(Name = "point")]
-        public int Point { get; set; }
-
-        [DataMember(Name = "isHigh")]
-        public bool IsHigh { get; set; }
-
-        [DataMember(Name = "elapsedTimeM")]
-        public int ElapsedTimeM { get; set; }
-
-        [DataMember(Name = "communityId")]
-        public string CommunityId { get; set; }
-
-        [DataMember(Name = "communityName")]
-        public string CommunityName { get; set; }
+        [DataMember(Name = "metadata")]
+        public AudioMetadata Metadata { get; set; }
     }
 
-    [DataContract]
-    public class LiveTopics
+    public class AudioMetadata
     {
+        [DataMember(Name = "bitrate")]
+        public int Bitrate { get; set; }
 
-        [DataMember(Name = "items")]
-        public IList<TopicItem> Items { get; set; }
+        [DataMember(Name = "samplingRate")]
+        public int SamplingRate { get; set; }
+
+        [DataMember(Name = "loudness")]
+        public Loudness Loudness { get; set; }
+
+        [DataMember(Name = "levelIndex")]
+        public int LevelIndex { get; set; }
+
+        [DataMember(Name = "loudnessCollection")]
+        public LoudnessCollection[] LoudnessCollection { get; set; }
+
+
+        [IgnoreDataMember]
+        public double VideoLoudnessCollection => LoudnessCollection.First(x => x.Type == "video").Value;
     }
 
-    [DataContract]
-    public class Ids
+    public class Loudness
     {
+        [DataMember(Name = "integratedLoudness")]
+        public double IntegratedLoudness { get; set; }
 
-        [DataMember(Name = "default")]
-        public string Default { get; set; }
-
-        [DataMember(Name = "nicos")]
-        public object Nicos { get; set; }
-
-        [DataMember(Name = "community")]
-        public string Community { get; set; }
+        [DataMember(Name = "truePeak")]
+        public double TruePeak { get; set; }
     }
 
-    [DataContract]
-    public class Thread
+    public class LoudnessCollection
     {
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
 
-        [DataMember(Name = "commentCount")]
-        public int CommentCount { get; set; }
-
-        [DataMember(Name = "hasOwnerThread")]
-        public string HasOwnerThread { get; set; }
-
-        [DataMember(Name = "mymemoryLanguage")]
-        public object MymemoryLanguage { get; set; }
-
-        [DataMember(Name = "serverUrl")]
-        public string ServerUrl { get; set; }
-
-        [DataMember(Name = "subServerUrl")]
-        public string SubServerUrl { get; set; }
-
-        [DataMember(Name = "ids")]
-        public Ids Ids { get; set; }
+        [DataMember(Name = "value")]
+        public double Value { get; set; }
     }
 
-    [DataContract]
-    public class SeriesVideoMetaCount
+    public class Session
     {
-        [DataMember(Name = "view")]
-        public int ViewCount { get; set; }
+        [DataMember(Name = "recipeId")]
+        public string RecipeId { get; set; }
 
-        [DataMember(Name = "comment")]
-        public int CommentCount { get; set; }
+        [DataMember(Name = "playerId")]
+        public string PlayerId { get; set; }
 
-        [DataMember(Name = "mylist")]
-        public int MylistCount { get; set; }
+        [DataMember(Name = "videos")]
+        public string[] Videos { get; set; }
+
+        [DataMember(Name = "audios")]
+        public string[] Audios { get; set; }
+
+        [DataMember(Name = "movies")]
+        public object[] Movies { get; set; }
+
+        [DataMember(Name = "protocols")]
+        public string[] Protocols { get; set; }
+
+        [DataMember(Name = "authTypes")]
+        public AuthTypes AuthTypes { get; set; }
+
+        [DataMember(Name = "serviceUserId")]
+        public string ServiceUserId { get; set; }
+
+        [DataMember(Name = "token")]
+        public string Token { get; set; }
+
+        [DataMember(Name = "signature")]
+        public string Signature { get; set; }
+
+        [DataMember(Name = "contentId")]
+        public string ContentId { get; set; }
+
+        [DataMember(Name = "heartbeatLifetime")]
+        public int HeartbeatLifetime { get; set; }
+
+        [DataMember(Name = "contentKeyTimeout")]
+        public int ContentKeyTimeout { get; set; }
+
+        [DataMember(Name = "priority")]
+        public double Priority { get; set; }
+
+        [DataMember(Name = "transferPresets")]
+        public object[] TransferPresets { get; set; }
+
+        [DataMember(Name = "urls")]
+        public UrlData[] Urls { get; set; }
     }
 
-
-    [DataContract]
-    public class SeriesVideoOwner
+    public class AuthTypes
     {
-        [DataMember(Name = "ownerType")]
-        public string OwnerType { get; set; }
+        [DataMember(Name = "http")]
+        public string Http { get; set; }
 
-        [DataMember(Name = "id")]
-        public string Id { get; set; }
-
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
-
-        [DataMember(Name = "iconUrl")]
-        public string IconUrl { get; set; }
+        [DataMember(Name = "hls")]
+        public string Hls { get; set; }
     }
 
-
-    [DataContract]
-    public class SeriesVideoThumbnail
+    public class UrlData
     {
         [DataMember(Name = "url")]
         public string Url { get; set; }
 
-        [DataMember(Name = "middleUrl")]
-        public string MiddleUrl { get; set; }
+        public string UrlUnsafe => "https://api.dmc.nico/api/sessions";
 
-        [DataMember(Name = "largeUrl")]
-        public string LargeUrl { get; set; }
+        [DataMember(Name = "isWellKnownPort")]
+        public bool IsWellKnownPort { get; set; }
+
+        [DataMember(Name = "isSsl")]
+        public bool IsSsl { get; set; }
     }
 
+    public class VideoContent
+    {
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
 
-    [DataContract]
+        [DataMember(Name = "isAvailable")]
+        public bool IsAvailable { get; set; }
+
+        [DataMember(Name = "metadata")]
+        public VideoMetadata Metadata { get; set; }
+    }
+
+    public class VideoMetadata
+    {
+        [DataMember(Name = "label")]
+        public string Label { get; set; }
+
+        [DataMember(Name = "bitrate")]
+        public int Bitrate { get; set; }
+
+        [DataMember(Name = "resolution")]
+        public Resolution Resolution { get; set; }
+
+        [DataMember(Name = "levelIndex")]
+        public int LevelIndex { get; set; }
+
+        [DataMember(Name = "recommendedHighestAudioLevelIndex")]
+        public int RecommendedHighestAudioLevelIndex { get; set; }
+    }
+
+    public class Resolution
+    {
+        [DataMember(Name = "width")]
+        public int Width { get; set; }
+
+        [DataMember(Name = "height")]
+        public int Height { get; set; }
+    }
+
+    public class WelcomeOwner
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "nickname")]
+        public string Nickname { get; set; }
+
+        [DataMember(Name = "iconUrl")]
+        public Uri IconUrl { get; set; }
+
+        [DataMember(Name = "channel")]
+        public object Channel { get; set; }
+
+        [DataMember(Name = "live")]
+        public object Live { get; set; }
+
+        [DataMember(Name = "isVideosPublic")]
+        public bool IsVideosPublic { get; set; }
+
+        [DataMember(Name = "isMylistsPublic")]
+        public bool IsMylistsPublic { get; set; }
+
+        [DataMember(Name = "viewer")]
+        public OwnerViewer Viewer { get; set; }
+    }
+
+    public class OwnerViewer
+    {
+        [DataMember(Name = "isFollowing")]
+        public bool IsFollowing { get; set; }
+    }
+
+    public class PcWatchPage
+    {
+        [DataMember(Name = "tagRelatedBanner")]
+        public object TagRelatedBanner { get; set; }
+
+        [DataMember(Name = "videoEnd")]
+        public VideoEnd VideoEnd { get; set; }
+
+        [DataMember(Name = "showOwnerMenu")]
+        public bool ShowOwnerMenu { get; set; }
+
+        [DataMember(Name = "showOwnerThreadCoEditingLink")]
+        public bool ShowOwnerThreadCoEditingLink { get; set; }
+
+        [DataMember(Name = "showMymemoryEditingLink")]
+        public bool ShowMymemoryEditingLink { get; set; }
+    }
+
+    public class VideoEnd
+    {
+        [DataMember(Name = "bannerIn")]
+        public object BannerIn { get; set; }
+
+        [DataMember(Name = "overlay")]
+        public object Overlay { get; set; }
+    }
+
+    public class Player
+    {
+        [DataMember(Name = "initialPlayback")]
+        public object InitialPlayback { get; set; }
+
+        [DataMember(Name = "comment")]
+        public PlayerComment Comment { get; set; }
+
+        [DataMember(Name = "layerMode")]
+        public int LayerMode { get; set; }
+    }
+
+    public class PlayerComment
+    {
+        [DataMember(Name = "isDefaultInvisible")]
+        public bool IsDefaultInvisible { get; set; }
+    }
+
+    public class Ranking
+    {
+        [DataMember(Name = "genre")]
+        public RankingGenre Genre { get; set; }
+
+        [DataMember(Name = "popularTag")]
+        public PopularTag[] PopularTag { get; set; }
+    }
+
+    public class RankingGenre
+    {
+        [DataMember(Name = "rank")]
+        public int Rank { get; set; }
+
+        [DataMember(Name = "genre")]
+        public string Genre { get; set; }
+
+        [DataMember(Name = "dateTime")]
+        public DateTimeOffset DateTime { get; set; }
+    }
+
+    public class PopularTag
+    {
+        [DataMember(Name = "tag")]
+        public string Tag { get; set; }
+
+        [DataMember(Name = "regularizedTag")]
+        public string RegularizedTag { get; set; }
+
+        [DataMember(Name = "rank")]
+        public int Rank { get; set; }
+
+        [DataMember(Name = "genre")]
+        public string Genre { get; set; }
+
+        [DataMember(Name = "dateTime")]
+        public DateTimeOffset DateTime { get; set; }
+    }
+
+    public class Series
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "title")]
+        public string Title { get; set; }
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        [DataMember(Name = "thumbnailUrl")]
+        public Uri ThumbnailUrl { get; set; }
+
+        [DataMember(Name = "video")]
+        public SeriesVideo Video { get; set; }
+    }
+
     public class SeriesVideo
+    {
+        [DataMember(Name = "prev")]
+        public SeriesVideoContent Prev { get; set; }
+
+        [DataMember(Name = "next")]
+        public SeriesVideoContent Next { get; set; }
+
+        [DataMember(Name = "first")]
+        public SeriesVideoContent First { get; set; }
+    }
+
+    public class SeriesVideoContent
     {
         [DataMember(Name = "type")]
         public string Type { get; set; }
@@ -1189,13 +749,13 @@ namespace Mntone.Nico2.Videos.Dmc
         public string Title { get; set; }
 
         [DataMember(Name = "registeredAt")]
-        public DateTime RegisteredAt { get; set; }
+        public DateTimeOffset RegisteredAt { get; set; }
 
         [DataMember(Name = "count")]
-        public SeriesVideoMetaCount MetaCount { get; set; }
+        public Count Count { get; set; }
 
         [DataMember(Name = "thumbnail")]
-        public SeriesVideoThumbnail Thumbnail { get; set; }
+        public FirstThumbnail Thumbnail { get; set; }
 
         [DataMember(Name = "duration")]
         public int Duration { get; set; }
@@ -1212,96 +772,381 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "isPaymentRequired")]
         public bool IsPaymentRequired { get; set; }
 
-        [DataMember(Name = "owner")]
-        public SeriesVideoOwner owner { get; set; }
+        [DataMember(Name = "playbackPosition")]
+        public object PlaybackPosition { get; set; }
 
+        [DataMember(Name = "owner")]
+        public FirstOwner Owner { get; set; }
+
+        [DataMember(Name = "requireSensitiveMasking")]
+        public bool RequireSensitiveMasking { get; set; }
+
+        [DataMember(Name = "9d091f87")]
+        public bool The9D091F87 { get; set; }
+
+        [DataMember(Name = "acf68865")]
+        public bool Acf68865 { get; set; }
     }
 
-    [DataContract]
-    public class Series
+    public class Count
     {
+        [DataMember(Name = "view")]
+        public int View { get; set; }
+
+        [DataMember(Name = "comment")]
+        public int Comment { get; set; }
+
+        [DataMember(Name = "mylist")]
+        public int Mylist { get; set; }
+
+        [DataMember(Name = "like")]
+        public int Like { get; set; }
+    }
+
+    public class FirstOwner
+    {
+        [DataMember(Name = "ownerType")]
+        public string OwnerType { get; set; }
+
         [DataMember(Name = "id")]
         public int Id { get; set; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "iconUrl")]
+        public Uri IconUrl { get; set; }
+    }
+
+    public class FirstThumbnail
+    {
+        [DataMember(Name = "url")]
+        public Uri Url { get; set; }
+
+        [DataMember(Name = "middleUrl")]
+        public Uri MiddleUrl { get; set; }
+
+        [DataMember(Name = "largeUrl")]
+        public Uri LargeUrl { get; set; }
+
+        [DataMember(Name = "listingUrl")]
+        public Uri ListingUrl { get; set; }
+
+        [DataMember(Name = "nHdUrl")]
+        public Uri NHdUrl { get; set; }
+    }
+
+    public class SystemClass
+    {
+        [DataMember(Name = "serverTime")]
+        public DateTimeOffset ServerTime { get; set; }
+
+        [DataMember(Name = "isPeakTime")]
+        public bool IsPeakTime { get; set; }
+    }
+
+    public class Tag
+    {
+        [DataMember(Name = "items")]
+        public TagItem[] Items { get; set; }
+
+        [DataMember(Name = "hasR18Tag")]
+        public bool HasR18Tag { get; set; }
+
+        [DataMember(Name = "isPublishedNicoscript")]
+        public bool IsPublishedNicoscript { get; set; }
+
+        [DataMember(Name = "edit")]
+        public Edit Edit { get; set; }
+
+        [DataMember(Name = "viewer")]
+        public Edit Viewer { get; set; }
+    }
+
+    public class Edit
+    {
+        [DataMember(Name = "isEditable")]
+        public bool IsEditable { get; set; }
+
+        [DataMember(Name = "uneditableReason")]
+        public object UneditableReason { get; set; }
+
+        [DataMember(Name = "editKey")]
+        public string EditKey { get; set; }
+    }
+
+    public class TagItem
+    {
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "isCategory")]
+        public bool IsCategory { get; set; }
+
+        [DataMember(Name = "isCategoryCandidate")]
+        public bool IsCategoryCandidate { get; set; }
+
+        [DataMember(Name = "isNicodicArticleExists")]
+        public bool IsNicodicArticleExists { get; set; }
+
+        [DataMember(Name = "isLocked")]
+        public bool IsLocked { get; set; }
+    }
+
+    public class WelcomeVideo
+    {
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
 
         [DataMember(Name = "title")]
         public string Title { get; set; }
 
-        [DataMember(Name = "thumbnailUrl")]
-        public string ThumbnailUrl { get; set; }
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
 
-        [DataMember(Name = "createdAt")]
-        public DateTime CreatedAt { get; set; }
+        [DataMember(Name = "count")]
+        public Count Count { get; set; }
 
-        [DataMember(Name = "updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        [DataMember(Name = "duration")]
+        public int Duration { get; set; }
 
-        [DataMember(Name = "prevVideo")]
-        public SeriesVideo PrevVideo { get; set; }
+        [DataMember(Name = "thumbnail")]
+        public VideoThumbnail Thumbnail { get; set; }
 
-        [DataMember(Name = "nextVideo")]
-        public SeriesVideo NextVideo { get; set; }
-    }
+        [DataMember(Name = "rating")]
+        public Rating Rating { get; set; }
 
+        [DataMember(Name = "registeredAt")]
+        public DateTimeOffset RegisteredAt { get; set; }
 
+        [DataMember(Name = "isPrivate")]
+        public bool IsPrivate { get; set; }
 
-    [DataContract]
-    public class DmcWatchResponse
-    {
+        [DataMember(Name = "isDeleted")]
+        public bool IsDeleted { get; set; }
 
-        [DataMember(Name = "video")]
-        public Video Video { get; set; }
+        [DataMember(Name = "isNoBanner")]
+        public bool IsNoBanner { get; set; }
 
-        /*
-        [DataMember(Name = "player")]
-        public Player Player { get; set; }
-        */
+        [DataMember(Name = "isAuthenticationRequired")]
+        public bool IsAuthenticationRequired { get; set; }
 
-        [DataMember(Name = "commentComposite")]
-        public CommentComposite CommentComposite { get; set; }
-
-        [DataMember(Name = "thread")]
-        public Thread Thread { get; set; }
-
-        [DataMember(Name = "tags")]
-        public IList<Tag> Tags { get; set; }
-
-        [DataMember(Name = "playlist")]
-        public Playlist Playlist { get; set; }
-
-        [DataMember(Name = "owner")]
-        public Owner Owner { get; set; }
+        [DataMember(Name = "isEmbedPlayerAllowed")]
+        public bool IsEmbedPlayerAllowed { get; set; }
 
         [DataMember(Name = "viewer")]
-        public Viewer Viewer { get; set; }
+        public VideoViewer Viewer { get; set; }
 
-        [DataMember(Name = "community")]
-        public object Community { get; set; }
+        [DataMember(Name = "watchableUserTypeForPayment")]
+        public string WatchableUserTypeForPayment { get; set; }
 
-        [DataMember(Name = "channel")]
-        public Channel Channel { get; set; }
+        [DataMember(Name = "commentableUserTypeForPayment")]
+        public string CommentableUserTypeForPayment { get; set; }
 
-        [DataMember(Name = "ad")]
-        public Ad Ad { get; set; }
-
-        [DataMember(Name = "lead")]
-        public Lead Lead { get; set; }
-
-        [DataMember(Name = "maintenance")]
-        public object Maintenance { get; set; }
-
-        [DataMember(Name = "context")]
-        public Context Context { get; set; }
-
-        [DataMember(Name = "liveTopics")]
-        public LiveTopics LiveTopics { get; set; }
-
-        [DataMember(Name = "series")]
-        public Series Series { get; set; }
-
-        [DataMember(Name = "easyComment")]
-        public EasyComment EasyComment { get; set; }
+        [DataMember(Name = "9d091f87")]
+        public bool The9D091F87 { get; set; }
     }
 
+    public class Rating
+    {
+        [DataMember(Name = "isAdult")]
+        public bool IsAdult { get; set; }
+    }
+
+    public class VideoThumbnail
+    {
+        [DataMember(Name = "url")]
+        public Uri Url { get; set; }
+
+        [DataMember(Name = "middleUrl")]
+        public Uri MiddleUrl { get; set; }
+
+        [DataMember(Name = "largeUrl")]
+        public Uri LargeUrl { get; set; }
+
+        [DataMember(Name = "player")]
+        public Uri Player { get; set; }
+
+        [DataMember(Name = "ogp")]
+        public Uri Ogp { get; set; }
+    }
+
+    public class VideoViewer
+    {
+        [DataMember(Name = "isOwner")]
+        public bool IsOwner { get; set; }
+
+        [DataMember(Name = "like")]
+        public Like Like { get; set; }
+    }
+
+    public class Like
+    {
+        [DataMember(Name = "isLiked")]
+        public bool IsLiked { get; set; }
+
+        [DataMember(Name = "count")]
+        public object Count { get; set; }
+    }
+
+    public class VideoAds
+    {
+        [DataMember(Name = "additionalParams")]
+        public VideoAdsAdditionalParams AdditionalParams { get; set; }
+
+        [DataMember(Name = "items")]
+        public VideoAdsItem[] Items { get; set; }
+
+        [DataMember(Name = "reason")]
+        public string Reason { get; set; }
+    }
+
+    public class VideoAdsAdditionalParams
+    {
+        [DataMember(Name = "videoId")]
+        public string VideoId { get; set; }
+
+        [DataMember(Name = "videoDuration")]
+        public int VideoDuration { get; set; }
+
+        [DataMember(Name = "isAdultRatingNG")]
+        public bool IsAdultRatingNg { get; set; }
+
+        [DataMember(Name = "isAuthenticationRequired")]
+        public bool IsAuthenticationRequired { get; set; }
+
+        [DataMember(Name = "isR18")]
+        public bool IsR18 { get; set; }
+
+        [DataMember(Name = "nicosid")]
+        public string Nicosid { get; set; }
+
+        [DataMember(Name = "lang")]
+        public string Lang { get; set; }
+
+        [DataMember(Name = "watchTrackId")]
+        public string WatchTrackId { get; set; }
+
+        [DataMember(Name = "genre")]
+        public string Genre { get; set; }
+
+        [DataMember(Name = "gender")]
+        public int Gender { get; set; }
+
+        [DataMember(Name = "age")]
+        public int Age { get; set; }
+    }
+
+    public class VideoAdsItem
+    {
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
+
+        [DataMember(Name = "timingMs")]
+        public object TimingMs { get; set; }
+
+        [DataMember(Name = "additionalParams")]
+        public ItemAdditionalParams AdditionalParams { get; set; }
+    }
+
+    public class ItemAdditionalParams
+    {
+        [DataMember(Name = "linearType")]
+        public string LinearType { get; set; }
+
+        [DataMember(Name = "adIdx")]
+        public int AdIdx { get; set; }
+
+        [DataMember(Name = "skipType")]
+        public int SkipType { get; set; }
+
+        [DataMember(Name = "skippableType")]
+        public int SkippableType { get; set; }
+
+        [DataMember(Name = "pod")]
+        public int Pod { get; set; }
+    }
+
+    public class WelcomeViewer
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "nickname")]
+        public string Nickname { get; set; }
+
+        [DataMember(Name = "isPremium")]
+        public bool IsPremium { get; set; }
+
+        [DataMember(Name = "existence")]
+        public Existence Existence { get; set; }
+    }
+
+    public class Existence
+    {
+        [DataMember(Name = "age")]
+        public int Age { get; set; }
+
+        [DataMember(Name = "prefecture")]
+        public string Prefecture { get; set; }
+
+        [DataMember(Name = "sex")]
+        public string Sex { get; set; }
+    }
+
+    public class Waku
+    {
+        [DataMember(Name = "information")]
+        public object Information { get; set; }
+
+        [DataMember(Name = "bgImages")]
+        public object[] BgImages { get; set; }
+
+        [DataMember(Name = "addContents")]
+        public object AddContents { get; set; }
+
+        [DataMember(Name = "addVideo")]
+        public object AddVideo { get; set; }
+
+        [DataMember(Name = "tagRelatedBanner")]
+        public TagRelatedBanner TagRelatedBanner { get; set; }
+
+        [DataMember(Name = "tagRelatedMarquee")]
+        public TagRelatedMarquee TagRelatedMarquee { get; set; }
+    }
+
+    public class TagRelatedBanner
+    {
+        [DataMember(Name = "title")]
+        public string Title { get; set; }
+
+        [DataMember(Name = "imageUrl")]
+        public Uri ImageUrl { get; set; }
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        [DataMember(Name = "isEvent")]
+        public bool IsEvent { get; set; }
+
+        [DataMember(Name = "linkUrl")]
+        public Uri LinkUrl { get; set; }
+
+        [DataMember(Name = "isNewWindow")]
+        public bool IsNewWindow { get; set; }
+    }
+
+    public class TagRelatedMarquee
+    {
+        [DataMember(Name = "title")]
+        public string Title { get; set; }
+
+        [DataMember(Name = "linkUrl")]
+        public Uri LinkUrl { get; set; }
+
+        [DataMember(Name = "isNewWindow")]
+        public bool IsNewWindow { get; set; }
+    }
 
     #endregion
 

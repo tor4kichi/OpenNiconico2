@@ -40,7 +40,7 @@ namespace Mntone.Nico2.Videos.Comment
         public static async Task<string> GetCommentDataAsync(NiconicoContext context, int userId, string commentServerUrl, int threadId, bool isKeyRequired)
         {
             var paramDict = new Dictionary<string, string>();
-            paramDict.Add("user_id", userId.ToString());
+            paramDict.Add("user_id", userId is 0 ? "" : userId.ToString());
             paramDict.Add("version", "20090904");
             paramDict.Add("thread", threadId.ToString());
             paramDict.Add("res_from", "-1000");

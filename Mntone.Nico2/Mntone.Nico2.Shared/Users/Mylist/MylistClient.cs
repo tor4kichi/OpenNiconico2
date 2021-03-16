@@ -191,10 +191,12 @@ namespace Mntone.Nico2.Users.Mylist
 			return await context.GetJsonAsAsync<MylistGroupItemsResponse>(uri, Converter.Settings);
 		}
 
-		public static Task<MylistGroupItemsResponse> GetMylistGroupItemsAsync(NiconicoContext context, long mylistId, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize, uint pageCount)
+		public static async Task<MylistGroupItemsResponse> GetMylistGroupItemsAsync(NiconicoContext context, long mylistId, MylistSortKey sortKey, MylistSortOrder sortOrder, uint pageSize, uint pageCount)
 		{
 			// Note: CORSのOPTIONSを先に送る奴が必要になるかも
-			return context.GetJsonAsAsync<MylistGroupItemsResponse>($"https://nvapi.nicovideo.jp/v2/mylists/{mylistId}?sortKey={sortKey.ToQueryString()}&sortOrder={sortOrder.ToQueryString()}&pageSize={pageSize}&page={pageCount + 1}", Converter.Settings);
+			var uri = $"https://nvapi.nicovideo.jp/v2/mylists/{mylistId}?sortKey={sortKey.ToQueryString()}&sortOrder={sortOrder.ToQueryString()}&pageSize={pageSize}&page={pageCount + 1}";
+			await context.PrepareCorsAsscessAsync(HttpMethod.Get, uri);
+			return await context.GetJsonAsAsync<MylistGroupItemsResponse>(uri, Converter.Settings);
 		}
 
 		public static async Task<ContentManageResult> AddMylistItemAsync(NiconicoContext context, string group_id, NiconicoItemType item_type, string item_id, string description)

@@ -214,9 +214,9 @@ namespace Mntone.Nico2.Videos
         }
 
 
-        public Task<Dmc.DmcWatchResponse> GetDmcWatchJsonAsync(string requestId, string playlistToken)
+        public Task<Dmc.DmcWatchResponse> GetDmcWatchJsonAsync(string requestId, bool isLoggedIn, string actionTrackId)
         {
-            return Dmc.DmcClient.GetDmcWatchJsonAsync(_context, requestId, playlistToken);
+            return Dmc.DmcClient.GetDmcWatchJsonAsync(_context, requestId, isLoggedIn, actionTrackId);
         }
 
 

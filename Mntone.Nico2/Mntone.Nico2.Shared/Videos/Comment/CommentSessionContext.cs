@@ -31,12 +31,12 @@ namespace Mntone.Nico2.Videos.Comment
     {
         public NiconicoContext Context { get; private set; }
 
-        public Dmc.CommentComposite CommenctComposite { get; private set; }
+        public Dmc.Comment CommenctComposite { get; private set; }
         public string UserId { get; private set; }
         public string UserKey { get; private set; }
         public bool IsPremium { get; private set; }
 
-        private Dmc.ThreadFragment DefaultPostTargetThread => CommenctComposite.Threads.FirstOrDefault(x => x.IsDefaultPostTarget);
+        private Dmc.Thread DefaultPostTargetThread => CommenctComposite.Threads.FirstOrDefault(x => x.IsDefaultPostTarget);
 
         private string _DefaultPostTargetThreadId;
         private string DefaultPostTargetThreadId => _DefaultPostTargetThreadId ?? (_DefaultPostTargetThreadId = DefaultPostTargetThread.Id.ToString());
@@ -58,13 +58,13 @@ namespace Mntone.Nico2.Videos.Comment
         {
             Context = context;
 
-            CommenctComposite = dmc.CommentComposite;
+            CommenctComposite = dmc.Comment;
             var userId = dmc.Viewer?.Id.ToString();
             UserId = userId == null || userId == "0" ? "" : userId;
-            UserKey = dmc.Context?.Userkey;
+            UserKey = dmc.Comment.Keys.UserKey;
             IsPremium = dmc.Viewer?.IsPremium ?? false;
 
-            _LastRes = dmc.Thread.CommentCount;
+            //_LastRes = dmc.Thread.CommentCount;
 
             _ThreadLeavesContentString = ThreadLeaves.MakeContentString(TimeSpan.FromSeconds(dmc.Video.Duration));
         }

@@ -15,7 +15,7 @@ namespace Mntone.Nico2.JsonHelpers
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return WebUtility.HtmlDecode((string)reader.Value);
+            return WebUtility.HtmlDecode(reader.Value?.ToString() ?? string.Empty);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

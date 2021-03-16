@@ -23,28 +23,37 @@ namespace Mntone.Nico2.Videos.Dmc
     {
         #region DmcWatchResponse
 
-        public static async Task<string> GetDmcWatchJsonDataAsync(NiconicoContext context, string requestId, string playlistToken)
+        // https://www.nicovideo.jp/api/watch/v3_guest/1615359905?_frontendId=6&_frontendVersion=0&actionTrackId=rV8Nf4Qith_1615871913294&skips=harmful&additionals=pcWatchPage,external,marquee,series&isContinueWatching=true&i18nLanguage=ja-jp&t=1615871919713
+        // https://www.nicovideo.jp/api/watch/v3/1615359905?_frontendId=6&_frontendVersion=0&actionTrackId=nYQzK4jFdB_1615872059788&skips=harmful&additionals=pcWatchPage,external,marquee,series&isContinueWatching=true&i18nLanguage=ja-jp&t=1615872080318
+        public static async Task<string> GetDmcWatchJsonDataAsync(NiconicoContext context, string requestId, bool isLoggedIn, string actionTrackId)
         {
             if (!NiconicoRegex.IsVideoId(requestId))
             {
                 //				throw new ArgumentException();
             }
 
-            var dict = new Dictionary<string, string>();
-            var url = $"{NiconicoUrls.VideoWatchPageUrl}{requestId}";
+            //bool isLoggedIn = true;
 
-            dict.Add("mode", "pc_html5");
-            dict.Add("eco", "0");
-            dict.Add("playlist_token", playlistToken);
-            dict.Add("watch_harmful", ((uint)HarmfulContentReactionType.ContinueWithNotMoreConfirm).ToString());
-            dict.Add("continue_watching", "1");
+            var dict = new Dictionary<string, string>();
+            var url = $"{NiconicoUrls.VideoApiUrlBase}watch/{(isLoggedIn ? "v3" : "v3_guest")}/{requestId}";
+
+            dict.Add("_frontendId", "6");
+            dict.Add("_frontendVersion", "0");
+            dict.Add("actionTrackId", actionTrackId);
+            dict.Add("skips", "harmful");
+            dict.Add("additionals", WebUtility.UrlEncode("pcWatchPage,external,marquee,series"));
+            dict.Add("isContinueWatching", "true");
+            dict.Add("i18nLanguage", "ja-jp");
+            dict.Add("t", DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());
 
             url += "?" + HttpQueryExtention.DictionaryToQuery(dict);
-
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
 
             requestMessage.Headers.Add("Accept", "*/*");
+            requestMessage.Headers.Referer = new Uri($"https://www.nicovideo.jp/watch/{requestId}");
+            requestMessage.Headers.Add("Sec-Fetch-Site", "same-origin");
+            requestMessage.Headers.Host = new Windows.Networking.HostName("www.nicovideo.jp");
 
             try
             {
@@ -77,14 +86,14 @@ namespace Mntone.Nico2.Videos.Dmc
             jsonSerializer.NullValueHandling = NullValueHandling.Include;
             jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
 
-            var dmcWatchResponse = jsonSerializer.Deserialize<DmcWatchResponse>(new JsonTextReader(new StringReader(htmlString)));
-            return dmcWatchResponse;
+            var dmcWatchResponse = jsonSerializer.Deserialize<DmcApiWatchResponse>(new JsonTextReader(new StringReader(htmlString)));
+            return dmcWatchResponse.Data;
         }
 
 
-        public static Task<DmcWatchResponse> GetDmcWatchJsonAsync(NiconicoContext context, string requestId, string playlistToken)
+        public static Task<DmcWatchResponse> GetDmcWatchJsonAsync(NiconicoContext context, string requestId, bool isLoggedIn, string actionTrackId)
         {
-            return GetDmcWatchJsonDataAsync(context, requestId, playlistToken)
+            return GetDmcWatchJsonDataAsync(context, requestId, isLoggedIn, actionTrackId)
                 .ContinueWith(prevTask => ParseDmcWatchJsonData(prevTask.Result));
         }
 
@@ -192,6 +201,7 @@ namespace Mntone.Nico2.Videos.Dmc
                 }
                 catch
                 {
+                    /*
                     var videoInfoNode = htmlDocument.GetElementbyId("watchAPIDataContainer");
                     if (videoInfoNode == null)
                     {
@@ -291,6 +301,8 @@ namespace Mntone.Nico2.Videos.Dmc
                     {
                         DmcWatchResponse = dmcWatchResponse
                     };
+                    */
+                    throw new NotSupportedException("smile page is outdated");
                 }
             }
         }
@@ -324,36 +336,37 @@ namespace Mntone.Nico2.Videos.Dmc
         {
             var req = new DmcSessionRequest();
 
-            var session = watchData.Video.DmcInfo.SessionApi;
-            var qualities = watchData.Video.DmcInfo.Quality;
-            var encryption = watchData.Video.DmcInfo.Encryption;
+            var session = watchData.Media.Delivery.Movie.Session;
+            var videoQualities = watchData.Media.Delivery.Movie.Videos;
+            var audioQualities = watchData.Media.Delivery.Movie.Audios;
+            var encryption = watchData.Media.Delivery.Encryption;
 
             // リクエストする動画品質を決定します
             // モバイルの時は最後の動画品質をモバイル画質として断定して指定
             // それ以外の場合、対象画質とそれ以下の有効な画質をすべて指定
             var requestVideoQuality = new List<string>();
-            if (videoQuality?.Available ?? false)
+            if (videoQuality?.IsAvailable ?? false)
             {
                 requestVideoQuality.Add(videoQuality.Id);
             }
             else
             {
-                var fallbackVideoQuality = qualities.Videos.Last();
+                var fallbackVideoQuality = videoQualities.Last(x => x.Metadata.LevelIndex == 0);
                 requestVideoQuality.Add(fallbackVideoQuality.Id);
             }
 
             var requestAudioQuality = new List<string>();
-            if (audioQuality?.Available ?? false)
+            if (audioQuality?.IsAvailable ?? false)
             {
                 requestAudioQuality.Add(audioQuality.Id);
             }
             else
             {
-                var fallbackAudioQuality = qualities.Audios.Last();
+                var fallbackAudioQuality = audioQualities.Last(x => x.Metadata.LevelIndex == 0);
                 requestAudioQuality.Add(fallbackAudioQuality.Id);
             }
 
-            var sessionUrl = $"{session.Urls[0].Url}?_format=json";
+            var sessionUrl = $"{session.Urls[0].UrlUnsafe}?_format=json";
             var useSsl = true; // session.Urls[0].IsSsl;
             var wellKnownPort = session.Urls[0].IsWellKnownPort;
             var protocolName = session.Protocols[0]; // http,hls
@@ -405,8 +418,8 @@ namespace Mntone.Nico2.Videos.Dmc
                                     {
                                         HlsEncryptionV1 = new Protocol.HlsEncryptionV1()
                                         {
-                                            EncryptedKey = encryption.HlsEncryptionV1.EncryptedKey,
-                                            KeyUri = encryption.HlsEncryptionV1.KeyUri
+//                                            EncryptedKey = encryption.HlsEncryptionV1.EncryptedKey,
+                                            //KeyUri = encryption.HlsEncryptionV1.KeyUri
                                         }
                                     }
                                     : null
@@ -430,7 +443,7 @@ namespace Mntone.Nico2.Videos.Dmc
                 ContentAuth = new ContentAuth_Request()
                 {
                     AuthType = "ht2",
-                    ContentKeyTimeout = session.ContentKeyTimeout,
+                    ContentKeyTimeout = (int)session.ContentKeyTimeout,
                     ServiceId = "nicovideo",
                     ServiceUserId = session.ServiceUserId
                 },
@@ -494,8 +507,8 @@ namespace Mntone.Nico2.Videos.Dmc
             DmcSessionResponse sessionRes
             )
         {
-            var session = watch.Video.DmcInfo.SessionApi;
-            var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=PUT";
+            var session = watch.Media.Delivery.Movie.Session;
+            var sessionUrl = $"{session.Urls[0].UrlUnsafe}/{sessionRes.Data.Session.Id}?_format=json&_method=PUT";
 
             var message = new HttpRequestMessage(HttpMethod.Options, new Uri(sessionUrl));
             message.Headers.Add("Access-Control-Request-Method", "POST");
@@ -519,8 +532,8 @@ namespace Mntone.Nico2.Videos.Dmc
             DmcSessionResponse sessionRes
             )
         {
-            var session = watch.Video.DmcInfo.SessionApi;
-            var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=PUT";
+            var session = watch.Media.Delivery.Movie.Session;
+            var sessionUrl = $"{session.Urls[0].UrlUnsafe}/{sessionRes.Data.Session.Id}?_format=json&_method=PUT";
 
             var message = new HttpRequestMessage(HttpMethod.Post, new Uri(sessionUrl));
 
@@ -553,8 +566,8 @@ namespace Mntone.Nico2.Videos.Dmc
             DmcSessionResponse sessionRes
             )
         {
-            var session = watch.Video.DmcInfo.SessionApi;
-            var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=DELETE";
+            var session = watch.Media.Delivery.Movie.Session;
+            var sessionUrl = $"{session.Urls[0].UrlUnsafe}/{sessionRes.Data.Session.Id}?_format=json&_method=DELETE";
 
             var message = new HttpRequestMessage(HttpMethod.Options, new Uri(sessionUrl));
             message.Headers.Add("Access-Control-Request-Method", "POST");
@@ -573,8 +586,8 @@ namespace Mntone.Nico2.Videos.Dmc
             DmcSessionResponse sessionRes
             )
         {
-            var session = watch.Video.DmcInfo.SessionApi;
-            var sessionUrl = $"{session.Urls[0].Url}/{sessionRes.Data.Session.Id}?_format=json&_method=DELETE";
+            var session = watch.Media.Delivery.Movie.Session;
+            var sessionUrl = $"{session.Urls[0].UrlUnsafe}/{sessionRes.Data.Session.Id}?_format=json&_method=DELETE";
 
             var message = new HttpRequestMessage(HttpMethod.Post, new Uri(sessionUrl));
             message.Headers.Add("Access-Control-Request-Method", "POST");
