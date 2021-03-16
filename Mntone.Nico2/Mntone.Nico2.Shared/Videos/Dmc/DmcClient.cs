@@ -418,8 +418,8 @@ namespace Mntone.Nico2.Videos.Dmc
                                     {
                                         HlsEncryptionV1 = new Protocol.HlsEncryptionV1()
                                         {
-//                                            EncryptedKey = encryption.HlsEncryptionV1.EncryptedKey,
-                                            //KeyUri = encryption.HlsEncryptionV1.KeyUri
+                                            EncryptedKey = encryption.EncryptedKey,
+                                            KeyUri = encryption.KeyUri
                                         }
                                     }
                                     : null

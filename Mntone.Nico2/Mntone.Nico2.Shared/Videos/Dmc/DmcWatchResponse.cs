@@ -398,7 +398,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public string RecipeId { get; set; }
 
         [DataMember(Name = "encryption")]
-        public object Encryption { get; set; }
+        public Encryption Encryption { get; set; }
 
         [DataMember(Name = "movie")]
         public Movie Movie { get; set; }
@@ -409,6 +409,16 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "trackingId")]
         public string TrackingId { get; set; }
     }
+
+    public class Encryption
+    {
+        [DataMember(Name = "encryptedKey")]
+        public string EncryptedKey { get; set; }
+
+        [DataMember(Name = "keyUri")]
+        public string KeyUri { get; set; }
+    }
+
 
     public class Movie
     {
