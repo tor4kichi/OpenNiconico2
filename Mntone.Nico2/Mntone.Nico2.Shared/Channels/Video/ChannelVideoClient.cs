@@ -100,14 +100,9 @@ namespace Mntone.Nico2.Channels.Video
 
             try
             {
-                var itemsNode = doc.DocumentNode.Descendants("ul").SingleOrDefault(x =>
-                {
-                    return x.Attributes.Contains("class") && x.Attributes["class"].Value == "items";
-                });
+                var itemsNode = doc.DocumentNode.SelectNodes("//*[@id=\"video_page\"]/section[1]/article/section/section/ul/li");
 
-
-
-                res.Videos = itemsNode?.GetElementsByClassName("item")
+                res.Videos = itemsNode
                     .Select(li =>
                     {
                         ChannelVideoInfo info = new ChannelVideoInfo();
@@ -117,7 +112,7 @@ namespace Mntone.Nico2.Channels.Video
                         {
                             var anchor = left.Element("a");
                             var thumbnailImage = anchor.Element("img");
-                            info.ThumbnailUrl = thumbnailImage.Attributes["data-original"].Value;
+                            info.ThumbnailUrl = thumbnailImage.Attributes["src"].Value;
 
                             var ppv = anchor.GetElementByClassName("purchase_type");
                             if (ppv != null)
