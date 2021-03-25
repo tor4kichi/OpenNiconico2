@@ -146,15 +146,15 @@ namespace Mntone.Nico2.Users.Mylist
 
 
 		
-		public static async Task<MylistGroupsResponse> GetLoginUserMylistGroupsAsync(NiconicoContext context)
+		public static async Task<MylistGroupsResponse> GetLoginUserMylistGroupsAsync(NiconicoContext context, int sampleItemsCount = 3)
 		{
-			return await context.GetJsonAsAsync<MylistGroupsResponse>(@"https://nvapi.nicovideo.jp/v1/users/me/mylists", Converter.Settings);
+			return await context.GetJsonAsAsync<MylistGroupsResponse>(@$"https://nvapi.nicovideo.jp/v1/users/me/mylists?sampleItemCount={sampleItemsCount}", Converter.Settings);
 		}
 
 
-		public static async Task<MylistGroupsResponse> GetMylistGroupsAsync(NiconicoContext context, int userId)
+		public static async Task<MylistGroupsResponse> GetMylistGroupsAsync(NiconicoContext context, int userId, int sampleItemsCount = 3)
 		{
-			return await context.GetJsonAsAsync<MylistGroupsResponse>($"https://nvapi.nicovideo.jp/v1/users/{userId}/mylists?sampleItemCount=3", Converter.Settings
+			return await context.GetJsonAsAsync<MylistGroupsResponse>($"https://nvapi.nicovideo.jp/v1/users/{userId}/mylists?sampleItemCount={sampleItemsCount}", Converter.Settings
 				, (headers) => 
 				{
 #if WINDOWS_UWP
