@@ -44,7 +44,7 @@ namespace Mntone.Nico2.Searches.Video
 		{
 			var dict = new Dictionary<string, string>();
 			dict.Add("__format", "json");
-			dict.Add("v", string.Join(',', videoIdList));
+			dict.Add("v", string.Join(",", videoIdList));
 
 			return await context.GetStringAsync(NiconicoUrls.NICOVIDEO_CE_NICOAPI_V1_VIDEO_INFO_ARRAY, dict);
 		}

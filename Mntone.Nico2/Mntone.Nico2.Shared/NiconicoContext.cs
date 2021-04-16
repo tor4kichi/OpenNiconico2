@@ -397,7 +397,7 @@ namespace Mntone.Nico2
         internal async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
 #if DEBUG_NICO_URL
-			UrlDebugHelper.DebugLog(request.RequestUri.OriginalString);
+			UrlDebugHelper.DebugLog($"[{request.Method}] {request.RequestUri.OriginalString}");
 #endif
 
 #if WINDOWS_UWP

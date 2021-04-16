@@ -75,14 +75,14 @@ namespace Mntone.Nico2.Videos.Comment
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        private async Task<string> SendCommentCommandAsync(object[] parameter)
+        private async Task<string> SendCommentCommandAsync(Uri server, object[] parameter)
         {
             var requestParamsJson = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
             });
 
-            return await Context.PostAsync(NiconicoUrls.NmsgCommentApiUrl, requestParamsJson);
+            return await Context.PostAsync($"{server.OriginalString}/api.json", requestParamsJson);
         }
 
 
@@ -200,7 +200,7 @@ namespace Mntone.Nico2.Videos.Comment
 
 
             // コメント取得リクエストを送信
-            var responseString = await SendCommentCommandAsync(commentCommandList.ToArray());
+            var responseString = await SendCommentCommandAsync(DefaultPostTargetThread.Server, commentCommandList.ToArray());
 
             // コメント取得結果をパース
             var res = ParseNMSGResponseJson(responseString);
@@ -254,7 +254,7 @@ namespace Mntone.Nico2.Videos.Comment
             };
 
             // コメント取得リクエストを送信
-            var responseString = await SendCommentCommandAsync(commentCommandList);
+            var responseString = await SendCommentCommandAsync(DefaultPostTargetThread.Server, commentCommandList);
 
             // コメント取得結果をパース
             var res = ParseNMSGResponseJson(responseString);
@@ -352,7 +352,7 @@ namespace Mntone.Nico2.Videos.Comment
                 new PingItem($"rf:{_SubmitTimes}"),
             };
 
-            var resString = await SendCommentCommandAsync(commentCommandList);
+            var resString = await SendCommentCommandAsync(DefaultPostTargetThread.Server, commentCommandList);
 
             var res = NMSGParsePostCommentResult(resString);
 
