@@ -124,7 +124,7 @@ namespace Mntone.Nico2.Searches.Video
 		{
 			var responseContainer = JsonSerializerExtensions.Load<VideoListingResponseContainer>(videoSearchResponseJson);
 
-			return responseContainer.nicovideo_video_response;
+			return responseContainer.niconico_response;
 		}
 
 

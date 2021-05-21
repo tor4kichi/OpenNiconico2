@@ -11,7 +11,8 @@ namespace Mntone.Nico2.Videos.Related
 {
     internal sealed class RelatedClient
     {
-        public static async Task<string> GetRelatedVideoDataAsync(NiconicoContext context, string videoId, uint from, uint limit, Sort sortMethod, Order sortDir)
+
+        public static Task<NicoVideoResponse> GetRelatedVideoAsync(NiconicoContext context, string videoId, uint from, uint limit, Sort sortMethod, Order sortDir)
         {
             var dict = new Dictionary<string, string>();
 
@@ -23,25 +24,8 @@ namespace Mntone.Nico2.Videos.Related
 
             var query = HttpQueryExtention.DictionaryToQuery(dict);
 
-            return await context
-                .GetStringAsync($"{NiconicoUrls.RelatedVideoApiUrl}?{query}");
-        }
-
-        private static T ParseXml<T>(string xml)
-        {
-            var serializer = new XmlSerializer(typeof(T));
-
-            using (var stream = new StringReader(xml.DecodeUTF8()))
-            {
-                return (T)serializer.Deserialize(stream);
-            }
-        }
-
-
-        public static Task<NicoVideoResponse> GetRelatedVideoAsync(NiconicoContext context, string videoId, uint from, uint limit, Sort sortMethod, Order sortDir)
-        {
-            return GetRelatedVideoDataAsync(context, videoId, from, limit, sortMethod, sortDir)
-                .ContinueWith(prevTask => ParseXml<NicoVideoResponse>(prevTask.Result));
+            return context
+                .GetJsonAsAsync<NicoVideoResponse>($"{NiconicoUrls.RelatedVideoApiUrl}?{query}");
         }
 
 

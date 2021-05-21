@@ -234,8 +234,8 @@ namespace Mntone.Nico2.Searches.Video
 	public class VideoListingResponseContainer
 	{
 
-		[DataMember(Name = "nicovideo_video_response")]
-		public VideoListingResponse nicovideo_video_response { get; set; }
+		[DataMember(Name = "niconico_response")]
+		public VideoListingResponse niconico_response { get; set; }
 	}
 
 }

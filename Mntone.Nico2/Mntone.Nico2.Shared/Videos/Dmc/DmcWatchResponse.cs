@@ -64,6 +64,9 @@ namespace Mntone.Nico2.Videos.Dmc
         [DataMember(Name = "okReason")]
         public string OkReason { get; set; }
 
+        [DataMember(Name = "payment")]
+        public Payment Payment { get; set; }
+
         [DataMember(Name = "owner")]
         public WelcomeOwner Owner { get; set; }
 
@@ -74,7 +77,7 @@ namespace Mntone.Nico2.Videos.Dmc
         public Player Player { get; set; }
 
         [DataMember(Name = "ppv")]
-        public object Ppv { get; set; }
+        public Ppv Ppv { get; set; }
 
         [DataMember(Name = "ranking")]
         public Ranking Ranking { get; set; }
@@ -633,6 +636,55 @@ namespace Mntone.Nico2.Videos.Dmc
         public bool IsFollowing { get; set; }
     }
 
+    public class PreviewPermission
+    {
+        [DataMember(Name = "isEnabled")]
+        public bool IsEnabled { get; set; }
+    }
+
+
+    public partial class Payment
+    {
+        [DataMember(Name = "video")]
+        public PaymentVideo Video { get; set; }
+
+        [DataMember(Name = "preview")]
+        public Preview Preview { get; set; }
+    }
+
+    public partial class Preview
+    {
+        [DataMember(Name = "ppv")]
+        public PreviewPermission Ppv { get; set; }
+
+        [DataMember(Name = "admission")]
+        public PreviewPermission Admission { get; set; }
+
+        [DataMember(Name = "premium")]
+        public PreviewPermission Premium { get; set; }
+    }
+
+    public partial class PaymentVideo
+    {
+        [DataMember(Name = "isPpv")]
+        public bool IsPpv { get; set; }
+
+        [DataMember(Name = "isAdmission")]
+        public bool IsAdmission { get; set; }
+
+        [DataMember(Name = "isPremium")]
+        public bool IsPremium { get; set; }
+
+        [DataMember(Name = "watchableUserType")]
+        public string WatchableUserType { get; set; }
+
+        [DataMember(Name = "commentableUserType")]
+        public string CommentableUserType { get; set; }
+    }
+
+
+
+
     public class PcWatchPage
     {
         [DataMember(Name = "tagRelatedBanner")]
@@ -676,6 +728,12 @@ namespace Mntone.Nico2.Videos.Dmc
     {
         [DataMember(Name = "isDefaultInvisible")]
         public bool IsDefaultInvisible { get; set; }
+    }
+
+    public class Ppv
+    {
+        [DataMember(Name = "accessFrom")]
+        public object AccessFrom { get; set; }
     }
 
     public class Ranking

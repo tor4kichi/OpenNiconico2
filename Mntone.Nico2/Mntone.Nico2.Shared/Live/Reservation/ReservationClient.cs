@@ -173,7 +173,7 @@ namespace Mntone.Nico2.Live.Reservation
                 {
                     System.Diagnostics.Debug.WriteLine(error.ToString());
                 }
-                throw new Exception();
+//                throw new Exception();
             }
 
 

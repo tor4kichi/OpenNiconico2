@@ -63,9 +63,11 @@ namespace Mntone.Nico2.Videos.Series
                 var detailDescription = seriesDetailsChildren.ElementAt(1);
                 var expandedDescTextNode = detailDescription.SelectSingleNode("div/div/div/div[1]/div");
                 seriesDetails.DescriptionHTML = expandedDescTextNode.InnerHtml;
+
+                var bgUrl = seriesThumbnailImageDiv.GetAttributeValue("data-background-image", null);
                 seriesDetails.Series = new Series()
                 {
-                    ThumbnailUrl = new Uri(seriesThumbnailImageDiv.GetAttributeValue("data-background-image", string.Empty)),
+                    ThumbnailUrl = !string.IsNullOrEmpty(bgUrl) ? new Uri(bgUrl) : null,
                     Count = _AsExtractNumber(detailBody.Elements("div").ElementAt(1).InnerText),
                     Title = seriesThumbnailImageDiv.GetAttributeValue("alt", string.Empty),
                 };

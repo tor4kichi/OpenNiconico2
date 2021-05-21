@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,9 +54,9 @@ namespace Mntone.Nico2.Users.Follow
 		}
 
 
-		public static async Task<FollowChannelResponse> GetFollowChannelAsync(NiconicoContext context, uint limit = 25, uint page = 0)
+		public static async Task<FollowChannelResponse> GetFollowChannelAsync(NiconicoContext context, uint limit = 25, uint offset = 0)
 		{
-			var uri = $"https://public.api.nicovideo.jp/v1/user/followees/channels.json?limit={limit}&page={page}";
+			var uri = $"https://public.api.nicovideo.jp/v1/user/followees/channels.json?limit={limit}&offset={offset}";
 			await context.PrepareCorsAsscessAsync(HttpMethod.Get, uri);
 			return await context.GetJsonAsAsync<FollowChannelResponse>(uri);
 		}
@@ -73,6 +74,30 @@ namespace Mntone.Nico2.Users.Follow
             public Meta Meta { get; set; }
         }
 
+        public class FollowedResultResponce
+        {
+            [Newtonsoft.Json.JsonProperty("meta")]
+            public Meta Meta { get; set; }
+
+            [Newtonsoft.Json.JsonProperty("data")]
+            public FollowedData Data { get; set; }
+        }
+
+        public class FollowedData
+        {
+            [Newtonsoft.Json.JsonProperty("following")]
+            public bool IsFollowing { get; set; }
+        }
+
+
+        private static async Task<bool> GetFollowedInternalAsync(NiconicoContext context, string uri)
+        {
+            var result = await context.GetJsonAsAsync<FollowedResultResponce>(HttpMethod.Get, uri, headerModifier: headers =>
+            {
+                headers.Add("X-Request-With", "https://www.nicovideo.jp/my/follow");
+            });
+            return result.Data.IsFollowing;
+        }
 
         private static async Task<ContentManageResult> AddFollowInternalAsync(NiconicoContext context, string uri)
         {
@@ -106,6 +131,12 @@ namespace Mntone.Nico2.Users.Follow
             return RemoveFollowInternalAsync(context, $"https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{userId}.json");
         }
 
+        public static Task<bool> IsFollowingUserAsync(NiconicoContext context, uint userId)
+        {
+            return GetFollowedInternalAsync(context, $"https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{userId}.json");
+        }
+
+
 
         public static Task<ContentManageResult> AddFollowTagAsync(NiconicoContext context, string tag)
         {
@@ -116,6 +147,13 @@ namespace Mntone.Nico2.Users.Follow
         {
             return RemoveFollowInternalAsync(context, $"https://nvapi.nicovideo.jp/v1/users/me/following/tags?tag={tag}");
         }
+
+        /*
+        public static Task<bool> IsFollowingTagAsync(NiconicoContext context, string tag)
+        {
+            return GetFollowedInternalAsync(context, $"https://nvapi.nicovideo.jp/v1/users/me/following/tags?tag={Uri.EscapeDataString(tag)}");
+        }
+        */
 
 
 
@@ -129,12 +167,31 @@ namespace Mntone.Nico2.Users.Follow
             return RemoveFollowInternalAsync(context, $"https://nvapi.nicovideo.jp/v1/users/me/following/mylists/{mylistId}");
         }
 
+        /*
+        public static Task<bool> IsFollowingMylistAsync(NiconicoContext context, string mylistId)
+        {
+            return GetFollowedInternalAsync(context, $"https://nvapi.nicovideo.jp/v1/users/me/following/mylists/{mylistId}");
+        }
+        */
+
 
 
 
         #region Community
 
+        public static Task<UserOwnedCommunityResponse> GetUserOwnedCommunitiesAsync(NiconicoContext context, uint userId)
+        {
+            return context.GetJsonAsAsync<UserOwnedCommunityResponse>($"https://public.api.nicovideo.jp/v1/user/{userId}/communities.json");
+        }
 
+
+        public static async Task<CommunityAuthorityResponse> GetCommunityAuthorityAsync(NiconicoContext context, string communityId)
+        {
+            var communityIdWoCo = communityId.Substring(2);
+            var communityJoinPageUrl = new Uri($"https://com.nicovideo.jp/motion/{communityId}");
+
+            return await context.GetJsonAsAsync<CommunityAuthorityResponse>($"https://com.nicovideo.jp/api/v1/communities/{communityIdWoCo}/authority.json");
+        }
 
         public static async Task<ContentManageResult> AddFollowCommunityAsync(NiconicoContext context, string communityId)
         {
@@ -315,10 +372,16 @@ namespace Mntone.Nico2.Users.Follow
             public string Commit { get; set; }
         }
 
-#endregion
+        #endregion
 
 
-#region Channel
+        #region Channel
+
+
+        public static async Task<ChannelAuthorityResponse> GetChannelAuthorityAsync(NiconicoContext context, uint channelNumberId)
+        {
+            return await context.GetJsonAsAsync<ChannelAuthorityResponse>($"https://public.api.nicovideo.jp/v1/channel/channelapp/channels/{channelNumberId}.json");
+        }
 
 
 
@@ -386,11 +449,200 @@ namespace Mntone.Nico2.Users.Follow
     }
 
 
+    public sealed class UserOwnedCommunityResponse
+    {
+        [JsonProperty("meta")]
+        public Meta Meta { get; set; }
+
+        [JsonProperty("data")]
+        public UserOwnedCommunity Data { get; set; }
+    }
+
+    public sealed class UserOwnedCommunity
+    {
+        [JsonProperty("owned")]
+        public List<FollowCommunityResponse.FollowCommunity> OwnedCommunities { get; set; }
+    }
+
+
+    public class CommunityAuthorityResponse
+    {
+        [JsonProperty("meta")]
+        public Meta Meta { get; set; }
+
+        [JsonProperty("data")]
+        public CommunityAuthority Data { get; set; }
+    }
+
+    public class CommunityAuthority
+    {
+        [JsonProperty("user_id")]
+        public long UserId { get; set; }
+
+        [JsonProperty("is_owner")]
+        public bool IsOwner { get; set; }
+
+        [JsonProperty("is_member")]
+        public bool IsMember { get; set; }
+
+        [JsonProperty("can_post_content")]
+        public bool CanPostContent { get; set; }
+    }
+
+
     internal struct ChannelFollowApiInfo
     {
         public string AddApi { get; set; }
         public string DeleteApi { get; set; }
         public string Params { get; set; }
+    }
+
+
+    public partial class ChannelAuthorityResponse
+    {
+        [JsonProperty("meta")]
+        public Meta Meta { get; set; }
+
+        [JsonProperty("data")]
+        public Data Data { get; set; }
+    }
+
+    public partial class Data
+    {
+        [JsonProperty("session")]
+        public Session Session { get; set; }
+
+        [JsonProperty("hasVideo")]
+        public bool HasVideo { get; set; }
+
+        [JsonProperty("hasLive")]
+        public bool HasLive { get; set; }
+
+        [JsonProperty("hasOfficialLive")]
+        public bool HasOfficialLive { get; set; }
+
+        [JsonProperty("hasBlog")]
+        public bool HasBlog { get; set; }
+
+        [JsonProperty("hasEvent")]
+        public bool HasEvent { get; set; }
+
+        [JsonProperty("hasTwitter")]
+        public bool HasTwitter { get; set; }
+
+        [JsonProperty("hasYoutube")]
+        public bool HasYoutube { get; set; }
+
+        [JsonProperty("hasRss")]
+        public bool HasRss { get; set; }
+
+        [JsonProperty("hasSpecialContent")]
+        public bool HasSpecialContent { get; set; }
+
+        [JsonProperty("defaultContent")]
+        public string DefaultContent { get; set; }
+
+        [JsonProperty("channel")]
+        public Channel Channel { get; set; }
+
+        [JsonProperty("video")]
+        public OfficialLive Video { get; set; }
+
+        [JsonProperty("officialLive")]
+        public OfficialLive OfficialLive { get; set; }
+    }
+
+    public partial class Channel
+    {
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("descriptionHtml")]
+        public string DescriptionHtml { get; set; }
+
+        [JsonProperty("isFree")]
+        public bool IsFree { get; set; }
+
+        [JsonProperty("screenName")]
+        public string ScreenName { get; set; }
+
+        [JsonProperty("ownerName")]
+        public string OwnerName { get; set; }
+
+        [JsonProperty("price")]
+        public long Price { get; set; }
+
+        [JsonProperty("bodyPrice")]
+        public long BodyPrice { get; set; }
+
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        [JsonProperty("thumbnailUrl")]
+        public Uri ThumbnailUrl { get; set; }
+
+        [JsonProperty("thumbnailSmallUrl")]
+        public Uri ThumbnailSmallUrl { get; set; }
+
+        [JsonProperty("canAdmit")]
+        public bool CanAdmit { get; set; }
+
+        [JsonProperty("isAdult")]
+        public bool IsAdult { get; set; }
+
+        [JsonProperty("lastPublishedAt")]
+        public DateTimeOffset LastPublishedAt { get; set; }
+
+        [JsonProperty("backgroundImage")]
+        public BackgroundImage BackgroundImage { get; set; }
+
+        [JsonProperty("rss")]
+        public object[] Rss { get; set; }
+
+        [JsonProperty("officialLiveTags")]
+        public OfficialLiveTag[] OfficialLiveTags { get; set; }
+    }
+
+    public partial class BackgroundImage
+    {
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        [JsonProperty("repeatFlag")]
+        public long RepeatFlag { get; set; }
+    }
+
+    public partial class OfficialLiveTag
+    {
+        [JsonProperty("text")]
+        public string Text { get; set; }
+    }
+
+    public partial class OfficialLive
+    {
+        [JsonProperty("lastPublishedAt")]
+        public DateTimeOffset LastPublishedAt { get; set; }
+    }
+
+    public partial class Session
+    {
+        [JsonProperty("hasContentsAuthority")]
+        public bool HasContentsAuthority { get; set; }
+
+        [JsonProperty("isJoining")]
+        public bool IsJoining { get; set; }
+
+        [JsonProperty("isFollowing")]
+        public bool IsFollowing { get; set; }
+
+        [JsonProperty("subscribingTopics")]
+        public object[] SubscribingTopics { get; set; }
     }
 
 }

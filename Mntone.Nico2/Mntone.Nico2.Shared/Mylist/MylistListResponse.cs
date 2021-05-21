@@ -93,7 +93,7 @@ namespace Mntone.Nico2.Mylist
 		public Mylist Mylist { get; set; }
 	}
 
-	[XmlRoot(ElementName = "nicovideo_video_response")]
+	[XmlRoot(ElementName = "niconico_response")]
 	public class NicoVideoResponse
 	{
 		[XmlElement(ElementName = "count")]

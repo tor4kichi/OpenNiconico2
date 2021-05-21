@@ -47,7 +47,7 @@ namespace Mntone.Nico2.Searches.Video
     public class VideoInfoResponseContainer
     {
 
-        [DataMember(Name = "nicovideo_video_response")]
+        [DataMember(Name = "niconico_response")]
         public VideoInfoResponse NicovideoVideoResponse { get; set; }
     }
 
@@ -55,7 +55,7 @@ namespace Mntone.Nico2.Searches.Video
     public class VideoInfoArrayResponseContainer
     {
 
-        [DataMember(Name = "nicovideo_video_response")]
+        [DataMember(Name = "niconico_response")]
         public VideoInfoArrayResponse DataContainer { get; set; }
     }
 

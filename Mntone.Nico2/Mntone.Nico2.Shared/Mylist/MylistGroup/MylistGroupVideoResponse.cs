@@ -45,7 +45,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 	public class MylistGroupVideoResponseContainer
 	{
 
-		[DataMember(Name = "nicovideo_video_response")]
-		public MylistGroupVideoResponse nicovideo_video_response { get; set; }
+		[DataMember(Name = "niconico_response")]
+		public MylistGroupVideoResponse niconico_response { get; set; }
 	}
 }

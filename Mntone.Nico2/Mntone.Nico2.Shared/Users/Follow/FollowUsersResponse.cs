@@ -89,7 +89,7 @@ namespace Mntone.Nico2.Users.Follow
         public string Cursor { get; set; }
     }
 
-    public partial class Meta
+    public class Meta
     {
         [JsonProperty("status")]
         public long Status { get; set; }

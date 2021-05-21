@@ -27,6 +27,9 @@ namespace Mntone.Nico2.Channels.Video
 
         public bool IsRequirePayment { get; set; }
         public string PurchasePreviewUrl { get; set; }
+
+        public bool IsMemberUnlimitedAccess { get; set; }
+        public bool IsFreeForMember { get; set; }
     }
 
 
@@ -103,7 +106,7 @@ namespace Mntone.Nico2.Channels.Video
                 var itemsNode = doc.DocumentNode.SelectNodes("//*[@id=\"video_page\"]/section[1]/article/section/section/ul/li");
 
                 res.Videos = itemsNode
-                    .Select(li =>
+                    ?.Select(li =>
                     {
                         ChannelVideoInfo info = new ChannelVideoInfo();
 
@@ -117,7 +120,21 @@ namespace Mntone.Nico2.Channels.Video
                             var ppv = anchor.GetElementByClassName("purchase_type");
                             if (ppv != null)
                             {
-                                info.IsRequirePayment = true;
+                                foreach (var ppvType in ppv.Element("span").GetClasses())
+                                {
+                                    if (ppvType== "all_pay")
+                                    {
+                                        info.IsRequirePayment = true;
+                                    }
+                                    else if (ppvType == "free_for_member")
+                                    {
+                                        info.IsFreeForMember = true;
+                                    }
+                                    else if (ppvType == "member_unlimited_access")
+                                    {
+                                        info.IsMemberUnlimitedAccess = true;
+                                    }
+                                }
                             }
 
                             var commentDescNode = anchor.GetElementByClassName("last_res");
@@ -182,7 +199,7 @@ namespace Mntone.Nico2.Channels.Video
 
                         return info;
                     })
-                    .ToList() 
+                    ?.ToList() 
                     ?? new List<ChannelVideoInfo>();
 
             }

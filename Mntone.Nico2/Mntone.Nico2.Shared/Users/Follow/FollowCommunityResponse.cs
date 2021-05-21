@@ -19,7 +19,7 @@
         public partial class FollowCommunity
         {
             [JsonProperty("id")]
-            public long Id { get; set; }
+            public string Id { get; set; }
 
             [JsonProperty("globalId")]
             public string GlobalId { get; set; }

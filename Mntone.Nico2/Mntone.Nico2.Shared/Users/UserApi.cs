@@ -101,6 +101,10 @@ namespace Mntone.Nico2.Users
 
 
 
+		public Task<bool> IsFollowingUserAsync(uint userId)
+        {
+			return Follow.FollowClient.IsFollowingUserAsync(_context, userId);
+		}
 
 
 		public Task<ContentManageResult> AddFollowUserAsync(string userId)
@@ -117,7 +121,12 @@ namespace Mntone.Nico2.Users
 
 
 
-
+		/*
+		public Task<bool> IsFollowingTagAsync(string tag)
+		{
+			return Follow.FollowClient.IsFollowingTagAsync(_context, tag);
+		}
+		*/
 
 		public Task<ContentManageResult> AddFollowTagAsync(string tag)
 		{
@@ -130,6 +139,13 @@ namespace Mntone.Nico2.Users
 			return Follow.FollowClient.RemoveFollowTagAsync(_context, tag);
 		}
 
+
+		/*
+		public Task<bool> IsFollowingMylistAsync(string userId)
+		{
+			return Follow.FollowClient.IsFollowingMylistAsync(_context, userId);
+		}
+		*/
 
 		public Task<ContentManageResult> AddFollowMylistAsync(string mylistId)
 		{
@@ -470,9 +486,19 @@ namespace Mntone.Nico2.Users
 
         #region Follow Community
 
-        public Task<FollowCommunityResponse> GetFollowCommunityAsync(uint limit = 25, uint page = 0)
+		public Task<UserOwnedCommunityResponse> GetUserOwnedCommunitiesAsync(uint userId)
+        {
+			return FollowClient.GetUserOwnedCommunitiesAsync(_context, userId);
+        }
+
+		public Task<CommunityAuthorityResponse> GetCommunityAuthorityAsync(string communityId)
+        {
+			return FollowClient.GetCommunityAuthorityAsync(_context, communityId);
+		}
+
+        public Task<FollowCommunityResponse> GetFollowCommunityAsync(uint limit = 25, uint offset = 0)
 		{
-			return Follow.FollowClient.GetFollowCommunityAsync(_context, limit, page);
+			return Follow.FollowClient.GetFollowCommunityAsync(_context, limit, offset);
 		}
 
 
@@ -486,13 +512,17 @@ namespace Mntone.Nico2.Users
 			return FollowClient.RemoveFollowCommunityAsync(_context, communityId);
 		}
 
-        #endregion
+		#endregion
 
 
-        #region Follow Channel
+		#region Follow Channel
 
+		public Task<ChannelAuthorityResponse> GetChannelAuthorityAsync(uint channelNumberId)
+		{
+			return FollowClient.GetChannelAuthorityAsync(_context, channelNumberId);
+		}
 
-        public Task<FollowChannelResponse> GetFollowChannelAsync(uint limit = 25, uint page = 0)
+		public Task<FollowChannelResponse> GetFollowChannelAsync(uint limit = 25, uint page = 0)
         {
             return FollowClient.GetFollowChannelAsync(_context, limit, page);
         }

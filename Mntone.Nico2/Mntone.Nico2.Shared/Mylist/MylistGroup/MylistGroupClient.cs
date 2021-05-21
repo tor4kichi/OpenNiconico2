@@ -62,7 +62,7 @@ namespace Mntone.Nico2.Mylist.MylistGroup
 		{
 			var responseContainer = JsonSerializerExtensions.Load<MylistGroupVideoResponseContainer>(json);
 
-			return responseContainer.nicovideo_video_response;
+			return responseContainer.niconico_response;
 		}
 
 
