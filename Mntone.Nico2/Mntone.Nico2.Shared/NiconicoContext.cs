@@ -157,8 +157,6 @@ namespace Mntone.Nico2
     */
                 await GetAsync(NiconicoUrls.VideoLoginUrl);
 
-                await Task.Delay(1000);
-
                 var res = await SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
 
                 const string TwoFactorAuthSite = @"https://account.nicovideo.jp/mfa";
