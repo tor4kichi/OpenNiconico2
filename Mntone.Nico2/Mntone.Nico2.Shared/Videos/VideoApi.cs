@@ -108,22 +108,6 @@ namespace Mntone.Nico2.Videos
 		}
 #endif
 
-		
-        /// <summary>
-		/// 動画ページ内にある動画情報を取得します。
-		/// </summary>
-		/// <param name="requestId">動画ID</param>
-		/// <param name="forceLowQuality">強制的に低画質動画を再生する場合に true</param>
-		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
-		/// <returns></returns>
-		/// <exception cref="ContentZoningException"></exception>
-        public Task<WatchAPI.WatchApiResponse> GetWatchApiAsync(string requestId, bool forceLowQuality, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
-        {
-            return WatchAPI.WatchAPIClient.GetWatchApiAsync(_context, requestId, forceLowQuality, harmfulReactType);
-        }
-
-
-
         /// <summary>
         /// 動画情報を元にして動画コメントを取得します。
         /// </summary>
@@ -204,13 +188,10 @@ namespace Mntone.Nico2.Videos
 		/// 動画ページ内にある動画情報を取得します。
 		/// </summary>
 		/// <param name="requestId">動画ID</param>
-		/// <param name="forceLowQuality">強制的に低画質動画を再生する場合に true</param>
-		/// <param name="harmfulReactType">ContentZoningExceptionをキャッチした時のみ使用、有害動画の視聴を継続する場合に None以外 を設定</param>
 		/// <returns></returns>
-		/// <exception cref="ContentZoningException"></exception>
-		public Task<Dmc.DmcWatchData> GetDmcWatchResponseAsync(string requestId, HarmfulContentReactionType harmfulReactType = HarmfulContentReactionType.None)
+		public Task<Dmc.DmcWatchData> GetDmcWatchResponseAsync(string requestId)
         {
-            return Dmc.DmcClient.GetDmcWatchResponseAsync(_context, requestId, harmfulReactType);
+            return Dmc.DmcClient.GetDmcWatchResponseAsync(_context, requestId);
         }
 
 

@@ -24,7 +24,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Communities\LiveInfo\LiveInfoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Video\CommunityVideoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Communities\Video\CommunityVideoResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ContentZoningException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dictionaries\CategoryExtensions.cs" />
@@ -39,7 +38,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Embed\EmbedApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Embed\Ichiba\IchibaClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Embed\Ichiba\IchibaResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HarmfulContentReactionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HtmlDocumentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpQueryExtention.cs" />
@@ -258,8 +256,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Users\UserVideosClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\VideoApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videos\Dmc\DmcWatchResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\TagRelatedMarquee.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchAPIClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Videos\WatchAPI\WatchApiResponse.cs" />
   </ItemGroup>
 </Project>
