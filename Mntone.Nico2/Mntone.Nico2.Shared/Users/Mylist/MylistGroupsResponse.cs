@@ -102,7 +102,7 @@ namespace Mntone.Nico2.Users.Mylist
     public partial class Video
     {
         [JsonProperty("type")]
-        public TypeEnum Type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
