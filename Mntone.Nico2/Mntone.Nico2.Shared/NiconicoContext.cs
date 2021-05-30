@@ -40,8 +40,9 @@ namespace Mntone.Nico2
 		/// <remarks>
 		/// 非ログイン API 用に使用できます
 		/// </remarks>
-		public NiconicoContext()
+		public NiconicoContext(string additionalUserAgent)
 		{
+			AdditionalUserAgent = additionalUserAgent;
 #if WINDOWS_UWP
 			var filter = new HttpBaseProtocolFilter()
 			{
@@ -57,8 +58,8 @@ namespace Mntone.Nico2
                         CookieContainer = CookieContainer
                     });
 #endif
-			HttpClient.DefaultRequestHeaders.Add("User-Agent", this._AdditionalUserAgent != null
-				? NiconicoContext.DefaultUserAgent + " (" + this._AdditionalUserAgent + ')'
+			HttpClient.DefaultRequestHeaders.Add("User-Agent", this.AdditionalUserAgent != null
+				? NiconicoContext.DefaultUserAgent + " (" + this.AdditionalUserAgent + ')'
 				: NiconicoContext.DefaultUserAgent);
 
 			HttpClient.DefaultRequestHeaders.Add("Referer", "https://www.nicovideo.jp/");
@@ -78,8 +79,8 @@ namespace Mntone.Nico2
 			/// コンストラクター
 			/// </summary>
 			/// <param name="token">認証トークン</param>
-		public NiconicoContext( NiconicoAuthenticationToken token )
-			: this()
+		public NiconicoContext(string additionalUserAgent, NiconicoAuthenticationToken token )
+			: this(additionalUserAgent)
 		{
 			this.AuthenticationToken = token;
 		}
@@ -89,8 +90,8 @@ namespace Mntone.Nico2
 		/// </summary>
 		/// <param name="token">認証トークン</param>
 		/// <param name="session">ログオン セッション</param>
-		public NiconicoContext( NiconicoAuthenticationToken token, NiconicoSession session )
-			: this( token )
+		public NiconicoContext(string additionalUserAgent, NiconicoAuthenticationToken token, NiconicoSession session )
+			: this(additionalUserAgent, token)
 		{
 			this.CurrentSession = session;
 		}
@@ -583,12 +584,7 @@ namespace Mntone.Nico2
 		/// <remarks>
 		/// 特に事情がない限り、各アプリ名を指定するなどしてください
 		/// </remarks>
-		public string AdditionalUserAgent
-		{
-			get { return this._AdditionalUserAgent; }
-			set { this._AdditionalUserAgent = value; }
-		}
-		private string _AdditionalUserAgent = null;
+		public string AdditionalUserAgent { get; }
 
 #endregion
 
