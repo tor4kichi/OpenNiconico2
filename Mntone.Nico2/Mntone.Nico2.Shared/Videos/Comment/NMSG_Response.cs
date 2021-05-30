@@ -64,7 +64,7 @@ namespace Mntone.Nico2.Videos.Comment
 
         internal List<JToken> _CommentsSource { get; } = new List<JToken>();
 
-        public ThreadType ThreadType { get; internal set; }
+        //public ThreadType ThreadType { get; internal set; }
 
         public List<NMSG_Chat> ParseComments()
         {
